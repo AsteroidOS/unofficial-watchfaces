@@ -25,17 +25,6 @@
  * This watchface is based on the official analog watchface but comes
  * with a seconds hand, strokes for hours and minutes, correct
  * dropshadows for the hands and other small improvements.
- *
- * For the seconds hand, you will need to change:
- *
- *  updateFrequency: WallClock.Minute
- *
- * to
- *
- *  updateFrequency: WallClock.Second
- *
- * in asteroid-launcher:qml/MainScreen.qml
- *
  */
 
 import QtQuick 2.1
