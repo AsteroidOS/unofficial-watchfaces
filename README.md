@@ -4,4 +4,16 @@ AsteroidOS it can eventually be merged in the default set of asteroid-launcher.
 
 | Watchface | Title | Creator |
 |---|---|---|
-| ![thumbnail](https://github.com/AsteroidOS/unofficial-watchfaces/raw/master/001-analog-precision.jpg) | [001-analog-precision](https://github.com/AsteroidOS/unofficial-watchfaces/blob/master/001-analog-precision.qml) | [Mario Kicherer](mailto:dev@kicherer.org) |
+| ![thumbnail](.thumbnails/analog-precision.jpg) | [analog-precision](analog-precision/usr/share/asteroid-launcher/watchfaces/analog-precision.qml) | [Mario Kicherer](mailto:dev@kicherer.org) |
+| ![thumbnail](.thumbnails/retro-lcd.jpg) | [retro-lcd](retro-lcd/usr/share/asteroid-launcher/watchfaces/retro-lcd-24hr.qml) | [Huntereb](mailto:Huntereb@lewd.pics) |
+
+### Installation ###
+Enable ADB USB mode in settings and push the usr folder to your root directory.
+
+`adb push usr /`
+
+### Licenses ###
+
+| File | License |
+| --- | --- |
+| retro-lcd - [Digital-7 (Mono)](retro-lcd/usr/share/fonts/digital-7%20(mono).ttf) | The font "Digital-7" is freeware for home use and was created by [Sizenko Alexander](http://www.styleseven.com). |
