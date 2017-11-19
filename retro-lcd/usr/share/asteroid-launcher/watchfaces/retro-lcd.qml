@@ -40,6 +40,10 @@ Canvas {
 			}
 
 			if (ourTime == 0) ourTime = 12;
+		} else {
+			ctx.textAlign = "center";
+			ctx.font = "bold " + fontSizeCalc(11) + "px " + "Roboto";
+			ctx.fillText("24H", centerX - (centerX * 0.42), centerY - (centerY * 0.085));
 		}
 
 		var fontFamily = "'Digital-7 Mono'";
