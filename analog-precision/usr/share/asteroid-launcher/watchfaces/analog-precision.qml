@@ -49,11 +49,14 @@ Item {
 	// hours
 	Canvas {
 		z: 8
+        id: hourHand  // :D
+        property var hour: 0
 		anchors.fill: parent
 		smooth: true
 		onPaint: {
 			var ctx = getContext("2d")
 			var rot = (wallClock.time.getHours() - 3 + wallClock.time.getMinutes()/60) / 12
+            ctx.reset()
 			ctx.lineWidth = 4
 			ctx.strokeStyle = "white"
 			ctx.shadowColor = "#80000000"
@@ -71,10 +74,13 @@ Item {
 	// minutes
 	Canvas {
 		z: 9
+        id: minuteHand
+        property var minute: 0
 		anchors.fill: parent
 		smooth: true
 		onPaint: {
 			var ctx = getContext("2d")
+            ctx.reset()
 			ctx.lineWidth = 2
 			ctx.strokeStyle = "white"
 			ctx.shadowColor = "#80000000"
@@ -92,10 +98,14 @@ Item {
 	// seconds
 	Canvas {
 		z: 10
+        id: secondHand  // :D
+        property var second: 0
 		anchors.fill: parent
 		smooth: true
 		onPaint: {
 			var ctx = getContext("2d")
+            ctx.reset()
+
 			
 			ctx.fillStyle = "red"
 			ctx.beginPath()
@@ -190,4 +200,46 @@ Item {
 			}
 		}
 	}
+
+    Connections {
+        target: wallClock
+        onTimeChanged: {
+            var hour = wallClock.time.getHours()
+            var minute = wallClock.time.getMinutes()
+            var second = wallClock.time.getSeconds()
+            var date = wallClock.time.getDate()
+            if(secondHand.second != second) {
+                secondHand.second = second
+                secondHand.requestPaint()
+            }if(minuteHand.minute != minute) {
+                minuteHand.minute = minute
+                minuteHand.requestPaint()
+            } if(hourHand.hour != hour) {
+                hourHand.hour = hour
+                hourHand.requestPaint()
+            }
+        }
+    }
+
+    Component.onCompleted: {
+        var hour = wallClock.time.getHours()
+        var minute = wallClock.time.getMinutes()
+        var second = wallClock.time.getSeconds()
+        var date = wallClock.time.getDate()
+        secondHand.second = second
+        secondHand.requestPaint()
+        minuteHand.minute = minute
+        minuteHand.requestPaint()
+        hourHand.hour = hour
+        hourHand.requestPaint()
+    }
+
+    Connections {
+        target: localeManager
+        onChangesObserverChanged: {
+            secondHand.requestPaint()
+            minuteHand.requestPaint()
+            hourHand.requestPaint()
+        }
+    }
 }
