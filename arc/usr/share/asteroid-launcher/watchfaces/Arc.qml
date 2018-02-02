@@ -122,7 +122,7 @@ Item {
         Text {
             id: dateDisplay
             z: 8
-            font.pixelSize: 0
+            font.pixelSize: watchFace.arcdatefontsize
             color: watchFace.arctextcolor
             horizontalAlignment: Text.AlignHCenter
             verticalAlignment: Text.AlignVCenter
