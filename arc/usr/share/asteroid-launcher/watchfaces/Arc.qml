@@ -191,7 +191,6 @@ Item {
                         arcItem.lineWidth = data.lineWidth
                     }
                     if(data.colorCircle) {
-                        console.log('color circle', '' + data.colorCircle,data.colorCircle.r)
                         if(data.colorCircle.r) {
                             arcItem.colorCircle = 'rgba('+data.colorCircle.r*255+','+data.colorCircle.g*255+','+data.colorCircle.b*255+','+data.colorCircle.a*255+')'
                         } else {
@@ -229,6 +228,10 @@ Item {
                 property real cachedArcEnd: -1
                 property real arcEnd: {
                     var data = model.get(index)
+                    if(data === null) {
+                        return 0
+                    }
+
                     var type = data.key
                     if(type === 'hours') {
                         return  ((timeBinding.getHours()%12) * 30)// + (timeBinding.getMinutes() / 2)
@@ -323,6 +326,9 @@ Item {
                 Text {
                     text: {
 
+                        if(!timeBinding) {
+                            return ''
+                        }
                         var data = model.get(index)
                         var type = data.key
                         if(type === 'hours') {
