@@ -182,19 +182,16 @@ Item {
         sourceSize.width: width
         fillMode: Image.PreserveAspectFit
         source: "./kitt-button.svg"
-
     }
 
     Image {
         id: foregroundImage
-
         anchors.fill: parent
         sourceSize.height: width
         sourceSize.width: width
         source: "./kitt-fg.svg"
 
     }
-
 
     BluetoothStatus {
         id: btStatus
@@ -211,13 +208,6 @@ Item {
         id: batteryIsCharging
         key: "Battery.IsCharging"
         value: false
-    }
-
-
-    Connections {
-        target: localeManager
-        onChangesObserverChanged: {
-        }
     }
 
     Connections {
