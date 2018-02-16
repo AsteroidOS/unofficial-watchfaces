@@ -6,6 +6,8 @@ AsteroidOS it can eventually be merged in the default set of asteroid-launcher.
 |---|---|---|
 | ![thumbnail](.thumbnails/analog-precision.jpg) | [analog-precision](analog-precision/usr/share/asteroid-launcher/watchfaces/analog-precision.qml) | [Mario Kicherer](mailto:dev@kicherer.org) |
 | ![thumbnail](.thumbnails/retro-lcd.jpg) | [retro-lcd](retro-lcd/usr/share/asteroid-launcher/watchfaces/retro-lcd.qml) | [Huntereb](mailto:Huntereb@lewd.pics) |
+| ![thumbnail](.thumbnails/kitt.jpg) | [kitt](kitt/usr/share/asteroid-launcher/watchfaces/kitt.qml) | [jgibbon](https://github.com/jgibbon) |
+| ![thumbnail](.thumbnails/arc.jpg) | [arc (multiple)](arc/usr/share/asteroid-launcher/watchfaces/) | [jgibbon](https://github.com/jgibbon) |
 
 ### Installation ###
 Enable ADB USB mode in settings and push the usr folder to your root directory.
