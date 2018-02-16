@@ -21,11 +21,6 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-// Asteroid theme colors
-// yellow	Qt.rgba(0.945, 0.769, 0.059, 1)
-// Orange	Qt.rgba(1, 0.549, 0.149, 1)
-// red		Qt.rgba(0.871, 0.165, 0.102, 1)
-
 import QtQuick 2.1
 
 Item {
@@ -56,8 +51,8 @@ Item {
         source: "day-clock-center.png"
         anchors.horizontalCenter: parent.horizontalCenter
         anchors.verticalCenter: parent.verticalCenter
-    width: parent.width/3
-    height: parent.height/3
+        width: parent.width/3
+        height: parent.height/3
     }
 
     /*hour text*/
@@ -141,12 +136,4 @@ Item {
         twentyfourhourArc.minute = minute
         twentyfourhourArc.requestPaint()
     }
-
-    Connections {
-        target: localeManager
-        onChangesObserverChanged: {
-            twentyfourhourArc.requestPaint()
-        }
-    }
-
 }

@@ -41,7 +41,7 @@ Item {
             var hoursList = ["<b>zwölf</b>", "<b>ein</b>", "<b>zwei</b>", "<b>drei</b>", "<b>vier</b>", "<b>fünf</b>", "<b>sechs</b>", "<b>sieben</b>", "<b>acht</b>", "<b>neun</b>", "<b>zehn</b>", "<b>elf</b>"]
             var minutesFirst = [false, true, true, true, false, true, false, true, false, true, true, true, false]
             var nextHour = [false, false, false, false, false, false, false, false, false, true, true, true, true]
-            var hourSuffix = [true, true, false, false ,true, false, true, false, true, false, false, false, true]
+            var hourSuffix = [true, false, false, false ,true, false, true, false, true, false, false, false, true]
 
             var minutes = Math.round(time.getMinutes()/5)
             var hours = (time.getHours() + (nextHour[minutes] ? 1 : 0)) % 12

@@ -21,11 +21,6 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-// Asteroid theme colors
-// yellow	Qt.rgba(0.945, 0.769, 0.059, 0.25)
-// Orange	Qt.rgba(1, 0.549, 0.149, 0.25)
-// red		Qt.rgba(0.871, 0.165, 0.102, 0.7)
-
 import QtQuick 2.1
 
 Item {
@@ -199,14 +194,4 @@ Item {
         hourCanvas.hour = hour
         hourCanvas.requestPaint()
     }
-
-    Connections {
-        target: localeManager
-        onChangesObserverChanged: {
-            secondCanvas.requestPaint()
-            minuteCanvas.requestPaint()
-            hourCanvas.requestPaint()
-        }
-    }
-
 }

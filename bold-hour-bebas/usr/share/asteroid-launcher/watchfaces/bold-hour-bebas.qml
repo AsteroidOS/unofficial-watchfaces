@@ -21,11 +21,6 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-// Asteroid theme colors
-// yellow	Qt.rgba(0.945, 0.769, 0.059, 1)
-// Orange	Qt.rgba(1, 0.549, 0.149, 1)
-// red		Qt.rgba(0.871, 0.165, 0.102, 1)
-
 import QtQuick 2.1
 
 Item {
@@ -52,6 +47,7 @@ Item {
 
     Text {
         id: hourDisplay
+        renderType: Text.NativeRendering
         font.pixelSize: parent.height*0.95
         font.family: "BebasKai"
         font.styleName:"Bold"
@@ -109,7 +105,6 @@ Item {
         onTimeChanged: {
             var hour = wallClock.time.getHours()
             var minute = wallClock.time.getMinutes()
-            var date = wallClock.time.getDate()
             if(minuteArc.minute != minute) {
                 minuteArc.minute = minute
                 minuteCircle.requestPaint()
@@ -121,18 +116,8 @@ Item {
     Component.onCompleted: {
         var hour = wallClock.time.getHours()
         var minute = wallClock.time.getMinutes()
-        var date = wallClock.time.getDate()
         minuteArc.minute = minute
         minuteCircle.requestPaint()
         minuteArc.requestPaint()
-    }
-
-    Connections {
-        target: localeManager
-        onChangesObserverChanged: {
-            minuteCircle.requestPaint()
-            minuteArc.requestPaint()
-            dateDisplay.text = Qt.binding(function() { return wallClock.time.toLocaleString(Qt.locale(), "<b>ddd</b> d MMM") })
-        }
     }
 }

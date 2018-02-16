@@ -21,11 +21,6 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-// Asteroid theme colors
-// yellow	Qt.rgba(0.945, 0.769, 0.059, 1)
-// Orange	Qt.rgba(1, 0.549, 0.149, 1)
-// red		Qt.rgba(0.871, 0.165, 0.102, 1)
-
 import QtQuick 2.2
 
 Rectangle {
@@ -44,6 +39,7 @@ Rectangle {
             color: 1 << index & modelData ? Qt.rgba(0.871, 0.165, 0.102, 1) : Qt.rgba(0.184, 0.184, 0.184, 0.5)
         }
     }
+
     Component {
         id: draw_led_minute
         Rectangle {
@@ -53,6 +49,7 @@ Rectangle {
             color: 1 << index & modelData ? Qt.rgba(1, 0.549, 0.149, 1) : Qt.rgba(0.184, 0.184, 0.184, 0.5)
         }
     }
+
     Component {
         id: draw_led_second
         Rectangle {
@@ -72,7 +69,6 @@ Rectangle {
             font.pixelSize: parent.height/3.9
             font.family: 'Digital-7 Mono'
             color: "white"
-            /*style: Text.Outline; styleColor: "#80000000"*/
             opacity: 0.9
             style: Text.Outline; styleColor: "#80000000"
             horizontalAlignment: Text.AlignHCenter
@@ -80,35 +76,8 @@ Rectangle {
             y: parent.height*0.63
             text: wallClock.time.toLocaleString(Qt.locale(), "HHmmss")
         }
-
-        Text {
-            id: minuteDisplay
-            font.pixelSize: parent.height/3.83
-            font.family: 'Digital-7 Mono'
-            color: "white"
-            /*style: Text.Outline; styleColor: "#80000000"*/
-            opacity: 0.9
-            style: Text.Outline; styleColor: "#80000000"
-            horizontalAlignment: Text.AlignHCenter
-            x: parent.width*0.378
-            y: parent.height*0.65
-            text: wallClock.time.toLocaleString(Qt.locale(), " ")
-        }
-
-        Text {
-            id: secondDisplay
-            font.pixelSize: parent.height/3.83
-            font.family: 'Digital-7 Mono'
-            color: "white"
-            /*style: Text.Outline; styleColor: "#80000000"*/
-            opacity: 0.95
-            style: Text.Outline; styleColor: "#80000000"
-            horizontalAlignment: Text.AlignHCenter
-            x: parent.width*0.616
-            y: parent.height*0.65
-            text: wallClock.time.toLocaleString(Qt.locale(), " ")
-        }
     }
+
     Item {
         anchors.topMargin: parent.height/8
         anchors.horizontalCenter: parent.horizontalCenter

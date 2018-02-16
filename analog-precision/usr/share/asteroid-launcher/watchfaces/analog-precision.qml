@@ -48,8 +48,8 @@ Item {
 
 	// hours
 	Canvas {
-		z: 8
-        id: hourHand  // :D
+        z: 8
+        id: hourHand
         property var hour: 0
 		anchors.fill: parent
 		smooth: true
@@ -65,8 +65,7 @@ Item {
 			ctx.shadowBlur = 4
 			ctx.beginPath()
 			ctx.moveTo(parent.width/2, parent.height/2)
-			ctx.lineTo(parent.width/2+Math.cos(rot * 2 * Math.PI)*width*0.25,
-				   parent.height/2+Math.sin(rot * 2 * Math.PI)*width*0.25)
+            ctx.lineTo(parent.width/2+Math.cos(rot * 2 * Math.PI)*width*0.25, parent.height/2+Math.sin(rot * 2 * Math.PI)*width*0.25)
 			ctx.stroke()
 		}
 	}
@@ -90,29 +89,26 @@ Item {
 			ctx.beginPath()
 			ctx.moveTo(parent.width/2, parent.height/2)
 			ctx.lineTo(parent.width/2+Math.cos((wallClock.time.getMinutes() - 15)/60 * 2 * Math.PI)*width*0.32,
-				   parent.height/2+Math.sin((wallClock.time.getMinutes() - 15)/60 * 2 * Math.PI)*width*0.32)
+                    parent.height/2+Math.sin((wallClock.time.getMinutes() - 15)/60 * 2 * Math.PI)*width*0.32)
 			ctx.stroke()
 		}
 	}
-	
+
 	// seconds
 	Canvas {
 		z: 10
-        id: secondHand  // :D
+        id: secondHand
         property var second: 0
 		anchors.fill: parent
 		smooth: true
 		onPaint: {
 			var ctx = getContext("2d")
             ctx.reset()
-
-			
 			ctx.fillStyle = "red"
 			ctx.beginPath()
 			ctx.arc(width/2, height/2, 3, 0, 2*Math.PI, false)
 			ctx.closePath()
-			ctx.fill()
-			
+			ctx.fill()	
 			ctx.lineWidth = 1
 			ctx.strokeStyle = "red"
 			ctx.shadowColor = "#80000000"
@@ -122,7 +118,7 @@ Item {
 			ctx.beginPath()
 			ctx.moveTo(parent.width/2, parent.height/2)
 			ctx.lineTo(parent.width/2+Math.cos((wallClock.time.getSeconds() - 15)/60 * 2 * Math.PI)*width*0.335,
-				   parent.height/2+Math.sin((wallClock.time.getSeconds() - 15)/60 * 2 * Math.PI)*width*0.335)
+                    parent.height/2+Math.sin((wallClock.time.getSeconds() - 15)/60 * 2 * Math.PI)*width*0.335)
 			ctx.stroke()
 		}
 	}
@@ -214,14 +210,14 @@ Item {
             }if(minuteHand.minute != minute) {
                 minuteHand.minute = minute
                 minuteHand.requestPaint()
-            } if(hourHand.hour != hour) {
+            }if(hourHand.hour != hour) {
                 hourHand.hour = hour
                 hourHand.requestPaint()
             }
         }
-    }
+     }
 
-    Component.onCompleted: {
+     Component.onCompleted: {
         var hour = wallClock.time.getHours()
         var minute = wallClock.time.getMinutes()
         var second = wallClock.time.getSeconds()
@@ -232,14 +228,6 @@ Item {
         minuteHand.requestPaint()
         hourHand.hour = hour
         hourHand.requestPaint()
-    }
+     }
 
-    Connections {
-        target: localeManager
-        onChangesObserverChanged: {
-            secondHand.requestPaint()
-            minuteHand.requestPaint()
-            hourHand.requestPaint()
-        }
-    }
 }
