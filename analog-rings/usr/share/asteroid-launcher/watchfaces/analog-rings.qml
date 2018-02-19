@@ -45,6 +45,7 @@ Item {
             var ctx = getContext("2d")
             var rot = (wallClock.time.getMinutes() -15 )*6
             ctx.reset()
+            ctx.lineCap="round"
             ctx.beginPath()
             ctx.arc(parent.width/2, parent.height/2, width / 2.75, -90* radian, 450* radian, false);
             ctx.lineWidth = parent.width/80
@@ -94,6 +95,7 @@ Item {
             var ctx = getContext("2d")
             var rot = 0.5 * (60 * (wallClock.time.getHours()-3) + wallClock.time.getMinutes())
             ctx.reset()
+            ctx.lineCap="round"
             ctx.beginPath()
             ctx.arc(parent.width/2, parent.height/2, width / 5.3, 270* radian, 630* radian, false);
             ctx.lineWidth = parent.width/80
