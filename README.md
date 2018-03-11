@@ -10,6 +10,7 @@ AsteroidOS it can eventually be merged in the default set of asteroid-launcher.
 | ![thumbnail](.thumbnails/arc.jpg) | [arc (multiple)](arc/usr/share/asteroid-launcher/watchfaces/) | [jgibbon](https://github.com/jgibbon) |
 | ![thumbnail](.thumbnails/50s-americana-analog.jpg) | [50s-americana-analog](50s-americana-analog/usr/share/asteroid-launcher/watchfaces/50s-americana-analog.qml) | [eLtMosen](https://github.com/eLtMosen) |
 | ![thumbnail](.thumbnails/70s-analog-classic.jpg) | [70s-analog-classic](70s-analog-classic/usr/share/asteroid-launcher/watchfaces/70s-analog-classic.qml) | [eLtMosen](https://github.com/eLtMosen) |
+| ![thumbnail](.thumbnails/analog-railway.jpg) | [analog-railway](analog-railway/usr/share/asteroid-launcher/watchfaces/analog-railway.qml) | [eLtMosen](https://github.com/eLtMosen) |
 | ![thumbnail](.thumbnails/analog-rings.jpg) | [analog-rings](analog-rings/usr/share/asteroid-launcher/watchfaces/analog-rings.qml) | [eLtMosen](https://github.com/eLtMosen) |
 | ![thumbnail](.thumbnails/binary-lcd.jpg) | [binary-lcd](binary-lcd/usr/share/asteroid-launcher/watchfaces/binary-lcd.qml) | [eLtMosen](https://github.com/eLtMosen) |
 | ![thumbnail](.thumbnails/bold-hour-bebas.jpg) | [bold-hour-bebas](bold-hour-bebas/usr/share/asteroid-launcher/watchfaces/bold-hour-bebas.qml) | [eLtMosen](https://github.com/eLtMosen) |
