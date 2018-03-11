@@ -9,6 +9,7 @@ AsteroidOS it can eventually be merged in the default set of asteroid-launcher.
 | ![thumbnail](.thumbnails/kitt.jpg) | [kitt](kitt/usr/share/asteroid-launcher/watchfaces/kitt.qml) | [jgibbon](https://github.com/jgibbon) |
 | ![thumbnail](.thumbnails/arc.jpg) | [arc (multiple)](arc/usr/share/asteroid-launcher/watchfaces/) | [jgibbon](https://github.com/jgibbon) |
 | ![thumbnail](.thumbnails/50s-americana-analog.jpg) | [50s-americana-analog](50s-americana-analog/usr/share/asteroid-launcher/watchfaces/50s-americana-analog.qml) | [eLtMosen](https://github.com/eLtMosen) |
+| ![thumbnail](.thumbnails/70s-analog-classic.jpg) | [70s-analog-classic](70s-analog-classic/usr/share/asteroid-launcher/watchfaces/70s-analog-classic.qml) | [eLtMosen](https://github.com/eLtMosen) |
 | ![thumbnail](.thumbnails/analog-rings.jpg) | [analog-rings](analog-rings/usr/share/asteroid-launcher/watchfaces/analog-rings.qml) | [eLtMosen](https://github.com/eLtMosen) |
 | ![thumbnail](.thumbnails/binary-lcd.jpg) | [binary-lcd](binary-lcd/usr/share/asteroid-launcher/watchfaces/binary-lcd.qml) | [eLtMosen](https://github.com/eLtMosen) |
 | ![thumbnail](.thumbnails/bold-hour-bebas.jpg) | [bold-hour-bebas](bold-hour-bebas/usr/share/asteroid-launcher/watchfaces/bold-hour-bebas.qml) | [eLtMosen](https://github.com/eLtMosen) |
@@ -29,7 +30,7 @@ Enable ADB USB mode in settings and push the usr folder to your root directory.
 
 ### Licenses ###
 
-| File | License |
+| Watchface - File | License |
 | --- | --- |
 | retro-lcd - [Digital-7 (Mono)](retro-lcd/usr/share/fonts/digital-7%20(mono).ttf) | The font "Digital-7" is freeware for home use and was created by [Sizenko Alexander](http://www.styleseven.com). |
 | binary-lcd - [Digital-7 (Mono)](binary-lcd/usr/share/fonts/digital-7%20(mono).ttf) | The font "Digital-7" is freeware for home use and was created by [Sizenko Alexander](http://www.styleseven.com). |
@@ -41,3 +42,4 @@ Enable ADB USB mode in settings and push the usr folder to your root directory.
 | sporty-round [SlimSans](sporty-round/usr/share/fonts/SlimSans.ttf) | The font "SlimSans" was created by [Manfred Klein](https://web.archive.org/web/20170823125251/http://manfred-klein.ina-mar.com). Manfred’s fonts are free for private and charity use. They are even free for commercial use – but if there’s any profit, pls make a donation to organizations like [Doctors Without Borders](http://www.doctorswithoutborders.org/)|
 | orbiting-asteroids - [Blue Marble](orbiting-asteroids/usr/share/asteroid-launcher/wallpapers/nasa-blue-marble.jpg) | The image "Blue Marble", Eastern Hemisphere March 2014, Photo from NASA Goddard Space Flight Center is available under creative commons license |
 | 50s-americana-analog - [Fyodor-BoldCondensed](50s-americana-analog/usr/share/fonts/Fyodor-BoldCondensed.ttf) | The font "Fyodor" is licensed under SIL Open Font License and was created by [Chris Hughes](http://fyodor.blueroomcollective.co.uk/). [license](http://scripts.sil.org/cms/scripts/page.php?site_id=nrsi&id=OFL)|
+| 70s-analog-classic - [Lavoir](70s-analog-classic/usr/share/fonts/Lavoir.otf) | The font "Lavoir" is licensed under SIL Open Font License and was created by [Alex Chavot](http://www.alexchavot.fr/typefaces.php/). [license](http://scripts.sil.org/cms/scripts/page.php?site_id=nrsi&id=OFL)|
