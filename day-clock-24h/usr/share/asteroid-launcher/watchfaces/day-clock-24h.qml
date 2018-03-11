@@ -21,6 +21,12 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
+/*
+ * Based on kitt by velox/jgibbon regarding arcs and image embedding.
+ * v2, corrected line height problems by seperating the font line-breaks
+ * into own text items  for more precise alignment.
+ */
+
 import QtQuick 2.1
 
 Item {
@@ -28,7 +34,6 @@ Item {
     Canvas {
         z: 1
         id: twentyfourhourArc
-        property var minute: 0
         anchors.fill: parent
         smooth: true
         renderTarget: Canvas.FramebufferObject
@@ -39,7 +44,7 @@ Item {
             ctx.beginPath()
             ctx.lineWidth = parent.width/42
             ctx.fillStyle = Qt.rgba(0, 0, 0, 0.5)
-            ctx.arc(parent.width/2, parent.height/2, width, 90*0.01745329252, rot*0.01745329252, false);
+            ctx.arc(parent.width/2, parent.height/2, width, 90*0.01745, rot*0.01745, false);
             ctx.lineTo(parent.width/2, parent.height/2)
             ctx.fill()
         }
@@ -55,37 +60,66 @@ Item {
         height: parent.height/3
     }
 
-    /*hour text*/
     Text {
         z: 3
         id: hourDisplay
-        font.pixelSize: parent.height*0.20
-        lineHeight: width/80
+        property var offset: height*0.5
+        font.pixelSize: parent.height*0.22
         font.family: "Vollkorn"
         font.styleName:"Regular"
         color: "white"
         style: Text.Outline; styleColor: "#80000000"
         opacity: 0.9
         horizontalAlignment: Text.AlignHCenter
-        x: parent.width/16
-        y: parent.height/4.2
-        text: wallClock.time.toLocaleString(Qt.locale(), "HH<br>mm")
+        x: parent.width/14
+        y: parent.height/2.5-offset
+        text: wallClock.time.toLocaleString(Qt.locale(), "HH")
+    }
+
+    Text {
+        z: 3
+        id: minuteDisplay
+        property var offset: height*0.5
+        font.pixelSize: parent.height*0.22
+        font.family: "Vollkorn"
+        font.styleName:"Regular"
+        color: "white"
+        style: Text.Outline; styleColor: "#80000000"
+        opacity: 0.9
+        horizontalAlignment: Text.AlignHCenter
+        x: parent.width/14
+        y: parent.height/1.65-offset
+        text: wallClock.time.toLocaleString(Qt.locale(), "mm")
+    }
+
+    Text {
+        z: 4
+        id: dayDisplay
+        property var offset: height*0.5
+        font.pixelSize: parent.height*0.20
+        font.family: "Vollkorn"
+        font.styleName:"Regular"
+        color: "white"
+        style: Text.Outline; styleColor: "#80000000"
+        opacity: 0.5
+        x: parent.width*0.7
+        y: parent.height/2.5-offset
+        text: (Math.round((((0.25 * (60 * (wallClock.time.getHours()+6) + wallClock.time.getMinutes())-90)/360)*100) * 1) / 1)
     }
 
     Text {
         z: 4
         id: percentDisplay
+        property var offset: height*0.5
         font.pixelSize: parent.height*0.20
         font.family: "Vollkorn"
         font.styleName:"Regular"
-        lineHeight: width/75
         color: "white"
         style: Text.Outline; styleColor: "#80000000"
         opacity: 0.5
-        horizontalAlignment: Text.AlignHCenter
-        x: parent.width*0.7
-        y: parent.height/4.2
-        text: (Math.round((((0.25 * (60 * (wallClock.time.getHours()+6) + wallClock.time.getMinutes())-90)/360)*100) * 1) / 1) + "<br>%"
+        x: parent.width*0.73
+        y: parent.height/1.58-offset
+        text: "%"
     }
 
     Text {
@@ -107,7 +141,7 @@ Item {
     Text {
         z: 6
         id: dateDisplay
-        font.pixelSize: parent.height*0.08
+        font.pixelSize: parent.height*0.1
         font.family: "Vollkorn"
         font.styleName:"Regular"
         lineHeight: parent.height*0.0025
@@ -116,24 +150,18 @@ Item {
         opacity: 0.8
         horizontalAlignment: Text.AlignHCenter
         anchors.horizontalCenter: parent.horizontalCenter
-        y: parent.height/1.3
+        y: parent.height/1.32
         text: wallClock.time.toLocaleString(Qt.locale(), "yyyy MM dd")
     }
 
     Connections {
         target: wallClock
         onTimeChanged: {
-            var minute = wallClock.time.getMinutes()
-              if(twentyfourhourArc.minute != minute) {
-                twentyfourhourArc.minute = minute
-                twentyfourhourArc.requestPaint()
-            }
+            twentyfourhourArc.requestPaint()
         }
     }
 
     Component.onCompleted: {
-        var minute = wallClock.time.getMinutes()
-        twentyfourhourArc.minute = minute
         twentyfourhourArc.requestPaint()
     }
 }
