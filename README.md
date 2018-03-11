@@ -20,6 +20,7 @@ AsteroidOS it can eventually be merged in the default set of asteroid-launcher.
 | ![thumbnail](.thumbnails/greenium.jpg) | [greenium](greenium/usr/share/asteroid-launcher/watchfaces/greenium.qml) | [eLtMosen](https://github.com/eLtMosen) |
 | ![thumbnail](.thumbnails/humongous.jpg) | [humongous](humongous/usr/share/asteroid-launcher/watchfaces/humongous.qml) | [eLtMosen](https://github.com/eLtMosen) |
 | ![thumbnail](.thumbnails/logo-45degree.jpg) | [logo-45degree](logo-45degree/usr/share/asteroid-launcher/watchfaces/logo-45degree.qml) | [eLtMosen](https://github.com/eLtMosen) |
+| ![thumbnail](.thumbnails/masked-spartan.jpg) | [masked-spartan](masked-spartan/usr/share/asteroid-launcher/watchfaces/masked-spartan.qml) | [eLtMosen](https://github.com/eLtMosen) |
 | ![thumbnail](.thumbnails/orbiting-asteroids.jpg) | [orbiting-asteroids](orbiting-asteroids/usr/share/asteroid-launcher/watchfaces/orbiting-asteroids.qml) | [eLtMosen](https://github.com/eLtMosen) |
 | ![thumbnail](.thumbnails/prominent-seconds.jpg) | [prominent-seconds](prominent-seconds/usr/share/asteroid-launcher/watchfaces/prominent-seconds.qml) | [eLtMosen](https://github.com/eLtMosen) |
 | ![thumbnail](.thumbnails/rainbow-uprising.jpg) | [rainbow-uprising](rainbow-uprising/usr/share/asteroid-launcher/watchfaces/rainbow-uprising.qml) | [eLtMosen](https://github.com/eLtMosen) |
@@ -49,3 +50,4 @@ Enable ADB USB mode in settings and push the usr folder to your root directory.
 | binary-digital - [Simpleness](binary-digital/usr/share/fonts/Simpleness.otf) | The font "Simpleness" is licensed under SIL Open Font License and was created by [Valentin Francois](http://valentinfrancois.fr/). [license](binary-digital/usr/share/fonts/License.pdf)|
 | humongous - [Item-Black](humongous/usr/share/fonts/ITEMBL__.TTF) | The font "Item" is Public Domain and was created by [Bojmic Interpro](https://www.fontzillion.com/fonts/bojmic-interpro/item).|
 | logo-45degree - [Sinner](logo-45degree/usr/share/fonts/SINNER__.TTF) | The font "Sinner" is freeware for personal, non-commercial use only and was created by [Helge Barske](http://www.barske.com/). [license-info](https://www.fontzillion.com/fonts/helge-barske/sinner)|
+| masked-spartan - [LeagueSpartan-Bold](masked-spartan/usr/share/fonts/LeagueSpartan-Bold.otf) | The font "LeagueSpartan" is licensed under SIL Open Font License and was created by [Caroline Hadilaksono, Micah Rich, & Tyler Finck](https://www.theleagueofmoveabletype.com/league-spartan). [license](http://scripts.sil.org/cms/scripts/page.php?site_id=nrsi&id=OFL)|
