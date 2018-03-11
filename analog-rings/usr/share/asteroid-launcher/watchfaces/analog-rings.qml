@@ -24,23 +24,22 @@
 import QtQuick 2.1
 
 Item {
-    property var radian: 0.01745329252
+    property var radian: 0.01745
 
     Image {
         id: logoAsteroid
         source: "asteroid_logo.png"
         anchors.horizontalCenter: parent.horizontalCenter
         anchors.verticalCenter: parent.verticalCenter
-        width: parent.width/5.2
-        height: parent.height/5.2
+        width: parent.width/5.7
+        height: parent.height/5.7
     }
 
     Canvas {
         id: minuteArc
-        property var minute: 0
         anchors.fill: parent
         smooth: true
-        renderTarget: Canvas.FramebufferObject 
+        renderTarget: Canvas.FramebufferObject
         onPaint: {
             var ctx = getContext("2d")
             var rot = (wallClock.time.getMinutes() -15 )*6
@@ -61,7 +60,6 @@ Item {
 
     Canvas {
         id: minuteCircle
-        property var minute: 0
         property var rotM: (wallClock.time.getMinutes() - 15)/60
         property var centerX: parent.width/2
         property var centerY: parent.height/2
@@ -69,7 +67,7 @@ Item {
         property var minuteY: centerY+Math.sin(rotM * 2 * Math.PI)*width*0.36
         anchors.fill: parent
         smooth: true
-        renderTarget: Canvas.FramebufferObject 
+        renderTarget: Canvas.FramebufferObject
         onPaint: {
             var ctx = getContext("2d")
             var rot1 = (0 -15 )*6 * radian
@@ -87,10 +85,9 @@ Item {
 
     Canvas {
         id: hourArc
-        property var hour: 0
         anchors.fill: parent
         smooth: true
-        renderTarget: Canvas.FramebufferObject 
+        renderTarget: Canvas.FramebufferObject
         onPaint: {
             var ctx = getContext("2d")
             var rot = 0.5 * (60 * (wallClock.time.getHours()-3) + wallClock.time.getMinutes())
@@ -111,7 +108,6 @@ Item {
 
     Canvas {
         id: hourCircle
-        property var hour: 0
         property var rotH: (wallClock.time.getHours()-3 + wallClock.time.getMinutes()/60) / 12
         property var centerX: parent.width/2
         property var centerY: parent.height/2
@@ -119,7 +115,7 @@ Item {
         property var hourY: (centerY+Math.sin(rotH * 2 * Math.PI)*width*0.185)
         anchors.fill: parent
         smooth: true
-        renderTarget: Canvas.FramebufferObject 
+        renderTarget: Canvas.FramebufferObject
         onPaint: {
             var ctx = getContext("2d")
             var rot1 = (0 -15 )*6 * radian
@@ -138,60 +134,51 @@ Item {
     Text {
         id: hourDisplay
         property var rotH: (wallClock.time.getHours()-3 + wallClock.time.getMinutes()/60) / 12
-        property var centerX: parent.width/2-width/2
-        property var centerY: parent.height/2-height/2
-        font.pixelSize: parent.height/9
-        font.family: "OpenSans"
+        property var hoffset: parent.height*0.0015
+        property var voffset: parent.height*0.005
+        property var centerX: parent.width/2-width/2-hoffset
+        property var centerY: parent.height/2-height/2+voffset
+        font.pixelSize: parent.height/8
+        font.family: "SlimSans"
         color: "white"
         opacity: 1.0
         style: Text.Outline; styleColor: "#80000000"
         horizontalAlignment: Text.AlignHCenter
-        x: centerX+Math.cos(rotH * 2 * Math.PI)*height*1.18
-        y: centerY+Math.sin(rotH * 2 * Math.PI)*height*1.18
+        x: centerX+Math.cos(rotH * 2 * Math.PI)*height*1.32
+        y: centerY+Math.sin(rotH * 2 * Math.PI)*height*1.32
         text: wallClock.time.toLocaleString(Qt.locale(), "<b>HH</b>")
     }
 
     Text {
         id: minuteDisplay
         property var rotM: (wallClock.time.getMinutes() - 15)/60
-        property var centerX: parent.width/2-width/2
-        property var centerY: parent.height/2-height/2
-        font.pixelSize: parent.height/10
-        font.family: "OpenSans"
+        property var hoffset: parent.height*0.0015
+        property var voffset: parent.height*0.0015
+        property var centerX: parent.width/2-width/2-hoffset
+        property var centerY: parent.height/2-height/2+voffset
+        font.pixelSize: parent.height/8
+        font.family: "SlimSans"
         color: "white"
         opacity: 1.00
         style: Text.Outline; styleColor: "#80000000"
-        x: centerX+Math.cos(rotM * 2 * Math.PI)*height*2.585
-        y: centerY+Math.sin(rotM * 2 * Math.PI)*height*2.585
+        x: centerX+Math.cos(rotM * 2 * Math.PI)*height*2.535
+        y: centerY+Math.sin(rotM * 2 * Math.PI)*height*2.535
         text: wallClock.time.toLocaleString(Qt.locale(), "mm")
     }
 
     Connections {
         target: wallClock
         onTimeChanged: {
-            var hour = wallClock.time.getHours()
-            var minute = wallClock.time.getMinutes()
-            var second = wallClock.time.getSeconds()
-            var date = wallClock.time.getDate()
-            if(minuteArc.minute != minute) {
-                minuteArc.minute = minute
-                minuteCircle.requestPaint()
-                minuteArc.requestPaint()
-                hourArc.hour = hour
-                hourCircle.requestPaint()
-                hourArc.requestPaint()
-            }
+            minuteCircle.requestPaint()
+            minuteArc.requestPaint()
+            hourCircle.requestPaint()
+            hourArc.requestPaint()
         }
     }
 
     Component.onCompleted: {
-        var hour = wallClock.time.getHours()
-        var minute = wallClock.time.getMinutes()
-        var date = wallClock.time.getDate()
-        minuteArc.minute = minute
         minuteCircle.requestPaint()
         minuteArc.requestPaint()
-        hourArc.hour = hour
         hourCircle.requestPaint()
         hourArc.requestPaint()
     }

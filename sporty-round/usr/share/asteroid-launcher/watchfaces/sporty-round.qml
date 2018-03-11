@@ -41,6 +41,7 @@ Item {
             ctx.stroke()
         }
     }
+
     // second stroke
     Canvas {
         z: 2
@@ -65,34 +66,10 @@ Item {
         }
     }
 
-    // second Arc
-    /*Canvas {
-        z: 3
-        id: secondArc
-        property var second: 0
-        anchors.fill: parent
-        smooth: true
-        onPaint: {
-            var ctx = getContext("2d")
-            var rot = (wallClock.time.getSeconds() - 15)*6
-            ctx.reset()
-            ctx.shadowColor = Qt.rgba(0.361, 1, 0.824, 0.9)
-            ctx.shadowOffsetX = 0
-            ctx.shadowOffsetY = 0
-            ctx.shadowBlur = 4
-            ctx.beginPath()
-            ctx.arc(parent.width/2, parent.height/2, width *0.43, -90* 0.01745329252, rot* 0.01745329252, false);
-            ctx.lineWidth = parent.width/200
-            ctx.strokeStyle = Qt.rgba(0.361, 1, 0.824, 1)
-            ctx.stroke()
-        }
-    }*/
-
     // second display
     Canvas {
         z: 3
         id: secondDisplay
-        property var second: 0
         anchors.fill: parent
         smooth: true
         onPaint: {
@@ -126,17 +103,17 @@ Item {
         onPaint: {
             var ctx = getContext("2d")
             ctx.reset()
-            ctx.lineWidth = parent.height/200
+            ctx.lineWidth = parent.height / 200
             ctx.strokeStyle = Qt.rgba(0.361, 1, 0.824, 1)
             ctx.shadowColor = Qt.rgba(0.361, 1, 0.824, 0.9)
             ctx.shadowOffsetX = 0
             ctx.shadowOffsetY = 0
             ctx.shadowBlur = 4
             ctx.beginPath()
-            ctx.moveTo(parent.width/2+Math.cos((wallClock.time.getSeconds() - 15)/60 * 2 * Math.PI)*width*0.28,
-                    parent.height/2+Math.sin((wallClock.time.getSeconds() - 15)/60 * 2 * Math.PI)*width*0.28)
-            ctx.lineTo(parent.width/2+Math.cos((wallClock.time.getSeconds() - 15)/60 * 2 * Math.PI)*width*0.43,
-                    parent.height/2+Math.sin((wallClock.time.getSeconds() - 15)/60 * 2 * Math.PI)*width*0.43)
+            ctx.moveTo(parent.width / 2 + Math.cos((second - 15) / 60 * 2 * Math.PI)*width * 0.28,
+                    parent.height / 2 + Math.sin((second - 15) / 60 * 2 * Math.PI)*width * 0.28)
+            ctx.lineTo(parent.width / 2 + Math.cos((second - 15) / 60 * 2 * Math.PI)*width * 0.43,
+                    parent.height / 2 + Math.sin((second - 15) / 60 * 2 * Math.PI)*width * 0.43)
             ctx.stroke()
         }
     }
@@ -153,13 +130,10 @@ Item {
 
             ctx.translate(parent.width/2, parent.height/2)
             for (var i=0; i < 60; i++) {
-                // do not paint a minute stroke when there is an hour stroke
-                //if ((i%5) != 0) {
-                    ctx.beginPath()
-                    ctx.moveTo(0, height*0.355)
-                    ctx.lineTo(0, height*0.395)
-                    ctx.stroke()
-                //}
+                ctx.beginPath()
+                ctx.moveTo(0, height*0.355)
+                ctx.lineTo(0, height*0.395)
+                ctx.stroke()
                 ctx.rotate(Math.PI/30)
             }
         }
@@ -169,7 +143,6 @@ Item {
     Canvas {
         z: 6
         id: minuteDisplay
-        property var minute: 0
         anchors.fill: parent
         smooth: true
         onPaint: {
@@ -209,10 +182,10 @@ Item {
             ctx.shadowOffsetY = 0
             ctx.shadowBlur = 5
             ctx.beginPath()
-            ctx.moveTo(parent.width/2+Math.cos((wallClock.time.getMinutes() - 15)/60 * 2 * Math.PI)*width*0.285,
-                    parent.height/2+Math.sin((wallClock.time.getMinutes() - 15)/60 * 2 * Math.PI)*width*0.285)
-            ctx.lineTo(parent.width/2+Math.cos((wallClock.time.getMinutes() - 15)/60 * 2 * Math.PI)*width*0.36,
-                    parent.height/2+Math.sin((wallClock.time.getMinutes() - 15)/60 * 2 * Math.PI)*width*0.36)
+            ctx.moveTo(parent.width / 2 + Math.cos((minute - 15) / 60 * 2 * Math.PI) * width * 0.285,
+                    parent.height / 2 + Math.sin((minute - 15) / 60 * 2 * Math.PI) * width * 0.285)
+            ctx.lineTo(parent.width / 2 + Math.cos((minute - 15) / 60 * 2 * Math.PI) * width * 0.36,
+                    parent.height / 2 + Math.sin((minute - 15) / 60 * 2 * Math.PI) * width * 0.36)
             ctx.stroke()
         }
     }
@@ -226,7 +199,7 @@ Item {
         smooth: true
         onPaint: {
             var ctx = getContext("2d")
-            var rot = 0.5 * (60 * (wallClock.time.getHours()-3) + wallClock.time.getMinutes())
+            var rot = 0.5 * (60 * (hour-3) + wallClock.time.getMinutes())
             ctx.reset()
             ctx.shadowColor = Qt.rgba(0.996, 0, 0.031, 0.7)
             ctx.shadowOffsetX = 0
@@ -235,23 +208,10 @@ Item {
             ctx.lineWidth = parent.height/82
             ctx.lineCap="round"
             ctx.strokeStyle = Qt.rgba(0.996, 0, 0.031, 0.9)
-            //ctx.translate(parent.width/2, parent.height/2)
-            //for (var i=0; i <= rot/60; i++) {
-                ctx.beginPath()
-                ctx.arc(parent.width/2, parent.height/2, width *0.32, 270* 0.01745329252, rot* 0.01745329252, false);
-                ctx.stroke()
-                //ctx.rotate(Math.PI/6)
-            //}
+            ctx.beginPath()
+            ctx.arc(parent.width/2, parent.height/2, width *0.32, 270* 0.01745, rot* 0.01745, false);
+            ctx.stroke()
 
-
-
-
-
-            /*ctx.beginPath()
-            ctx.arc(parent.width/2, parent.height/2, width *0.43, -90* 0.01745329252, rot* 0.01745329252, false);
-            ctx.lineWidth = parent.width/200
-            ctx.strokeStyle = Qt.rgba(0.361, 1, 0.824, 1)
-            ctx.stroke()*/
         }
     }
 
@@ -311,7 +271,6 @@ Item {
             var hour = wallClock.time.getHours()
             var minute = wallClock.time.getMinutes()
             var second = wallClock.time.getSeconds()
-            var date = wallClock.time.getDate()
             if(secondHand.second != second) {
                 secondHand.second = second
                 secondHand.requestPaint()
@@ -332,7 +291,6 @@ Item {
         var hour = wallClock.time.getHours()
         var minute = wallClock.time.getMinutes()
         var second = wallClock.time.getSeconds()
-        var date = wallClock.time.getDate()
         secondHand.second = second
         secondHand.requestPaint()
         secondDisplay.requestPaint()
@@ -342,7 +300,5 @@ Item {
         minuteDisplay.requestPaint()
         hourArc.hour = hour
         hourArc.requestPaint()
-
      }
-
 }
