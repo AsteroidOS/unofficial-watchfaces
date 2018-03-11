@@ -33,7 +33,7 @@ Enable ADB USB mode in settings and push the usr folder to your root directory.
 
 ### Licenses ###
 
-| Watchface - File | License |https://www.fontzillion.com/fonts/bojmic-interpro/item
+| Watchface - File | License |
 | --- | --- |
 | retro-lcd - [Digital-7 (Mono)](retro-lcd/usr/share/fonts/digital-7%20(mono).ttf) | The font "Digital-7" is freeware for home use and was created by [Sizenko Alexander](http://www.styleseven.com). |
 | binary-lcd - [Digital-7 (Mono)](binary-lcd/usr/share/fonts/digital-7%20(mono).ttf) | The font "Digital-7" is freeware for home use and was created by [Sizenko Alexander](http://www.styleseven.com). |
@@ -48,3 +48,4 @@ Enable ADB USB mode in settings and push the usr folder to your root directory.
 | 70s-analog-classic - [Lavoir](70s-analog-classic/usr/share/fonts/Lavoir.otf) | The font "Lavoir" is licensed under SIL Open Font License and was created by [Alex Chavot](http://www.alexchavot.fr/typefaces.php/). [license](http://scripts.sil.org/cms/scripts/page.php?site_id=nrsi&id=OFL)|
 | binary-digital - [Simpleness](binary-digital/usr/share/fonts/Simpleness.otf) | The font "Simpleness" is licensed under SIL Open Font License and was created by [Valentin Francois](http://valentinfrancois.fr/). [license](binary-digital/usr/share/fonts/License.pdf)|
 | humongous - [Item-Black](humongous/usr/share/fonts/ITEMBL__.TTF) | The font "Item" is Public Domain and was created by [Bojmic Interpro](https://www.fontzillion.com/fonts/bojmic-interpro/item).|
+| logo-45degree - [Sinner](logo-45degree/usr/share/fonts/SINNER__.TTF) | The font "Sinner" is freeware for personal, non-commercial use only and was created by [Helge Barske](http://www.barske.com/). [license-info](https://www.fontzillion.com/fonts/helge-barske/sinner)|

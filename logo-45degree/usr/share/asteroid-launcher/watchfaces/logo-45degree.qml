@@ -21,67 +21,71 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
+/*
+ * Based on digital stock watchfaces, example of how to offset and
+ * rotate fonts to align them to other objects.
+ * v2, changed font to Sinner for more edgy look fitting the logo.
+ */
+
 import QtQuick 2.1
 
 Item {
 
     Image {
-        id: logoAsteroid
         source: "asteroid_logo.png"
+        opacity: 0.75
         anchors.horizontalCenter: parent.horizontalCenter
         anchors.verticalCenter: parent.verticalCenter
-        width: parent.width/2.1
-        height: parent.height/2.1
+        width: parent.width/1.68
+        height: parent.height/1.68
     }
 
     Text {
         id: hourDisplay
+        property var hoffset: parent.width*0.28
+        property var voffset: -parent.height*0.03
         property var rotH: (wallClock.time.getHours()-3 + wallClock.time.getMinutes()/60) / 12
-        font.pixelSize: parent.height/3
-        font.family: "OpenSans"
-        color: "white"
-        style: Text.Outline; styleColor: "#80000000"
+        font.pixelSize: parent.height/4
+        font.family: "sinner"
+        color: Qt.rgba(1, 1, 1, 0.8)
         opacity: 0.95
+        style: Text.Outline; styleColor: Qt.rgba(0, 0, 0, 0.4)
+        x: parent.width/3.8 - hoffset
+        y: parent.height/3.8 - voffset
         horizontalAlignment: Text.AlignHCenter
-        transform: Rotation { origin.x: centerX;
-                              origin.y: centerY;
-                              angle: -45}
-        x: parent.width/2-width/0.70
-        y: parent.height/2-height/1.78
-        text: wallClock.time.toLocaleString(Qt.locale(), "<b>HH</b>")
-
-
+        transform: Rotation {angle: -45}
+        text: wallClock.time.toLocaleString(Qt.locale(), "HH")
     }
 
     Text {
         id: minuteDisplay
-        font.pixelSize: parent.height/3
-        font.family: "OpenSans"
-        color: "white"
-        style: Text.Outline; styleColor: "#80000000"
+        property var hoffset: parent.width*0.035
+        property var voffset: parent.height*0.28
+        font.pixelSize: parent.height/4
+        font.family: "sinner"
+        color: Qt.rgba(1, 1, 1, 0.8)
         opacity: 0.95
-        transform: Rotation { origin.x: centerX;
-                              origin.y: centerY;
-                              angle: +45}
-        x: parent.width/1.295
-        y: parent.height/2-height/0.855
+        style: Text.Outline; styleColor: Qt.rgba(0, 0, 0, 0.4)
+        transform: Rotation {angle: +45}
+        x: parent.width/1.35 - hoffset
+        y: parent.height/3.8 - voffset
+        horizontalAlignment: Text.AlignHCenter
         text: wallClock.time.toLocaleString(Qt.locale(), "mm")
-
     }
 
     Text {
         id: secondDisplay
-        font.pixelSize: parent.height/3
-        font.family: "OpenSans"
-        color: "white"
-        style: Text.Outline; styleColor: "#80000000"
+        property var hoffset: parent.width*0.28
+        property var voffset: -parent.height*0.03
+        font.pixelSize: parent.height/4
+        font.family: "sinner"
+        color: Qt.rgba(1, 1, 1, 0.8)
         opacity: 0.95
-        transform: Rotation { origin.x: centerX;
-                              origin.y: centerY;
-                              angle: -45}
-        x: parent.width/2.34
-        y: parent.height/1.41
+        style: Text.Outline; styleColor: Qt.rgba(0, 0, 0, 0.4)
+        transform: Rotation {angle: -45}
+        x: parent.width/1.35 - hoffset
+        y: parent.height/1.35 - voffset
+        horizontalAlignment: Text.AlignHCenter
         text: wallClock.time.toLocaleString(Qt.locale(), "ss")
-
     }
 }
