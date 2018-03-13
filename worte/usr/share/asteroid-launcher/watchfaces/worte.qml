@@ -40,7 +40,7 @@ Item {
             var minutesList = [" ", "<b>fünf</b><br>nach", "<b>zehn</b><br>nach", "<b>viertel</b><br>nach", "<b>zwanzig</b>", "<b>fünf</b><br> vor halb", "<b>dreißig</b>", "<b>fünf</b><br> nach halb", "<b>vierzig</b>", "<b>viertel</b><br>vor", "<b>zehn</b><br>vor", "<b>fünf</b><br>vor", " "]
             var hoursList = ["<b>zwölf</b>", "<b>ein</b>", "<b>zwei</b>", "<b>drei</b>", "<b>vier</b>", "<b>fünf</b>", "<b>sechs</b>", "<b>sieben</b>", "<b>acht</b>", "<b>neun</b>", "<b>zehn</b>", "<b>elf</b>"]
             var minutesFirst = [false, true, true, true, false, true, false, true, false, true, true, true, false]
-            var nextHour = [false, false, false, false, false, false, false, false, false, true, true, true, true]
+            var nextHour   = [false, false, false, false, false, false, false, false, false, true, true, true, true]
             var hourSuffix = [true, false, false, false ,true, false, true, false, true, false, false, false, true]
 
             var minutes = Math.round(time.getMinutes()/5)
@@ -53,15 +53,23 @@ Item {
             if (hourSuffix[minutes]) {
                 if (minutesFirst[minutes]) {
                     var generatedString = minutesList[minutes].toUpperCase() + newline + hoursList[hours].toUpperCase() +" UHR"
-                    } else {
+                } else {
                     var generatedString = hoursList[hours].toUpperCase()+" UHR" + newline + minutesList[minutes].toUpperCase()}
+            } else {
+                if (hours == 1) {
+                    if (minutesFirst[minutes]) {
+                        var generatedString = minutesList[minutes].toUpperCase() + newline + hoursList[hours].toUpperCase()+"<b>S</b>"
+                    } else {
+                        var generatedString = hoursList[hours].toUpperCase() +"<b>S</b>"+ newline + minutesList[minutes].toUpperCase()
+                    }
                 } else {
                     if (minutesFirst[minutes]) {
                         var generatedString = minutesList[minutes].toUpperCase() + newline + hoursList[hours].toUpperCase()
-                        } else {
+                    } else {
                         var generatedString = hoursList[hours].toUpperCase() + newline + minutesList[minutes].toUpperCase()
                     }
                 }
+            }
             return start + generatedString + end
         }
 
@@ -80,20 +88,26 @@ Item {
             left: parent.left
             right: parent.right
         }
+        Behavior on text {
+            SequentialAnimation {
+                NumberAnimation { target: timeDisplay; property: "opacity"; to: 0 }
+                PropertyAction {}
+                NumberAnimation { target: timeDisplay; property: "opacity"; to: 1 }
+            }
+        }
         text: generateTime(wallClock.time)
     }
 
     Text {
         id: dateDisplay
-
         font.pixelSize: parent.height*0.07
         color: "white"
         style: Text.Outline; styleColor: "#80000000"
         opacity: 0.8
         horizontalAlignment: Text.AlignHCenter
         anchors {
-            topMargin: 10
-            top: timeDisplay.bottom
+            bottomMargin: parent.height*0.115
+            bottom: parent.bottom
             left: parent.left
             right: parent.right
         }

@@ -35,36 +35,35 @@ Item {
             var ctx = getContext("2d")
             ctx.reset()
             ctx.beginPath()
-            ctx.lineWidth = parent.width/42
+            ctx.lineWidth = parent.width / 42
             ctx.fillStyle = Qt.rgba(1, 0.176, 0.188, 0.2)
-            ctx.fillRect(0, 0, parent.width/6, parent.height)
+            ctx.fillRect(0, 0, parent.width / 6, parent.height)
             ctx.closePath()
             ctx.beginPath()
-            ctx.lineWidth = parent.width/42
+            ctx.lineWidth = parent.width / 42
             ctx.fillStyle = Qt.rgba(0.996, 0.541, 0.098, 0.2)
-            ctx.fillRect(parent.width/6, 0, parent.width/6, parent.height)
+            ctx.fillRect(parent.width / 6, 0, parent.width / 6, parent.height)
             ctx.closePath()
             ctx.beginPath()
-            ctx.lineWidth = parent.width/42
+            ctx.lineWidth = parent.width / 42
             ctx.fillStyle = Qt.rgba(0.922, 0.859, 0.047, 0.2)
-            ctx.fillRect(parent.width/6*2, 0, parent.width/6, parent.height)
+            ctx.fillRect(parent.width / 6 * 2, 0, parent.width / 6, parent.height)
             ctx.closePath()
             ctx.beginPath()
-            ctx.lineWidth = parent.width/42
+            ctx.lineWidth = parent.width / 42
             ctx.fillStyle = Qt.rgba(0.694, 0.812, 0.051, 0.2)
-            ctx.fillRect(parent.width/6*3, 0, parent.width/6, parent.height)
+            ctx.fillRect(parent.width / 6 * 3, 0, parent.width / 6, parent.height)
             ctx.closePath()
             ctx.beginPath()
-            ctx.lineWidth = parent.width/42
+            ctx.lineWidth = parent.width / 42
             ctx.fillStyle = Qt.rgba(0.055, 0.694, 0.91, 0.2)
-            ctx.fillRect(parent.width/6*4, 0, parent.width/6, parent.height)
+            ctx.fillRect(parent.width / 6 * 4, 0, parent.width / 6, parent.height)
             ctx.closePath()
             ctx.beginPath()
-            ctx.lineWidth = parent.width/42
+            ctx.lineWidth = parent.width / 42
             ctx.fillStyle = Qt.rgba(0.51, 0, 0.427, 0.2)
-            ctx.fillRect(parent.width/6*5, 0, parent.width/6, parent.height)
+            ctx.fillRect(parent.width / 6 * 5, 0, parent.width / 6, parent.height)
             ctx.closePath()
-
         }
     }
 
@@ -74,7 +73,7 @@ Item {
         anchors.horizontalCenter: parent.horizontalCenter
         color: Qt.rgba(0, 0, 0, 0.7)
         width: parent.width
-        height: parent.height*0.24
+        height: parent.height * 0.24
     }
 
     Canvas {
@@ -89,14 +88,14 @@ Item {
             var ctx = getContext("2d")
             ctx.reset()
             ctx.beginPath()
-            ctx.lineWidth = parent.width/42
+            ctx.lineWidth = parent.width / 42
             ctx.fillStyle = Qt.rgba(0.996, 0.282, 0.298, 0.7)
-            ctx.fillRect(0, parent.height, parent.width/6, wallClock.time.getHours()/24*100*(-parent.height/100))
+            ctx.fillRect(0, parent.height, parent.width / 6, hour / 24 * 100 * (-parent.height / 100))
             ctx.closePath()
             ctx.beginPath()
-            ctx.lineWidth = parent.width/42
+            ctx.lineWidth = parent.width / 42
             ctx.fillStyle = Qt.rgba(1, 0.631, 0.188, 0.7)
-            ctx.fillRect(parent.width/6, parent.height, parent.width/6, wallClock.time.getHours()/24*100*(-parent.height/100))
+            ctx.fillRect(parent.width / 6, parent.height, parent.width / 6, hour / 24 * 100 * (-parent.height / 100))
             ctx.closePath()
 
         }
@@ -114,14 +113,14 @@ Item {
             var ctx = getContext("2d")
             ctx.reset()
             ctx.beginPath()
-            ctx.lineWidth = parent.width/42
+            ctx.lineWidth = parent.width / 42
             ctx.fillStyle = Qt.rgba(1, 0.933, 0.051, 0.7)
-            ctx.fillRect(parent.width/6*2, parent.height, parent.width/6, wallClock.time.getMinutes()/60*100*(-parent.height/100))
+            ctx.fillRect(parent.width / 6 * 2, parent.height, parent.width / 6, minute / 60 * 100 * (-parent.height / 100))
             ctx.closePath()
             ctx.beginPath()
-            ctx.lineWidth = parent.width/42
+            ctx.lineWidth = parent.width / 42
             ctx.fillStyle = Qt.rgba(0.855, 1, 0.047, 0.7)
-            ctx.fillRect(parent.width/6*3, parent.height, parent.width/6, wallClock.time.getMinutes()/60*100*(-parent.height/100))
+            ctx.fillRect(parent.width / 6 * 3, parent.height, parent.width / 6, minute / 60 * 100 * (-parent.height / 100))
             ctx.closePath()
 
         }
@@ -139,16 +138,15 @@ Item {
             var ctx = getContext("2d")
             ctx.reset()
             ctx.beginPath()
-            ctx.lineWidth = parent.width/42
+            ctx.lineWidth = parent.width / 42
             ctx.fillStyle = Qt.rgba(0.133, 0.827, 1, 0.7)
-            ctx.fillRect(parent.width/6*4, parent.height, parent.width/6, wallClock.time.getSeconds()/60*100*(-parent.height/100))
+            ctx.fillRect(parent.width / 6 * 4, parent.height, parent.width / 6, second / 60 * 100 * (-parent.height / 100))
             ctx.closePath()
             ctx.beginPath()
-            ctx.lineWidth = parent.width/42
+            ctx.lineWidth = parent.width / 42
             ctx.fillStyle = Qt.rgba(0.902, 0, 0.769, 0.7)
-            ctx.fillRect(parent.width/6*5, parent.height, parent.width/6, wallClock.time.getSeconds()/60*100*(-parent.height/100))
+            ctx.fillRect(parent.width / 6 * 5, parent.height, parent.width / 6, second / 60 * 100 * (-parent.height / 100))
             ctx.closePath()
-
         }
     }
 
@@ -156,14 +154,17 @@ Item {
         z: 6
         id: hourDisplay
         renderType: Text.NativeRendering
-        font.pixelSize: parent.height*0.25
+        font.pixelSize: parent.height * 0.25
         font.family: "Titillium"
         font.styleName:"Bold"
-        lineHeight: parent.height/330
+        lineHeight: parent.height / 330
         color: Qt.rgba(1, 1, 1, 1)
         horizontalAlignment: Text.AlignHCenter
-        anchors.verticalCenter: parent.verticalCenter
-        x: parent.width/6-width/2
+        anchors {
+            topMargin: parent.height * 0.395
+            top: parent.top
+        }
+        x: parent.width / 6-width / 2
         text: wallClock.time.toLocaleString(Qt.locale(), "HH")
     }
 
@@ -171,14 +172,17 @@ Item {
         z: 6
         id: minuteDisplay
         renderType: Text.NativeRendering
-        font.pixelSize: parent.height*0.25
+        font.pixelSize: parent.height * 0.25
         font.family: "Titillium"
         font.styleName:"Regular"
-        lineHeight: parent.height/330
+        lineHeight: parent.height / 330
         color: Qt.rgba(1, 1, 1, 1)
         horizontalAlignment: Text.AlignHCenter
-        anchors.verticalCenter: parent.verticalCenter
-        anchors.horizontalCenter: parent.horizontalCenter
+        anchors {
+            topMargin: parent.height * 0.395
+            top: parent.top
+            horizontalCenter: parent.horizontalCenter
+        }
         text: wallClock.time.toLocaleString(Qt.locale(), "mm")
     }
 
@@ -186,14 +190,17 @@ Item {
         z: 6
         id: secondDisplay
         renderType: Text.NativeRendering
-        font.pixelSize: parent.height*0.25
+        font.pixelSize: parent.height * 0.25
         font.family: "Titillium"
         font.styleName:"Thin"
-        lineHeight: parent.height/330
+        lineHeight: parent.height / 330
         color: Qt.rgba(1, 1, 1, 1)
         horizontalAlignment: Text.AlignHCenter
-        anchors.verticalCenter: parent.verticalCenter
-        x: parent.width/6*5-width/2
+        anchors {
+            topMargin: parent.height * 0.395
+            top: parent.top
+        }
+        x: parent.width / 6 * 5 - width / 2
         text: wallClock.time.toLocaleString(Qt.locale(), "ss")
     }
 
@@ -214,19 +221,18 @@ Item {
                 hourBar.requestPaint()
             }
         }
-     }
+    }
 
-     Component.onCompleted: {
-         var hour = wallClock.time.getHours()
-         var minute = wallClock.time.getMinutes()
-         var second = wallClock.time.getSeconds()
-         secondBar.second = second
-         secondBar.requestPaint()
-         minuteBar.minute = minute
-         minuteBar.requestPaint()
-         hourBar.hour = hour
-         hourBar.requestPaint()
+    Component.onCompleted: {
+        var hour = wallClock.time.getHours()
+        var minute = wallClock.time.getMinutes()
+        var second = wallClock.time.getSeconds()
+        secondBar.second = second
+        secondBar.requestPaint()
+        minuteBar.minute = minute
+        minuteBar.requestPaint()
+        hourBar.hour = hour
+        hourBar.requestPaint()
 
-     }
-
+    }
 }
