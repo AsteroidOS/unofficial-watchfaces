@@ -12,6 +12,7 @@ AsteroidOS it can eventually be merged in the default set of asteroid-launcher.
 | ![thumbnail](.thumbnails/analog-70s-classic.jpg) | [analog-70s-classic](analog-70s-classic/usr/share/asteroid-launcher/watchfaces/analog-70s-classic.qml) | [eLtMosen](https://github.com/eLtMosen) |
 | ![thumbnail](.thumbnails/analog-railway.jpg) | [analog-railway](analog-railway/usr/share/asteroid-launcher/watchfaces/analog-railway.qml) | [eLtMosen](https://github.com/eLtMosen) |
 | ![thumbnail](.thumbnails/analog-rings.jpg) | [analog-rings](analog-rings/usr/share/asteroid-launcher/watchfaces/analog-rings.qml) | [eLtMosen](https://github.com/eLtMosen) |
+| ![thumbnail](.thumbnails/analog-tactical.jpg) | [analog-tactical](analog-tactical/usr/share/asteroid-launcher/watchfaces/analog-tactical.qml) | [eLtMosen](https://github.com/eLtMosen) |
 | ![thumbnail](.thumbnails/binary-digital.jpg) | [binary-digital](binary-digital/usr/share/asteroid-launcher/watchfaces/binary-digital.qml) | [eLtMosen](https://github.com/eLtMosen) |
 | ![thumbnail](.thumbnails/binary-lcd.jpg) | [binary-lcd](binary-lcd/usr/share/asteroid-launcher/watchfaces/binary-lcd.qml) | [eLtMosen](https://github.com/eLtMosen) |
 | ![thumbnail](.thumbnails/bold-hour-bebas.jpg) | [bold-hour-bebas](bold-hour-bebas/usr/share/asteroid-launcher/watchfaces/bold-hour-bebas.qml) | [eLtMosen](https://github.com/eLtMosen) |
@@ -64,3 +65,4 @@ AsteroidOS it can eventually be merged in the default set of asteroid-launcher.
 | motivational-quotes - [Lobster](motivational-quotes/usr/share/fonts/Lobster.otf) | The font "Lobster" is licensed under SIL Open Font License and was created by [Impallari Type](http://www.impallari.com/lobster). [license](http://scripts.sil.org/cms/scripts/page.php?site_id=nrsi&id=OFL)|
 | clean-bars - [CPMono_v07](clean-bars/usr/share/fonts/) | The font "CPMono_v07" is licensed under CC-BY-3.0 and was created by [Tino Meinert, Liquitype](http://liquitype.fr/index.html). [license](clean-bars/usr/share/fonts/CC_License.txt)|
 | funky-town-words - [Source Sans Pro](funky-town-words/usr/share/fonts/) | The font "Source Sans Pro" is licensed under SIL Open Font License and was created by [Adobe](http://www.adobe.com). [license](funky-town-words/usr/share/fonts/OFL.txt)|
+| analog-tactical - [Fyodor-BoldCondensed](analog-tactical/usr/share/fonts/Fyodor-BoldCondensed.ttf) | The font "Fyodor" is licensed under SIL Open Font License and was created by [Chris Hughes](http://fyodor.blueroomcollective.co.uk/). [license](http://scripts.sil.org/cms/scripts/page.php?site_id=nrsi&id=OFL)|
