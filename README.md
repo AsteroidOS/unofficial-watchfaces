@@ -8,8 +8,8 @@ AsteroidOS it can eventually be merged in the default set of asteroid-launcher.
 | ![thumbnail](.thumbnails/retro-lcd.jpg) | [retro-lcd](retro-lcd/usr/share/asteroid-launcher/watchfaces/retro-lcd.qml) | [Huntereb](mailto:Huntereb@lewd.pics) |
 | ![thumbnail](.thumbnails/kitt.jpg) | [kitt](kitt/usr/share/asteroid-launcher/watchfaces/kitt.qml) | [jgibbon](https://github.com/jgibbon) |
 | ![thumbnail](.thumbnails/arc.jpg) | [arc (multiple)](arc/usr/share/asteroid-launcher/watchfaces/) | [jgibbon](https://github.com/jgibbon) |
-| ![thumbnail](.thumbnails/50s-americana-analog.jpg) | [50s-americana-analog](50s-americana-analog/usr/share/asteroid-launcher/watchfaces/50s-americana-analog.qml) | [eLtMosen](https://github.com/eLtMosen) |
-| ![thumbnail](.thumbnails/70s-analog-classic.jpg) | [70s-analog-classic](70s-analog-classic/usr/share/asteroid-launcher/watchfaces/70s-analog-classic.qml) | [eLtMosen](https://github.com/eLtMosen) |
+| ![thumbnail](.thumbnails/analog-50s-americana.jpg) | [analog-50s-americana](analog-50s-americana/usr/share/asteroid-launcher/watchfaces/analog-50s-americana.qml) | [eLtMosen](https://github.com/eLtMosen) |
+| ![thumbnail](.thumbnails/analog-70s-classic.jpg) | [analog-70s-classic](analog-70s-classic/usr/share/asteroid-launcher/watchfaces/analog-70s-classic.qml) | [eLtMosen](https://github.com/eLtMosen) |
 | ![thumbnail](.thumbnails/analog-railway.jpg) | [analog-railway](analog-railway/usr/share/asteroid-launcher/watchfaces/analog-railway.qml) | [eLtMosen](https://github.com/eLtMosen) |
 | ![thumbnail](.thumbnails/analog-rings.jpg) | [analog-rings](analog-rings/usr/share/asteroid-launcher/watchfaces/analog-rings.qml) | [eLtMosen](https://github.com/eLtMosen) |
 | ![thumbnail](.thumbnails/binary-digital.jpg) | [binary-digital](binary-digital/usr/share/asteroid-launcher/watchfaces/binary-digital.qml) | [eLtMosen](https://github.com/eLtMosen) |
@@ -30,10 +30,13 @@ AsteroidOS it can eventually be merged in the default set of asteroid-launcher.
 | ![thumbnail](.thumbnails/sporty-round-v2.jpg) | [sporty-round-v2](sporty-round-v2/usr/share/asteroid-launcher/watchfaces/sporty-round-v2.qml) | [eLtMosen](https://github.com/eLtMosen) |
 | ![thumbnail](.thumbnails/worte.jpg) | [worte](worte/usr/share/asteroid-launcher/watchfaces/worte.qml) | [eLtMosen](https://github.com/eLtMosen) |
 
-### Installation ###
-Enable ADB USB mode in settings and push the usr folder to your root directory.
+### Install selected or all watchfaces via scripted SCP/SSH ###
 
-`adb push usr /`
+- Open a terminal and clone unofficial-watchfaces repo to a new subfolder from your current location.
+`git clone https://github.com/AsteroidOS/unofficial-watchfaces`
+- Cd into unofficial-watchfaces folder.
+`cd unofficial-watchfaces/`
+- Start `./deploy.sh` and select a single watchface with its given number or copy all at once with option 1.
 
 ### Licenses ###
 
@@ -50,8 +53,8 @@ Enable ADB USB mode in settings and push the usr folder to your root directory.
 | rainbow-uprising [Titillium-Bold](greenium/usr/share/fonts/Titillium-Bold.otf), [Titillium-Regular](rainbow-uprising/usr/share/fonts/Titillium-Regular.otf), [Titillium-Thin](rainbow-uprising/usr/share/fonts/Titillium-Thin.otf) | The font "Titillium" is licensed under SIL Open Font License and was created at the [Accademia di Belle Arti di Urbino](http://www.campivisivi.net/titillium/). [license](greenium/usr/share/fonts/OFL.txt)|
 | sporty-round, sporty-round-v2 [SlimSans](sporty-round/usr/share/fonts/SlimSans.ttf) | The font "SlimSans" was created by [Manfred Klein](https://web.archive.org/web/20170823125251/http://manfred-klein.ina-mar.com). Manfred’s fonts are free for private and charity use. They are even free for commercial use – but if there’s any profit, pls make a donation to organizations like [Doctors Without Borders](http://www.doctorswithoutborders.org/)|
 | orbiting-asteroids - [Blue Marble](orbiting-asteroids/usr/share/asteroid-launcher/wallpapers/nasa-blue-marble.jpg) | The image "Blue Marble", Eastern Hemisphere March 2014, Photo from NASA Goddard Space Flight Center is available under creative commons license |
-| 50s-americana-analog - [Fyodor-BoldCondensed](50s-americana-analog/usr/share/fonts/Fyodor-BoldCondensed.ttf) | The font "Fyodor" is licensed under SIL Open Font License and was created by [Chris Hughes](http://fyodor.blueroomcollective.co.uk/). [license](http://scripts.sil.org/cms/scripts/page.php?site_id=nrsi&id=OFL)|
-| 70s-analog-classic - [Lavoir](70s-analog-classic/usr/share/fonts/Lavoir.otf) | The font "Lavoir" is licensed under SIL Open Font License and was created by [Alex Chavot](http://www.alexchavot.fr/typefaces.php/). [license](http://scripts.sil.org/cms/scripts/page.php?site_id=nrsi&id=OFL)|
+| analog-50s-americana - [Fyodor-BoldCondensed](analog-50s-americana/usr/share/fonts/Fyodor-BoldCondensed.ttf) | The font "Fyodor" is licensed under SIL Open Font License and was created by [Chris Hughes](http://fyodor.blueroomcollective.co.uk/). [license](http://scripts.sil.org/cms/scripts/page.php?site_id=nrsi&id=OFL)|
+| analog-70s-classic - [Lavoir](analog-70s-classic/usr/share/fonts/Lavoir.otf) | The font "Lavoir" is licensed under SIL Open Font License and was created by [Alex Chavot](http://www.alexchavot.fr/typefaces.php/). [license](http://scripts.sil.org/cms/scripts/page.php?site_id=nrsi&id=OFL)|
 | binary-digital - [Simpleness](binary-digital/usr/share/fonts/Simpleness.otf) | The font "Simpleness" is licensed under SIL Open Font License and was created by [Valentin Francois](http://valentinfrancois.fr/). [license](binary-digital/usr/share/fonts/License.pdf)|
 | humongous - [Item-Black](humongous/usr/share/fonts/ITEMBL__.TTF) | The font "Item" is Public Domain and was created by [Bojmic Interpro](https://www.fontzillion.com/fonts/bojmic-interpro/item).|
 | logo-45degree - [Sinner](logo-45degree/usr/share/fonts/SINNER__.TTF) | The font "Sinner" is freeware for personal, non-commercial use only and was created by [Helge Barske](http://www.barske.com/). [license-info](https://www.fontzillion.com/fonts/helge-barske/sinner)|
