@@ -17,6 +17,7 @@ AsteroidOS it can eventually be merged in the default set of asteroid-launcher.
 | ![thumbnail](.thumbnails/bold-hour-bebas.jpg) | [bold-hour-bebas](bold-hour-bebas/usr/share/asteroid-launcher/watchfaces/bold-hour-bebas.qml) | [eLtMosen](https://github.com/eLtMosen) |
 | ![thumbnail](.thumbnails/bold-hour-bebas-v2.jpg) | [bold-hour-bebas-v2](bold-hour-bebas-v2/usr/share/asteroid-launcher/watchfaces/bold-hour-bebas-v2.qml) | [eLtMosen](https://github.com/eLtMosen) |
 | ![thumbnail](.thumbnails/contemporary-digital-rings.jpg) | [contemporary-digital-rings](contemporary-digital-rings/usr/share/asteroid-launcher/watchfaces/contemporary-digital-rings.qml) | [eLtMosen](https://github.com/eLtMosen) |
+| ![thumbnail](.thumbnails/clean-bars.jpg) | [clean-bars](clean-bars/usr/share/asteroid-launcher/watchfaces/clean-bars.qml) | [eLtMosen](https://github.com/eLtMosen) |
 | ![thumbnail](.thumbnails/day-clock-24h.jpg) | [day-clock-24h](day-clock-24h/usr/share/asteroid-launcher/watchfaces/day-clock-24h.qml) | [eLtMosen](https://github.com/eLtMosen) |
 | ![thumbnail](.thumbnails/greenium.jpg) | [greenium](greenium/usr/share/asteroid-launcher/watchfaces/greenium.qml) | [eLtMosen](https://github.com/eLtMosen) |
 | ![thumbnail](.thumbnails/humongous.jpg) | [humongous](humongous/usr/share/asteroid-launcher/watchfaces/humongous.qml) | [eLtMosen](https://github.com/eLtMosen) |
@@ -38,7 +39,7 @@ AsteroidOS it can eventually be merged in the default set of asteroid-launcher.
 `cd unofficial-watchfaces/`
 - Start `./deploy.sh` and select a single watchface with its given number or copy all at once with option 1.
 
-### Licenses ###
+### Licenses ###CPMono_v07
 
 | Watchface - File | License |
 | --- | --- |
@@ -60,3 +61,4 @@ AsteroidOS it can eventually be merged in the default set of asteroid-launcher.
 | logo-45degree - [Sinner](logo-45degree/usr/share/fonts/SINNER__.TTF) | The font "Sinner" is freeware for personal, non-commercial use only and was created by [Helge Barske](http://www.barske.com/). [license-info](https://www.fontzillion.com/fonts/helge-barske/sinner)|
 | masked-spartan - [LeagueSpartan-Bold](masked-spartan/usr/share/fonts/LeagueSpartan-Bold.otf) | The font "LeagueSpartan" is licensed under SIL Open Font License and was created by [Caroline Hadilaksono, Micah Rich, & Tyler Finck](https://www.theleagueofmoveabletype.com/league-spartan). [license](http://scripts.sil.org/cms/scripts/page.php?site_id=nrsi&id=OFL)|
 | motivational-quotes - [Lobster](motivational-quotes/usr/share/fonts/Lobster.otf) | The font "Lobster" is licensed under SIL Open Font License and was created by [Impallari Type](http://www.impallari.com/lobster). [license](http://scripts.sil.org/cms/scripts/page.php?site_id=nrsi&id=OFL)|
+| clean-bars - [CPMono_v07](clean-bars/usr/share/fonts/) | The font "CPMono_v07" is licensed under CC-BY-3.0 and was created by [Tino Meinert, Liquitype](http://liquitype.fr/index.html). [license](clean-bars/usr/share/fonts/CC_License.txt)|
