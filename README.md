@@ -24,6 +24,7 @@ AsteroidOS it can eventually be merged in the default set of asteroid-launcher.
 | ![thumbnail](.thumbnails/greenium.jpg) | [greenium](greenium/usr/share/asteroid-launcher/watchfaces/greenium.qml) | [eLtMosen](https://github.com/eLtMosen) |
 | ![thumbnail](.thumbnails/funky-town-words.jpg) | [funky-town-words](funky-town-words/usr/share/asteroid-launcher/watchfaces/funky-town-words.qml) | [eLtMosen](https://github.com/eLtMosen) |
 | ![thumbnail](.thumbnails/humongous.jpg) | [humongous](humongous/usr/share/asteroid-launcher/watchfaces/humongous.qml) | [eLtMosen](https://github.com/eLtMosen) |
+| ![thumbnail](.thumbnails/karlos-matrix.jpg) | [karlos-matrix](karlos-matrix/usr/share/asteroid-launcher/watchfaces/karlos-matrix.qml) | [eLtMosen](https://github.com/eLtMosen) |
 | ![thumbnail](.thumbnails/logo-45degree.jpg) | [logo-45degree](logo-45degree/usr/share/asteroid-launcher/watchfaces/logo-45degree.qml) | [eLtMosen](https://github.com/eLtMosen) |
 | ![thumbnail](.thumbnails/masked-spartan.jpg) | [masked-spartan](masked-spartan/usr/share/asteroid-launcher/watchfaces/masked-spartan.qml) | [eLtMosen](https://github.com/eLtMosen) |
 | ![thumbnail](.thumbnails/motivational-quotes.jpg) | [motivational-quotes](motivational-quotes/usr/share/asteroid-launcher/watchfaces/motivational-quotes.qml) | [eLtMosen](https://github.com/eLtMosen) |
@@ -42,7 +43,7 @@ AsteroidOS it can eventually be merged in the default set of asteroid-launcher.
 `cd unofficial-watchfaces/`
 - Start `./deploy.sh` and select a single watchface with its given number or copy all at once with option 1.
 
-### Licenses ###CPMono_v07
+### Licenses ###
 
 | Watchface - File | License |
 | --- | --- |
@@ -67,4 +68,5 @@ AsteroidOS it can eventually be merged in the default set of asteroid-launcher.
 | clean-bars - [CPMono_v07](clean-bars/usr/share/fonts/) | The font "CPMono_v07" is licensed under CC-BY-3.0 and was created by [Tino Meinert, Liquitype](http://liquitype.fr/index.html). [license](clean-bars/usr/share/fonts/CC_License.txt)|
 | funky-town-words - [Source Sans Pro](funky-town-words/usr/share/fonts/) | The font "Source Sans Pro" is licensed under SIL Open Font License and was created by [Adobe](http://www.adobe.com). [license](funky-town-words/usr/share/fonts/OFL.txt)|
 | analog-tactical - [Fyodor-BoldCondensed](analog-tactical/usr/share/fonts/Fyodor-BoldCondensed.ttf) | The font "Fyodor" is licensed under SIL Open Font License and was created by [Chris Hughes](http://fyodor.blueroomcollective.co.uk/). [license](http://scripts.sil.org/cms/scripts/page.php?site_id=nrsi&id=OFL)|
-| analog-scientific - [Fyodor-BoldCondensed](analog-scientific/usr/share/fonts/) | The font "Reglo" is licensed under SIL Open Font License and was created by [sebsan, Sebastien Sanfilippo](https://github.com/sebsan/Reglo). [license](https://github.com/sebsan/Reglo/blob/master/OFL.txt)|
+| analog-scientific - [Reglo](analog-scientific/usr/share/fonts/) | The font "Reglo" is licensed under SIL Open Font License and was created by [sebsan, Sebastien Sanfilippo](https://github.com/sebsan/Reglo). [license](https://github.com/sebsan/Reglo/blob/master/OFL.txt)|
+| karlos-matrix - [Elektra SH](karlos-matrix/usr/share/fonts/) | According to fonts4free.net, the font "Elektra SH" is free for both personel and commercial usages and was created by [Samy Halim](https://www.fontshop.com/designers/samy-halim). [license](http://www.fonts4free.net/elektra-sh-font.html)|
