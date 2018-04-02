@@ -10,6 +10,7 @@ AsteroidOS it can eventually be merged in the default set of asteroid-launcher.
 | ![thumbnail](.thumbnails/arc.jpg) | [arc (multiple)](arc/usr/share/asteroid-launcher/watchfaces/) | [jgibbon](https://github.com/jgibbon) |
 | ![thumbnail](.thumbnails/analog-50s-americana.jpg) | [analog-50s-americana](analog-50s-americana/usr/share/asteroid-launcher/watchfaces/analog-50s-americana.qml) | [eLtMosen](https://github.com/eLtMosen) |
 | ![thumbnail](.thumbnails/analog-70s-classic.jpg) | [analog-70s-classic](analog-70s-classic/usr/share/asteroid-launcher/watchfaces/analog-70s-classic.qml) | [eLtMosen](https://github.com/eLtMosen) |
+| ![thumbnail](.thumbnails/analog-asteroid-logo.jpg) | [analog-asteroid-logo](analog-asteroid-logo/usr/share/asteroid-launcher/watchfaces/analog-asteroid-logo.qml) | [eLtMosen](https://github.com/eLtMosen) |
 | ![thumbnail](.thumbnails/analog-railway.jpg) | [analog-railway](analog-railway/usr/share/asteroid-launcher/watchfaces/analog-railway.qml) | [eLtMosen](https://github.com/eLtMosen) |
 | ![thumbnail](.thumbnails/analog-rings.jpg) | [analog-rings](analog-rings/usr/share/asteroid-launcher/watchfaces/analog-rings.qml) | [eLtMosen](https://github.com/eLtMosen) |
 | ![thumbnail](.thumbnails/analog-scientific.jpg) | [analog-scientific](analog-scientific/usr/share/asteroid-launcher/watchfaces/analog-scientific.qml) | [eLtMosen](https://github.com/eLtMosen) |
