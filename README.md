@@ -1,53 +1,63 @@
-This repository tries to keep track of AsteroidOS unofficial watchfaces. Feel free
-to pull request your work here and if it suits the graphic guidelines of
-AsteroidOS it can eventually be merged in the default set of asteroid-launcher.
+This repository tries to keep track of AsteroidOS unofficial watchfaces.
+Feel free to pull request your work here and if it suits the graphic guidelines
+of AsteroidOS, it can eventually be merged into the default set of asteroid-launcher.
 
-| Watchface | Title | Creator |
-|---|---|---|
-| ![thumbnail](.thumbnails/analog-precision.jpg) | [analog-precision](analog-precision/usr/share/asteroid-launcher/watchfaces/analog-precision.qml) | [Mario Kicherer](mailto:dev@kicherer.org) |
-| ![thumbnail](.thumbnails/retro-lcd.jpg) | [retro-lcd](retro-lcd/usr/share/asteroid-launcher/watchfaces/retro-lcd.qml) | [Huntereb](mailto:Huntereb@lewd.pics) |
-| ![thumbnail](.thumbnails/kitt.jpg) | [kitt](kitt/usr/share/asteroid-launcher/watchfaces/kitt.qml) | [jgibbon](https://github.com/jgibbon) |
-| ![thumbnail](.thumbnails/arc.jpg) | [arc (multiple)](arc/usr/share/asteroid-launcher/watchfaces/) | [jgibbon](https://github.com/jgibbon) |
-| ![thumbnail](.thumbnails/alternative-default-digital-mosen.jpg) | [alternative-default-digital-mosen](alternative-default-digital-mosen/usr/share/asteroid-launcher/watchfaces/alternative-default-digital-mosen.qml) | [eLtMosen](https://github.com/eLtMosen) |
-| ![thumbnail](.thumbnails/alternative-digital-mosen.jpg) | [alternative-digital-mosen](alternative-digital-mosen/usr/share/asteroid-launcher/watchfaces/alternative-digital-mosen.qml) | [eLtMosen](https://github.com/eLtMosen) |
-| ![thumbnail](.thumbnails/alternative-digital-2-mosen.jpg) | [alternative-digital-2-mosen](alternative-digital-2-mosen/usr/share/asteroid-launcher/watchfaces/alternative-digital-2-mosen.qml) | [eLtMosen](https://github.com/eLtMosen) |
-| ![thumbnail](.thumbnails/alternative-scifi-mosen.jpg) | [alternative-scifi-mosen](alternative-scifi-mosen/usr/share/asteroid-launcher/watchfaces/alternative-scifi-mosen.qml) | [eLtMosen](https://github.com/eLtMosen) |
-| ![thumbnail](.thumbnails/analog-50s-americana.jpg) | [analog-50s-americana](analog-50s-americana/usr/share/asteroid-launcher/watchfaces/analog-50s-americana.qml) | [eLtMosen](https://github.com/eLtMosen) |
-| ![thumbnail](.thumbnails/analog-70s-classic.jpg) | [analog-70s-classic](analog-70s-classic/usr/share/asteroid-launcher/watchfaces/analog-70s-classic.qml) | [eLtMosen](https://github.com/eLtMosen) |
-| ![thumbnail](.thumbnails/analog-asteroid-logo.jpg) | [analog-asteroid-logo](analog-asteroid-logo/usr/share/asteroid-launcher/watchfaces/analog-asteroid-logo.qml) | [eLtMosen](https://github.com/eLtMosen) |
-| ![thumbnail](.thumbnails/analog-nordic.jpg) | [analog-nordic](analog-nordic/usr/share/asteroid-launcher/watchfaces/analog-nordic.qml) | [eLtMosen](https://github.com/eLtMosen) |
-| ![thumbnail](.thumbnails/analog-railway.jpg) | [analog-railway](analog-railway/usr/share/asteroid-launcher/watchfaces/analog-railway.qml) | [eLtMosen](https://github.com/eLtMosen) |
-| ![thumbnail](.thumbnails/analog-rings.jpg) | [analog-rings](analog-rings/usr/share/asteroid-launcher/watchfaces/analog-rings.qml) | [eLtMosen](https://github.com/eLtMosen) |
-| ![thumbnail](.thumbnails/analog-scientific.jpg) | [analog-scientific](analog-scientific/usr/share/asteroid-launcher/watchfaces/analog-scientific.qml) | [eLtMosen](https://github.com/eLtMosen) |
-| ![thumbnail](.thumbnails/analog-tactical.jpg) | [analog-tactical](analog-tactical/usr/share/asteroid-launcher/watchfaces/analog-tactical.qml) | [eLtMosen](https://github.com/eLtMosen) |
-| ![thumbnail](.thumbnails/binary-digital.jpg) | [binary-digital](binary-digital/usr/share/asteroid-launcher/watchfaces/binary-digital.qml) | [eLtMosen](https://github.com/eLtMosen) |
-| ![thumbnail](.thumbnails/binary-lcd.jpg) | [binary-lcd](binary-lcd/usr/share/asteroid-launcher/watchfaces/binary-lcd.qml) | [eLtMosen](https://github.com/eLtMosen) |
-| ![thumbnail](.thumbnails/bold-hour-bebas.jpg) | [bold-hour-bebas](bold-hour-bebas/usr/share/asteroid-launcher/watchfaces/bold-hour-bebas.qml) | [eLtMosen](https://github.com/eLtMosen) |
-| ![thumbnail](.thumbnails/bold-hour-bebas-v2.jpg) | [bold-hour-bebas-v2](bold-hour-bebas-v2/usr/share/asteroid-launcher/watchfaces/bold-hour-bebas-v2.qml) | [eLtMosen](https://github.com/eLtMosen) |
-| ![thumbnail](.thumbnails/contemporary-digital-rings.jpg) | [contemporary-digital-rings](contemporary-digital-rings/usr/share/asteroid-launcher/watchfaces/contemporary-digital-rings.qml) | [eLtMosen](https://github.com/eLtMosen) |
-| ![thumbnail](.thumbnails/clean-bars.jpg) | [clean-bars](clean-bars/usr/share/asteroid-launcher/watchfaces/clean-bars.qml) | [eLtMosen](https://github.com/eLtMosen) |
-| ![thumbnail](.thumbnails/day-clock-24h.jpg) | [day-clock-24h](day-clock-24h/usr/share/asteroid-launcher/watchfaces/day-clock-24h.qml) | [eLtMosen](https://github.com/eLtMosen) |
-| ![thumbnail](.thumbnails/greenium.jpg) | [greenium](greenium/usr/share/asteroid-launcher/watchfaces/greenium.qml) | [eLtMosen](https://github.com/eLtMosen) |
-| ![thumbnail](.thumbnails/funky-town-words.jpg) | [funky-town-words](funky-town-words/usr/share/asteroid-launcher/watchfaces/funky-town-words.qml) | [eLtMosen](https://github.com/eLtMosen) |
-| ![thumbnail](.thumbnails/humongous.jpg) | [humongous](humongous/usr/share/asteroid-launcher/watchfaces/humongous.qml) | [eLtMosen](https://github.com/eLtMosen) |
-| ![thumbnail](.thumbnails/karlos-matrix.jpg) | [karlos-matrix](karlos-matrix/usr/share/asteroid-launcher/watchfaces/karlos-matrix.qml) | [eLtMosen](https://github.com/eLtMosen) |
-| ![thumbnail](.thumbnails/logo-45degree.jpg) | [logo-45degree](logo-45degree/usr/share/asteroid-launcher/watchfaces/logo-45degree.qml) | [eLtMosen](https://github.com/eLtMosen) |
-| ![thumbnail](.thumbnails/masked-spartan.jpg) | [masked-spartan](masked-spartan/usr/share/asteroid-launcher/watchfaces/masked-spartan.qml) | [eLtMosen](https://github.com/eLtMosen) |
-| ![thumbnail](.thumbnails/motivational-quotes.jpg) | [motivational-quotes](motivational-quotes/usr/share/asteroid-launcher/watchfaces/motivational-quotes.qml) | [eLtMosen](https://github.com/eLtMosen) |
-| ![thumbnail](.thumbnails/orbiting-asteroids.jpg) | [orbiting-asteroids](orbiting-asteroids/usr/share/asteroid-launcher/watchfaces/orbiting-asteroids.qml) | [eLtMosen](https://github.com/eLtMosen) |
-| ![thumbnail](.thumbnails/prominent-seconds.jpg) | [prominent-seconds](prominent-seconds/usr/share/asteroid-launcher/watchfaces/prominent-seconds.qml) | [eLtMosen](https://github.com/eLtMosen) |
-| ![thumbnail](.thumbnails/rainbow-uprising.jpg) | [rainbow-uprising](rainbow-uprising/usr/share/asteroid-launcher/watchfaces/rainbow-uprising.qml) | [eLtMosen](https://github.com/eLtMosen) |
-| ![thumbnail](.thumbnails/sporty-round.jpg) | [sporty-round](sporty-round/usr/share/asteroid-launcher/watchfaces/sporty-round.qml) | [eLtMosen](https://github.com/eLtMosen) |
-| ![thumbnail](.thumbnails/sporty-round-v2.jpg) | [sporty-round-v2](sporty-round-v2/usr/share/asteroid-launcher/watchfaces/sporty-round-v2.qml) | [eLtMosen](https://github.com/eLtMosen) |
-| ![thumbnail](.thumbnails/worte.jpg) | [worte](worte/usr/share/asteroid-launcher/watchfaces/worte.qml) | [eLtMosen](https://github.com/eLtMosen) |
 
 ### Install selected or all watchfaces via scripted SCP/SSH ###
 
-- Open a terminal and clone unofficial-watchfaces repo to a new subfolder from your current location.
+- Open a terminal and clone this unofficial-watchfaces repo to a new subfolder from your current location.\
 `git clone https://github.com/AsteroidOS/unofficial-watchfaces`
-- Cd into unofficial-watchfaces folder.
+- Cd into unofficial-watchfaces folder.\
 `cd unofficial-watchfaces/`
-- Start `./deploy.sh` and select a single watchface with its given number or copy all at once with option 1.
+- Connect your AsteroidOS Watch, configured to Settings -> USB -> Developer Mode.
+- Start `./deploy.sh` and select a single watchface with its given number or copy all available watchfaces at once with option 1.
+
+
+### Following great community contributions are available ###
+
+Watchface creation in QtQuick is really easy!
+You can learn how to make your own by following the [Watchface Creation](https://asteroidos.org/wiki/watchfaces-creation/) Guide.
+The creators of the below listed watchfaces are happy to answer your questions and you are free to use their contributions as base for your own work.
+
+
+| Round Display | Square Display | Watchface Title | Creator |
+|---|---|---|---|
+| ![thumbnail](.thumbnails/analog-precision-round.jpg) |![thumbnail](.thumbnails/analog-precision.jpg) | [analog-precision](analog-precision/usr/share/asteroid-launcher/watchfaces/analog-precision.qml) | [Mario Kicherer](mailto:dev@kicherer.org) |
+| ![thumbnail](.thumbnails/retro-lcd-round.jpg) |![thumbnail](.thumbnails/retro-lcd.jpg) | [retro-lcd](retro-lcd/usr/share/asteroid-launcher/watchfaces/retro-lcd.qml) | [Huntereb](mailto:Huntereb@lewd.pics) |
+| ![thumbnail](.thumbnails/kitt-round.jpg) |![thumbnail](.thumbnails/kitt.jpg) | [kitt](kitt/usr/share/asteroid-launcher/watchfaces/kitt.qml) | [jgibbon](https://github.com/jgibbon) |
+| ![thumbnail](.thumbnails/arc-round.jpg) |![thumbnail](.thumbnails/arc.jpg) | [arc (multiple)](arc/usr/share/asteroid-launcher/watchfaces/) | [jgibbon](https://github.com/jgibbon) |
+| ![thumbnail](.thumbnails/alternative-default-digital-mosen-round.jpg) |![thumbnail](.thumbnails/alternative-default-digital-mosen.jpg) | [alternative-default-digital-mosen](alternative-default-digital-mosen/usr/share/asteroid-launcher/watchfaces/alternative-default-digital-mosen.qml) | [eLtMosen](https://github.com/eLtMosen) |
+| ![thumbnail](.thumbnails/alternative-digital-mosen-round.jpg) |![thumbnail](.thumbnails/alternative-digital-mosen.jpg) | [alternative-digital-mosen](alternative-digital-mosen/usr/share/asteroid-launcher/watchfaces/alternative-digital-mosen.qml) | [eLtMosen](https://github.com/eLtMosen) |
+| ![thumbnail](.thumbnails/alternative-digital-2-mosen-round.jpg) |![thumbnail](.thumbnails/alternative-digital-2-mosen.jpg) | [alternative-digital-2-mosen](alternative-digital-2-mosen/usr/share/asteroid-launcher/watchfaces/alternative-digital-2-mosen.qml) | [eLtMosen](https://github.com/eLtMosen) |
+| ![thumbnail](.thumbnails/alternative-scifi-mosen-round.jpg) |![thumbnail](.thumbnails/alternative-scifi-mosen.jpg) | [alternative-scifi-mosen](alternative-scifi-mosen/usr/share/asteroid-launcher/watchfaces/alternative-scifi-mosen.qml) | [eLtMosen](https://github.com/eLtMosen) |
+| ![thumbnail](.thumbnails/analog-50s-americana-round.jpg) |![thumbnail](.thumbnails/analog-50s-americana.jpg) | [analog-50s-americana](analog-50s-americana/usr/share/asteroid-launcher/watchfaces/analog-50s-americana.qml) | [eLtMosen](https://github.com/eLtMosen) |
+| ![thumbnail](.thumbnails/analog-70s-classic-round.jpg) |![thumbnail](.thumbnails/analog-70s-classic.jpg) | [analog-70s-classic](analog-70s-classic/usr/share/asteroid-launcher/watchfaces/analog-70s-classic.qml) | [eLtMosen](https://github.com/eLtMosen) |
+| ![thumbnail](.thumbnails/analog-asteroid-logo-round.jpg) |![thumbnail](.thumbnails/analog-asteroid-logo.jpg) | [analog-asteroid-logo](analog-asteroid-logo/usr/share/asteroid-launcher/watchfaces/analog-asteroid-logo.qml) | [eLtMosen](https://github.com/eLtMosen) |
+| ![thumbnail](.thumbnails/analog-nordic-round.jpg) |![thumbnail](.thumbnails/analog-nordic.jpg) | [analog-nordic](analog-nordic/usr/share/asteroid-launcher/watchfaces/analog-nordic.qml) | [eLtMosen](https://github.com/eLtMosen) |
+| ![thumbnail](.thumbnails/analog-railway-round.jpg) |![thumbnail](.thumbnails/analog-railway.jpg) | [analog-railway](analog-railway/usr/share/asteroid-launcher/watchfaces/analog-railway.qml) | [eLtMosen](https://github.com/eLtMosen) |
+| ![thumbnail](.thumbnails/analog-rings-round.jpg) |![thumbnail](.thumbnails/analog-rings.jpg) | [analog-rings](analog-rings/usr/share/asteroid-launcher/watchfaces/analog-rings.qml) | [eLtMosen](https://github.com/eLtMosen) |
+| ![thumbnail](.thumbnails/analog-scientific-round.jpg) |![thumbnail](.thumbnails/analog-scientific.jpg) | [analog-scientific](analog-scientific/usr/share/asteroid-launcher/watchfaces/analog-scientific.qml) | [eLtMosen](https://github.com/eLtMosen) |
+| ![thumbnail](.thumbnails/analog-tactical-round.jpg) |![thumbnail](.thumbnails/analog-tactical.jpg) | [analog-tactical](analog-tactical/usr/share/asteroid-launcher/watchfaces/analog-tactical.qml) | [eLtMosen](https://github.com/eLtMosen) |
+| ![thumbnail](.thumbnails/binary-digital-round.jpg) |![thumbnail](.thumbnails/binary-digital.jpg) | [binary-digital](binary-digital/usr/share/asteroid-launcher/watchfaces/binary-digital.qml) | [eLtMosen](https://github.com/eLtMosen) |
+| ![thumbnail](.thumbnails/binary-lcd-round.jpg) |![thumbnail](.thumbnails/binary-lcd.jpg) | [binary-lcd](binary-lcd/usr/share/asteroid-launcher/watchfaces/binary-lcd.qml) | [eLtMosen](https://github.com/eLtMosen) |
+| ![thumbnail](.thumbnails/bold-hour-bebas-round.jpg) |![thumbnail](.thumbnails/bold-hour-bebas.jpg) | [bold-hour-bebas](bold-hour-bebas/usr/share/asteroid-launcher/watchfaces/bold-hour-bebas.qml) | [eLtMosen](https://github.com/eLtMosen) |
+| ![thumbnail](.thumbnails/bold-hour-bebas-v2-round.jpg) |![thumbnail](.thumbnails/bold-hour-bebas-v2.jpg) | [bold-hour-bebas-v2](bold-hour-bebas-v2/usr/share/asteroid-launcher/watchfaces/bold-hour-bebas-v2.qml) | [eLtMosen](https://github.com/eLtMosen) |
+| ![thumbnail](.thumbnails/clean-bars-round.jpg) |![thumbnail](.thumbnails/clean-bars.jpg) | [clean-bars](clean-bars/usr/share/asteroid-launcher/watchfaces/clean-bars.qml) | [eLtMosen](https://github.com/eLtMosen) |
+| ![thumbnail](.thumbnails/contemporary-digital-rings-round.jpg) |![thumbnail](.thumbnails/contemporary-digital-rings.jpg) | [contemporary-digital-rings](contemporary-digital-rings/usr/share/asteroid-launcher/watchfaces/contemporary-digital-rings.qml) | [eLtMosen](https://github.com/eLtMosen) |
+| ![thumbnail](.thumbnails/day-clock-24h-round.jpg) |![thumbnail](.thumbnails/day-clock-24h.jpg) | [day-clock-24h](day-clock-24h/usr/share/asteroid-launcher/watchfaces/day-clock-24h.qml) | [eLtMosen](https://github.com/eLtMosen) |
+| ![thumbnail](.thumbnails/funky-town-words-round.jpg) |![thumbnail](.thumbnails/funky-town-words.jpg) | [funky-town-words](funky-town-words/usr/share/asteroid-launcher/watchfaces/funky-town-words.qml) | [eLtMosen](https://github.com/eLtMosen) |
+| ![thumbnail](.thumbnails/greenium-round.jpg) |![thumbnail](.thumbnails/greenium.jpg) | [greenium](greenium/usr/share/asteroid-launcher/watchfaces/greenium.qml) | [eLtMosen](https://github.com/eLtMosen) |
+| ![thumbnail](.thumbnails/humongous-round.jpg) |![thumbnail](.thumbnails/humongous.jpg) | [humongous](humongous/usr/share/asteroid-launcher/watchfaces/humongous.qml) | [eLtMosen](https://github.com/eLtMosen) |
+| ![thumbnail](.thumbnails/karlos-matrix-round.jpg) |![thumbnail](.thumbnails/karlos-matrix.jpg) | [karlos-matrix](karlos-matrix/usr/share/asteroid-launcher/watchfaces/karlos-matrix.qml) | [eLtMosen](https://github.com/eLtMosen) |
+| ![thumbnail](.thumbnails/logo-45degree-round.jpg) |![thumbnail](.thumbnails/logo-45degree.jpg) | [logo-45degree](logo-45degree/usr/share/asteroid-launcher/watchfaces/logo-45degree.qml) | [eLtMosen](https://github.com/eLtMosen) |
+| ![thumbnail](.thumbnails/masked-spartan-round.jpg) |![thumbnail](.thumbnails/masked-spartan.jpg) | [masked-spartan](masked-spartan/usr/share/asteroid-launcher/watchfaces/masked-spartan.qml) | [eLtMosen](https://github.com/eLtMosen) |
+| ![thumbnail](.thumbnails/motivational-quotes-round.jpg) |![thumbnail](.thumbnails/motivational-quotes.jpg) | [motivational-quotes](motivational-quotes/usr/share/asteroid-launcher/watchfaces/motivational-quotes.qml) | [eLtMosen](https://github.com/eLtMosen) |
+| ![thumbnail](.thumbnails/orbiting-asteroids-round.jpg) |![thumbnail](.thumbnails/orbiting-asteroids.jpg) | [orbiting-asteroids](orbiting-asteroids/usr/share/asteroid-launcher/watchfaces/orbiting-asteroids.qml) | [eLtMosen](https://github.com/eLtMosen) |
+| ![thumbnail](.thumbnails/prominent-seconds-round.jpg) |![thumbnail](.thumbnails/prominent-seconds.jpg) | [prominent-seconds](prominent-seconds/usr/share/asteroid-launcher/watchfaces/prominent-seconds.qml) | [eLtMosen](https://github.com/eLtMosen) |
+| ![thumbnail](.thumbnails/rainbow-uprising-round.jpg) |![thumbnail](.thumbnails/rainbow-uprising.jpg) | [rainbow-uprising](rainbow-uprising/usr/share/asteroid-launcher/watchfaces/rainbow-uprising.qml) | [eLtMosen](https://github.com/eLtMosen) |
+| ![thumbnail](.thumbnails/sporty-round-round.jpg) |![thumbnail](.thumbnails/sporty-round.jpg) | [sporty-round](sporty-round/usr/share/asteroid-launcher/watchfaces/sporty-round.qml) | [eLtMosen](https://github.com/eLtMosen) |
+| ![thumbnail](.thumbnails/sporty-round-v2-round.jpg) |![thumbnail](.thumbnails/sporty-round-v2.jpg) | [sporty-round-v2](sporty-round-v2/usr/share/asteroid-launcher/watchfaces/sporty-round-v2.qml) | [eLtMosen](https://github.com/eLtMosen) |
+| ![thumbnail](.thumbnails/worte-round.jpg) |![thumbnail](.thumbnails/worte.jpg) | [worte](worte/usr/share/asteroid-launcher/watchfaces/worte.qml) | [eLtMosen](https://github.com/eLtMosen) |
 
 ### Licenses ###
 
