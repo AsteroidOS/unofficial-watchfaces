@@ -23,7 +23,7 @@ The creators of the below listed watchfaces are happy to answer your questions a
 | Round Display | Square Display | Watchface Title | Creator |
 |---|---|---|---|
 | ![thumbnail](.thumbnails/analog-precision-round.jpg) |![thumbnail](.thumbnails/analog-precision.jpg) | [analog-precision](analog-precision/usr/share/asteroid-launcher/watchfaces/analog-precision.qml) | [Mario Kicherer](mailto:dev@kicherer.org) |
-| ![thumbnail](.thumbnails/retro-lcd-round.jpg) |![thumbnail](.thumbnails/retro-lcd.jpg) | [retro-lcd](retro-lcd/usr/share/asteroid-launcher/watchfaces/retro-lcd.qml) | [Huntereb](mailto:Huntereb@lewd.pics) |
+| ![thumbnail](.thumbnails/retro-lcd-round.jpg) |![thumbnail](.thumbnails/retro-lcd.jpg) | [retro-lcd](retro-lcd/usr/share/asteroid-launcher/watchfaces/retro-lcd.qml) | [Huntereb](mailto:Huntereb@lewd.pics), [eLtMosen](https://github.com/eLtMosen) |
 | ![thumbnail](.thumbnails/kitt-round.jpg) |![thumbnail](.thumbnails/kitt.jpg) | [kitt](kitt/usr/share/asteroid-launcher/watchfaces/kitt.qml) | [jgibbon](https://github.com/jgibbon) |
 | ![thumbnail](.thumbnails/arc-round.jpg) |![thumbnail](.thumbnails/arc.jpg) | [arc (multiple)](arc/usr/share/asteroid-launcher/watchfaces/) | [jgibbon](https://github.com/jgibbon) |
 | ![thumbnail](.thumbnails/alternative-default-digital-mosen-round.jpg) |![thumbnail](.thumbnails/alternative-default-digital-mosen.jpg) | [alternative-default-digital-mosen](alternative-default-digital-mosen/usr/share/asteroid-launcher/watchfaces/alternative-default-digital-mosen.qml) | [eLtMosen](https://github.com/eLtMosen) |
