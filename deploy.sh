@@ -17,32 +17,16 @@ select opt in "${options[@]}"
       then
         for opt in "${options[@]}"
           do
-            if [ -e $opt/usr/share/asteroid-launcher/watchfaces/ ]
+          if [ -e $opt/usr/share/ ]
               then
-                scp $opt/usr/share/asteroid-launcher/watchfaces/* root@192.168.2.15:/usr/share/asteroid-launcher/watchfaces/
+                scp -r $opt/usr/share/* root@192.168.2.15:/usr/share/
               fi
-            if [ -e $opt/usr/share/asteroid-launcher/wallpapers/ ]
-              then
-                scp $opt/usr/share/asteroid-launcher/wallpapers/* root@192.168.2.15:/usr/share/asteroid-launcher/wallpapers/
-              fi
-            if [ -e $opt/usr/share/fonts/ ]
-              then
-                scp $opt/usr/share/fonts/* root@192.168.2.15:/usr/share/fonts/
-            fi
        done
       fi
-    if [ -e $opt/usr/share/asteroid-launcher/watchfaces/ ]
+    if [ -e $opt/usr/share/asteroid-launcher/watchfaces ]
       then
-        scp $opt/usr/share/asteroid-launcher/watchfaces/* root@192.168.2.15:/usr/share/asteroid-launcher/watchfaces/
+        scp -r $opt/usr/share/* root@192.168.2.15:/usr/share/
       else
         break
-      fi
-    if [ -e $opt/usr/share/asteroid-launcher/wallpapers/ ]
-      then
-        scp $opt/usr/share/asteroid-launcher/wallpapers/* root@192.168.2.15:/usr/share/asteroid-launcher/wallpapers/
-      fi
-    if [ -e $opt/usr/share/fonts/ ]
-      then
-        scp $opt/usr/share/fonts/* root@192.168.2.15:/usr/share/fonts/
       fi
 done
