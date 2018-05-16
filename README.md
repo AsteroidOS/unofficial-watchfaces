@@ -11,6 +11,7 @@ of AsteroidOS, it can eventually be merged into the default set of asteroid-laun
 `cd unofficial-watchfaces/`
 - Connect your AsteroidOS Watch, configured to Settings -> USB -> Developer Mode.
 - Start `./deploy.sh` and select a single watchface with its given number or copy all available watchfaces at once with option 1.
+- You may need to [restart the session or watch](https://asteroidos.org/wiki/useful-commands/#restart) if for example new fonts were installed along with the new watchfaces.
 
 
 ### Following great community contributions are available ###

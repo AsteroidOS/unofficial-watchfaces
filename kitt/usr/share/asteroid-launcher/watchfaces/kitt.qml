@@ -17,7 +17,7 @@ import QtQuick 2.1
 import org.freedesktop.contextkit 1.0
 import org.asteroid.controls 1.0
 import org.asteroid.utils 1.0
-import org.nemomobile.ngf 1.0
+import Nemo.Ngf 1.0
 
 Item {
     id: watchFace
