@@ -1,7 +1,4 @@
 import QtQuick 2.1
-import org.freedesktop.contextkit 1.0
-import org.asteroid.controls 1.0
-import org.asteroid.utils 1.0
 
 Item {
     id: rootitem
@@ -109,7 +106,7 @@ Item {
             var ourSecs = wallClock.time.getSeconds();
             var ourDOW = Qt.formatDate(wallClock.time, "ddd").substr(0, 2);
             var ourDay = Qt.formatDate(wallClock.time, "dd").substr(0, 2).replace(/^0/, '');
-            
+
             if (ourMins < 10) ourMins = "0" + ourMins;
             if (ourSecs < 10) ourSecs = "0" + ourSecs;
 
@@ -167,11 +164,5 @@ Item {
 		digital.requestPaint()
 		digitalambient.requestPaint()
         }
-    }
-	    ContextProperty {
-        id: batteryChargePercentage
-        key: "Battery.ChargePercentage"
-        value: "100"
-        Component.onCompleted: batteryChargePercentage.subscribe()
     }
 }
