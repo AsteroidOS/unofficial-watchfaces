@@ -105,52 +105,46 @@ Item {
             anchors.fill: parent
             onDoubleClicked: {
                if (circleDoubleClickCover.toggle === 1) {
-                    growH.start()
-                    growW.start()
-                    animateColor2.start()
-                    animateColor3.start()
-                    animateColor4.start()
-                    animateColor5.start()
-                    animateColor6.start()
-                    animateColor7.start()
+                    grow.start()
+                    fadeToWhiteBG.start()
                     secondCanvas.colorctx = Qt.rgba(1, 1, 1, 0.6);
                     secondCanvas.requestPaint();
-                    shrinkH.start()
-                    shrinkW.start()
+                    shrink.start()
                     circleDoubleClickCover.toggle = 0
                } else {
-                    growH.start()
-                    growW.start()
-                    animateColor2t.start()
-                    animateColor3t.start()
-                    animateColor4t.start()
-                    animateColor5t.start()
-                    animateColor6t.start()
-                    animateColor7t.start()
+                    grow.start()
+                    fadeToBlackBG.start()
                     secondCanvas.colorctx = Qt.rgba(0, 0, 0, 0.6);
                     secondCanvas.requestPaint();
-                    shrinkH.start()
-                    shrinkW.start()
+                    shrink.start()
                     circleDoubleClickCover.toggle = 1
                 }
             }
         }
-        PropertyAnimation {id: growH; target: circleDoubleClickCover; properties: "height"; to: parent.width*0.9; duration: 0}
-        PropertyAnimation {id: growW; target: circleDoubleClickCover; properties: "width"; to: parent.width*0.9; duration: 0}
-        PropertyAnimation {id: shrinkH; target: circleDoubleClickCover; properties: "height"; to: parent.width*0.5; duration: 600}
-        PropertyAnimation {id: shrinkW; target: circleDoubleClickCover; properties: "width"; to: parent.width*0.5; duration: 600}
-        PropertyAnimation {id: animateColor2; target: circleDoubleClickCover; properties: "color"; to: "white"; duration: 600}
-        PropertyAnimation {id: animateColor3; target: circlePulse; properties: "color"; to: Qt.rgba(1, 1, 1, 1); duration: 600}
-        PropertyAnimation {id: animateColor4; target: minuteDisplay; properties: "color"; to: "black"; duration: 600}
-        PropertyAnimation {id: animateColor5; target: hourDisplay; properties: "color"; to: "black"; duration: 600}
-        PropertyAnimation {id: animateColor6; target: circleTransBack; properties: "color"; to: Qt.rgba(1, 1, 1, 0.3); duration: 600}
-        PropertyAnimation {id: animateColor7; target: minuteCircle; properties: "color"; to: "white"; duration: 600}
-        PropertyAnimation {id: animateColor2t; target: circleDoubleClickCover; properties: "color"; to: "black"; duration: 600}
-        PropertyAnimation {id: animateColor3t; target: circlePulse; properties: "color"; to: Qt.rgba(0, 0, 0, 1); duration: 600}
-        PropertyAnimation {id: animateColor4t; target: minuteDisplay; properties: "color"; to: "white"; duration: 600}
-        PropertyAnimation {id: animateColor5t; target: hourDisplay; properties: "color"; to: "white"; duration: 600}
-        PropertyAnimation {id: animateColor6t; target: circleTransBack; properties: "color"; to: Qt.rgba(0, 0, 0, 0.3); duration: 600}
-        PropertyAnimation {id: animateColor7t; target: minuteCircle; properties: "color"; to: "black"; duration: 600}
+        ParallelAnimation { id: fadeToWhiteBG;
+            PropertyAnimation {target: circleDoubleClickCover; properties: "color"; to: "white"; duration: 600}
+            PropertyAnimation {target: circlePulse; properties: "color"; to: Qt.rgba(1, 1, 1, 1); duration: 600}
+            PropertyAnimation {target: minuteDisplay; properties: "color"; to: "black"; duration: 600}
+            PropertyAnimation {target: hourDisplay; properties: "color"; to: "black"; duration: 600}
+            PropertyAnimation {target: circleTransBack; properties: "color"; to: Qt.rgba(1, 1, 1, 0.3); duration: 600}
+            PropertyAnimation {target: minuteCircle; properties: "color"; to: "white"; duration: 600}
+        }
+        ParallelAnimation { id: fadeToBlackBG;
+            PropertyAnimation {target: circleDoubleClickCover; properties: "color"; to: "black"; duration: 600}
+            PropertyAnimation {target: circlePulse; properties: "color"; to: Qt.rgba(0, 0, 0, 1); duration: 600}
+            PropertyAnimation {target: minuteDisplay; properties: "color"; to: "white"; duration: 600}
+            PropertyAnimation {target: hourDisplay; properties: "color"; to: "white"; duration: 600}
+            PropertyAnimation {target: circleTransBack; properties: "color"; to: Qt.rgba(0, 0, 0, 0.3); duration: 600}
+            PropertyAnimation {target: minuteCircle; properties: "color"; to: "black"; duration: 600}
+        }
+        ParallelAnimation { id: grow;
+            PropertyAnimation {target: circleDoubleClickCover; properties: "height"; to: parent.width*0.9; duration: 0}
+            PropertyAnimation {target: circleDoubleClickCover; properties: "width"; to: parent.width*0.9; duration: 0}
+        }
+        ParallelAnimation { id: shrink;
+            PropertyAnimation {target: circleDoubleClickCover; properties: "height"; to: parent.width*0.5; duration: 600}
+            PropertyAnimation {target: circleDoubleClickCover; properties: "width"; to: parent.width*0.5; duration: 600}
+        }
     }
 
     Rectangle {
