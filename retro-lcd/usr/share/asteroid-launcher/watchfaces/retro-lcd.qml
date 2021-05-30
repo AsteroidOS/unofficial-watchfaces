@@ -43,6 +43,7 @@ Item {
             var ourDay = Qt.formatDate(wallClock.time, "dd").substr(0, 2).replace(/^0/, '');
 
             if (ourMins < 10) ourMins = "0" + ourMins;
+            if (ourSecs < 10) ourSecs = "0" + ourSecs;
 
             function fontSizeCalc(ourSize) {
                 var ratio = ourSize / 280;
@@ -72,7 +73,7 @@ Item {
             ctx.font = "50 " + fontSizeCalc(62) + "px " + fontFamily;
             ctx.fillText(ourMins, centerX + (centerX * 0.32), centerY + (centerY * 0.05));
             
-            if (!displayAmbient){
+            if (!displayAmbient) {
                 ctx.font = "50 " + fontSizeCalc(42) + "px " + fontFamily;
                 ctx.fillText(ourSecs, centerX + (centerX * 0.633), centerY + (centerY * 0.123));
             }
