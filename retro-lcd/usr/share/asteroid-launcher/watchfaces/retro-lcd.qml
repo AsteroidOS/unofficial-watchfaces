@@ -28,9 +28,9 @@ Item {
             var ctx = getContext("2d");
             ctx.reset();
             if (displayAmbient){
-            ctx.fillStyle = "#ffffff";
-            }else{
-            ctx.fillStyle = "#252525";
+                ctx.fillStyle = "#ffffff";
+            } else {
+                ctx.fillStyle = "#252525";
             }
             ctx.textBaseline = 'middle';
             var centerX = rootitem.width * 0.5;
@@ -86,8 +86,8 @@ Item {
             ctx.textAlign = "center";
             ctx.font = "50 " + fontSizeCalc(46) + "px " + "Roboto";
             ctx.fillText(":", centerX - (centerX * 0.103), centerY + (centerY * 0.15));
-            }
         }
+    }
 
     Connections {
         target: desktop
