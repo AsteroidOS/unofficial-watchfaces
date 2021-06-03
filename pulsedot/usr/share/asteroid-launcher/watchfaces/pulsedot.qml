@@ -1,4 +1,4 @@
-/*
+﻿/*
  * Copyright (C) 2021 - Timo Könnecke <el-t-mo@arcor.de>
  *               2016 - Sylvia van Os <iamsylvie@openmailbox.org>
  *               2015 - Florent Revest <revestflo@gmail.com>
@@ -201,7 +201,6 @@ Item {
     Text {
         z: 6
         id: hourDisplay
-        property var hour: if (use12H.value) {if (wallClock.time.getHours() !== 12) wallClock.time.getHours() % 12; else 12} else wallClock.time.getHours()
         font.pixelSize: parent.height*0.36
         font.family: "SourceSansPro"
         font.styleName:"Semibold"
@@ -221,7 +220,10 @@ Item {
                 NumberAnimation { target: hourDisplay; property: "opacity"; to: 1 }
             }
         }
-        text: hour
+        text: if (use12H.value) {
+                  wallClock.time.toLocaleString(Qt.locale(), "hh ap").slice(0, 2)}
+              else
+                  wallClock.time.toLocaleString(Qt.locale(), "HH")
     }
 
     Connections {

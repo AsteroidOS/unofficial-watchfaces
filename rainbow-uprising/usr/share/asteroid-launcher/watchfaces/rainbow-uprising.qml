@@ -165,7 +165,10 @@ Item {
             top: parent.top
         }
         x: parent.width / 6-width / 2
-        text: wallClock.time.toLocaleString(Qt.locale(), "HH")
+        text: if (use12H.value) {
+                  wallClock.time.toLocaleString(Qt.locale(), "hh ap").slice(0, 2)}
+              else
+                  wallClock.time.toLocaleString(Qt.locale(), "HH")
     }
 
     Text {

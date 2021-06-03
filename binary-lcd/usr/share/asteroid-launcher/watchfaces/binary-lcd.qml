@@ -74,7 +74,10 @@ Rectangle {
             horizontalAlignment: Text.AlignHCenter
             x: parent.width*0.148
             y: parent.height*0.63
-            text: wallClock.time.toLocaleString(Qt.locale(), "HHmmss")
+            text: if (use12H.value) {
+                      wallClock.time.toLocaleString(Qt.locale(), "hh ap").slice(0, 2) + wallClock.time.toLocaleString(Qt.locale(), "mmss")}
+                  else
+                      wallClock.time.toLocaleString(Qt.locale(), "HH" + wallClock.time.toLocaleString(Qt.locale(), "mmss"))
         }
     }
 

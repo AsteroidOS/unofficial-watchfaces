@@ -64,21 +64,24 @@ Item {
         id: hourDisplay
         font.pixelSize: parent.height*0.16
         font.family: "Raleway"
-        font.styleName:"Regular"
+        font.styleName: "Regular"
         color: "white"
         opacity: 1.0
         style: Text.Outline; styleColor: "#80000000"
         horizontalAlignment: Text.AlignHCenter
         anchors.horizontalCenter: parent.horizontalCenter
         anchors.verticalCenter: parent.verticalCenter
-        text: wallClock.time.toLocaleString(Qt.locale(), "<b>HH</b>:mm")
+        text: if (use12H.value) {
+                  wallClock.time.toLocaleString(Qt.locale(), "<b>hh</b> ap").slice(0, 9) + wallClock.time.toLocaleString(Qt.locale(), ":mm")}
+              else
+                  wallClock.time.toLocaleString(Qt.locale(), "<b>HH</b>") + wallClock.time.toLocaleString(Qt.locale(), ":mm")
     }
 
     Connections {
         target: wallClock
         onTimeChanged: {
             var second = wallClock.time.getSeconds()
-            if(secondCanvas.second != second) {
+            if(secondCanvas.second !== second) {
                 secondCanvas.second = second
                 secondCanvas.requestPaint()
             }

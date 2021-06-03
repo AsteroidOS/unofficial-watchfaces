@@ -91,9 +91,12 @@ Item {
         horizontalAlignment: Text.AlignHCenter
         anchors.horizontalCenter: parent.horizontalCenter
         y: parent.height / 4
-        text: wallClock.time.toLocaleString(Qt.locale(), "HH")
+        text: if (use12H.value) {
+                  wallClock.time.toLocaleString(Qt.locale(), "hh ap").slice(0, 2)}
+              else
+                  wallClock.time.toLocaleString(Qt.locale(), "HH")
     }
-    /*minute text*/
+
     Text {
         z: 6
         id: minuteDisplay
@@ -115,7 +118,7 @@ Item {
         target: wallClock
         onTimeChanged: {
             var second = wallClock.time.getSeconds()
-            if(secondDisplay.second != second) {
+            if(secondDisplay.second !== second) {
                 secondDisplay.second = second
                 secondDisplay.requestPaint()
             }

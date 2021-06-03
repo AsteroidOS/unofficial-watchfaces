@@ -140,13 +140,17 @@ Item {
         property var centerY: parent.height/2-height/2+voffset
         font.pixelSize: parent.height/8
         font.family: "SlimSans"
+        font.styleName: "Bold"
         color: "white"
         opacity: 1.0
         style: Text.Outline; styleColor: "#80000000"
         horizontalAlignment: Text.AlignHCenter
         x: centerX+Math.cos(rotH * 2 * Math.PI)*height*1.32
         y: centerY+Math.sin(rotH * 2 * Math.PI)*height*1.32
-        text: wallClock.time.toLocaleString(Qt.locale(), "<b>HH</b>")
+        text: if (use12H.value) {
+                  wallClock.time.toLocaleString(Qt.locale(), "<b>hh</b> ap").slice(0, 9) }
+              else
+                  wallClock.time.toLocaleString(Qt.locale(), "<b>HH</b>")
     }
 
     Text {

@@ -55,7 +55,10 @@ Item {
             color: Qt.rgba(1, 1, 1, 1)
             x: parent.width / 2 - width / 2.075
             y: parent.height / 2 - (height * 0.885)
-            text: wallClock.time.toLocaleString(Qt.locale(), "HH")
+            text: if (use12H.value) {
+                      wallClock.time.toLocaleString(Qt.locale(), "hh ap").slice(0, 2)}
+                  else
+                      wallClock.time.toLocaleString(Qt.locale(), "HH")
         }
 
         Text {
