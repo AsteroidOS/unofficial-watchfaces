@@ -1,6 +1,7 @@
 #!/bin/bash
 # Deploy selected Watchfaces from /unofficial-watchfaces folder
-# to a connected AsteroidOS watch in developer mode
+# to a connected AsteroidOS watch in developer mode.
+# Use -a for adb and no flag for scp transfer.
 
 PS3='Deploy watchface #) or quit with any other key) '
 
@@ -17,16 +18,26 @@ select opt in "${options[@]}"
       then
         for opt in "${options[@]}"
           do
-          if [ -e $opt/usr/share/ ]
+            if [ -e $opt/usr/share/ ]
               then
-                scp -r $opt/usr/share/* root@192.168.2.15:/usr/share/
+              if [ "$1" = "-a" ]
+                then
+                  adb push $opt/usr/share/* /usr/share/
+                else
+                  scp -r $opt/usr/share/* root@192.168.2.15:/usr/share/
               fi
+            fi
        done
       fi
     if [ -e $opt/usr/share/asteroid-launcher/watchfaces ]
       then
-        scp -r $opt/usr/share/* root@192.168.2.15:/usr/share/
+        if [ "$1" = "-a" ]
+          then
+            adb push $opt/usr/share/* /usr/share/
+          else
+            scp -r $opt/usr/share/* root@192.168.2.15:/usr/share/
+        fi
       else
         break
-      fi
+    fi
 done
