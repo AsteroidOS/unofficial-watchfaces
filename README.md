@@ -3,15 +3,20 @@ Feel free to pull request your work here and if it suits the graphic guidelines
 of AsteroidOS, it can eventually be merged into the default set of asteroid-launcher.
 
 
-### Install selected or all watchfaces via scripted SCP/SSH ###
+### Install selected or all watchfaces using scripted SCP/ADB ###
 
 - Open a terminal and clone this unofficial-watchfaces repo to a new subfolder from your current location.\
 `git clone https://github.com/AsteroidOS/unofficial-watchfaces`
 - Cd into unofficial-watchfaces folder.\
 `cd unofficial-watchfaces/`
-- Connect your AsteroidOS Watch, configured to Settings -> USB -> Developer Mode.
-- Start `./deploy.sh` and select a single watchface with its given number or copy all available watchfaces at once with option 1.
-- You may need to [restart the session or watch](https://asteroidos.org/wiki/useful-commands/#restart) if for example new fonts were installed along with the new watchfaces.
+- Connect your AsteroidOS Watch, configured to either ADB Mode (ADB transfer) or Developer Mode (SCP transfer) in Settings -> USB.
+- Start `./deploy.sh` to use SCP commands or `./deploy.sh -a` for ADB commands.
+- Select a single watchface to deploy to the watch with its given number or copy all available watchfaces at once with option 1.
+- You then can restart the ceres session and apply a single selected watchface with pressing 'y'.
+
+Note that restarting the ceres session might be necessary when new fonts were installed along with the new watchfaces.
+Restarting the ceres session might break things like Always On Mode for the remaining uptime. Reboot the watch in that case.
+You may [restart the session or reboot the watch](https://asteroidos.org/wiki/useful-commands/#restart) manually.
 
 
 ### Following great community contributions are available ###
