@@ -78,20 +78,10 @@ Item {
                 style: Text.Outline; styleColor: Qt.rgba(255,255,255,0.5)
                 opacity: 0.9
                 horizontalAlignment: Text.AlignHCenter
-                text: '00:00'
-                Component.onCompleted: format()
-
-                function format(){
-                    var hr = watchFace.time.getHours();
-                    var min = watchFace.time.getMinutes();
-                    if (min < 10) {
-                        min = "0" + min;
-                    }
-                    if (hr < 10) {
-                        hr = "0" + hr;
-                    }
-                    text = hr+':'+min+''
-                }
+                text: if (use12H.value) {
+                          wallClock.time.toLocaleString(Qt.locale(), "hh ap").slice(0, 2) + wallClock.time.toLocaleString(Qt.locale(), ":mm")}
+                      else
+                          wallClock.time.toLocaleString(Qt.locale(), "HH") + wallClock.time.toLocaleString(Qt.locale(), ":mm")
 
             }
 

@@ -54,7 +54,10 @@ Item {
         y: parent.height/3.8 - voffset
         horizontalAlignment: Text.AlignHCenter
         transform: Rotation {angle: -45}
-        text: wallClock.time.toLocaleString(Qt.locale(), "HH")
+        text: if (use12H.value) {
+                  wallClock.time.toLocaleString(Qt.locale(), "hh ap").slice(0, 2)}
+              else
+                  wallClock.time.toLocaleString(Qt.locale(), "HH")
     }
 
     Text {

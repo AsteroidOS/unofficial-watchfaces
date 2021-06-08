@@ -53,7 +53,10 @@ Item {
             horizontalCenter: parent.horizontalCenter
             horizontalCenterOffset: parent.width*0.0062
         }
-        text: wallClock.time.toLocaleString(Qt.locale(), "HH:mm")
+        text: if (use12H.value) {
+                  wallClock.time.toLocaleString(Qt.locale(), "hh ap").slice(0, 2) + wallClock.time.toLocaleString(Qt.locale(), ":mm")}
+              else
+                  wallClock.time.toLocaleString(Qt.locale(), "HH") + wallClock.time.toLocaleString(Qt.locale(), ":mm")
     }
 
     Text {
@@ -112,6 +115,7 @@ Item {
     Text {
         z: 8
         id: apDisplay
+        visible: use12H.value
         font.pixelSize: parent.height*0.08
         font.family: "Elektra"
         color: Qt.rgba(1, 0, 1, 0.95)

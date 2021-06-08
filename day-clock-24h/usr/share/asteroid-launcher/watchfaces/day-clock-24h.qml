@@ -73,7 +73,10 @@ Item {
         horizontalAlignment: Text.AlignHCenter
         x: parent.width/14
         y: parent.height/2.5-offset
-        text: wallClock.time.toLocaleString(Qt.locale(), "HH")
+        text: if (use12H.value) {
+                  wallClock.time.toLocaleString(Qt.locale(), "hh ap").slice(0, 2)}
+              else
+                  wallClock.time.toLocaleString(Qt.locale(), "HH")
     }
 
     Text {

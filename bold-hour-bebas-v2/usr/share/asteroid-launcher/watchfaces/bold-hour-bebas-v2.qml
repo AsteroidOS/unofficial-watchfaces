@@ -54,13 +54,16 @@ Item {
         renderType: Text.NativeRendering
         font.pixelSize: parent.height*0.94
         font.family: "Bebas Neue"
-        font.styleName:"Bold"
+        font.styleName: "Bold"
         color: Qt.rgba(1, 1, 1, 0.85)
         style: Text.Outline; styleColor: Qt.rgba(0, 0, 0, 0.4)
         horizontalAlignment: Text.AlignHCenter
         x: parent.width/2-width/1.88
         y: parent.height/2-offset
-        text: wallClock.time.toLocaleString(Qt.locale(), "<b>HH</b>")
+        text: if (use12H.value) {
+                  wallClock.time.toLocaleString(Qt.locale(), "hh ap").slice(0, 2)}
+              else
+                  wallClock.time.toLocaleString(Qt.locale(), "HH")
     }
 
     Canvas {

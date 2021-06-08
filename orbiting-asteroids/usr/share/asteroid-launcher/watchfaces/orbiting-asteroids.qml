@@ -31,7 +31,7 @@ Item {
         property var second: 0
         anchors.fill: parent
         smooth: true
-        renderTarget: Canvas.FramebufferObject 
+        renderTarget: Canvas.FramebufferObject
         onPaint: {
             var ctx = getContext("2d")
             var rot = (wallClock.time.getSeconds() - 15)*6
@@ -60,7 +60,7 @@ Item {
         property var minute: 0
         anchors.fill: parent
         smooth: true
-        renderTarget: Canvas.FramebufferObject 
+        renderTarget: Canvas.FramebufferObject
         onPaint: {
             var ctx = getContext("2d")
             var rot = (wallClock.time.getMinutes() -15 )*6
@@ -95,7 +95,7 @@ Item {
         property var hour: 0
         anchors.fill: parent
         smooth: true
-        renderTarget: Canvas.FramebufferObject 
+        renderTarget: Canvas.FramebufferObject
         onPaint: {
             var ctx = getContext("2d")
             var rot = 0.5 * (60 * (wallClock.time.getHours()-3) + wallClock.time.getMinutes())
@@ -169,13 +169,17 @@ Item {
         id: hourDisplay
         font.pixelSize: parent.height/4
         font.family: "OpenSans"
+        font.styleName:"Bold"
         color: "white"
         opacity: 0.8
         style: Text.Outline; styleColor: "#80000000"
         horizontalAlignment: Text.AlignHCenter
         anchors.horizontalCenter: parent.horizontalCenter
         anchors.verticalCenter: parent.verticalCenter
-        text: wallClock.time.toLocaleString(Qt.locale(), "<b>HH</b>")
+        text: if (use12H.value) {
+                  wallClock.time.toLocaleString(Qt.locale(), "hh ap").slice(0, 2) }
+              else
+                  wallClock.time.toLocaleString(Qt.locale(), "HH")
     }
 
     Text {

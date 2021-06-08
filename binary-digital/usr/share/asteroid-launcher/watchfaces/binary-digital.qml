@@ -113,7 +113,10 @@ Rectangle {
                 horizontalCenter: parent.horizontalCenter
                 horizontalCenterOffset: -parent.height*0.235+hoffset
             }
-            text: wallClock.time.toLocaleString(Qt.locale(), "HH")
+            text: if (use12H.value) {
+                      wallClock.time.toLocaleString(Qt.locale(), "hh ap").slice(0, 2)}
+                  else
+                      wallClock.time.toLocaleString(Qt.locale(), "HH")
         }
 
         Text {

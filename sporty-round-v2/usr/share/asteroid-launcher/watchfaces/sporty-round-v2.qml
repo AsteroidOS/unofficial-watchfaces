@@ -337,7 +337,10 @@ Item {
         horizontalAlignment: Text.AlignHCenter
         anchors.horizontalCenter: parent.horizontalCenter
         anchors.verticalCenter: parent.verticalCenter
-        text: wallClock.time.toLocaleString(Qt.locale(), "<b>HH</b>:mm")
+        text: if (use12H.value) {
+                  wallClock.time.toLocaleString(Qt.locale(), "<b>hh</b> ap").slice(0, 9) + wallClock.time.toLocaleString(Qt.locale(), ":mm")}
+              else
+                  wallClock.time.toLocaleString(Qt.locale(), "<b>HH</b>") + wallClock.time.toLocaleString(Qt.locale(), ":mm")
     }
 
     Text {
@@ -391,18 +394,18 @@ Item {
             var second = wallClock.time.getSeconds()
             var date = wallClock.time.getDate()
             batteryArc.requestPaint()
-            if(secondHand.second != second) {
+            if(secondHand.second !== second) {
                 secondHand.second = second
                 secondHand.requestPaint()
                 secondDisplay.second = second
                 secondDisplay.requestPaint()
                 secondArc.requestPaint()
-            }if(minuteHand.minute != minute) {
+            }if(minuteHand.minute !== minute) {
                 minuteHand.minute = minute
                 minuteHand.requestPaint()
                 minuteDisplay.minute = minute
                 minuteDisplay.requestPaint()
-            }if(hourArc.hour != hour) {
+            }if(hourArc.hour !== hour) {
                 hourArc.hour = hour
                 hourArc.requestPaint()
             }

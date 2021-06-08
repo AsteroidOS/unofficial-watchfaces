@@ -164,8 +164,10 @@ Item {
             bottom: parent.verticalCenter
         }
         x: parent.width/4.5-width/2
-        text: wallClock.time.toLocaleString(Qt.locale(), "HH")
-    }
+        text: if (use12H.value) {
+                  wallClock.time.toLocaleString(Qt.locale(), "hh ap").slice(0, 2)}
+              else
+                  wallClock.time.toLocaleString(Qt.locale(), "HH")    }
 
     Text {
         z: 6
@@ -207,13 +209,13 @@ Item {
             var hour = wallClock.time.getHours()
             var minute = wallClock.time.getMinutes()
             var second = wallClock.time.getSeconds()
-            if(secondBar.second != second) {
+            if(secondBar.second !== second) {
                 secondBar.second = second
                 secondBar.requestPaint()
-            }if(minuteBar.minute != minute) {
+            }if(minuteBar.minute !== minute) {
                 minuteBar.minute = minute
                 minuteBar.requestPaint()
-            }if(hourBar.hour != hour) {
+            }if(hourBar.hour !== hour) {
                 hourBar.hour = hour
                 hourBar.requestPaint()
             }
