@@ -28,6 +28,7 @@ The creators of the below listed watchfaces are happy to answer your questions a
 
 | Round Display | Square Display | Watchface Title | Creator |
 |---|---|---|---|
+| ![thumbnail](.thumbnails/analog-silly-walks-round.jpg) | ![thumbnail](.thumbnails/analog-silly-walks.jpg) | [analog-silly-walks](analog-silly-walks/usr/share/asteroid-launcher/watchfaces/analog-silly-walks.qml) | [eLtMosen](https://github.com/eLtMosen) |
 | ![thumbnail](.thumbnails/analog-red-handed-round.jpg) | ![thumbnail](.thumbnails/analog-red-handed.jpg) | [analog-red-handed](analog-red-handed/usr/share/asteroid-launcher/watchfaces/analog-red-handed.qml) | [eLtMosen](https://github.com/eLtMosen) |
 | ![thumbnail](.thumbnails/pulsedot-round.jpg) | ![thumbnail](.thumbnails/pulsedot.jpg) | [pulsedot](pulsedot/usr/share/asteroid-launcher/watchfaces/pulsedot.qml) | [eLtMosen](https://github.com/eLtMosen) |
 | ![thumbnail](.thumbnails/analog-precision-round.jpg) |![thumbnail](.thumbnails/analog-precision.jpg) | [analog-precision](analog-precision/usr/share/asteroid-launcher/watchfaces/analog-precision.qml) | [Mario Kicherer](mailto:dev@kicherer.org) |
@@ -61,6 +62,7 @@ The creators of the below listed watchfaces are happy to answer your questions a
 
 | Watchface - File | License |
 | --- | --- |
+| analog-silly-walks - [Varieté - Regular](analog-silly-walks/usr/share/fonts/Varieté_Regular.ttf) | The font "Varieté" is licensed under SIL Open Font License and was created by [Peter Wiegel](https://de.fonts2u.com/variete.schriftart). [license](http://scripts.sil.org/cms/scripts/page.php?site_id=nrsi&id=OFL)|
 | analog-red-handed - [PTSans - Bold](analog-red-handed/usr/share/fonts/PTSans-Bold.ttf) | The font "PTSans" is licensed under SIL Open Font License and was created by [Alexandra Korolkova, Olga Umpeleva and Vladimir Yefimov and released by ParaType](https://fonts.google.com/specimen/PT+Sans). [license](http://scripts.sil.org/cms/scripts/page.php?site_id=nrsi&id=OFL)|
 | analog-red-handed - [Russo One - Regular](analog-red-handed/usr/share/fonts/RussoOne-Regular.ttf) | The font "Russo One" is licensed under SIL Open Font License and was created by [Jovanny Lemonad](https://fonts.google.com/specimen/Russo+One). [license](http://scripts.sil.org/cms/scripts/page.php?site_id=nrsi&id=OFL)|
 | pulsedot - [Source Sans Pro - Semibold](pulsedot/usr/share/fonts/SourceSansPro-Semibold.ttf) [Source Sans Pro - Regular](pulsedot/usr/share/fonts/SourceSansPro-Regular.ttf)| The font "Source Sans Pro" is licensed under SIL Open Font License and was created by [Paul D Hunt](https://fonts.google.com/specimen/Source+Sans+Pro). [license](http://scripts.sil.org/cms/scripts/page.php?site_id=nrsi&id=OFL)|
