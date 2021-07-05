@@ -26,8 +26,6 @@ import QtQuick 2.9
 Item {
     id: root
     clip: true
-    width: parent.width
-    height: parent.height
 
     property var radian: 0.01745
     property string currentColor: "black"

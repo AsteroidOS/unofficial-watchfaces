@@ -25,8 +25,6 @@ import QtQuick 2.1
 
 Item {
     id: root
-    width: parent.width
-    height: parent.height
 
     Canvas {
         z: 1
