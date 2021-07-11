@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   width="320"
+   height="320"
+   viewBox="0 0 84.667 84.667"
+   version="1.1"
+   id="svg4"
+   sodipodi:docname="minute-red-handed-ambient.svg"
+   inkscape:version="1.1 (c68e22c387, 2021-05-23)"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <defs
+     id="defs8" />
+  <sodipodi:namedview
+     id="namedview6"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageshadow="2"
+     inkscape:pageopacity="0"
+     inkscape:pagecheckerboard="0"
+     showgrid="false"
+     showguides="true"
+     inkscape:guide-bbox="true"
+     inkscape:zoom="1.03125"
+     inkscape:cx="263.75758"
+     inkscape:cy="289.9394"
+     inkscape:window-width="1650"
+     inkscape:window-height="1033"
+     inkscape:window-x="0"
+     inkscape:window-y="0"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="svg4" />
+  <path
+     style="fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:0.22458px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+     d="m 42.333498,2.8241126 h 0.283806 L 44.115855,32.5218 42.773016,42.333498 h -0.439518"
+     id="path265-5" />
+  <path
+     style="fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:0.22458px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+     d="M 42.3335,2.8241143 H 42.049695 L 40.551143,32.521802 41.893982,42.3335 H 42.3335"
+     id="path265-3-6" />
+  <circle
+     style="fill:#ffffff;fill-rule:evenodd;stroke-width:0.264584"
+     id="path856"
+     cx="42.3335"
+     cy="42.3335"
+     r="2.3251355" />
+  <circle
+     style="fill:#000000;fill-rule:evenodd;stroke-width:0.243856"
+     id="path960"
+     cx="42.3335"
+     cy="42.3335"
+     r="1.6035419" />
+</svg>

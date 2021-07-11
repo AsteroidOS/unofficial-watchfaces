@@ -38,6 +38,7 @@ The creators of the below listed watchfaces are happy to answer your questions a
 
 | Round Display | Square Display | Watchface Title | Creator |
 |---|---|---|---|
+| ![thumbnail](.thumbnails/analog-lenok-round.jpg) | ![thumbnail](.thumbnails/analog-lenok.jpg) | [analog-lenok](analog-lenok/usr/share/asteroid-launcher/watchfaces/analog-lenok.qml) | [CosmosDev](https://github.com/CosmosDev) |
 | ![thumbnail](.thumbnails/analog-words-round.jpg) | ![thumbnail](.thumbnails/analog-words.jpg) | [analog-words](analog-words/usr/share/asteroid-launcher/watchfaces/analog-words.qml) | [eLtMosen](https://github.com/eLtMosen) |
 | ![thumbnail](.thumbnails/analog-silly-walks-round.jpg) | ![thumbnail](.thumbnails/analog-silly-walks.jpg) | [analog-silly-walks](analog-silly-walks/usr/share/asteroid-launcher/watchfaces/analog-silly-walks.qml) | [eLtMosen](https://github.com/eLtMosen) |
 | ![thumbnail](.thumbnails/analog-red-handed-round.jpg) | ![thumbnail](.thumbnails/analog-red-handed.jpg) | [analog-red-handed](analog-red-handed/usr/share/asteroid-launcher/watchfaces/analog-red-handed.qml) | [eLtMosen](https://github.com/eLtMosen) |
@@ -73,6 +74,7 @@ The creators of the below listed watchfaces are happy to answer your questions a
 
 | Watchface - File | License |
 | --- | --- |
+| analog-lenok - [Michroma - Regular](analog-lenok/usr/share/fonts/Michroma.ttf) | The font "Michroma" is licensed under SIL Open Font License and was created by [Vernon Adams](https://github.com/vernnobile). [license](http://scripts.sil.org/cms/scripts/page.php?site_id=nrsi&id=OFL)|
 | analog-words - [Montserrat - Regular](analog-words/usr/share/fonts/Montserrat-Regular.ttf) | The font "Montserrat" is licensed under SIL Open Font License and was created by [The Montserrat project](https://github.com/JulietaUla/Montserrat). [license](http://scripts.sil.org/cms/scripts/page.php?site_id=nrsi&id=OFL)|
 | analog-words - [Source Sans Pro - Semibold](analog-words/usr/share/fonts/SourceSansPro-Semibold.ttf) [Source Sans Pro - Light](analog-words/usr/share/fonts/SourceSansPro-Light.ttf)| The font "Source Sans Pro" is licensed under SIL Open Font License and was created by [Paul D Hunt](https://fonts.google.com/specimen/Source+Sans+Pro). [license](http://scripts.sil.org/cms/scripts/page.php?site_id=nrsi&id=OFL)|
 | analog-silly-walks - [Varieté - Regular](analog-silly-walks/usr/share/fonts/Varieté_Regular.ttf) | The font "Varieté" is licensed under SIL Open Font License and was created by [Peter Wiegel](https://de.fonts2u.com/variete.schriftart). [license](http://scripts.sil.org/cms/scripts/page.php?site_id=nrsi&id=OFL)|
