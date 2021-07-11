@@ -31,7 +31,7 @@ select opt in "${options[@]}"
 do
     if [ -e $opt/usr/share/ ]
     then
-          sed '/Item {/a height: 640; width: 640; Image { source: "background.jpg"; width: 640; height: 640;}' <$opt/usr/share/asteroid-launcher/watchfaces/${opt::-1}.qml >$opt/usr/share/asteroid-launcher/watchfaces/${opt::-1}_scene.qml
+          sed '/Item {/a height: 640; width: 640; Image { source: "background.jpg"; width: 640; height: 640;} property bool displayAmbient: false' <$opt/usr/share/asteroid-launcher/watchfaces/${opt::-1}.qml >$opt/usr/share/asteroid-launcher/watchfaces/${opt::-1}_scene.qml
           sed -i "/Item {/a Item { property var value: $use12; id: use12H;} Item { property var time: new Date(); id: wallClock; Timer { interval: 1000; running: true; repeat: true; onTriggered: wallClock.time = new Date(); } }" $opt/usr/share/asteroid-launcher/watchfaces/${opt::-1}_scene.qml
 
           if [[ -f "${opt::-1}/usr/share/asteroid-launcher/watchfaces/background.jpg" ]]
