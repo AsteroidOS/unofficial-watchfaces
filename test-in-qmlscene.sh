@@ -19,37 +19,38 @@ fi
 
 if ! command -v qmlscene &> /dev/null
 then
-    echo "$(tput setaf 1)qmlscene could not be found. Install qtcreator from your package manager.$(tput sgr0)"
+    echo "
+$(tput setaf 1)qmlscene could not be found. Install qtcreator from your package manager.$(tput sgr0)"
     exit
 else
-    echo "$(tput setaf 2)qmlscene found, proceeding...$(tput sgr0)
+    echo "
+$(tput setaf 2)qmlscene found, proceeding...$(tput sgr0)
          "
 fi
 
 select opt in "${options[@]}"
 
 do
-    if [ -e $opt/usr/share/ ]
+    if [ -e ${opt::-1}/usr/share/ ]
     then
-          sed '/Item {/a height: 640; width: 640; Image { source: "background.jpg"; width: 640; height: 640;} property bool displayAmbient: false' <$opt/usr/share/asteroid-launcher/watchfaces/${opt::-1}.qml >$opt/usr/share/asteroid-launcher/watchfaces/${opt::-1}_scene.qml
-          sed -i "/Item {/a Item { property var value: $use12; id: use12H;} Item { property var time: new Date(); id: wallClock; Timer { interval: 1000; running: true; repeat: true; onTriggered: wallClock.time = new Date(); } }" $opt/usr/share/asteroid-launcher/watchfaces/${opt::-1}_scene.qml
-
-          if [[ -f "${opt::-1}/usr/share/asteroid-launcher/watchfaces/background.jpg" ]]
-          then
-              echo "$(tput setaf 2)${opt::-1}/usr/share/asteroid-launcher/watchfaces/background.jpg found and using as background.$(tput sgr0)"
-              download=false
-          else
-              echo "$(tput setaf 214)Downloading background.jpg from AsteroidOS Github repo. Will be removed after closing qmlscene.$(tput sgr0)"
-              wget -O ${opt::-1}/usr/share/asteroid-launcher/watchfaces/background.jpg https://raw.githubusercontent.com/AsteroidOS/asteroid-wallpapers/master/480x480/000-flatmesh.jpg
-              download=true
-          fi
-          qmlscene --scaling --resize-to-root $opt/usr/share/asteroid-launcher/watchfaces/${opt::-1}_scene.qml
-          if $download; then
-              echo "$(tput setaf 2)Removing temporary background.jpg since it did not exist before execution of this script.$(tput sgr0)"
-              rm ${opt::-1}/usr/share/asteroid-launcher/watchfaces/background.jpg
-          fi
-          rm $opt/usr/share/asteroid-launcher/watchfaces/${opt::-1}_scene.qml
-          else
-        break   
+        tempfile=$(mktemp /tmp/watchfaceloader.qmlXXXX)
+        sed "s#@@@12h@@@#$use12#g" <watchfaceloader.qml >$tempfile
+        sed -i "s#@@@watchface@@@#share/asteroid-launcher/watchfaces/${opt::-1}.qml#g" $tempfile
+        if [[ -f "background.jpg" ]]
+        then
+            echo "$(tput setaf 2)Custom background.jpg found and is used as background.$(tput sgr0)"
+            cp background.jpg /tmp/background.jpg
+        else
+            echo "$(tput setaf 214)Downloading background.jpg from AsteroidOS Github repo. Place a background.jpg to this folder to avoid download.$(tput sgr0)"
+            wget -O /tmp/background.jpg https://raw.githubusercontent.com/AsteroidOS/asteroid-wallpapers/master/480x480/000-flatmesh.jpg
+        fi
+        cp -R ${opt::-1}/usr/share/ /tmp/
+        qmlscene --scaling --resize-to-root $tempfile
+        echo "$(tput setaf 2)Removing temporary files.$(tput sgr0)"
+        rm $tempfile
+        rm /tmp/background.jpg
+        rm -R /tmp/share/
+    else
+      break
     fi
 done
