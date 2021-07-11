@@ -26,7 +26,7 @@ import QtQuick 2.9
 
 Item {
     Image {
-      source: !displayAmbient ? "analog-lenok/strokes.svg" : "analog-lenok/strokes-ambient.svg"
+      source: !displayAmbient ? "analog-modern-steel/strokes.svg" : "analog-modern-steel/strokes-ambient.svg"
       width: parent.width
       height: parent.height
     }
@@ -182,7 +182,7 @@ Item {
         Image {
             id: monthSVG
             z: 1
-            source: "analog-lenok/handle.svg"
+            source: "analog-modern-steel/handle.svg"
             anchors.horizontalCenter: parent.horizontalCenter
             anchors.verticalCenter: parent.verticalCenter
             width: parent.width
@@ -222,7 +222,7 @@ Item {
     Image {
         id: hourSVG
         z: 2
-        source: !displayAmbient ? "analog-lenok/hour.svg" : "analog-lenok/hour-ambient.svg"
+        source: !displayAmbient ? "analog-modern-steel/hour.svg" : "analog-modern-steel/hour-ambient.svg"
         anchors.horizontalCenter: parent.horizontalCenter
         anchors.verticalCenter: parent.verticalCenter
         width: parent.width
@@ -237,7 +237,7 @@ Item {
     Image {
         id: minuteSVG
         z: 3
-        source: !displayAmbient ? "analog-lenok/minute.svg" : "analog-lenok/minute-ambient.svg"
+        source: !displayAmbient ? "analog-modern-steel/minute.svg" : "analog-modern-steel/minute-ambient.svg"
         anchors.horizontalCenter: parent.horizontalCenter
         anchors.verticalCenter: parent.verticalCenter
         width: parent.width
@@ -253,7 +253,7 @@ Item {
         id: secondSVG
         z: 4
         visible: !displayAmbient
-        source: "analog-lenok/second.svg"
+        source: "analog-modern-steel/second.svg"
         anchors.centerIn: parent
         width: parent.width
         height: parent.height
