@@ -33,8 +33,8 @@ select opt in "${options[@]}"
 do
     if [ -e ${opt::-1}/usr/share/ ]
     then
-        sed "s#@@@12h@@@#$use12#g" <watchfaceloader.qml >/tmp/loader.qml
-        sed -i "s#@@@watchface@@@#share/asteroid-launcher/watchfaces/${opt::-1}.qml#g" /tmp/loader.qml
+        sed "s#@@@12h@@@#$use12#g" <watchfaceloader.qmltemplate >/tmp/loader.qmltemplate
+        sed -i "s#@@@watchface@@@#share/asteroid-launcher/watchfaces/${opt::-1}.qml#g" /tmp/loader.qmltemplate
         if [[ -f "background.jpg" ]]
         then
             echo "$(tput setaf 2)Custom background.jpg found and is used as background.$(tput sgr0)"
@@ -44,9 +44,9 @@ do
             wget -O /tmp/background.jpg https://raw.githubusercontent.com/AsteroidOS/asteroid-wallpapers/master/480x480/000-flatmesh.jpg
         fi
         cp -R ${opt::-1}/usr/share/ /tmp/
-        qmlscene --scaling --resize-to-root /tmp/loader.qml
+        qmlscene --scaling --resize-to-root /tmp/loader.qmltemplate
         echo "$(tput setaf 2)Removing temporary files.$(tput sgr0)"
-        rm /tmp/loader.qml
+        rm /tmp/loader.qmltemplate
         rm /tmp/background.jpg
         rm -R /tmp/share/
     else

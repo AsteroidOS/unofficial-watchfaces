@@ -1,7 +1,6 @@
 import QtQuick 2.9
 
 Item {
-
     height: 640
     width: 640
     property bool displayAmbient: false
