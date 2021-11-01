@@ -300,7 +300,7 @@ Item {
 
     Connections {
         target: wallClock
-        onTimeChanged: {
+        function onTimeChanged() {
             minuteHand.requestPaint()
             hourHand.requestPaint()
         }

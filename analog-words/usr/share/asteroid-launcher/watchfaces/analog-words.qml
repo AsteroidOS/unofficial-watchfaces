@@ -230,15 +230,17 @@ Item {
 
     Connections {
         target: compositor
-        onDisplayAmbientEntered: if (currentColor == "") {
+        function onDisplayAmbientEntered() { if (currentColor == "") {
                                      currentColor = "black"
                                      userColor = ""
                                  }
                                  else
                                      userColor = "black"
+        }
 
-        onDisplayAmbientLeft:    if (userColor == "") {
+        function onDisplayAmbientLeft() {    if (userColor == "") {
                                      currentColor = ""
                                  }
+        }
     }
 }

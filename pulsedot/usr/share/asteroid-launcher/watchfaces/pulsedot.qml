@@ -355,7 +355,7 @@ Item {
 
     Connections {
         target: compositor
-        onDisplayAmbientEntered: if (currentColor == "black") {
+        function onDisplayAmbientEntered() { if (currentColor == "black") {
                                      currentColor = ""
                                      userColor = "black"
                                      grow.start()
@@ -366,9 +366,10 @@ Item {
                                      grow.start()
                                      shrink.start()
                                  }
+        }
 
 
-        onDisplayAmbientLeft:    if (userColor == "black") {
+        function onDisplayAmbientLeft() {    if (userColor == "black") {
                                      currentColor = "black"
                                      grow.start()
                                      shrink.start()
@@ -378,11 +379,12 @@ Item {
                                      grow.start()
                                      shrink.start()
                                  }
+        }
     }
 
     Connections {
         target: wallClock
-        onTimeChanged: {
+        function onTimeChanged() {
             var minute = wallClock.time.getMinutes()
             var second = wallClock.time.getSeconds()
             if(secondCanvas.second !== second) {

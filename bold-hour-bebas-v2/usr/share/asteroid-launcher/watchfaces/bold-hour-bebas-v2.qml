@@ -108,7 +108,7 @@ Item {
 
     Connections {
         target: wallClock
-        onTimeChanged: {
+        function onTimeChanged() {
             minuteCircle.requestPaint()
             minuteArc.requestPaint()
         }

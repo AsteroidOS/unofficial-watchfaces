@@ -159,7 +159,7 @@ Item {
 
     Connections {
         target: wallClock
-        onTimeChanged: {
+        function onTimeChanged() {
             twentyfourhourArc.requestPaint()
         }
     }
