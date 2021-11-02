@@ -1,5 +1,7 @@
 /*
- * Copyright (C) 2021 - Timo Könnecke <github.com/eLtMosen>
+ * Copyright (C) 2021 - Ed Beroset <github.com/beroset>
+ *               2021 - Timo Könnecke <github.com/eLtMosen>
+ *
  * All rights reserved.
  *
  * This program is free software: you can redistribute it and/or modify
@@ -17,6 +19,7 @@
  */
 
 import QtQuick 2.1
+import QtGraphicalEffects 1.15
 
 Item {
     property string currentColor: ""
@@ -63,7 +66,7 @@ Item {
 
         Text {
             id: minuteDisplay
-            font.pixelSize: parent.height * 0.5
+            font.pixelSize: parent.height * 0.549
             font.family: "Montserrat"
             font.styleName: "Regular"
             color: "black"
@@ -79,8 +82,8 @@ Item {
             z: hour == index ? 1 : 0
             id: backRectangles
             antialiasing: true
-            width: hourText.paintedWidth + (hourText.x * 1.15 )
-            height: parent.height * 0.12
+            width: hourText.paintedWidth + (hourText.x * 1.21)
+            height: parent.height * 0.138
             color: hour == index ? "white" : colorOffset[index]
             opacity: 1
             radius: width * 0.5
@@ -89,7 +92,7 @@ Item {
                     origin.x: backRectangles.height / 2;
                     origin.y: backRectangles.height / 2;
                     angle: ((index) * 30) - 90
-                }, 
+                },
                 Translate {
                     x: (parent.width - backRectangles.height) / 2
                     y: (parent.height - backRectangles.height) / 2
@@ -97,7 +100,7 @@ Item {
             ]
             state: currentColor
             states: State { name: "black";
-                PropertyChanges { target: backRectangles; 
+                PropertyChanges { target: backRectangles;
                     color: hour == index ? "white" : "black" }
             }
             transitions: Transition {
@@ -105,14 +108,16 @@ Item {
                     ColorAnimation { duration: 500 }
             }
 
-            Text { 
+            Text {
                 id: hourText
-                font.pixelSize: parent.height * 0.6
+                property var heightFontOffest: (index > 0 && index < 7) ? -parent.height * 0.05 : parent.height * 0.05
+                font.pixelSize: parent.height * (hour == index ? 0.70 : 0.56)
                 font.family: "SourceSansPro"
-                font.styleName: hour == index ? "Bold" : "Light"
+                font.styleName: hour == index ? "Semibold" : "Light"
+                font.letterSpacing: hour == index ? -parent.height * 0.02 : parent.height * 0.001
                 color: "black"
-                x: parent.height * 2.0
-                y: (parent.height - hourText.height) / 2 
+                x: hour == index ? parent.height * 1.58 : parent.height * 1.94
+                y: ((parent.height - hourText.height) / 2) + heightFontOffest
                 text: Qt.locale().name.substring(0,2) === "de" ? wordsDE[index]:
                       Qt.locale().name.substring(0,2) === "fr" ? wordsFR[index]:
                       Qt.locale().name.substring(0,2) === "es" ? wordsES[index]:
@@ -134,7 +139,7 @@ Item {
                 }
                 state: currentColor
                 states: State { name: "black";
-                    PropertyChanges { target: hourText; 
+                    PropertyChanges { target: hourText;
                         color: hour == index ? "black" : "white" }
                 }
                 transitions: Transition {
@@ -142,12 +147,21 @@ Item {
                         ColorAnimation { duration: 500 }
                 }
             }
+            layer.enabled: true
+            layer.effect: DropShadow {
+                transparentBorder: true
+                horizontalOffset: 3
+                verticalOffset: 3
+                radius: 12.0
+                samples: 17
+                color: "#50000000"
+            }
         }
     }
 
     Connections {
         target: compositor
-        function onDisplayAmbientEntered() { 
+        function onDisplayAmbientEntered() {
             if (currentColor == "") {
                 currentColor = "black"
                 userColor = ""
@@ -156,9 +170,9 @@ Item {
                 userColor = "black"
         }
 
-        function onDisplayAmbientLeft() {    
+        function onDisplayAmbientLeft() {
             if (userColor == "") {
-                currentColor = "" 
+                currentColor = ""
             }
         }
     }
