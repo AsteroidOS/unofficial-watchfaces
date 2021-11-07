@@ -33,6 +33,11 @@ ApplicationWindow {
                 onCheckedChanged: displayAmbient = checked; 
             }
             Item { Layout.fillWidth: true }
+            Button {
+                id: screenshot
+                text: "Screenshot"
+                onClicked: myFrame.snapshot()
+            }
         }
     }
 
@@ -40,6 +45,12 @@ ApplicationWindow {
         id: myFrame
         height: 640
         width: frame.height
+        function snapshot() {
+            myFrame.grabToImage(
+            function(result) {  
+                result.saveToFile(testface + (round ? "-round.jpg" : ".jpg"))
+            }, Qt.size(320, 320) )
+        }
 
         Rectangle {
             id: frame
@@ -69,10 +80,7 @@ ApplicationWindow {
                 }
             }
 
-            Keys.onReturnPressed: myFrame.grabToImage(
-            function(result) {  
-                result.saveToFile(testface + (round ? "-round.jpg" : ".jpg"))
-            }, Qt.size(320, 320) )
+            Keys.onReturnPressed: snapshot()
         }
 
         Item {
