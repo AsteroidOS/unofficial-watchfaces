@@ -11,6 +11,7 @@ of AsteroidOS, it can eventually be merged into the default set of asteroid-laun
 `cd unofficial-watchfaces/`
 - Connect your AsteroidOS Watch, configured to either ADB Mode (ADB transfer) or Developer Mode (SCP transfer) in Settings -> USB.
 - Start `./deploy.sh` to use SCP commands or `./deploy.sh -a` for ADB commands.
+- You can also use `./deploy.sh --help` to get a list of available options.
 - Select a single watchface to deploy to the watch with its given number or copy all available watchfaces at once with option 1.
 - You then can restart the ceres session and apply a single selected watchface with pressing 'y'.
 
@@ -21,10 +22,8 @@ You may [restart the session or reboot the watch](https://asteroidos.org/wiki/us
 
 ### Test watchfaces in qmlscene ###
 
-- After cloning the repo and changing into its local directory like described above, execute test-in-qmlscene.sh without flag to use 24H display.\
-`./test-in-qmlscene.sh`
-- Or with the -use12h flag for 12H display.\
-`./test-in-qmlscene.sh -use12h`
+- After cloning the repo and changing into its local directory like described above, execute `./test-in-qmlscene.sh`.  
+- Options within the GUI allow you to use 24H or 12H, round or square watchface, ambient (darkened) or not, and allows you to take a screenshot.
 
 Note that some community watchfaces use features that are not available in qmlscene, like the battery display.
 
