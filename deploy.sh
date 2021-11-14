@@ -7,6 +7,10 @@ PS3='- Deploy watchface by entering its number -
 - Refresh list with the enter key -
 - Quit with any other input -'
 
+# These can be changed to 2222 and localhost for qemux86 target
+WATCHPORT=22
+WATCHADDR=192.168.2.15
+
 unset options i
 options[i++]="DEPLOY-ALL"
 while IFS= read -r -d $'\0' f
@@ -26,7 +30,7 @@ select opt in "${options[@]}"
                 then
                   adb push $opt/usr/share/* /usr/share/
                 else
-                  scp -r $opt/usr/share/* root@192.168.2.15:/usr/share/
+                  echo scp -P${WATCHPORT} -r $opt/usr/share/* root@${WATCHADDR}:/usr/share/
               fi
             fi
          done
@@ -40,7 +44,7 @@ select opt in "${options[@]}"
                then
                  adb shell systemctl restart user@1000
                else
-                 ssh -t root@192.168.2.15 "systemctl restart user@1000"
+                 ssh -t ${WATCHROOTADDR} "systemctl restart user@1000"
              fi
          fi
       else
@@ -61,14 +65,14 @@ select opt in "${options[@]}"
                     adb shell systemctl restart user@1000
                 fi
               else
-                scp -r $opt/usr/share/* root@192.168.2.15:/usr/share/
+                scp -P${WATCHPORT} -r $opt/usr/share/* root@${WATCHADDR}:/usr/share/
                 echo " "
                 echo "Press 'y' to activate ${opt::-1} and restart the ceres session on the watch."
                 echo "Back to watchface selection with any other key press."
                 read -rsn1 input
                 if [ "$input" = "y" ]; then
-                  ssh -t ceres@192.168.2.15 "dconf write /desktop/asteroid/watchface \"'file:///usr/share/asteroid-launcher/watchfaces/${opt::-1}.qml'\""
-                  ssh -t root@192.168.2.15 "systemctl restart user@1000"
+                  ssh -p ${WATCHPORT} -t ceres@${WATCHADDR} "dconf write /desktop/asteroid/watchface \"'file:///usr/share/asteroid-launcher/watchfaces/${opt::-1}.qml'\""
+                  ssh -p ${WATCHPORT} -t root@${WATCHADDR} "systemctl restart user@1000"
                 fi
             fi
           else
