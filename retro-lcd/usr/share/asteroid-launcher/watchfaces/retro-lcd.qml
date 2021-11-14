@@ -92,10 +92,10 @@ Item {
 
     Connections {
         target: desktop
-        onDisplayAmbientChanged: digital.requestPaint()
+        function onDisplayAmbientChanged() { digital.requestPaint() }
     }
     Connections {
         target: wallClock
-        onTimeChanged: digital.requestPaint()
+        function onTimeChanged() { digital.requestPaint() }
     }
 }

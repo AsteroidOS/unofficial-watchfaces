@@ -128,7 +128,7 @@ Item {
 
     Connections {
         target: wallClock
-        onTimeChanged: {
+        function onTimeChanged() {
             var minute = wallClock.time.getMinutes()
             var date = wallClock.time.getDate()
             if(hourMinuteCanvas.minute != minute) {
@@ -161,7 +161,7 @@ Item {
 
     Connections {
         target: localeManager
-        onChangesObserverChanged: {
+        function onChangesObserverChanged() {
             hourMinuteCanvas.requestPaint()
             dateCanvas.requestPaint()
             amPmCanvas.requestPaint()

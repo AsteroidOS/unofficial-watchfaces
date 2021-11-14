@@ -197,7 +197,7 @@ Item {
 
     Connections {
         target: wallClock
-        onTimeChanged: {
+        function onTimeChanged() {
 
             secondHand.requestPaint()
             minuteHand.requestPaint()

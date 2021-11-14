@@ -270,7 +270,7 @@ Item {
 
     Connections {
         target: wallClock
-        onTimeChanged: {
+        function onTimeChanged() {
             var hour = wallClock.time.getHours()
             var minute = wallClock.time.getMinutes()
             var second = wallClock.time.getSeconds()
@@ -278,7 +278,6 @@ Item {
                 secondHand.second = second
                 secondHand.requestPaint()
                 secondDisplay.requestPaint()
-                secondArc.requestPaint()
             }if(minuteHand.minute !== minute) {
                 minuteHand.minute = minute
                 minuteHand.requestPaint()
@@ -297,7 +296,6 @@ Item {
         secondHand.second = second
         secondHand.requestPaint()
         secondDisplay.requestPaint()
-        secondArc.requestPaint()
         minuteHand.minute = minute
         minuteHand.requestPaint()
         minuteDisplay.requestPaint()

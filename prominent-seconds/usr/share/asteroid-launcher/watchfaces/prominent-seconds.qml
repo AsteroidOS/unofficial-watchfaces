@@ -77,7 +77,7 @@ Item {
 
     Connections {
         target: wallClock
-        onTimeChanged: {
+        function onTimeChanged() {
             var second = wallClock.time.getSeconds()
             if(secondCanvas.second !== second) {
                 secondCanvas.second = second
