@@ -71,7 +71,7 @@ Item {
 
     Text {
         visible: !displayAmbient
-        font.pixelSize: parent.height*0.06
+        font.pixelSize: parent.height*0.10
         font.family: "Feronia"
         color: "brown"
         style: Text.Outline
@@ -79,24 +79,9 @@ Item {
         horizontalAlignment: Text.AlignHCenter
         anchors {
             centerIn: parent
-            verticalCenterOffset: parent.width*0.32
+            verticalCenterOffset: parent.width*0.30
         }
         text: "Asteroid OS"
-    }
-
-    Text {
-        visible: !displayAmbient
-        font.pixelSize: parent.height*0.04
-        font.family: "Feronia"
-        color: "brown"
-        style: Text.Outline
-        styleColor: "darkorange"
-        horizontalAlignment: Text.AlignHCenter
-        anchors {
-            centerIn: parent
-            verticalCenterOffset: parent.width*0.38
-        }
-        text: "Hack your Wrist"
     }
 
     Repeater{
