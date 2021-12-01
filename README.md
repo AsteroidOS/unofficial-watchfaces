@@ -38,6 +38,7 @@ The creators of the below listed watchfaces are happy to answer your questions a
 | Round Display | Square Display | Watchface Title | Creator |
 |---|---|---|---|
 | ![thumbnail](.thumbnails/analog-asteroid-logo-round.jpg) |![thumbnail](.thumbnails/analog-asteroid-logo.jpg) | [analog-asteroid-logo](analog-asteroid-logo/usr/share/asteroid-launcher/watchfaces/analog-asteroid-logo.qml) | [eLtMosen](https://github.com/eLtMosen) |
+| ![thumbnail](.thumbnails/analog-aviator-round.jpg) |![thumbnail](.thumbnails/analog-aviator.jpg) | [analog-aviator](analog-aviator/usr/share/asteroid-launcher/watchfaces/analog-aviator.qml) | [eLtMosen](https://github.com/eLtMosen) |
 | ![thumbnail](.thumbnails/analog-classy-roman-round.jpg) | ![thumbnail](.thumbnails/analog-classy-roman.jpg) | [analog-classy-roman](analog-classy-roman/usr/share/asteroid-launcher/watchfaces/analog-classy-roman.qml) | [eLtMosen](https://github.com/eLtMosen) |
 | ![thumbnail](.thumbnails/analog-halloween-round.jpg) | ![thumbnail](.thumbnails/analog-halloween.jpg) | [analog-halloween](analog-halloween/usr/share/asteroid-launcher/watchfaces/analog-halloween.qml) | [beroset](https://github.com/beroset) |
 | ![thumbnail](.thumbnails/analog-modern-steel-round.jpg) | ![thumbnail](.thumbnails/analog-modern-steel.jpg) | [analog-modern-steel](analog-modern-steel/usr/share/asteroid-launcher/watchfaces/analog-modern-steel.qml) | [CosmosDev](https://github.com/CosmosDev) |
@@ -82,7 +83,8 @@ The creators of the below listed watchfaces are happy to answer your questions a
 
 | Watchface - File | License |
 | --- | --- |
-| analog-neon-diver - [Bebas Neue](analog-neon-diver/usr/share/fonts/BebasNeueBold.ttf) | The font "Bebas Neue" are licensed under SIL Open Font License and was created by [Dharma Type](http://www.dharmatype.com/). [license](http://scripts.sil.org/cms/scripts/page.php?site_id=nrsi&id=OFL) |
+| analog-aviator - [Arkhip](analog-aviator/usr/share/fonts/Arkhip_font.ttf) | The font "Arkhip" is free for personal and comercial use and was created by Ivan Klimov, Irina Dementieva, Alexei Tikhonov Dominic [Klimov Design](https://www.behance.net/gallery/24073667/Arkhip-Typeface-Free). |
+| analog-neon-diver - [Bebas Neue](analog-neon-diver/usr/share/fonts/BebasNeueBold.ttf) | The font "Bebas Neue" is licensed under SIL Open Font License and was created by [Dharma Type](http://www.dharmatype.com/). [license](http://scripts.sil.org/cms/scripts/page.php?site_id=nrsi&id=OFL) |
 | analog-classy-roman - [Raleway - Regular](analog-classy-roman/usr/share/fonts/Raleway-Regular.ttf) | The font "Raleway" is licensed under SIL Open Font License and was created by [Matt McInerney](https://fonts.google.com/?query=Matt%20McInerney) & [Pablo Impallari](https://fonts.google.com/?query=Pablo%20Impallari). [license](http://scripts.sil.org/cms/scripts/page.php?site_id=nrsi&id=OFL)|
 | analog-classy-roman - [Roboto Condensed - Bold](analog-classy-roman/usr/share/fonts/RobotoCondensed-Bold.ttf) | The font "Roboto Condensed" is licensed under Apache License, Version 2.0 and was created by [Christian Robertson](https://fonts.google.com/?query=Christian+Robertson). [license](https://www.apache.org/licenses/LICENSE-2.0.html)|
 | analog-modern-steel - [Michroma - Regular](analog-modern-steel/usr/share/fonts/Michroma.ttf) | The font "Michroma" is licensed under SIL Open Font License and was created by [Vernon Adams](https://github.com/vernnobile). [license](http://scripts.sil.org/cms/scripts/page.php?site_id=nrsi&id=OFL)|
