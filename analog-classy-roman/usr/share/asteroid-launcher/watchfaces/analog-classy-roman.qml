@@ -21,14 +21,15 @@ import QtQuick 2.9
 Item {
     property string currentColor: "black"
     property string userColor: ""
+    property string imgPath: "../watchface-img/"
     property var numeral: ["\u216B", "\u2160", "\u2161", "\u2162", "\u2163", "\u2164", "\u2165", "\u2166", "\u2167", "\u2168", "\u2169", "\u216A"]
 
     Image {
         z: 0
         id: background
         property var toggle: 1
-        source: !displayAmbient ? "analog-classy-roman/background-classy-roman-white.svg" :
-                                  "analog-classy-roman/background-classy-roman.svg"
+        source: !displayAmbient ? imgPath + "background-classy-roman-white.svg" :
+                                  imgPath + "background-classy-roman.svg"
         anchors.horizontalCenter: parent.horizontalCenter
         anchors.verticalCenter: parent.verticalCenter
         width: parent.width
@@ -49,7 +50,7 @@ Item {
         states: State { name: "black"
             PropertyChanges {
                 target: background
-                source: "analog-classy-roman/background-classy-roman.svg"
+                source: imgPath + "background-classy-roman.svg"
             }
         }
         transitions: Transition {
@@ -63,8 +64,8 @@ Item {
     Image {
         z: 1
         id: logoAsteroid
-        source: !displayAmbient ? "analog-classy-roman/asteroid_logo_bw.png" :
-                                  "analog-classy-roman/asteroid_logo_wb.png"
+        source: !displayAmbient ? imgPath + "asteroid_logo_bw.png" :
+                                  imgPath + "asteroid_logo_wb.png"
         anchors.horizontalCenter: parent.horizontalCenter
         anchors.verticalCenter: parent.verticalCenter
         anchors.verticalCenterOffset: -parent.height * 0.37
@@ -74,7 +75,7 @@ Item {
         states: State { name: "black"
             PropertyChanges {
                 target: logoAsteroid
-                source: "analog-classy-roman/asteroid_logo_wb.png"
+                source: imgPath + "asteroid_logo_wb.png"
             }
         }
         transitions: Transition {
@@ -298,7 +299,7 @@ Item {
     Image {
         id: hourSVG
         z: 3
-        source: "analog-classy-roman/hour-classy-roman-v3.svg"
+        source: imgPath + "hour-classy-roman-v3.svg"
         anchors.horizontalCenter: parent.horizontalCenter
         anchors.verticalCenter: parent.verticalCenter
         width: parent.width
@@ -313,7 +314,7 @@ Item {
     Image {
         id: minuteSVG
         z: 4
-        source: "analog-classy-roman/minute-classy-roman-v3.svg"
+        source: imgPath + "minute-classy-roman-v3.svg"
         anchors.horizontalCenter: parent.horizontalCenter
         anchors.verticalCenter: parent.verticalCenter
         width: parent.width
@@ -329,7 +330,7 @@ Item {
         id: secondSVG
         z: 4
         visible: !displayAmbient
-        source: "analog-classy-roman/second-classy-roman.svg"
+        source: imgPath + "second-classy-roman.svg"
         anchors.horizontalCenter: parent.horizontalCenter
         anchors.verticalCenter: parent.verticalCenter
         width: parent.width

@@ -217,7 +217,7 @@ Item {
 
     Image {
         id: logoAsteroid
-        source: "asteroid_logo.png"
+        source: "../watchface-img/asteroid-logo.svg"
         anchors.horizontalCenter: parent.horizontalCenter
         anchors.verticalCenter: parent.verticalCenter
         anchors.verticalCenterOffset: parent.height*0.18

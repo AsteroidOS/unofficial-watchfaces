@@ -29,7 +29,7 @@ Item {
     Image {
         z: 0
         id: backplate
-        source: "analog-neon-diver/backplate-neon.svg"
+        source: "../watchface-img/backplate-neon.svg"
         antialiasing: true
         anchors.centerIn: parent
         width: parent.width
@@ -40,16 +40,16 @@ Item {
             transparentBorder: true
             horizontalOffset: 0
             verticalOffset: 0
-            radius: 16.0
-            samples: 20
+            radius: 12.0
+            samples: 14
             color: Qt.rgba(0, 1, 1, 0.3)
         }
         Image {
             z: 0
             id: modeDisplay
             source: hourSVG.toggle24h ?
-                        "analog-neon-diver/backplate-neon-24hindicator.svg" :
-                        "analog-neon-diver/backplate-neon-12hindicator.svg"
+                        "../watchface-img/backplate-neon-24hindicator.svg" :
+                        "../watchface-img/backplate-neon-12hindicator.svg"
             antialiasing: true
             anchors.centerIn: parent
             width: parent.width
@@ -59,8 +59,8 @@ Item {
                 transparentBorder: true
                 horizontalOffset: 0
                 verticalOffset: 0
-                radius: 16.0
-                samples: 20
+                radius: 12.0
+                samples: 14
                 color: hourSVG.toggle24h ? Qt.rgba(0.01, 0.91, 0.14, 0.3) : Qt.rgba(0, 1, 1, 0.3)
             }
         }
@@ -105,7 +105,7 @@ Item {
             x: centerX + Math.cos(rotM * 2 * Math.PI) * parent.width * 0.458
             y: centerY + Math.sin(rotM * 2 * Math.PI) * parent.width * 0.458
             color: "white"
-            opacity: displayAmbient ? 0.4 : 0.80
+            opacity: displayAmbient ? 0.4 : 0.7
             text: hourSVG.toggle24h ?
                       index === 0 ? 24 : index * 2 :
                       index === 0 ? 12 : index
@@ -121,7 +121,7 @@ Item {
         z: 0
         id: asteroidLogo
         visible: !displayAmbient
-        source: "analog-neon-diver/asteroid-logo.svg"
+        source: "../watchface-img/asteroid-logo.svg"
         antialiasing: true
         anchors {
             centerIn: parent
@@ -168,8 +168,8 @@ Item {
             transparentBorder: true
             horizontalOffset: 0
             verticalOffset: 0
-            radius: 4.0
-            samples: 20
+            radius: 3.0
+            samples: 6
             color: "#00ffff"
         }
     }
@@ -179,8 +179,8 @@ Item {
         z: 2
         property bool toggle24h: false
         source: hourSVG.toggle24h ?
-                    "analog-neon-diver/hour-neon-diver-24h.svg" :
-                    "analog-neon-diver/hour-neon-diver-12h.svg"
+                    "../watchface-img/hour-neon-diver-24h.svg" :
+                    "../watchface-img/hour-neon-diver-12h.svg"
         antialiasing: true
         anchors.centerIn: parent
         width: parent.width
@@ -205,7 +205,7 @@ Item {
             horizontalOffset: 4
             verticalOffset: 4
             radius: 10.0
-            samples: 17
+            samples: 12
             color: Qt.rgba(0, 0, 0, 0.4)
         }
         MouseArea {
@@ -220,7 +220,7 @@ Item {
     Image {
         id: minuteSVG
         z: 3
-        source: "analog-neon-diver/minute-neon-diver.svg"
+        source: "../watchface-img/minute-neon-diver.svg"
         antialiasing: true
         anchors.centerIn: parent
         width: parent.width
@@ -239,10 +239,10 @@ Item {
         layer.enabled: true
         layer.effect: DropShadow {
             transparentBorder: true
-            horizontalOffset: 6
-            verticalOffset: 6
+            horizontalOffset: 5
+            verticalOffset: 5
             radius: 11.0
-            samples: 17
+            samples: 13
             color: Qt.rgba(0, 0, 0, 0.4)
         }
     }
@@ -252,7 +252,7 @@ Item {
         z: 4
         antialiasing: true
         visible: !displayAmbient
-        source: "analog-neon-diver/second-neon-diver.svg"
+        source: "../watchface-img/second-neon-diver.svg"
         anchors.centerIn: parent
         width: parent.width
         height: parent.height
@@ -266,8 +266,8 @@ Item {
             transparentBorder: true
             horizontalOffset: 8
             verticalOffset: 8
-            radius: 12.0
-            samples: 17
+            radius: 10.0
+            samples: 12
             color: Qt.rgba(0, 0, 0, 0.4)
         }
     }

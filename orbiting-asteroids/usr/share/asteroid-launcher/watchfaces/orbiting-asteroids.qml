@@ -25,6 +25,7 @@ import QtQuick 2.1
 
 Item {
     property var radian: 0.01745329252
+    property string imgPath: "../watchface-img/orbiting-asteroids-"
 
     Canvas {
         id: secondCanvas
@@ -134,7 +135,7 @@ Item {
         property var rotS: (wallClock.time.getSeconds() - 15)/60
         property var centerX: parent.width/2-width/2
         property var centerY: parent.height/2-height/2 
-        source: "asteroid_second.png"
+        source: imgPath + "second.png"
         x: centerX+Math.cos(rotS * 2 * Math.PI)*width*5.78
         y: centerY+Math.sin(rotS * 2 * Math.PI)*width*5.78
         width: parent.width/13
@@ -146,7 +147,7 @@ Item {
         property var rotM: (wallClock.time.getMinutes() - 15)/60
         property var centerX: parent.width/2-width/2
         property var centerY: parent.height/2-height/2
-        source: "asteroid_minute.png"
+        source: imgPath + "minute.png"
         x: centerX+Math.cos(rotM * 2 * Math.PI)*width*3.9
         y: centerY+Math.sin(rotM * 2 * Math.PI)*width*3.9
         width: parent.width/11
@@ -158,7 +159,7 @@ Item {
         property var rotH: (wallClock.time.getHours()-3 + wallClock.time.getMinutes()/60) / 12
         property var centerX: parent.width/2-width/2
         property var centerY: parent.height/2-height/2 
-        source: "asteroid_hour.png"
+        source: imgPath + "hour.png"
         x: (centerX+Math.cos(rotH * 2 * Math.PI)*width*2.23)
         y: (centerY+Math.sin(rotH * 2 * Math.PI)*width*2.23)
         width: parent.width/9

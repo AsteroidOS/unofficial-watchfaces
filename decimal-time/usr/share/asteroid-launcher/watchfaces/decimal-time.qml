@@ -161,7 +161,7 @@ Item {
         id: logoAsteroid
         z: 3
         opacity: displayAmbient ? 0.6 : 1.0
-        source: "asteroid_logo.png"
+        source: "../watchface-img/asteroid-logo.svg"
         width: parent.width/12
         height: parent.height/12
         transform : [ 
