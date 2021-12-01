@@ -23,11 +23,10 @@
 
 /*
  * Based on kitt by velox/jgibbon regarding arcs and image embedding.
- * v2, corrected line height problems by seperating the font line-breaks
- * into own text items  for more precise alignment.
  */
 
 import QtQuick 2.1
+import QtGraphicalEffects 1.15
 
 Item {
 
@@ -52,12 +51,32 @@ Item {
 
     Image {
         z: 2
-        id: logoAsteroid
-        source: "day-clock-center.png"
-        anchors.horizontalCenter: parent.horizontalCenter
-        anchors.verticalCenter: parent.verticalCenter
+        id: backGround
+        source: "../watchface-img/day-clock-center.svg"
+        anchors {
+            centerIn: parent
+        }
         width: parent.width/3
         height: parent.height/3
+        Image {
+            z: 2
+            id: backStars
+            source: "../watchface-img/day-clock-center-stars.svg"
+            anchors {
+                centerIn: parent
+            }
+            width: parent.width
+            height: parent.height
+            layer.enabled: true
+            layer.effect: DropShadow {
+                transparentBorder: true
+                horizontalOffset: 0
+                verticalOffset: 0
+                radius: 12.0
+                samples: 15
+                color: "#ccffcc00"
+            }
+        }
     }
 
     Text {

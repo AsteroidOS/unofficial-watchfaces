@@ -22,6 +22,7 @@ import Nemo.Ngf 1.0
 Item {
     id: watchFace
     property var time: wallClock.time //new Date() //
+    property string imgPath: "../watchface-img/"
 
     function formatAll(){
         secondsDisplay.format()
@@ -38,7 +39,7 @@ Item {
         sourceSize.height: width
         sourceSize.width: width
         anchors.fill: parent
-        source: "./kitt-bg.svg"
+        source: imgPath + "kitt-bg.svg"
     }
 
     Item {
@@ -158,7 +159,7 @@ Item {
         sourceSize.height: width
         sourceSize.width: height
         fillMode: Image.PreserveAspectFit
-        source: "./kitt-connected.svg"
+        source: imgPath + "kitt-connected.svg"
         opacity: btStatus.connected ? 1 : btStatus.powered? 0.5 : 0.1
     }
 
@@ -171,7 +172,7 @@ Item {
         sourceSize.height: height
         sourceSize.width: width
         fillMode: Image.PreserveAspectFit
-        source: "./kitt-button.svg"
+        source: imgPath + "kitt-button.svg"
     }
 
     Image {
@@ -179,7 +180,7 @@ Item {
         anchors.fill: parent
         sourceSize.height: width
         sourceSize.width: width
-        source: "./kitt-fg.svg"
+        source: imgPath + "kitt-fg.svg"
 
     }
 

@@ -44,7 +44,7 @@ Item {
     Image {
         z: 10
         id: logo
-        source: "asteroid_logo.png"
+        source: "..//watchface-img/asteroid-logo.svg"
         anchors.horizontalCenter: parent.horizontalCenter
         anchors.verticalCenter: parent.verticalCenter
         width: parent.width/2.5

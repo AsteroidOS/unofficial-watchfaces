@@ -28,6 +28,7 @@ Item {
 
     property string currentColor: ""
     property string userColor: ""
+    property string imgPath: "../watchface-img/analog-silly-walks-"
 
     Repeater {
         model: 12
@@ -84,7 +85,7 @@ Item {
     Image {
         id: backgound
         z: 2
-        source: !displayAmbient ? "bg-silly.svg" : "bg-silly-white.svg"
+        source: !displayAmbient ? imgPath + "bg.svg" : imgPath + "bg-white.svg"
         anchors.horizontalCenter: root.horizontalCenter
         anchors.verticalCenter: root.verticalCenter
         width: root.width
@@ -94,7 +95,7 @@ Item {
     Image {
         id: hourSVG
         z: 2
-        source: !displayAmbient ? "hour-silly.svg" : "hour-silly-white.svg"
+        source: !displayAmbient ? imgPath + "hour.svg" : imgPath + "hour-white.svg"
         anchors.horizontalCenter: root.horizontalCenter
         anchors.verticalCenter: root.verticalCenter
         width: root.width
@@ -109,7 +110,7 @@ Item {
     Image {
         id: minuteSVG
         z: 3
-        source: !displayAmbient ? "minute-silly.svg" : "minute-silly-white.svg"
+        source: !displayAmbient ? imgPath + "minute.svg" : imgPath + "minute-white.svg"
         anchors.horizontalCenter: root.horizontalCenter
         anchors.verticalCenter: root.verticalCenter
         width: root.width
@@ -126,7 +127,7 @@ Item {
         z: 4
         property var toggle: 1
         visible: !displayAmbient
-        source: "second-silly.svg"
+        source: imgPath + "second.svg"
         anchors.horizontalCenter: root.horizontalCenter
         anchors.verticalCenter: root.verticalCenter
         width: root.width

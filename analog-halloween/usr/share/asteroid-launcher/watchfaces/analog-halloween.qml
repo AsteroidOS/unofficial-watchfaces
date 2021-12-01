@@ -26,6 +26,9 @@
 import QtQuick 2.9
 
 Item {
+
+    property string imgPath: "../watchface-img/analog-halloween-"
+
     Repeater {
         model: 12
         Rectangle {
@@ -40,35 +43,15 @@ Item {
             color: "orange"
             width: parent.width*0.02
             height: parent.height*0.03
-            opacity: 0.6
+            opacity: 0.9
             transform: Rotation { origin.x: width/2; origin.y: height/2; angle: (index)*30}
         }
     }
-
-    Repeater{
-        model: 12
-        Rectangle {
-            z: 1
-            id: hourTicks
-            antialiasing : true
-            property var rotM: ((index) - 3)/12
-            property var centerX: parent.width/2-width/2
-            property var centerY: parent.height/2-height/2
-            x: centerX+Math.cos(rotM * 2 * Math.PI)*parent.width*0.46
-            y: centerY+Math.sin(rotM * 2 * Math.PI)*parent.width*0.46
-            color: "orange"
-            width: parent.width*0.02
-            height: parent.height*0.03
-            opacity: 0.6
-            transform: Rotation { origin.x: width/2; origin.y: height/2; angle: (index)*30}
-        }
-    }
-
     
     Image {
         id: hourSVG
         z: 2
-        source: "analog-halloween/hour.svg" 
+        source: imgPath + "hour.svg"
         anchors.horizontalCenter: parent.horizontalCenter
         anchors.verticalCenter: parent.verticalCenter
         width: parent.width
@@ -83,7 +66,7 @@ Item {
     Image {
         id: minuteSVG
         z: 3
-        source: "analog-halloween/minute.svg" 
+        source: imgPath + "minute.svg"
         anchors.horizontalCenter: parent.horizontalCenter
         anchors.verticalCenter: parent.verticalCenter
         width: parent.width
@@ -99,7 +82,7 @@ Item {
         id: secondSVG
         z: 4
         visible: !displayAmbient
-        source: "analog-halloween/second.svg"
+        source: imgPath + "second.svg"
         anchors.centerIn: parent
         width: parent.width
         height: parent.height

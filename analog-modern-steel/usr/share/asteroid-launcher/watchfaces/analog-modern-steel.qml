@@ -25,8 +25,11 @@
 import QtQuick 2.9
 
 Item {
+
+    property string imgPath: "../watchface-img/analog-modern-steel-"
+
     Image {
-      source: !displayAmbient ? "analog-modern-steel/strokes.svg" : "analog-modern-steel/strokes-ambient.svg"
+      source: !displayAmbient ? imgPath + "strokes.svg" : imgPath + "strokes-ambient.svg"
       width: parent.width
       height: parent.height
     }
@@ -182,7 +185,7 @@ Item {
         Image {
             id: monthSVG
             z: 1
-            source: "analog-modern-steel/handle.svg"
+            source: imgPath + "handle.svg"
             anchors.horizontalCenter: parent.horizontalCenter
             anchors.verticalCenter: parent.verticalCenter
             width: parent.width
@@ -222,7 +225,7 @@ Item {
     Image {
         id: hourSVG
         z: 2
-        source: !displayAmbient ? "analog-modern-steel/hour.svg" : "analog-modern-steel/hour-ambient.svg"
+        source: !displayAmbient ? imgPath + "hour.svg" : imgPath + "hour-ambient.svg"
         anchors.horizontalCenter: parent.horizontalCenter
         anchors.verticalCenter: parent.verticalCenter
         width: parent.width
@@ -237,7 +240,7 @@ Item {
     Image {
         id: minuteSVG
         z: 3
-        source: !displayAmbient ? "analog-modern-steel/minute.svg" : "analog-modern-steel/minute-ambient.svg"
+        source: !displayAmbient ? imgPath + "minute.svg" : imgPath + "minute-ambient.svg"
         anchors.horizontalCenter: parent.horizontalCenter
         anchors.verticalCenter: parent.verticalCenter
         width: parent.width
@@ -253,7 +256,7 @@ Item {
         id: secondSVG
         z: 4
         visible: !displayAmbient
-        source: "analog-modern-steel/second.svg"
+        source: imgPath + "second.svg"
         anchors.centerIn: parent
         width: parent.width
         height: parent.height

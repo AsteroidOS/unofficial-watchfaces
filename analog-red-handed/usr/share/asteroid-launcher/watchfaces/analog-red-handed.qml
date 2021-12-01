@@ -27,6 +27,7 @@ Item {
 
     property string currentColor: ""
     property string userColor: ""
+    property string imgPath: "../watchface-img/analog-red-handed-"
 
     Text {
         z: 0
@@ -134,7 +135,7 @@ Item {
     Image {
         z: 0
         id: logoAsteroid
-        source: "asteroid_logo.png"
+        source: "../watchface-img/asteroid-logo.svg"
         anchors.horizontalCenter: parent.horizontalCenter
         anchors.verticalCenter: parent.verticalCenter
         anchors.verticalCenterOffset: parent.height*0.18
@@ -256,7 +257,7 @@ Item {
     Image {
         id: hourSVG
         z: 2
-        source: !displayAmbient ? "hour-red-handed.svg" : "hour-red-handed-ambient.svg"
+        source: !displayAmbient ? imgPath + "hour.svg" : imgPath + "hour-ambient.svg"
         anchors.horizontalCenter: parent.horizontalCenter
         anchors.verticalCenter: parent.verticalCenter
         width: parent.width
@@ -271,7 +272,7 @@ Item {
     Image {
         id: minuteSVG
         z: 3
-        source: !displayAmbient ? "minute-red-handed.svg" : "minute-red-handed-ambient.svg"
+        source: !displayAmbient ? imgPath + "minute.svg" : imgPath + "minute-ambient.svg"
         anchors.horizontalCenter: parent.horizontalCenter
         anchors.verticalCenter: parent.verticalCenter
         width: parent.width
@@ -288,7 +289,7 @@ Item {
         z: 4
         property var toggle: 1
         visible: !displayAmbient
-        source: "second-red-handed.svg"
+        source: imgPath + "second.svg"
         anchors.horizontalCenter: parent.horizontalCenter
         anchors.verticalCenter: parent.verticalCenter
         width: parent.width
