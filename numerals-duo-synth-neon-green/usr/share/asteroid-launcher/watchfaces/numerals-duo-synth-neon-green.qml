@@ -32,6 +32,61 @@ Item {
 
     id: root
 
+    Text {
+        z: 0
+        id: dowDisplay
+        visible: !displayAmbient
+        font.pixelSize: root.height * 0.054
+        font.family: "Sunflower"
+        font.styleName: "Light"
+        font.letterSpacing: root.height*0.003
+        color: "white"
+        opacity: 0.95
+        horizontalAlignment: Text.AlignHCenter
+        anchors {
+            bottom: root.verticalCenter
+            bottomMargin: root.height*0.387
+            horizontalCenter: root.horizontalCenter
+        }
+        text: wallClock.time.toLocaleString(Qt.locale(), "dddd").toUpperCase()
+        layer.enabled: true
+        layer.effect: DropShadow {
+            transparentBorder: true
+            horizontalOffset: 0
+            verticalOffset: 3
+            radius: 12.0
+            samples: 16
+            color: "#fe16a2"
+        }
+    }
+
+    Text {
+        z: 0
+        id: dateDisplay
+        visible: !displayAmbient
+        font.pixelSize: root.height * 0.056
+        font.family: "Sunflower"
+        font.styleName: "Light"
+        color: "white"
+        opacity: 0.95
+        horizontalAlignment: Text.AlignHCenter
+        anchors {
+            top: root.verticalCenter
+            topMargin: root.height*0.394
+            horizontalCenter: root.horizontalCenter
+        }
+        text: wallClock.time.toLocaleString(Qt.locale(), "yyyy-MM-dd")
+        layer.enabled: true
+        layer.effect: DropShadow {
+            transparentBorder: true
+            horizontalOffset: 0
+            verticalOffset: -3
+            radius: 12.0
+            samples: 16
+            color: "#fe16a2"
+        }
+    }
+
     Item {
         x: DeviceInfo.hasRoundScreen ? length * 0.1 : (root.width != length ? root.width/2 - length/2 : 0)
         y: DeviceInfo.hasRoundScreen ? length * 0.1 : (root.height != length ? root.height/2 - length/2 : 0)

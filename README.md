@@ -85,6 +85,7 @@ The creators of the below listed watchfaces are happy to answer your questions a
 
 | Watchface - File | License |
 | --- | --- |
+| numerals-duo-synth-neon-green - [Sunflower - Light](numerals-duo-synth-neon-green/usr/share/fonts/Sunflower_Light.ttf) | The font "Sunflower" is licensed under SIL Open Font License and was created by The Sunflower Project Authors. [license](http://scripts.sil.org/cms/scripts/page.php?site_id=nrsi&id=OFL) |
 | analog-aviator - [Arkhip](analog-aviator/usr/share/fonts/Arkhip_font.ttf) | The font "Arkhip" is free for personal and comercial use and was created by Ivan Klimov, Irina Dementieva, Alexei Tikhonov Dominic [Klimov Design](https://www.behance.net/gallery/24073667/Arkhip-Typeface-Free). |
 | analog-neon-diver - [Bebas Neue](analog-neon-diver/usr/share/fonts/BebasNeueBold.ttf) | The font "Bebas Neue" is licensed under SIL Open Font License and was created by [Dharma Type](http://www.dharmatype.com/). [license](http://scripts.sil.org/cms/scripts/page.php?site_id=nrsi&id=OFL) |
 | analog-classy-roman - [Raleway - Regular](analog-classy-roman/usr/share/fonts/Raleway-Regular.ttf) | The font "Raleway" is licensed under SIL Open Font License and was created by [Matt McInerney](https://fonts.google.com/?query=Matt%20McInerney) & [Pablo Impallari](https://fonts.google.com/?query=Pablo%20Impallari). [license](http://scripts.sil.org/cms/scripts/page.php?site_id=nrsi&id=OFL)|
