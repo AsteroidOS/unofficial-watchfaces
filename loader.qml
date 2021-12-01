@@ -32,6 +32,13 @@ ApplicationWindow {
                 Component.onCompleted: checked = displayAmbient
                 onCheckedChanged: displayAmbient = checked; 
             }
+            Button {
+               id: reload
+               text: "Reload"
+               onClicked: {
+                    watchfaceLoader.source = testface + "/usr/share/asteroid-launcher/watchfaces/" + testface + ".qml?" + Math.random()
+               }
+            }
             Item { Layout.fillWidth: true }
             Button {
                 id: screenshot
