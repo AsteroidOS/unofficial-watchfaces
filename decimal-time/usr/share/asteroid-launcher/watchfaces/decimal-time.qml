@@ -90,6 +90,7 @@ Item {
             font.pixelSize: parent.height*0.08
             font.family: "CPMono_v07"
             color: "lightblue"
+            font.styleName: "Plain"
             id: hourLabel
             antialiasing : true
             opacity: displayAmbient ? 0.3 : 0.6
@@ -114,6 +115,7 @@ Item {
         font.pixelSize: parent.height*0.06
         font.family: "CPMono_v07"
         color: "white"
+        font.styleName: "Plain"
         visible: !displayAmbient
         horizontalAlignment: Text.AlignHCenter
         anchors {
@@ -133,6 +135,7 @@ Item {
         font.pixelSize: parent.height*0.06
         font.family: "CPMono_v07"
         color: "white"
+        font.styleName: "Plain"
         horizontalAlignment: Text.AlignHCenter
         anchors {
             centerIn: parent
@@ -147,10 +150,12 @@ Item {
         visible: !displayAmbient
         font.pixelSize: parent.height*0.15
         font.family: "CPMono_v07"
+        font.styleName: "Plain"
         color: "white"
         horizontalAlignment: Text.AlignHCenter
         anchors {
             centerIn: parent
+            verticalCenterOffset: parent.width*0.016
         }
         textFormat: Text.RichText
         text: getMetricHours(wallClock.time).toPrecision(5)
@@ -160,6 +165,7 @@ Item {
     Image {
         id: logoAsteroid
         z: 3
+        antialiasing: true
         opacity: displayAmbient ? 0.6 : 1.0
         source: "../watchface-img/asteroid-logo.svg"
         width: parent.width/12

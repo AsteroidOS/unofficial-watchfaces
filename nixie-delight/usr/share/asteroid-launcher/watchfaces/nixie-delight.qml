@@ -52,8 +52,8 @@ Item {
                 id: digit
                 anchors.centerIn: parent
                 font.pixelSize: nixieBackground.height*0.35 * sizefactor
-                font.family: "Montserrat-Regular"
-                font.weight: Font.ExtraLight
+                font.family: "Montserrat"
+                font.weight: Font.Light
                 color: "orange"
                 visible: !displayAmbient
                 horizontalAlignment: Text.AlignHCenter
