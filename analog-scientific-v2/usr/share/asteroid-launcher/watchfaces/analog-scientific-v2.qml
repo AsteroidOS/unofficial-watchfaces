@@ -60,7 +60,6 @@ Item {
                 origin.y: height / 2
                 angle: (index) * 6
             }
-
         }
     }
 
@@ -140,7 +139,6 @@ Item {
             rightMargin: parent.width * 0.004
             verticalCenter: parent.verticalCenter
             verticalCenterOffset: -parent.width * 0.124
-
         }
         text: if (use12H.value) {
                   wallClock.time.toLocaleString(Qt.locale(), "hh ap").slice(0, 2)}
@@ -198,7 +196,6 @@ Item {
             z: 1
             id: dayArc
             opacity: !displayAmbient ? 1 : 0.3
-
             anchors.fill: parent
             smooth: true
             onPaint: {
@@ -505,7 +502,6 @@ Item {
         Image {
             id: hourSVG
             z: 3
-            property bool toggle24h: false
             source: imgPath + "hour.svg"
             antialiasing: true
             anchors.centerIn: parent
