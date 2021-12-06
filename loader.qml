@@ -13,6 +13,7 @@ ApplicationWindow {
     property bool round: true
     property int mysize: 640
     property var testface: Qt.application.arguments[1]
+    readonly property var mouseWheelScale: 1/15
 
         /*
     menuBar: MenuBar {
@@ -83,6 +84,10 @@ ApplicationWindow {
                             enabled: settime.checked
                             currentIndex: 5
                             model: 12
+                            WheelHandler {
+                                property: "currentIndex"
+                                rotationScale: mouseWheelScale
+                            }
                             delegate: Label {
                                 text: locale.standaloneMonthName(index, Locale.ShortFormat)
                                 horizontalAlignment: Text.AlignHCenter
@@ -94,6 +99,10 @@ ApplicationWindow {
                             enabled: settime.checked
                             currentIndex: 24
                             model: 31
+                            WheelHandler {
+                                property: "currentIndex"
+                                rotationScale: mouseWheelScale
+                            }
                             delegate: Label {
                                 text: index + 1
                                 horizontalAlignment: Text.AlignHCenter
@@ -110,18 +119,30 @@ ApplicationWindow {
                             enabled: settime.checked
                             currentIndex: 16
                             model: 24
+                            WheelHandler {
+                                property: "currentIndex"
+                                rotationScale: mouseWheelScale
+                            }
                         }
                         Tumbler {
                             id: minutesTumbler
                             enabled: settime.checked
                             currentIndex: 58
                             model: 60
+                            WheelHandler {
+                                property: "currentIndex"
+                                rotationScale: mouseWheelScale
+                            }
                         }
                         Tumbler {
                             id: secondsTumbler
                             enabled: settime.checked
                             currentIndex: 28
                             model: 60
+                            WheelHandler {
+                                property: "currentIndex"
+                                rotationScale: mouseWheelScale
+                            }
                         }
                     }
                 }
