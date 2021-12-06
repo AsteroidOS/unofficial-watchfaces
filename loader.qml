@@ -8,95 +8,133 @@ ApplicationWindow {
     id: root
     visible: true
     minimumWidth: 640
-    minimumHeight: mysize + header.height
+    minimumHeight: mysize + header.height // + menuBar.height
     property bool displayAmbient: false
     property bool round: true
     property int mysize: 640
     property var testface: Qt.application.arguments[1]
 
+        /*
+    menuBar: MenuBar {
+        Menu {
+            title: qsTr("&Help")
+            Action { text: qsTr("&About") }
+        }
+    }
+        */
     header: ToolBar {
         background: Rectangle {
             color: "lightblue"
         }
-        GridLayout {
-            rows: 3
-            flow: GridLayout.TopToBottom
-            CheckBox {
-                id: roundCheckBox
-                text: "Round"
-                Component.onCompleted: checked = round
-                onCheckedChanged: round = checked; 
-            }
-            CheckBox {
-                id: checkBox12h
-                text: "12h time"
-                Component.onCompleted: checked = use12H.value
-                onCheckedChanged: use12H.value = checked; 
-            }
-            CheckBox {
-                id: settime
-                text: "Set Static Time"
-                checked: false
-            }
-            CheckBox {
-                id: halfsize
-                text: "320x320"
-                Component.onCompleted: checked = mysize == 320
-                onCheckedChanged: mysize = checked ? 320 : 640; 
-            }
-            CheckBox {
-                id: ambientCheckBox
-                text: "Dark"
-                Component.onCompleted: checked = displayAmbient
-                onCheckedChanged: displayAmbient = checked; 
-            }
-            Button {
-               id: reload
-               text: "Reload"
-               onClicked: {
-                    watchfaceLoader.source = testface + "/usr/share/asteroid-launcher/watchfaces/" + testface + ".qml?" + Math.random()
-               }
-            }
-            Item { Layout.fillWidth: true }
-            Button {
-                id: screenshot
-                flat: false
-                text: "Screenshot"
-                onClicked: myFrame.snapshot()
-            }
-            Button {
-                id: reload
-                flat: false
-                text: "Reload"
-                onClicked: {
-                    watchfaceLoader.source = testface + "/usr/share/asteroid-launcher/watchfaces/" + testface + ".qml?"+Math.random()
+        ColumnLayout {
+            RowLayout {
+                Layout.alignment: Qt.AlignCenter
+                CheckBox {
+                    id: roundCheckBox
+                    text: "Round"
+                    Component.onCompleted: checked = round
+                    onCheckedChanged: round = checked; 
+                }
+                CheckBox {
+                    id: halfsize
+                    text: "320x320"
+                    Component.onCompleted: checked = mysize == 320
+                    onCheckedChanged: mysize = checked ? 320 : 640; 
+                }
+                CheckBox {
+                    id: checkBox12h
+                    text: "12h time"
+                    Component.onCompleted: checked = use12H.value
+                    onCheckedChanged: use12H.value = checked; 
+                }
+                CheckBox {
+                    id: ambientCheckBox
+                    text: "Dark"
+                    Component.onCompleted: checked = displayAmbient
+                    onCheckedChanged: displayAmbient = checked; 
+                }
+                Button {
+                    id: screenshot
+                    flat: false
+                    text: "Screenshot"
+                    onClicked: myFrame.snapshot()
+                }
+                Button {
+                    id: reload
+                    flat: false
+                    text: "Reload"
+                    onClicked: {
+                        watchfaceLoader.source = testface + "/usr/share/asteroid-launcher/watchfaces/" + testface + ".qml?"+Math.random()
+                    }
                 }
             }
-            Slider {
-                id: timeSlider
-                enabled: settime.checked
-                opacity: settime.checked ? 1 : 0.4
-                width: 700
-                from: 0
-                value: 16.9
-                to: 24
-                Repeater {
-                    model: 25
-                    delegate: Rectangle {
-                        x: parent.horizontalPadding + parent.availableWidth * index / 24
-                        y: parent.height - height
-                        implicitWidth: 1
-                        implicitHeight: 8
-                        color: "brown"
+            RowLayout {
+                Layout.alignment: Qt.AlignCenter
+                CheckBox {
+                    id: settime
+                    text: "Set Static Time"
+                    checked: false
+                }
+                Slider {
+                    id: timeSlider
+                    enabled: settime.checked
+                    opacity: settime.checked ? 1 : 0.4
+                    width: 700
+                    from: 0
+                    value: 16.9
+                    to: 24
+                    Repeater {
+                        model: 25
+                        delegate: Rectangle {
+                            x: parent.horizontalPadding + parent.availableWidth * index / 24
+                            y: parent.height - height
+                            implicitWidth: 1
+                            implicitHeight: 8
+                            color: "brown"
+                        }
+                    }
+                    Text {
+                        text: "0"
+                        anchors.left: parent.left
+                    }
+                    Text {
+                        text: "24"
+                        anchors.right: parent.right
+                    }
+                }
+            }
+            RowLayout {
+                Text {
+                    leftPadding: 100
+                    text: "featureSlider"
+                }
+                Slider {
+                    id: featureSlider
+                    width: 700
+                    from: 0
+                    value: 0.5
+                    to: 1
+                    Repeater {
+                        model: 25
+                        delegate: Rectangle {
+                            x: parent.horizontalPadding + parent.availableWidth * index / 24
+                            y: parent.height - height
+                            implicitWidth: 1
+                            implicitHeight: 8
+                            color: "brown"
+                        }
+                    }
+                    Text {
+                        text: "0.0"
+                        anchors.left: parent.left
+                    }
+                    Text {
+                        text: "1.0"
+                        anchors.right: parent.right
                     }
                 }
                 Text {
-                    text: "0"
-                    anchors.left: parent.left
-                }
-                Text {
-                    text: "24"
-                    anchors.right: parent.right
+                    text: featureSlider.value.toFixed(3)
                 }
             }
         }
