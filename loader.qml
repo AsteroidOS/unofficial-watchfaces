@@ -75,31 +75,54 @@ ApplicationWindow {
                     text: "Set Static Time"
                     checked: false
                 }
-                Slider {
-                    id: timeSlider
-                    enabled: settime.checked
-                    opacity: settime.checked ? 1 : 0.4
-                    width: 700
-                    from: 0
-                    value: 16.9
-                    to: 24
-                    Repeater {
-                        model: 25
-                        delegate: Rectangle {
-                            x: parent.horizontalPadding + parent.availableWidth * index / 24
-                            y: parent.height - height
-                            implicitWidth: 1
-                            implicitHeight: 8
-                            color: "brown"
+                Frame {
+                    padding: 0
+                    Row {
+                        Tumbler {
+                            id: monthsTumbler
+                            enabled: settime.checked
+                            currentIndex: 5
+                            model: 12
+                            delegate: Label {
+                                text: locale.standaloneMonthName(index, Locale.ShortFormat)
+                                horizontalAlignment: Text.AlignHCenter
+                                verticalAlignment: Text.AlignVCenter
+                            }
+                        }
+                        Tumbler {
+                            id: daysTumbler
+                            enabled: settime.checked
+                            currentIndex: 24
+                            model: 31
+                            delegate: Label {
+                                text: index + 1
+                                horizontalAlignment: Text.AlignHCenter
+                                verticalAlignment: Text.AlignVCenter
+                            }
                         }
                     }
-                    Text {
-                        text: "0"
-                        anchors.left: parent.left
-                    }
-                    Text {
-                        text: "24"
-                        anchors.right: parent.right
+                }
+                Frame {
+                    padding: 0
+                    Row {
+                        Tumbler {
+                            id: hoursTumbler
+                            enabled: settime.checked
+                            currentIndex: 16
+                            model: 24
+                        }
+                        Tumbler {
+                            id: minutesTumbler
+                            enabled: settime.checked
+                            currentIndex: 58
+                            model: 60
+                        }
+                        Tumbler {
+                            id: secondsTumbler
+                            enabled: settime.checked
+                            currentIndex: 28
+                            model: 60
+                        }
                     }
                 }
             }
@@ -199,10 +222,8 @@ ApplicationWindow {
             function timewidget(statictime) {
                 var mydate = new Date()
                 if (statictime) {
-                    var hh = Math.floor(timeSlider.value)
-                    var mm = Math.floor(timeSlider.value * 60) % 60
-                    var ss = Math.floor(timeSlider.value * 3600) % 60
-                    mydate.setHours(hh, mm, ss)
+                    mydate.setHours(hoursTumbler.currentIndex, minutesTumbler.currentIndex, secondsTumbler.currentIndex)
+                    mydate.setMonth(monthsTumbler.currentIndex, daysTumbler.currentIndex + 1)
                 }
                 return mydate
             }
