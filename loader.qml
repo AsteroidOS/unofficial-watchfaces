@@ -1,165 +1,279 @@
-import QtQuick 2.15
 import QtGraphicalEffects 1.12
-import QtQuick.Layouts 1.2
+import QtQuick 2.15
 import QtQuick.Controls 2.15
 import QtQuick.Dialogs 1.1
+import QtQuick.Layouts 1.2
 
 ApplicationWindow {
-    id: root
-    visible: true
-    minimumWidth: 640
-    minimumHeight: mysize + header.height // + menuBar.height
-    property bool displayAmbient: false
-    property bool round: true
-    property int mysize: 640
+    id: approot
+    property bool displayAmbient: ambientCheckBox.checked
     property var testface: Qt.application.arguments[1]
-    readonly property var mouseWheelScale: 1/15
+    readonly property var initialStaticTime: new Date('1997-06-25T16:50:47')
+    readonly property var mouseWheelScale: 1 / 15
 
-        /*
-    menuBar: MenuBar {
-        Menu {
-            title: qsTr("&Help")
-            Action { text: qsTr("&About") }
+    minimumWidth: 640
+    minimumHeight: 640 + header.height
+
+    Rectangle {
+        id: watchfaceDisplayFrame
+
+        function snapshot() {
+            watchfaceDisplayFrame.grabToImage(function(result) {
+                result.saveToFile(approot.testface + (roundCheckBox.checked ? "-round.jpg" : ".jpg"));
+            }, Qt.size(320, 320));
         }
+
+        height: halfSize.checked ? 320 : 640
+        width: halfSize.checked ? 320 : 640
+
+        Rectangle {
+            id: frame
+
+            anchors.fill: parent
+            color: "black"
+            focus: true
+            layer.enabled: roundCheckBox.checked
+            Keys.onReturnPressed: watchfaceDisplayFrame.snapshot()
+
+            Image {
+                id: background
+
+                visible: !approot.displayAmbient
+                source: "background.jpg"
+                anchors.fill: parent
+            }
+
+            Loader {
+                id: watchfaceLoader
+
+                anchors.fill: parent
+                source: approot.testface + "/usr/share/asteroid-launcher/watchfaces/" + approot.testface + ".qml"
+            }
+
+            layer.effect: OpacityMask {
+                anchors.fill: parent
+                source: frame
+
+                maskSource: Rectangle {
+                    width: frame.width
+                    height: frame.height
+                    radius: frame.width / 2
+                }
+
+            }
+
+        }
+
+        Item {
+            id: use12H
+
+            property var value: twelveHourCheckBox.checked
+        }
+
+        Item {
+            id: wallClock
+
+            property var time: getDisplayTime()
+
+            function getDisplayTime(statictime) {
+                var displayTime = new Date();
+                if (setStaticTimeCheckBox.checked) {
+                    displayTime.setHours(hoursTumbler.currentIndex, minutesTumbler.currentIndex, secondsTumbler.currentIndex);
+                    displayTime.setMonth(monthsTumbler.currentIndex, daysTumbler.currentIndex + 1);
+                }
+                return displayTime;
+            }
+
+            Timer {
+                interval: 1000
+                running: true
+                repeat: true
+                onTriggered: wallClock.time = wallClock.getDisplayTime()
+            }
+
+        }
+
     }
-        */
+
     header: ToolBar {
-        background: Rectangle {
-            color: "lightblue"
-        }
         ColumnLayout {
             RowLayout {
                 Layout.alignment: Qt.AlignCenter
+
                 CheckBox {
                     id: roundCheckBox
-                    text: "Round"
-                    Component.onCompleted: checked = round
-                    onCheckedChanged: round = checked; 
+
+                    text: qsTr("Round")
+                    checked: true
                 }
+
                 CheckBox {
-                    id: halfsize
-                    text: "320x320"
-                    Component.onCompleted: checked = mysize == 320
-                    onCheckedChanged: mysize = checked ? 320 : 640; 
+                    id: halfSize
+
+                    text: qsTr("320x320")
                 }
+
                 CheckBox {
-                    id: checkBox12h
-                    text: "12h time"
-                    Component.onCompleted: checked = use12H.value
-                    onCheckedChanged: use12H.value = checked; 
+                    id: twelveHourCheckBox
+
+                    text: qsTr("12h time")
                 }
+
                 CheckBox {
                     id: ambientCheckBox
-                    text: "Dark"
-                    Component.onCompleted: checked = displayAmbient
-                    onCheckedChanged: displayAmbient = checked; 
+
+                    text: qsTr("Dark")
                 }
+
                 Button {
                     id: screenshot
+
                     flat: false
-                    text: "Screenshot"
-                    onClicked: myFrame.snapshot()
+                    text: qsTr("Screenshot")
+                    onClicked: watchfaceDisplayFrame.snapshot()
                 }
+
                 Button {
                     id: reload
+
                     flat: false
-                    text: "Reload"
+                    text: qsTr("Reload")
                     onClicked: {
-                        watchfaceLoader.source = testface + "/usr/share/asteroid-launcher/watchfaces/" + testface + ".qml?"+Math.random()
+                        watchfaceLoader.source = approot.testface + "/usr/share/asteroid-launcher/watchfaces/" + approot.testface + ".qml?" + Math.random();
                     }
                 }
+
             }
+
             RowLayout {
                 Layout.alignment: Qt.AlignCenter
+
                 CheckBox {
-                    id: settime
-                    text: "Set Static Time"
+                    id: setStaticTimeCheckBox
+
+                    text: qsTr("Set Static Time")
                     checked: false
                 }
+
                 Frame {
                     padding: 0
+
                     Row {
                         Tumbler {
                             id: monthsTumbler
-                            enabled: settime.checked
-                            currentIndex: 5
+
+                            enabled: setStaticTimeCheckBox.checked
+                            currentIndex: approot.initialStaticTime.getMonth()
                             model: 12
+
                             WheelHandler {
                                 property: "currentIndex"
-                                rotationScale: mouseWheelScale
+                                rotationScale: approot.mouseWheelScale
                             }
+
                             delegate: Label {
-                                text: locale.standaloneMonthName(index, Locale.ShortFormat)
+                                text: approot.locale.standaloneMonthName(index, Locale.ShortFormat)
                                 horizontalAlignment: Text.AlignHCenter
                                 verticalAlignment: Text.AlignVCenter
                             }
+
                         }
+
                         Tumbler {
                             id: daysTumbler
-                            enabled: settime.checked
-                            currentIndex: 24
+
+                            enabled: setStaticTimeCheckBox.checked
+                            currentIndex: approot.initialStaticTime.getDate() - 1
                             model: 31
+
                             WheelHandler {
                                 property: "currentIndex"
-                                rotationScale: mouseWheelScale
+                                rotationScale: approot.mouseWheelScale
                             }
+
                             delegate: Label {
                                 text: index + 1
                                 horizontalAlignment: Text.AlignHCenter
                                 verticalAlignment: Text.AlignVCenter
                             }
+
                         }
+
                     }
+
                 }
+
                 Frame {
                     padding: 0
+
                     Row {
                         Tumbler {
                             id: hoursTumbler
-                            enabled: settime.checked
-                            currentIndex: 16
+
+                            enabled: setStaticTimeCheckBox.checked
+                            currentIndex: approot.initialStaticTime.getHours()
                             model: 24
+
                             WheelHandler {
                                 property: "currentIndex"
-                                rotationScale: mouseWheelScale
+                                rotationScale: approot.mouseWheelScale
                             }
+
                         }
+
                         Tumbler {
                             id: minutesTumbler
-                            enabled: settime.checked
-                            currentIndex: 58
+
+                            enabled: setStaticTimeCheckBox.checked
+                            currentIndex: approot.initialStaticTime.getMinutes()
                             model: 60
+
                             WheelHandler {
                                 property: "currentIndex"
-                                rotationScale: mouseWheelScale
+                                rotationScale: approot.mouseWheelScale
                             }
+
                         }
+
                         Tumbler {
                             id: secondsTumbler
-                            enabled: settime.checked
-                            currentIndex: 28
+
+                            enabled: setStaticTimeCheckBox.checked
+                            currentIndex: approot.initialStaticTime.getSeconds()
                             model: 60
+
                             WheelHandler {
                                 property: "currentIndex"
-                                rotationScale: mouseWheelScale
+                                rotationScale: approot.mouseWheelScale
                             }
+
                         }
+
                     }
+
                 }
+
             }
+
             RowLayout {
                 Text {
                     leftPadding: 100
-                    text: "featureSlider"
+                    text: qsTr("featureSlider")
                 }
+
                 Slider {
                     id: featureSlider
+
                     width: 700
                     from: 0
                     value: 0.5
                     to: 1
+                    ToolTip.visible: hovered
+                    ToolTip.text: qsTr("Can be used to test a feature such as battery level.\nDevelopers can temporarily use 'featureSlider.value' in watchface code.")
+
                     Repeater {
                         model: 25
+
                         delegate: Rectangle {
                             x: parent.horizontalPadding + parent.availableWidth * index / 24
                             y: parent.height - height
@@ -167,87 +281,33 @@ ApplicationWindow {
                             implicitHeight: 8
                             color: "brown"
                         }
+
                     }
+
                     Text {
                         text: "0.0"
                         anchors.left: parent.left
                     }
+
                     Text {
                         text: "1.0"
                         anchors.right: parent.right
                     }
+
                 }
+
                 Text {
                     text: featureSlider.value.toFixed(3)
                 }
+
             }
+
         }
+
+        background: Rectangle {
+            color: "lightblue"
+        }
+
     }
 
-    Rectangle {
-        id: myFrame
-        height: root.mysize
-        width: root.mysize
-        function snapshot() {
-            myFrame.grabToImage(
-            function(result) {  
-                result.saveToFile(testface + (round ? "-round.jpg" : ".jpg"))
-            }, Qt.size(320, 320) )
-        }
-
-        Rectangle {
-            id: frame
-            anchors.fill: parent
-            color: "black"
-            focus: true
-            Image {
-                id: background
-                visible: !displayAmbient
-                source: "background.jpg"
-                anchors.fill: parent
-            }
-            Loader {
-                id: watchfaceLoader
-                anchors.fill: parent
-                source: testface + "/usr/share/asteroid-launcher/watchfaces/" + testface + ".qml"
-            }
-
-            layer.enabled: round
-            layer.effect:  OpacityMask {
-                anchors.fill: parent
-                source: frame
-                maskSource: Rectangle {
-                    width: frame.width
-                    height: frame.height
-                    radius: frame.width/2
-                }
-            }
-
-            Keys.onReturnPressed: snapshot()
-        }
-
-        Item {
-            id: use12H
-            property var value: false
-        }
-
-        Item {
-            id: wallClock
-            property var time: timewidget(settime.checked)
-            Timer {
-                interval: 1000
-                running: true
-                repeat: true
-                onTriggered: wallClock.time = wallClock.timewidget(settime.checked)
-            }
-            function timewidget(statictime) {
-                var mydate = new Date()
-                if (statictime) {
-                    mydate.setHours(hoursTumbler.currentIndex, minutesTumbler.currentIndex, secondsTumbler.currentIndex)
-                    mydate.setMonth(monthsTumbler.currentIndex, daysTumbler.currentIndex + 1)
-                }
-                return mydate
-            }
-        }
-    }
 }
