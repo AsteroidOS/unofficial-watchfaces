@@ -275,8 +275,8 @@ ApplicationWindow {
                         model: 25
 
                         delegate: Rectangle {
+                            anchors.bottom: parent.bottom
                             x: parent.horizontalPadding + parent.availableWidth * index / 24
-                            y: parent.height - height
                             implicitWidth: 1
                             implicitHeight: 8
                             color: "brown"
