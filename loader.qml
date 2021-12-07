@@ -126,7 +126,7 @@ ApplicationWindow {
                 }
 
                 Button {
-                    id: screenshot
+                    id: screenshotButton
 
                     flat: false
                     text: qsTr("Screenshot")
@@ -134,7 +134,7 @@ ApplicationWindow {
                 }
 
                 Button {
-                    id: reload
+                    id: reloadButton
 
                     flat: false
                     text: qsTr("Reload")
