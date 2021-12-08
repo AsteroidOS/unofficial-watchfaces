@@ -5,9 +5,9 @@ import QtQuick.Dialogs 1.1
 import QtQuick.Layouts 1.2
 
 ApplicationWindow {
-    id: approot
+    id: appRoot
     property bool displayAmbient: ambientCheckBox.checked
-    property var testface: Qt.application.arguments[1]
+    property var nameOfWatchfaceToBeTested: Qt.application.arguments[1]
     readonly property var initialStaticTime: new Date('1997-06-25T16:50:47')
     readonly property var mouseWheelScale: 1 / 15
 
@@ -19,7 +19,8 @@ ApplicationWindow {
 
         function snapshot() {
             watchfaceDisplayFrame.grabToImage(function(result) {
-                result.saveToFile(approot.testface + (roundCheckBox.checked ? "-round.jpg" : ".jpg"));
+                result.saveToFile(appRoot.nameOfWatchfaceToBeTested 
+                        + (roundCheckBox.checked ? "-round.jpg" : ".jpg"));
             }, Qt.size(320, 320));
         }
 
@@ -38,7 +39,7 @@ ApplicationWindow {
             Image {
                 id: background
 
-                visible: !approot.displayAmbient
+                visible: !appRoot.displayAmbient
                 source: "background.jpg"
                 anchors.fill: parent
             }
@@ -47,7 +48,9 @@ ApplicationWindow {
                 id: watchfaceLoader
 
                 anchors.fill: parent
-                source: approot.testface + "/usr/share/asteroid-launcher/watchfaces/" + approot.testface + ".qml"
+                source: appRoot.nameOfWatchfaceToBeTested 
+                        + "/usr/share/asteroid-launcher/watchfaces/" 
+                        + appRoot.nameOfWatchfaceToBeTested + ".qml"
             }
 
             layer.effect: OpacityMask {
@@ -59,9 +62,7 @@ ApplicationWindow {
                     height: frame.height
                     radius: frame.width / 2
                 }
-
             }
-
         }
 
         Item {
@@ -90,9 +91,7 @@ ApplicationWindow {
                 repeat: true
                 onTriggered: wallClock.time = wallClock.getDisplayTime()
             }
-
         }
-
     }
 
     header: ToolBar {
@@ -139,10 +138,12 @@ ApplicationWindow {
                     flat: false
                     text: qsTr("Reload")
                     onClicked: {
-                        watchfaceLoader.source = approot.testface + "/usr/share/asteroid-launcher/watchfaces/" + approot.testface + ".qml?" + Math.random();
+                        watchfaceLoader.source = appRoot.nameOfWatchfaceToBeTested 
+                                + "/usr/share/asteroid-launcher/watchfaces/" 
+                                + appRoot.nameOfWatchfaceToBeTested + ".qml?" 
+                                + Math.random();
                     }
                 }
-
             }
 
             RowLayout {
@@ -163,32 +164,31 @@ ApplicationWindow {
                             id: monthsTumbler
 
                             enabled: setStaticTimeCheckBox.checked
-                            currentIndex: approot.initialStaticTime.getMonth()
+                            currentIndex: appRoot.initialStaticTime.getMonth()
                             model: 12
 
                             WheelHandler {
                                 property: "currentIndex"
-                                rotationScale: approot.mouseWheelScale
+                                rotationScale: appRoot.mouseWheelScale
                             }
 
                             delegate: Label {
-                                text: approot.locale.standaloneMonthName(index, Locale.ShortFormat)
+                                text: appRoot.locale.standaloneMonthName(index, Locale.ShortFormat)
                                 horizontalAlignment: Text.AlignHCenter
                                 verticalAlignment: Text.AlignVCenter
                             }
-
                         }
 
                         Tumbler {
                             id: daysTumbler
 
                             enabled: setStaticTimeCheckBox.checked
-                            currentIndex: approot.initialStaticTime.getDate() - 1
+                            currentIndex: appRoot.initialStaticTime.getDate() - 1
                             model: 31
 
                             WheelHandler {
                                 property: "currentIndex"
-                                rotationScale: approot.mouseWheelScale
+                                rotationScale: appRoot.mouseWheelScale
                             }
 
                             delegate: Label {
@@ -196,11 +196,8 @@ ApplicationWindow {
                                 horizontalAlignment: Text.AlignHCenter
                                 verticalAlignment: Text.AlignVCenter
                             }
-
                         }
-
                     }
-
                 }
 
                 Frame {
@@ -211,48 +208,42 @@ ApplicationWindow {
                             id: hoursTumbler
 
                             enabled: setStaticTimeCheckBox.checked
-                            currentIndex: approot.initialStaticTime.getHours()
+                            currentIndex: appRoot.initialStaticTime.getHours()
                             model: 24
 
                             WheelHandler {
                                 property: "currentIndex"
-                                rotationScale: approot.mouseWheelScale
+                                rotationScale: appRoot.mouseWheelScale
                             }
-
                         }
 
                         Tumbler {
                             id: minutesTumbler
 
                             enabled: setStaticTimeCheckBox.checked
-                            currentIndex: approot.initialStaticTime.getMinutes()
+                            currentIndex: appRoot.initialStaticTime.getMinutes()
                             model: 60
 
                             WheelHandler {
                                 property: "currentIndex"
-                                rotationScale: approot.mouseWheelScale
+                                rotationScale: appRoot.mouseWheelScale
                             }
-
                         }
 
                         Tumbler {
                             id: secondsTumbler
 
                             enabled: setStaticTimeCheckBox.checked
-                            currentIndex: approot.initialStaticTime.getSeconds()
+                            currentIndex: appRoot.initialStaticTime.getSeconds()
                             model: 60
 
                             WheelHandler {
                                 property: "currentIndex"
-                                rotationScale: approot.mouseWheelScale
+                                rotationScale: appRoot.mouseWheelScale
                             }
-
                         }
-
                     }
-
                 }
-
             }
 
             RowLayout {
@@ -281,7 +272,6 @@ ApplicationWindow {
                             implicitHeight: 8
                             color: "brown"
                         }
-
                     }
 
                     Text {
@@ -293,21 +283,16 @@ ApplicationWindow {
                         text: "1.0"
                         anchors.right: parent.right
                     }
-
                 }
 
                 Text {
                     text: featureSlider.value.toFixed(3)
                 }
-
             }
-
         }
 
         background: Rectangle {
             color: "lightblue"
         }
-
     }
-
 }
