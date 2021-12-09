@@ -102,26 +102,29 @@ ApplicationWindow {
                 CheckBox {
                     id: roundCheckBox
 
-                    text: qsTr("Round")
+                    text: "\u25EF"
+                    ToolTip.visible: hovered
+                    ToolTip.delay: 600
+                    ToolTip.text: qsTr("Show the watchface as it would look on a round watch")
                     checked: true
-                }
-
-                CheckBox {
-                    id: halfSize
-
-                    text: qsTr("320x320")
-                }
-
-                CheckBox {
-                    id: twelveHourCheckBox
-
-                    text: qsTr("12h time")
                 }
 
                 CheckBox {
                     id: ambientCheckBox
 
-                    text: qsTr("Dark")
+                    text: "\u2b24"
+                    ToolTip.visible: hovered
+                    ToolTip.delay: 600
+                    ToolTip.text: qsTr("Switch to AmbientMode on black background")
+                }
+
+                CheckBox {
+                    id: halfSize
+
+                    text: qsTr("320p")
+                    ToolTip.visible: hovered
+                    ToolTip.delay: 600
+                    ToolTip.text: qsTr("Scale down view to 320x320px from 640px")
                 }
 
                 Button {
@@ -129,6 +132,9 @@ ApplicationWindow {
 
                     flat: false
                     text: qsTr("Screenshot")
+                    ToolTip.visible: hovered
+                    ToolTip.delay: 600
+                    ToolTip.text: qsTr("Take screenshot and store it named for use in /.thumbnail")
                     onClicked: watchfaceDisplayFrame.snapshot()
                 }
 
@@ -136,7 +142,10 @@ ApplicationWindow {
                     id: reloadButton
 
                     flat: false
-                    text: qsTr("Reload")
+                    text: "\u27f2"
+                    ToolTip.visible: hovered
+                    ToolTip.delay: 600
+                    ToolTip.text: qsTr("Reload qml code")
                     onClicked: {
                         watchfaceLoader.source = appRoot.nameOfWatchfaceToBeTested 
                                 + "/usr/share/asteroid-launcher/watchfaces/" 
@@ -150,9 +159,22 @@ ApplicationWindow {
                 Layout.alignment: Qt.AlignCenter
 
                 CheckBox {
+                    id: twelveHourCheckBox
+
+                    text: qsTr("12h")
+                    ToolTip.delay: 600
+                    ToolTip.visible: hovered
+                    ToolTip.text: qsTr("Switch to 2x 12h day format with am/pm")
+
+                }
+
+                CheckBox {
                     id: setStaticTimeCheckBox
 
-                    text: qsTr("Set Static Time")
+                    text: qsTr("Set Time")
+                    ToolTip.delay: 600
+                    ToolTip.visible: hovered
+                    ToolTip.text: qsTr("Set a custom time by draging the tumblers or use the mouse wheel above them")
                     checked: false
                 }
 
@@ -260,6 +282,7 @@ ApplicationWindow {
                     value: 0.5
                     to: 1
                     ToolTip.visible: hovered
+                    ToolTip.delay: 600
                     ToolTip.text: qsTr("Can be used to test a feature such as battery level.\nDevelopers can temporarily use 'featureSlider.value' in watchface code.")
 
                     Repeater {
