@@ -21,7 +21,6 @@ import QtQuick 2.9
 import QtGraphicalEffects 1.12
 
 Item {
-
     id: root
 
     property string imgPath: "../watchfaces-img/digital-fat-bwoy-"
