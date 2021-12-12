@@ -1,6 +1,8 @@
 This repository tries to keep track of AsteroidOS unofficial watchfaces.
-Feel free to pull request your work here and if it suits the graphic guidelines
-of AsteroidOS, it can eventually be merged into the default set of asteroid-launcher.
+Watchface creation in QtQuick is really easy!
+You can learn how to make your own by following the [Watchface Creation](https://asteroidos.org/wiki/watchfaces-creation/) Guide.
+The creators of the below listed watchfaces are happy to answer your questions and you are free to use their contributions as base for your own work.
+Feel free to pull request your work here and if it suits the graphic guidelines of AsteroidOS, it can eventually be merged into the default set of watchfaces shipped with asteroid-launcher.
 
 
 ### Install selected or all watchfaces using scripted SCP/ADB ###
@@ -13,56 +15,14 @@ of AsteroidOS, it can eventually be merged into the default set of asteroid-laun
 - Start `./deploy.sh` to use SCP commands or `./deploy.sh -a` for ADB commands.
 - You can also use `./deploy.sh --help` to get a list of available options.
 - Select a single watchface to deploy to the watch with its given number or copy all available watchfaces at once with option 1.
-- You then can restart the ceres session and apply a single selected watchface with pressing 'y'.
+- You can then restart the ceres session and apply a single selected watchface with pressing 'y'.
 
 Note that restarting the ceres session might be necessary when new fonts were installed along with the new watchfaces.
 Restarting the ceres session might break things like Always On Mode or the battery display for the remaining uptime. Reboot the watch in that case.
 You may [restart the session or reboot the watch](https://asteroidos.org/wiki/useful-commands/#restart) manually.
 
 
-### Test watchfaces in qmlscene ###
-
-- After cloning the repo and changing into its local directory like described above, execute `./test-in-qmlscene.sh`.  
-- Options within the GUI allow you to use 24H or 12H, round or square watchface, ambient (darkened) or not, and allows you to take a screenshot.
-
-### About the `featureSlider` ###
-
-Note that some community watchfaces use features that are not available in qmlscene, like the battery display.  While developing watchfaces with these features, it can be handy to temporarily write the code a little differently to allow it to build and run under qmlscene.  For example, to simulate a varying battery percentage, one can use the `featureSlider` built into the test script.  The `featureSlider` is a simple slider that, by default, is not tied to anything, but is free to be used temporarily while developing.  So for temporary test code, one could use something like this:
-
-```
-    Item {
-        id: batteryChargePercentage
-        property var value: (featureSlider.value * 100).toFixed(0)
-    }
-```
-
-Then the slider acts as a controller to allow the watchface designer to see how the watchface reacts to the different values.  Note that the slider gives a real value from 0.0 to 1.0, so to simulate the integer 0 to 100 that the real battery provides on the watch, we scale and convert to a fixed value in the code above.  
-
-In this instance, the final version that actually runs on the watch looked like this:
-
-```
-import org.freedesktop.contextkit 1.0
-import org.asteroid.controls 1.0
-import org.asteroid.utils 1.0
-```
-
-These imports exist in AsteroidOS, but not in the tester, so to run the actual code on the watch we need to add them.  The actual code for the battery looked like this:
-
-```
-    ContextProperty {
-        id: batteryChargePercentage
-        key: "Battery.ChargePercentage"
-        value: "100"
-        Component.onCompleted: batteryChargePercentage.subscribe()
-    }
-```
-
 ### Following great community contributions are available ###
-
-Watchface creation in QtQuick is really easy!
-You can learn how to make your own by following the [Watchface Creation](https://asteroidos.org/wiki/watchfaces-creation/) Guide.
-The creators of the below listed watchfaces are happy to answer your questions and you are free to use their contributions as base for your own work.
-
 
 | Round Display | Square Display | Watchface Title | Creator |
 |---|---|---|---|
