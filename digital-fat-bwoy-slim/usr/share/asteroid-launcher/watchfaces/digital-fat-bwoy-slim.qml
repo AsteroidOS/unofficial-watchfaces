@@ -23,7 +23,7 @@ import QtGraphicalEffects 1.12
 Item {
     id: root
 
-    property string imgPath: "../watchfaces-img/digital-fat-bwoy-"
+    property string imgPath: "../watchfaces-img/digital-fat-bwoy-slim-"
     anchors.centerIn: parent
 
     width: parent.width
