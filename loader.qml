@@ -8,7 +8,7 @@ ApplicationWindow {
     id: appRoot
     property bool displayAmbient: ambientCheckBox.checked
     property var nameOfWatchfaceToBeTested: Qt.application.arguments[1]
-    readonly property var initialStaticTime: new Date('1997-06-25T16:50:47')
+    readonly property var initialStaticTime: new Date('2021-12-02T13:37:42')
     readonly property var mouseWheelScale: 1 / 15
 
     minimumWidth: 640
@@ -102,6 +102,7 @@ ApplicationWindow {
                 CheckBox {
                     id: roundCheckBox
 
+                    font.pixelSize: 30
                     text: "\u25EF"
                     ToolTip.visible: hovered
                     ToolTip.delay: 600
@@ -112,7 +113,8 @@ ApplicationWindow {
                 CheckBox {
                     id: ambientCheckBox
 
-                    text: "\u2b24"
+                    font.pixelSize: 40
+                    text: "\u263D"
                     ToolTip.visible: hovered
                     ToolTip.delay: 600
                     ToolTip.text: qsTr("Switch to AmbientMode on black background")
@@ -121,7 +123,7 @@ ApplicationWindow {
                 CheckBox {
                     id: halfSize
 
-                    text: qsTr("320p")
+                    text: qsTr("320px")
                     ToolTip.visible: hovered
                     ToolTip.delay: 600
                     ToolTip.text: qsTr("Scale down view to 320x320px from 640px")
@@ -165,7 +167,6 @@ ApplicationWindow {
                     ToolTip.delay: 600
                     ToolTip.visible: hovered
                     ToolTip.text: qsTr("Switch to 2x 12h day format with am/pm")
-
                 }
 
                 CheckBox {
