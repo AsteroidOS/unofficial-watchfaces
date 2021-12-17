@@ -26,10 +26,13 @@ import QtGraphicalEffects 1.15
 
 Item {
     id: root
+
+    property string imgPath: "../watchface-img/analog-nort-"
+
     Image {
         id: hourSVG
         z: 0
-        source: "../watchface-img/hour-analog-nort.svg"
+        source: imgPath + "hour.svg"
         anchors {
             centerIn: root
         }
@@ -60,7 +63,7 @@ Item {
     Image {
         id: minuteSVG
         z: 1
-        source: "../watchface-img/minute-analog-nort.svg"
+        source: imgPath + "minute.svg"
         anchors {
             centerIn: root
         }
@@ -92,7 +95,7 @@ Item {
         id: secondSVG
         z: 2
         visible: !displayAmbient
-        source: "../watchface-img/second-analog-nort.svg"
+        source: imgPath + "second.svg"
         anchors {
             centerIn: root
         }
