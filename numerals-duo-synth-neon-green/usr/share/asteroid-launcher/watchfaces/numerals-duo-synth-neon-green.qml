@@ -29,6 +29,7 @@ import org.asteroid.controls 1.0
 
 Item {
     property int length: width > height ? height : width
+    property string imgPath: "../watchfaces-img/numerals-duo-synth-neon-green-"
 
     id: root
 
@@ -45,7 +46,7 @@ Item {
         horizontalAlignment: Text.AlignHCenter
         anchors {
             bottom: root.verticalCenter
-            bottomMargin: root.height*0.387
+            bottomMargin: DeviceInfo.hasRoundScreen ? root.height*0.387 : root.height*0.402
             horizontalCenter: root.horizontalCenter
         }
         text: wallClock.time.toLocaleString(Qt.locale(), "dddd").toUpperCase()
@@ -72,7 +73,7 @@ Item {
         horizontalAlignment: Text.AlignHCenter
         anchors {
             top: root.verticalCenter
-            topMargin: root.height*0.394
+            topMargin: DeviceInfo.hasRoundScreen ? root.height*0.394 : root.height*0.406
             horizontalCenter: root.horizontalCenter
         }
         text: wallClock.time.toLocaleString(Qt.locale(), "yyyy-MM-dd")
@@ -88,10 +89,10 @@ Item {
     }
 
     Item {
-        x: DeviceInfo.hasRoundScreen ? length * 0.1 : (root.width != length ? root.width/2 - length/2 : 0)
-        y: DeviceInfo.hasRoundScreen ? length * 0.1 : (root.height != length ? root.height/2 - length/2 : 0)
-        width: DeviceInfo.hasRoundScreen ? length * 0.8 : length
-        height: DeviceInfo.hasRoundScreen ? length * 0.8 : length
+        x: DeviceInfo.hasRoundScreen ? length * 0.1 : (root.width != length ? root.width/2 - length/2 : !displayAmbient ? length * 0.1 : 0)
+        y: DeviceInfo.hasRoundScreen ? length * 0.1 : (root.height != length ? root.height/2 - length/2 : !displayAmbient ? length * 0.1 : 0)
+        width: DeviceInfo.hasRoundScreen ? length * 0.8 : displayAmbient ? length : length * 0.8
+        height: DeviceInfo.hasRoundScreen ? length * 0.8 : displayAmbient ? length : length * 0.8
 
         LinearGradient {
             id: greenColor
@@ -127,7 +128,7 @@ Item {
            x: parseInt(parent.width*0.135)
            y: parseInt(parent.height*0.045)
            sourceSize: Qt.size(parent.width/2 - parent.width*0.15, parent.height/2 - parent.height*0.15)
-           source: "../watchfaces-img/neon" + wallClock.time.toLocaleString(Qt.locale(), "HH").slice(0, 1) + ".png"
+           source: imgPath + wallClock.time.toLocaleString(Qt.locale(), "HH").slice(0, 1) + ".png"
        }
        Image {
            id: topRight
@@ -137,7 +138,7 @@ Item {
            x: parseInt(parent.width/2 + parent.width*0.03)
            y: parseInt(parent.height*0.045)
            sourceSize: Qt.size(parent.width/2 - parent.width*0.15, parent.height/2 - parent.height*0.15)
-           source: "../watchfaces-img/neon" + wallClock.time.toLocaleString(Qt.locale(), "HH").slice(1, 2) + ".png"
+           source: imgPath + wallClock.time.toLocaleString(Qt.locale(), "HH").slice(1, 2) + ".png"
        }
        Image {
            id: bottomLeft
@@ -147,7 +148,7 @@ Item {
            x: parseInt(parent.width*0.135)
            y: parseInt(parent.height/2 + parent.height*0.025)
            sourceSize: Qt.size(parent.width/2 - parent.width*0.15, parent.height/2 - parent.height*0.15)
-           source: "../watchfaces-img/neon" + wallClock.time.toLocaleString(Qt.locale(), "mm").slice(0, 1) + ".png"
+           source: imgPath + wallClock.time.toLocaleString(Qt.locale(), "mm").slice(0, 1) + ".png"
        }
        Image {
            id: bottomRight
@@ -157,7 +158,7 @@ Item {
            x: parseInt(parent.width/2 + parent.width*0.03)
            y: parseInt(parent.height/2 + parent.height*0.025)
            sourceSize: Qt.size(parent.width/2 - parent.width*0.15, parent.height/2 - parent.height*0.15)
-           source: "../watchfaces-img/neon" + wallClock.time.toLocaleString(Qt.locale(), "mm").slice(1, 2) + ".png"
+           source: imgPath + wallClock.time.toLocaleString(Qt.locale(), "mm").slice(1, 2) + ".png"
        }
 
         OpacityMask {
