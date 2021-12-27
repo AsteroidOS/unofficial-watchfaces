@@ -45,7 +45,7 @@ Item {
                     verticalCenterOffset: parent.height * 0.15
                 }
                 opacity: displayAmbient ? 0.6 : 1.0
-                source: "../watchface-img/nixie.png"
+                source: "../watchface-img/nixie-delight-nixie.png"
             }
 
             Text {
