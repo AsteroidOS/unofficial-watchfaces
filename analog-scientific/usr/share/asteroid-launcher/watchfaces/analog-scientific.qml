@@ -183,6 +183,8 @@ Item {
     Canvas {
         z: 4
         id: secondCanvas
+
+        visible: !displayAmbient
         property var second: 0
         anchors.fill: parent
         smooth: true
@@ -211,7 +213,6 @@ Item {
             ctx.arc(parent.width/2, parent.height/2, parent.height*0.006, 0, 2*Math.PI, false)
             ctx.fill()
             ctx.closePath()
-
         }
     }
 
