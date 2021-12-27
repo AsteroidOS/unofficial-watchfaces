@@ -21,15 +21,15 @@ import QtQuick 2.9
 Item {
     property string currentColor: "black"
     property string userColor: ""
-    property string imgPath: "../watchface-img/"
+    property string imgPath: "../watchface-img/analog-classy-roman-"
     property var numeral: ["\u216B", "\u2160", "\u2161", "\u2162", "\u2163", "\u2164", "\u2165", "\u2166", "\u2167", "\u2168", "\u2169", "\u216A"]
 
     Image {
         z: 0
         id: background
         property var toggle: 1
-        source: !displayAmbient ? imgPath + "background-classy-roman-white.svg" :
-                                  imgPath + "background-classy-roman.svg"
+        source: !displayAmbient ? imgPath + "background-white.svg" :
+                                  imgPath + "background.svg"
         anchors.horizontalCenter: parent.horizontalCenter
         anchors.verticalCenter: parent.verticalCenter
         width: parent.width
@@ -50,7 +50,7 @@ Item {
         states: State { name: "black"
             PropertyChanges {
                 target: background
-                source: imgPath + "background-classy-roman.svg"
+                source: imgPath + "background.svg"
             }
         }
         transitions: Transition {
@@ -68,7 +68,7 @@ Item {
                                   imgPath + "asteroid_logo_wb.png"
         anchors.horizontalCenter: parent.horizontalCenter
         anchors.verticalCenter: parent.verticalCenter
-        anchors.verticalCenterOffset: -parent.height * 0.37
+        anchors.verticalCenterOffset: -parent.height * .37
         width: parent.width / 4.4
         height: parent.height / 4.4
         state: currentColor
@@ -89,14 +89,14 @@ Item {
     Text {
         z: 1
         id: asteroidSlogan
-        font.pixelSize: parent.height * 0.042
+        font.pixelSize: parent.height * .042
         font.family: "Raleway"
         color: "black"
-        opacity: 0.8
+        opacity: .8
         horizontalAlignment: Text.AlignHCenter
         anchors {
             top: parent.top
-            topMargin: parent.height * 0.24
+            topMargin: parent.height * .24
             horizontalCenter: parent.horizontalCenter
         }
         text: "<b>AsteroidOS</b><br>Hack Your Wrist"
@@ -117,16 +117,16 @@ Item {
     Text {
             z: 1
             id: dayDisplay
-            font.pixelSize: parent.height * 0.08
+            font.pixelSize: parent.height * .08
             font.family: "Roboto"
             font.styleName: "Bold"
             color: "black"
-            opacity: 0.8
+            opacity: .8
             horizontalAlignment: Text.AlignHCenter
             anchors {
                 verticalCenter: parent.verticalCenter
                 horizontalCenter: parent.horizontalCenter
-                horizontalCenterOffset: parent.width * 0.215
+                horizontalCenterOffset: parent.width * .215
             }
             text: wallClock.time.toLocaleString(Qt.locale(), "d").toUpperCase()
             state: currentColor
@@ -147,16 +147,16 @@ Item {
     Text {
             z: 1
             id: dowDisplay
-            font.pixelSize: parent.height * 0.08
+            font.pixelSize: parent.height * .08
             font.family: "Roboto"
             font.styleName: "Bold"
             color: "black"
-            opacity: 0.8
+            opacity: .8
             horizontalAlignment: Text.AlignHCenter
             anchors {
                 verticalCenter: parent.verticalCenter
                 horizontalCenter: parent.horizontalCenter
-                horizontalCenterOffset: -parent.width * 0.215
+                horizontalCenterOffset: -parent.width * .215
             }
             text: wallClock.time.toLocaleString(Qt.locale(), "ddd").toUpperCase().slice(0, 2)
             state: currentColor
@@ -177,15 +177,15 @@ Item {
     Text {
         z: 1
         id: monthDisplay
-        font.pixelSize: parent.height * 0.042
+        font.pixelSize: parent.height * .042
         font.family: "Raleway"
         color: "black"
-        opacity: 0.8
+        opacity: .8
         horizontalAlignment: Text.AlignHCenter
         anchors {
             horizontalCenter: parent.horizontalCenter
             verticalCenter: parent.verticalCenter
-            verticalCenterOffset: parent.width * 0.22
+            verticalCenterOffset: parent.width * .22
         }
         text: wallClock.time.toLocaleString(Qt.locale(), "<b>MMMM</b><br>yyyy")
         state: currentColor
@@ -212,18 +212,18 @@ Item {
             property var rotM: (index - 15) / 60
             property var centerX: parent.width / 2 - width / 2
             property var centerY: parent.height / 2 - height / 2
-            x: centerX + Math.cos(rotM * 2 * Math.PI) * parent.width * 0.47
-            y: centerY + Math.sin(rotM * 2 * Math.PI) * parent.width * 0.47
+            x: centerX + Math.cos(rotM * 2 * Math.PI) * parent.width * .47
+            y: centerY + Math.sin(rotM * 2 * Math.PI) * parent.width * .47
             color: "black"
             width: if (index % 5 == 0)
-                       parent.width * 0.02
+                       parent.width * .02
                    else
-                       parent.width * 0.003
+                       parent.width * .003
             height: if (index % 5 == 0)
-                        parent.width * 0.02
+                        parent.width * .02
                     else
-                        parent.width * 0.02
-            opacity: 0.6
+                        parent.width * .02
+            opacity: .6
             transform: Rotation {
                 origin.x: width / 2
                 origin.y: height / 2
@@ -254,11 +254,11 @@ Item {
         Text {
             id: hourText
             z: 2
-            property var heightFontOffest: -parent.height * 0.002
+            property var heightFontOffest: -parent.height * .002
             font.pixelSize: if (index == 0)
-                                parent.height * 0.113
+                                parent.height * .113
                             else
-                                parent.height * 0.10
+                                parent.height * .10
             antialiasing: true
             font.family: "Roboto Condensed"
             font.styleName: "Bold"
@@ -266,13 +266,13 @@ Item {
             property var centerX: parent.width / 2 - width / 2
             property var centerY: parent.height / 2 - height / 2
             x: if (index == 0)
-                   centerX + Math.cos(rotM * 2 * Math.PI) * (parent.width * 0.356)
+                   centerX + Math.cos(rotM * 2 * Math.PI) * (parent.width * .356)
                else
-                   centerX + Math.cos(rotM * 2 * Math.PI) * (parent.width * 0.41)
+                   centerX + Math.cos(rotM * 2 * Math.PI) * (parent.width * .41)
             y: if (index == 0)
-                   centerY + Math.sin(rotM * 2 * Math.PI) * (parent.width * 0.356) + heightFontOffest
+                   centerY + Math.sin(rotM * 2 * Math.PI) * (parent.width * .356) + heightFontOffest
                else
-                   centerY + Math.sin(rotM * 2 * Math.PI) * (parent.width * 0.41) + heightFontOffest
+                   centerY + Math.sin(rotM * 2 * Math.PI) * (parent.width * .41) + heightFontOffest
             color: "black"
             text: numeral[index]
             transform: Rotation {
@@ -299,7 +299,7 @@ Item {
     Image {
         id: hourSVG
         z: 3
-        source: imgPath + "hour-classy-roman-v3.svg"
+        source: imgPath + "hour.svg"
         anchors.horizontalCenter: parent.horizontalCenter
         anchors.verticalCenter: parent.verticalCenter
         width: parent.width
@@ -307,14 +307,14 @@ Item {
         transform: Rotation {
             origin.x: parent.width / 2
             origin.y: parent.height / 2
-            angle: (wallClock.time.getHours() * 30) + (wallClock.time.getMinutes() * 0.5)
+            angle: (wallClock.time.getHours() * 30) + (wallClock.time.getMinutes() * .5)
         }
     }
 
     Image {
         id: minuteSVG
         z: 4
-        source: imgPath + "minute-classy-roman-v3.svg"
+        source: imgPath + "minute.svg"
         anchors.horizontalCenter: parent.horizontalCenter
         anchors.verticalCenter: parent.verticalCenter
         width: parent.width
@@ -330,7 +330,7 @@ Item {
         id: secondSVG
         z: 4
         visible: !displayAmbient
-        source: imgPath + "second-classy-roman.svg"
+        source: imgPath + "second.svg"
         anchors.horizontalCenter: parent.horizontalCenter
         anchors.verticalCenter: parent.verticalCenter
         width: parent.width
