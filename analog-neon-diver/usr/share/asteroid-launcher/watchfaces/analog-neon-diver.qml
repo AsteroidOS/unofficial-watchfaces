@@ -26,10 +26,12 @@ import QtGraphicalEffects 1.15
 
 Item {
 
+    property string imgPath: "../watchface-img/analog-neon-diver-"
+
     Image {
         z: 0
         id: backplate
-        source: "../watchface-img/backplate-neon.svg"
+        source: imgPath + "backplate.svg"
         antialiasing: true
         anchors.centerIn: parent
         width: parent.width
@@ -48,8 +50,8 @@ Item {
             z: 0
             id: modeDisplay
             source: hourSVG.toggle24h ?
-                        "../watchface-img/backplate-neon-24hindicator.svg" :
-                        "../watchface-img/backplate-neon-12hindicator.svg"
+                        imgPath + "backplate-24hindicator.svg" :
+                        imgPath + "backplate-12hindicator.svg"
             antialiasing: true
             anchors.centerIn: parent
             width: parent.width
@@ -179,8 +181,8 @@ Item {
         z: 2
         property bool toggle24h: false
         source: hourSVG.toggle24h ?
-                    "../watchface-img/hour-neon-diver-24h.svg" :
-                    "../watchface-img/hour-neon-diver-12h.svg"
+                    imgPath + "hour-24h.svg" :
+                    imgPath + "hour-12h.svg"
         antialiasing: true
         anchors.centerIn: parent
         width: parent.width
@@ -220,7 +222,7 @@ Item {
     Image {
         id: minuteSVG
         z: 3
-        source: "../watchface-img/minute-neon-diver.svg"
+        source: imgPath + "minute.svg"
         antialiasing: true
         anchors.centerIn: parent
         width: parent.width
@@ -252,7 +254,7 @@ Item {
         z: 4
         antialiasing: true
         visible: !displayAmbient
-        source: "../watchface-img/second-neon-diver.svg"
+        source: imgPath + "second.svg"
         anchors.centerIn: parent
         width: parent.width
         height: parent.height
