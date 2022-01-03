@@ -8,7 +8,7 @@ Item {
         visible: !displayAmbient
         width: parent.width
         height: parent.height
-        source: "../watchface-img/" + "lcd-back" + ".png"
+        source: "../watchfaces-img/" + "lcd-back" + ".png"
         anchors {
             horizontalCenter: parent.horizontalCenter
             verticalCenter: parent.verticalCenter

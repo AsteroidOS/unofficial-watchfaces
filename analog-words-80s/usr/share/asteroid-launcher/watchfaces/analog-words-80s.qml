@@ -25,7 +25,7 @@ Item {
     property string currentHour: ''
     property string hourColor: ''
     property var neonColor: ["#99FF00E3", "#993500FF", "#9901FE01", "#99FFFE37", "#99FF8600", "#99ED0003", "#9900ffff", "#9938FF12", "#99007FFF", "#99FAAB00"]
-    property string imgPath: "../watchface-img/analog-words-80s-"
+    property string imgPath: "../watchfaces-img/analog-words-80s-"
 
     Image {
         z: 0

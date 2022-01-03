@@ -52,7 +52,7 @@ Item {
     Image {
         z: 2
         id: backGround
-        source: "../watchface-img/day-clock-center.svg"
+        source: "../watchfaces-img/day-clock-center.svg"
         anchors {
             centerIn: parent
         }
@@ -61,7 +61,7 @@ Item {
         Image {
             z: 2
             id: backStars
-            source: "../watchface-img/day-clock-center-stars.svg"
+            source: "../watchfaces-img/day-clock-center-stars.svg"
             anchors {
                 centerIn: parent
             }

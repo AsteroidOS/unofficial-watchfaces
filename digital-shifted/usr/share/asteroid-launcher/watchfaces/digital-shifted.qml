@@ -42,7 +42,7 @@ Item {
         id: ring
         z: 0
         visible: !displayAmbient
-        source: "../watchface-img/digital-shifted-ring.svg"
+        source: "../watchfaces-img/digital-shifted-ring.svg"
         anchors.horizontalCenter: parent.horizontalCenter
         anchors.verticalCenter: parent.verticalCenter
         width: parent.width
@@ -95,7 +95,7 @@ Item {
                 rightMargin: leftrightMargin
             }
             sourceSize: numeralSize
-            source: "../watchface-img/digital-shifted-" + wallClock.time.toLocaleString(Qt.locale(), "HH").slice(0, 1) + ".png"
+            source: "../watchfaces-img/digital-shifted-" + wallClock.time.toLocaleString(Qt.locale(), "HH").slice(0, 1) + ".png"
         }
 
         Image {
@@ -106,7 +106,7 @@ Item {
                 horizontalCenter: parent.horizontalCenter
             }
             sourceSize: numeralSize
-            source: "../watchface-img/digital-shifted-" + wallClock.time.toLocaleString(Qt.locale(), "HH").slice(1, 2) + ".png"
+            source: "../watchfaces-img/digital-shifted-" + wallClock.time.toLocaleString(Qt.locale(), "HH").slice(1, 2) + ".png"
         }
 
         Image {
@@ -117,7 +117,7 @@ Item {
                 horizontalCenter: parent.horizontalCenter
             }
             sourceSize: numeralSize
-            source: "../watchface-img/digital-shifted-" + wallClock.time.toLocaleString(Qt.locale(), "mm").slice(0, 1) + ".png"
+            source: "../watchfaces-img/digital-shifted-" + wallClock.time.toLocaleString(Qt.locale(), "mm").slice(0, 1) + ".png"
         }
 
         Image {
@@ -129,7 +129,7 @@ Item {
                 leftMargin: leftrightMargin
             }
             sourceSize: numeralSize
-            source: "../watchface-img/digital-shifted-" + wallClock.time.toLocaleString(Qt.locale(), "mm").slice(1, 2) + ".png"
+            source: "../watchfaces-img/digital-shifted-" + wallClock.time.toLocaleString(Qt.locale(), "mm").slice(1, 2) + ".png"
         }
 
         Text {

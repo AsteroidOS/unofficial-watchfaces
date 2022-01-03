@@ -26,7 +26,7 @@ import QtGraphicalEffects 1.15
 
 Item {
 
-    property string imgPath: "../watchface-img/analog-neon-diver-"
+    property string imgPath: "../watchfaces-img/analog-neon-diver-"
 
     Image {
         z: 0
@@ -123,7 +123,7 @@ Item {
         z: 0
         id: asteroidLogo
         visible: !displayAmbient
-        source: "../watchface-img/asteroid-logo.svg"
+        source: "../watchfaces-img/asteroid-logo.svg"
         antialiasing: true
         anchors {
             centerIn: parent

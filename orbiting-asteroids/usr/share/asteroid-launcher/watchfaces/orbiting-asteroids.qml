@@ -25,7 +25,7 @@ import QtQuick 2.1
 
 Item {
     property var radian: 0.01745329252
-    property string imgPath: "../watchface-img/orbiting-asteroids-"
+    property string imgPath: "../watchfaces-img/orbiting-asteroids-"
 
     Canvas {
         id: secondCanvas

@@ -29,7 +29,7 @@ import org.asteroid.utils 1.0
 
 Item {
     id: root
-    property string imgPath: "../watchface-img/analog-scientific-v2-"
+    property string imgPath: "../watchfaces-img/analog-scientific-v2-"
     property real rad: 0.01745
 
     ContextProperty {
@@ -94,7 +94,7 @@ Item {
         z: 1
         id: asteroidLogo
         visible: !displayAmbient
-        source: "../watchface-img/asteroid-logo.svg"
+        source: "../watchfaces-img/asteroid-logo.svg"
         antialiasing: true
         anchors {
             centerIn: parent

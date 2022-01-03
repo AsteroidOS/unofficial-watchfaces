@@ -32,7 +32,7 @@ import QtQuick 2.1
 Item {
 
     Image {
-        source: "../watchface-img/asteroid-logo.svg"
+        source: "../watchfaces-img/asteroid-logo.svg"
         opacity: 0.75
         anchors.horizontalCenter: parent.horizontalCenter
         anchors.verticalCenter: parent.verticalCenter

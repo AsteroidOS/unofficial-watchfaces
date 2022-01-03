@@ -22,7 +22,7 @@ import Nemo.Ngf 1.0
 Item {
     id: watchFace
     property var time: wallClock.time //new Date() //
-    property string imgPath: "../watchface-img/"
+    property string imgPath: "../watchfaces-img/"
 
     function formatAll(){
         secondsDisplay.format()
