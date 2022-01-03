@@ -26,7 +26,7 @@ import QtQuick 2.9
 
 Item {
 
-    property string imgPath: "../watchface-img/analog-modern-steel-"
+    property string imgPath: "../watchfaces-img/analog-modern-steel-"
 
     Image {
       source: !displayAmbient ? imgPath + "strokes.svg" : imgPath + "strokes-ambient.svg"

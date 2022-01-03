@@ -25,7 +25,7 @@ Item {
     property var topbottomMargin: root.height*0.022
     property var leftrightMargin: -root.height*0.018
     property var numeralSize: Qt.size(root.width*0.32, root.height*0.32)
-    property string imagePath: "../watchface-img/digital-numeral-unity-"
+    property string imagePath: "../watchfaces-img/digital-numeral-unity-"
 
     Image {
         id: topLeft

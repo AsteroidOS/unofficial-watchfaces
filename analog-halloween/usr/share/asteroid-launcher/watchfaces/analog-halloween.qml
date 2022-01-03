@@ -27,7 +27,7 @@ import QtQuick 2.9
 
 Item {
 
-    property string imgPath: "../watchface-img/analog-halloween-"
+    property string imgPath: "../watchfaces-img/analog-halloween-"
 
     Repeater {
         model: 12

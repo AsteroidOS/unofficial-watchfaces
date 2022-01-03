@@ -24,12 +24,12 @@ Item {
 
     property string currentColor: ""
     property string userColor: ""
-    property string imgPath: "../watchface-img/analog-aviator-"
+    property string imgPath: "../watchfaces-img/analog-aviator-"
 
     Image {
         z: 0
         id: asteroidLogo
-        source: "../watchface-img/asteroid-logo-white.svg"
+        source: "../watchfaces-img/asteroid-logo-white.svg"
         antialiasing: true
         anchors {
             centerIn: parent
@@ -42,7 +42,7 @@ Item {
         states: State { name: "black"
             PropertyChanges {
                 target: asteroidLogo
-                source: "../watchface-img/asteroid-logo-black.svg"
+                source: "../watchfaces-img/asteroid-logo-black.svg"
             }
         }
     }

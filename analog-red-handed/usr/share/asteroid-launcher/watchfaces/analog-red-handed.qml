@@ -27,7 +27,7 @@ Item {
 
     property string currentColor: ""
     property string userColor: ""
-    property string imgPath: "../watchface-img/analog-red-handed-"
+    property string imgPath: "../watchfaces-img/analog-red-handed-"
 
     Text {
         z: 0
@@ -135,7 +135,7 @@ Item {
     Image {
         z: 0
         id: logoAsteroid
-        source: "../watchface-img/asteroid-logo.svg"
+        source: "../watchfaces-img/asteroid-logo.svg"
         anchors.horizontalCenter: parent.horizontalCenter
         anchors.verticalCenter: parent.verticalCenter
         anchors.verticalCenterOffset: parent.height*0.18

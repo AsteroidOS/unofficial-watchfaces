@@ -27,7 +27,7 @@ import QtGraphicalEffects 1.15
 Item {
     id: root
 
-    property string imgPath: "../watchface-img/analog-nort-"
+    property string imgPath: "../watchfaces-img/analog-nort-"
 
     Image {
         id: hourSVG

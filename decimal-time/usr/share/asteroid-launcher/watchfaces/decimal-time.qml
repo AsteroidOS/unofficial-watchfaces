@@ -167,7 +167,7 @@ Item {
         z: 3
         antialiasing: true
         opacity: displayAmbient ? 0.6 : 1.0
-        source: "../watchface-img/asteroid-logo.svg"
+        source: "../watchfaces-img/asteroid-logo.svg"
         width: parent.width/12
         height: parent.height/12
         transform : [ 

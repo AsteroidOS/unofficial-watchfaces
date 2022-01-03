@@ -28,7 +28,7 @@ Item {
 
     property string currentColor: ""
     property string userColor: ""
-    property string imgPath: "../watchface-img/analog-silly-walks-"
+    property string imgPath: "../watchfaces-img/analog-silly-walks-"
 
     Repeater {
         model: 12

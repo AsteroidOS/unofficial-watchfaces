@@ -21,7 +21,7 @@ import QtQuick 2.9
 Item {
     property string currentColor: "black"
     property string userColor: ""
-    property string imgPath: "../watchface-img/analog-classy-roman-"
+    property string imgPath: "../watchfaces-img/analog-classy-roman-"
     property var numeral: ["\u216B", "\u2160", "\u2161", "\u2162", "\u2163", "\u2164", "\u2165", "\u2166", "\u2167", "\u2168", "\u2169", "\u216A"]
 
     Image {
