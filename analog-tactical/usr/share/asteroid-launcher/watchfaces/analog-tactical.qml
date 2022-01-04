@@ -29,10 +29,10 @@
  * Overall design is a recreation of vintage 70s BRAUN clock arms with thick strokes.
  */
 
-import QtQuick 2.1
+import QtQuick 2.9
 
 Item {
-    property var radian: 0.01745
+    property real radian: 0.01745
 
     // hour strokes
     Canvas {
@@ -62,8 +62,8 @@ Item {
         antialiasing: true
         smooth: true
         renderTarget: Canvas.FramebufferObject
-        property var voffset: -parent.height*0.009
-        property var hoffset: -parent.height*0.001
+        property real voffset: -parent.height*0.015
+        property real hoffset: -parent.height*0.003
         onPaint: {
             var ctx = getContext("2d")
             ctx.reset()
@@ -75,7 +75,9 @@ Item {
                 ctx.beginPath()
                 ctx.font = "99 " + height/13 + "px Fyodor"
                 ctx.fillText(i,
-                             Math.cos((i-3)/12 * 2 * Math.PI)*height*0.398-hoffset,
+                             i === 10 ? Math.cos((i-3)/12 * 2 * Math.PI)*height*0.402-hoffset :
+                                        i === 1 || i === 12 ? Math.cos((i-3)/12 * 2 * Math.PI)*height*0.390-hoffset :
+                                                              Math.cos((i-3)/12 * 2 * Math.PI)*height*0.398-hoffset,
                              (Math.sin((i-3)/12 * 2 * Math.PI)*height*0.398)-voffset)
                 ctx.closePath()
             }
@@ -85,8 +87,8 @@ Item {
     Canvas {
         z: 0
         id: hourHand
-        property var hour: 0
-        property var rotH: (hour-3 + wallClock.time.getMinutes()/60) / 12
+        property int hour: 0
+        property real rotH: (hour-3 + wallClock.time.getMinutes()/60) / 12
         anchors.fill: parent
         smooth: true
         onPaint: {
@@ -143,8 +145,8 @@ Item {
     Canvas {
         z: 1
         id: minuteHand
-        property var minute: 0
-        property var rotM: (minute - 15)/60
+        property int minute: 0
+        property real rotM: (minute - 15)/60
         anchors.fill: parent
         smooth: true
         onPaint: {
@@ -210,7 +212,7 @@ Item {
     Canvas {
         z: 2
         id: secondHand
-        property var second: 0
+        property int second: 0
         anchors.fill: parent
         smooth: true
         onPaint: {
@@ -255,10 +257,10 @@ Item {
             ctx.fillStyle = "white"
             ctx.textAlign = "center"
             ctx.textBaseline = 'middle';
-            ctx.font = "99 " + height/13 + "px Fyodor"
-            ctx.fillText(wallClock.time.toLocaleString(Qt.locale(), "dd"),
-                         width/1.99,
-                         height/1.96);
+            ctx.font = "99 " + height/14 + "px Noto Sans"
+            ctx.fillText(wallClock.time.toLocaleString(Qt.locale(), "d"),
+                         width/2,
+                         height/1.975);
         }
     }
 
