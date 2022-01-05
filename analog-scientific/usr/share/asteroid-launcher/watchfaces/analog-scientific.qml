@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2018 - Timo Könnecke <el-t-mo@arcor.de>
+ * Copyright (C) 2021 - Timo Könnecke <el-t-mo@arcor.de>
  *               2016 - Sylvia van Os <iamsylvie@openmailbox.org>
  *               2015 - Florent Revest <revestflo@gmail.com>
  *               2012 - Vasiliy Sorokin <sorokin.vasiliy@gmail.com>
@@ -36,11 +36,12 @@ Item {
         ctx.shadowBlur = 2
     }
 
-    // hour strokes
     Canvas {
+        id: hourStrokes
         z: 3
         anchors.fill: parent
-        smooth: true
+        renderTarget: Canvas.FramebufferObject
+
         onPaint: {
             var ctx = getContext("2d")
 
@@ -57,11 +58,13 @@ Item {
         }
     }
 
-    // minute strokes
     Canvas {
+        id: minuteStrokes
+
         z: 3
         anchors.fill: parent
-        smooth: true
+        renderTarget: Canvas.FramebufferObject
+
         onPaint: {
             var ctx = getContext("2d")
             ctx.lineWidth = parent.width*0.005
@@ -80,15 +83,18 @@ Item {
         }
     }
 
-    // number strokes
     Canvas {
+        id: numberStrokes
+
+        property real voffset: -parent.height*0.020
+        property real hoffset: -parent.height*0.00
+
         z: 0
         anchors.fill: parent
         antialiasing: true
         smooth: true
         renderTarget: Canvas.FramebufferObject
-        property var voffset: -parent.height*0.020
-        property var hoffset: -parent.height*0.00
+
         onPaint: {
             var ctx = getContext("2d")
             ctx.reset()
@@ -112,13 +118,15 @@ Item {
         }
     }
 
-    // hours
     Canvas {
-        z: 1
         id: hourCanvas
-        property var hour: 0
+
+        property int hour: 0
+
+        z: 1
         anchors.fill: parent
-        smooth: true
+        renderTarget: Canvas.FramebufferObject
+
         onPaint: {
             var ctx = getContext("2d")
             ctx.reset()
@@ -148,11 +156,14 @@ Item {
 
     // minutes
     Canvas {
-        z: 2
         id: minuteCanvas
-        property var minute: 0
+
+        property int minute: 0
+
+        z: 2
         anchors.fill: parent
-        smooth: true
+        renderTarget: Canvas.FramebufferObject
+
         onPaint: {
             var ctx = getContext("2d")
             ctx.reset()
@@ -179,15 +190,15 @@ Item {
         }
     }
 
-    // seconds
     Canvas {
-        z: 4
         id: secondCanvas
 
+        property int second: 0
+
+        z: 4
         visible: !displayAmbient
-        property var second: 0
         anchors.fill: parent
-        smooth: true
+
         onPaint: {
             var ctx = getContext("2d")
             ctx.reset()
@@ -219,15 +230,15 @@ Item {
     Image {
         id: logoAsteroid
         source: "../watchfaces-img/asteroid-logo.svg"
-        anchors.horizontalCenter: parent.horizontalCenter
-        anchors.verticalCenter: parent.verticalCenter
+        anchors.centerIn: parent
         anchors.verticalCenterOffset: parent.height*0.18
         width: parent.width/8
-        height: parent.height/8
+        height: width
     }
 
     Canvas {
         id: dowCanvas
+
         anchors.fill: parent
         renderTarget: Canvas.FramebufferObject
 
@@ -256,9 +267,11 @@ Item {
 
     Canvas {
         id: amPmCanvas
+
+        property bool am: false
+
         anchors.fill: parent
         renderTarget: Canvas.FramebufferObject
-        property var am: false
 
         onPaint: {
             var ctx = getContext("2d")
@@ -283,12 +296,13 @@ Item {
 
     Canvas {
         id: dateCanvas
+
+        property int date: 0
+
         anchors.fill: parent
         antialiasing: true
-        smooth: true
         renderTarget: Canvas.FramebufferObject
 
-        property var date: 0
 
         onPaint: {
             var ctx = getContext("2d")
@@ -304,10 +318,9 @@ Item {
         id: monthCanvas
         anchors.fill: parent
         antialiasing: true
-        smooth: true
         renderTarget: Canvas.FramebufferObject
 
-        property var month: 0
+        property int month: 0
 
         onPaint: {
             var ctx = getContext("2d")
@@ -329,24 +342,21 @@ Item {
             var am = hour < 12
             if(use12H.value) {
                 hour = hour % 12
-                if (hour == 0) hour = 12;
+                if (hour === 0) hour = 12;
             }
-            if(hourCanvas.hour != hour) {
-                hourCanvas.hour = hour
-                hourCanvas.requestPaint()
-            } if(minuteCanvas.minute != minute) {
+            if(minuteCanvas.minute !== minute) {
                 minuteCanvas.minute = minute
                 minuteCanvas.requestPaint()
-            } if(secondCanvas.second != second) {
+                hourCanvas.hour = hour
+                hourCanvas.requestPaint()
+            } if(secondCanvas.second !== second) {
                 secondCanvas.second = second
                 secondCanvas.requestPaint()
-            } if(dateCanvas.date != date) {
+            } if(dateCanvas.date !== date) {
                 dateCanvas.date = date
                 dateCanvas.requestPaint()
-                dowCanvas.requestPaint()
-            } if(monthCanvas.date != date) {
-                monthCanvas.date = date
                 monthCanvas.requestPaint()
+                dowCanvas.requestPaint()
             } if(amPmCanvas.am != am) {
                 amPmCanvas.am = am
                 amPmCanvas.requestPaint()
@@ -362,7 +372,7 @@ Item {
         var am = hour < 12
         if(use12H.value) {
             hour = hour % 12
-            if (hour == 0) hour = 12
+            if (hour === 0) hour = 12
         }
         hourCanvas.hour = hour
         hourCanvas.requestPaint()
@@ -373,7 +383,6 @@ Item {
         dateCanvas.date = date
         dateCanvas.requestPaint()
         dowCanvas.requestPaint()
-        monthCanvas.date = date
         monthCanvas.requestPaint()
         amPmCanvas.am = am
         amPmCanvas.requestPaint()
