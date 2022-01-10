@@ -53,6 +53,7 @@ Item {
         id: hourHand
         anchors.fill: parent
         smooth: true
+        renderStrategy: Canvas.Cooperative
         onPaint: {
             var ctx = getContext("2d")
             var rot = (wallClock.time.getHours() - 3 + wallClock.time.getMinutes()/60) / 12
@@ -76,6 +77,7 @@ Item {
         id: minuteHand
         anchors.fill: parent
         smooth: true
+        renderStrategy: Canvas.Cooperative
         onPaint: {
             var ctx = getContext("2d")
             ctx.reset()
@@ -99,6 +101,7 @@ Item {
         id: secondHand
         anchors.fill: parent
         smooth: true
+        renderStrategy: Canvas.Cooperative
         onPaint: {
             var ctx = getContext("2d")
             ctx.reset()
@@ -137,6 +140,7 @@ Item {
         z: 3
         anchors.fill: parent
         smooth: true
+        renderStrategy: Canvas.Cooperative
         onPaint: {
             var ctx = getContext("2d")
 
@@ -154,6 +158,7 @@ Item {
         z: 2
         anchors.fill: parent
         smooth: true
+        renderStrategy: Canvas.Cooperative
         onPaint: {
             var ctx = getContext("2d")
 
@@ -176,6 +181,7 @@ Item {
         z: 2
         anchors.fill: parent
         smooth: true
+        renderStrategy: Canvas.Cooperative
         onPaint: {
             var ctx = getContext("2d")
             ctx.lineWidth = 1.5

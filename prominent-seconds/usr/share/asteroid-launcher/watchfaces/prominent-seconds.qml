@@ -32,7 +32,7 @@ Item {
         property var second: 0
         anchors.fill: parent
         smooth: true
-        renderTarget: Canvas.FramebufferObject
+        renderStrategy: Canvas.Cooperative
         onPaint: {
             var ctx = getContext("2d")
             var date = wallClock.time.getDate()

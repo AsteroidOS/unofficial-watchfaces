@@ -30,6 +30,7 @@ Item {
         z: 1
         anchors.fill: parent
         smooth: true
+        renderStrategy: Canvas.Cooperative
         onPaint: {
             var ctx = getContext("2d")
 
@@ -47,6 +48,7 @@ Item {
         z: 2
         anchors.fill: parent
         smooth: true
+        renderStrategy: Canvas.Cooperative
         onPaint: {
             var ctx = getContext("2d")
             ctx.lineWidth = parent.height/200
@@ -72,6 +74,7 @@ Item {
         id: secondDisplay
         anchors.fill: parent
         smooth: true
+        renderStrategy: Canvas.Cooperative
         onPaint: {
             var ctx = getContext("2d")
             ctx.reset()
@@ -100,6 +103,7 @@ Item {
         property var second: 0
         anchors.fill: parent
         smooth: true
+        renderStrategy: Canvas.Cooperative
         onPaint: {
             var ctx = getContext("2d")
             ctx.reset()
@@ -123,6 +127,7 @@ Item {
         z: 3
         anchors.fill: parent
         smooth: true
+        renderStrategy: Canvas.Cooperative
         onPaint: {
             var ctx = getContext("2d")
             ctx.lineWidth = parent.height/32
@@ -145,6 +150,7 @@ Item {
         id: minuteDisplay
         anchors.fill: parent
         smooth: true
+        renderStrategy: Canvas.Cooperative
         onPaint: {
             var ctx = getContext("2d")
             ctx.reset()
@@ -172,6 +178,7 @@ Item {
         property var minute: 0
         anchors.fill: parent
         smooth: true
+        renderStrategy: Canvas.Cooperative
         onPaint: {
             var ctx = getContext("2d")
             ctx.reset()
@@ -197,6 +204,7 @@ Item {
         property var hour: 0
         anchors.fill: parent
         smooth: true
+        renderStrategy: Canvas.Cooperative
         onPaint: {
             var ctx = getContext("2d")
             var rot = 0.5 * (60 * (hour-3) + wallClock.time.getMinutes())
@@ -282,7 +290,6 @@ Item {
                 minuteHand.minute = minute
                 minuteHand.requestPaint()
                 minuteDisplay.requestPaint()
-            }if(hourArc.hour !== hour) {
                 hourArc.hour = hour
                 hourArc.requestPaint()
             }

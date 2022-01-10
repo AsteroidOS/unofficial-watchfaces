@@ -30,7 +30,7 @@ Item {
         id: rainbow
         anchors.fill: parent
         smooth: true
-        renderTarget: Canvas.FramebufferObject
+        renderStrategy: Canvas.Cooperative
         onPaint: {
             var ctx = getContext("2d")
             ctx.reset()
@@ -83,7 +83,7 @@ Item {
         anchors.fill: parent
         anchors.bottom: parent.bottom
         smooth: true
-        renderTarget: Canvas.FramebufferObject
+        renderStrategy: Canvas.Cooperative
         onPaint: {
             var ctx = getContext("2d")
             ctx.reset()
@@ -108,7 +108,7 @@ Item {
         anchors.fill: parent
         anchors.bottom: parent.bottom
         smooth: true
-        renderTarget: Canvas.FramebufferObject
+        renderStrategy: Canvas.Cooperative
         onPaint: {
             var ctx = getContext("2d")
             ctx.reset()
@@ -133,7 +133,7 @@ Item {
         anchors.fill: parent
         anchors.bottom: parent.bottom
         smooth: true
-        renderTarget: Canvas.FramebufferObject
+        renderStrategy: Canvas.Cooperative
         onPaint: {
             var ctx = getContext("2d")
             ctx.reset()
@@ -219,7 +219,6 @@ Item {
             }if(minuteBar.minute != minute) {
                 minuteBar.minute = minute
                 minuteBar.requestPaint()
-            }if(hourBar.hour != hour) {
                 hourBar.hour = hour
                 hourBar.requestPaint()
             }
@@ -236,6 +235,5 @@ Item {
         minuteBar.requestPaint()
         hourBar.hour = hour
         hourBar.requestPaint()
-
     }
 }
