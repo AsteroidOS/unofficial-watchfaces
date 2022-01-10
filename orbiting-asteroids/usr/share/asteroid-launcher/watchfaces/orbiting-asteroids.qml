@@ -32,7 +32,7 @@ Item {
         property var second: 0
         anchors.fill: parent
         smooth: true
-        renderTarget: Canvas.FramebufferObject
+        renderStrategy: Canvas.Cooperative
         onPaint: {
             var ctx = getContext("2d")
             var rot = (wallClock.time.getSeconds() - 15)*6
@@ -61,7 +61,7 @@ Item {
         property var minute: 0
         anchors.fill: parent
         smooth: true
-        renderTarget: Canvas.FramebufferObject
+        renderStrategy: Canvas.Cooperative
         onPaint: {
             var ctx = getContext("2d")
             var rot = (wallClock.time.getMinutes() -15 )*6
@@ -96,7 +96,7 @@ Item {
         property var hour: 0
         anchors.fill: parent
         smooth: true
-        renderTarget: Canvas.FramebufferObject
+        renderStrategy: Canvas.Cooperative
         onPaint: {
             var ctx = getContext("2d")
             var rot = 0.5 * (60 * (wallClock.time.getHours()-3) + wallClock.time.getMinutes())
@@ -226,7 +226,6 @@ Item {
             }if(minuteCanvas.minute != minute) {
                 minuteCanvas.minute = minute
                 minuteCanvas.requestPaint()
-            } if(hourCanvas.hour != hour) {
                 hourCanvas.hour = hour
                 hourCanvas.requestPaint()
             }

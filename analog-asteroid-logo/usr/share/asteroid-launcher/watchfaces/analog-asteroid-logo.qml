@@ -56,6 +56,7 @@ Item {
         id: logoShadowPath
         anchors.fill: parent
         smooth: true
+        renderStrategy: Canvas.Cooperative
         onPaint: {
             var ctx = getContext("2d")
             prepareContext(ctx)
@@ -108,6 +109,7 @@ Item {
         z: 1
         anchors.fill: parent
         smooth: true
+        renderStrategy: Canvas.Cooperative
         onPaint: {
             var ctx = getContext("2d")
             prepareContext(ctx)
@@ -143,6 +145,7 @@ Item {
         property var hour: 0
         anchors.fill: parent
         smooth: true
+        renderStrategy: Canvas.Cooperative
         onPaint: {
             var ctx = getContext("2d")
             prepareContext(ctx)
@@ -193,6 +196,7 @@ Item {
         property var minute: 0
         anchors.fill: parent
         smooth: true
+        renderStrategy: Canvas.Cooperative
         onPaint: {
             var ctx = getContext("2d")
             prepareContext(ctx)
@@ -240,6 +244,7 @@ Item {
         property var second: 0
         anchors.fill: parent
         smooth: true
+        renderStrategy: Canvas.Cooperative
         onPaint: {
             var ctx = getContext("2d")
             prepareContext(ctx)
@@ -263,12 +268,11 @@ Item {
             var minute = wallClock.time.getMinutes()
             var second = wallClock.time.getSeconds()
 
-            if(hourCanvas.hour != hour) {
-                hourCanvas.hour = hour
-                hourCanvas.requestPaint()
-            } if(minuteCanvas.minute != minute) {
+            if(minuteCanvas.minute != minute) {
                 minuteCanvas.minute = minute
                 minuteCanvas.requestPaint()
+                hourCanvas.hour = hour
+                hourCanvas.requestPaint()
             } if(secondCanvas.second != second) {
                 secondCanvas.second = second
                 secondCanvas.requestPaint()

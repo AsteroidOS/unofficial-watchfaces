@@ -29,6 +29,7 @@ Item {
         z: 3
         anchors.fill: parent
         smooth: true
+        renderStrategy: Canvas.Cooperative
         onPaint: {
             var ctx = getContext("2d")
             ctx.lineWidth = parent.height/48
@@ -55,6 +56,7 @@ Item {
         property var second: 0
         anchors.fill: parent
         smooth: true
+        renderStrategy: Canvas.Cooperative
         onPaint: {
             var ctx = getContext("2d")
             ctx.reset()

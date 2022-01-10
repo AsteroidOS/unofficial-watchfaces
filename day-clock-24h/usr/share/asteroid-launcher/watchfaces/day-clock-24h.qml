@@ -35,7 +35,7 @@ Item {
         id: twentyfourhourArc
         anchors.fill: parent
         smooth: true
-        renderTarget: Canvas.FramebufferObject
+        renderStrategy: Canvas.Cooperative
         onPaint: {
             var ctx = getContext("2d")
             var rot =  0.25 * (60 * (wallClock.time.getHours()+6) + wallClock.time.getMinutes())

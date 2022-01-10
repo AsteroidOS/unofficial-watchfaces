@@ -39,6 +39,7 @@ Item {
         z: 0
         anchors.fill: parent
         smooth: true
+        renderStrategy: Canvas.Cooperative
         onPaint: {
             var ctx = getContext("2d")
             ctx.lineCap="round"
@@ -61,7 +62,7 @@ Item {
         anchors.fill: parent
         antialiasing: true
         smooth: true
-        renderTarget: Canvas.FramebufferObject
+        renderStrategy: Canvas.Cooperative
         property real voffset: -parent.height*0.015
         property real hoffset: -parent.height*0.003
         onPaint: {
@@ -91,6 +92,7 @@ Item {
         property real rotH: (hour-3 + wallClock.time.getMinutes()/60) / 12
         anchors.fill: parent
         smooth: true
+        renderStrategy: Canvas.Cooperative
         onPaint: {
             var ctx = getContext("2d")
             ctx.reset()
@@ -149,6 +151,7 @@ Item {
         property real rotM: (minute - 15)/60
         anchors.fill: parent
         smooth: true
+        renderStrategy: Canvas.Cooperative
         onPaint: {
             var ctx = getContext("2d")
             ctx.reset()
@@ -215,6 +218,7 @@ Item {
         property int second: 0
         anchors.fill: parent
         smooth: true
+        renderStrategy: Canvas.Cooperative
         onPaint: {
             var ctx = getContext("2d")
             ctx.reset()
@@ -242,7 +246,7 @@ Item {
         anchors.fill: parent
         antialiasing: true
         smooth: true
-        renderTarget: Canvas.FramebufferObject
+        renderStrategy: Canvas.Cooperative
 
         property var date: 0
 
@@ -278,7 +282,6 @@ Item {
             }if(minuteHand.minute != minute) {
                 minuteHand.minute = minute
                 minuteHand.requestPaint()
-            }if(hourHand.hour != hour) {
                 hourHand.hour = hour
                 hourHand.requestPaint()
             }if(dateCanvas.date != date) {

@@ -42,6 +42,7 @@ Item {
         property var minute: 0
         anchors.fill: parent
         smooth: true
+        renderStrategy: Canvas.Cooperative
         onPaint: {
             var ctx = getContext("2d")
             ctx.reset()
@@ -82,6 +83,7 @@ Item {
         property var rotM: (minute - 15)/60
         anchors.fill: parent
         smooth: true
+        renderStrategy: Canvas.Cooperative
         onPaint: {
             var ctx = getContext("2d")
             ctx.reset()
@@ -115,6 +117,7 @@ Item {
         property var second: 0
         anchors.fill: parent
         smooth: true
+        renderStrategy: Canvas.Cooperative
         onPaint: {
             var ctx = getContext("2d")
             ctx.reset()
@@ -160,7 +163,7 @@ Item {
         anchors.fill: parent
         antialiasing: true
         smooth: true
-        renderTarget: Canvas.FramebufferObject
+        renderStrategy: Canvas.Cooperative
         onPaint: {
             var ctx = getContext("2d")
             ctx.reset()
@@ -181,6 +184,7 @@ Item {
         z: 1
         anchors.fill: parent
         smooth: true
+        renderStrategy: Canvas.Cooperative
         onPaint: {
             var ctx = getContext("2d")
 
@@ -202,6 +206,7 @@ Item {
         z: 1
         anchors.fill: parent
         smooth: true
+        renderStrategy: Canvas.Cooperative
         onPaint: {
             var ctx = getContext("2d")
 
@@ -223,6 +228,7 @@ Item {
         z: 1
         anchors.fill: parent
         smooth: true
+        renderStrategy: Canvas.Cooperative
         onPaint: {
             var ctx = getContext("2d")
             ctx.lineWidth = parent.width*0.015
@@ -254,7 +260,6 @@ Item {
                 minuteHand.minute = minute
                 hourHand.minute = minute
                 minuteHand.requestPaint()
-            }if(hourHand.hour != hour) {
                 hourHand.hour = hour
                 hourHand.requestPaint()
             }

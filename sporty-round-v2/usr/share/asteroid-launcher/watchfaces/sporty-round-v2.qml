@@ -33,6 +33,7 @@ Item {
         id: hourArc
         property var hour: 0
         anchors.fill: parent
+        renderStrategy: Canvas.Cooperative
         smooth: true
         onPaint: {
             var ctx = getContext("2d")
@@ -108,6 +109,7 @@ Item {
         z: 2
         anchors.fill: parent
         smooth: true
+        renderStrategy: Canvas.Cooperative
         onPaint: {
             var ctx = getContext("2d")
 
@@ -133,6 +135,7 @@ Item {
         z: 2
         anchors.fill: parent
         smooth: true
+        renderStrategy: Canvas.Cooperative
         onPaint: {
             var ctx = getContext("2d")
             ctx.lineWidth = parent.height*0.008
@@ -154,6 +157,7 @@ Item {
         property var second: 0
         anchors.fill: parent
         smooth: true
+        renderStrategy: Canvas.Cooperative
         onPaint: {
             var ctx = getContext("2d")
             ctx.reset()
@@ -181,6 +185,7 @@ Item {
         property var second: 0
         anchors.fill: parent
         smooth: true
+        renderStrategy: Canvas.Cooperative
         onPaint: {
             var ctx = getContext("2d")
             ctx.reset()
@@ -208,6 +213,7 @@ Item {
         z: 4
         anchors.fill: parent
         smooth: true
+        renderStrategy: Canvas.Cooperative
         onPaint: {
             var ctx = getContext("2d")
             ctx.lineWidth = parent.height/32
@@ -229,6 +235,7 @@ Item {
         property var minute: 0
         anchors.fill: parent
         smooth: true
+        renderStrategy: Canvas.Cooperative
         onPaint: {
             var ctx = getContext("2d")
             ctx.reset()
@@ -256,6 +263,7 @@ Item {
         property var minute: 0
         anchors.fill: parent
         smooth: true
+        renderStrategy: Canvas.Cooperative
         onPaint: {
             var ctx = getContext("2d")
             ctx.reset()
@@ -284,6 +292,7 @@ Item {
         property var hour: 0
         anchors.fill: parent
         smooth: true
+        renderStrategy: Canvas.Cooperative
         onPaint: {
             var ctx = getContext("2d")
             ctx.reset()
@@ -405,7 +414,6 @@ Item {
                 minuteHand.requestPaint()
                 minuteDisplay.minute = minute
                 minuteDisplay.requestPaint()
-            }if(hourArc.hour !== hour) {
                 hourArc.hour = hour
                 hourArc.requestPaint()
             }

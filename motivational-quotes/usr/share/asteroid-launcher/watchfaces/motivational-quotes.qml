@@ -197,6 +197,7 @@ Item {
         property var rotH: (wallClock.time.getHours()-3 + wallClock.time.getMinutes()/60) / 12
         anchors.fill: parent
         smooth: true
+        renderStrategy: Canvas.Cooperative
         onPaint: {
             var ctx = getContext("2d")
             ctx.reset()
@@ -236,6 +237,7 @@ Item {
         property var rotM: (wallClock.time.getMinutes() - 15)/60
         anchors.fill: parent
         smooth: true
+        renderStrategy: Canvas.Cooperative
         onPaint: {
             var ctx = getContext("2d")
             ctx.reset()
@@ -274,7 +276,7 @@ Item {
         anchors.fill: parent
         antialiasing: true
         smooth: true
-        renderTarget: Canvas.FramebufferObject
+        renderStrategy: Canvas.Cooperative
         property var voffset: -parent.height*0.017
         onPaint: {
             var ctx = getContext("2d")

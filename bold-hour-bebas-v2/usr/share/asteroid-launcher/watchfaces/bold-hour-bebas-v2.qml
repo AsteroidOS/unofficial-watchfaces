@@ -31,7 +31,7 @@ Item {
         property var centerY: parent.height/2
         anchors.fill: parent
         smooth: true
-        renderTarget: Canvas.FramebufferObject
+        renderStrategy: Canvas.Cooperative
         onPaint: {
             var ctx = getContext("2d")
             var rot = (wallClock.time.getMinutes() -15 )*6
@@ -75,7 +75,7 @@ Item {
         property var minuteY: centerY+Math.sin(rotM * 2 * Math.PI)*height/2.75
         anchors.fill: parent
         smooth: true
-        renderTarget: Canvas.FramebufferObject
+        renderStrategy: Canvas.Cooperative
         onPaint: {
             var ctx = getContext("2d")
             var rot1 = (0 -15 )*6 *0.01745

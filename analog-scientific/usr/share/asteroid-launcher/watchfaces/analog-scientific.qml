@@ -40,7 +40,7 @@ Item {
         id: hourStrokes
         z: 3
         anchors.fill: parent
-        renderTarget: Canvas.FramebufferObject
+        renderStrategy: Canvas.Cooperative
 
         onPaint: {
             var ctx = getContext("2d")
@@ -63,7 +63,7 @@ Item {
 
         z: 3
         anchors.fill: parent
-        renderTarget: Canvas.FramebufferObject
+        renderStrategy: Canvas.Cooperative
 
         onPaint: {
             var ctx = getContext("2d")
@@ -93,7 +93,7 @@ Item {
         anchors.fill: parent
         antialiasing: true
         smooth: true
-        renderTarget: Canvas.FramebufferObject
+        renderStrategy: Canvas.Cooperative
 
         onPaint: {
             var ctx = getContext("2d")
@@ -125,7 +125,7 @@ Item {
 
         z: 1
         anchors.fill: parent
-        renderTarget: Canvas.FramebufferObject
+        renderStrategy: Canvas.Cooperative
 
         onPaint: {
             var ctx = getContext("2d")
@@ -162,7 +162,7 @@ Item {
 
         z: 2
         anchors.fill: parent
-        renderTarget: Canvas.FramebufferObject
+        renderStrategy: Canvas.Cooperative
 
         onPaint: {
             var ctx = getContext("2d")
@@ -198,6 +198,7 @@ Item {
         z: 4
         visible: !displayAmbient
         anchors.fill: parent
+        renderStrategy: Canvas.Cooperative
 
         onPaint: {
             var ctx = getContext("2d")
@@ -240,7 +241,7 @@ Item {
         id: dowCanvas
 
         anchors.fill: parent
-        renderTarget: Canvas.FramebufferObject
+        renderStrategy: Canvas.Cooperative
 
         onPaint: {
             var ctx = getContext("2d")
@@ -271,7 +272,7 @@ Item {
         property bool am: false
 
         anchors.fill: parent
-        renderTarget: Canvas.FramebufferObject
+        renderStrategy: Canvas.Cooperative
 
         onPaint: {
             var ctx = getContext("2d")
@@ -301,7 +302,7 @@ Item {
 
         anchors.fill: parent
         antialiasing: true
-        renderTarget: Canvas.FramebufferObject
+        renderStrategy: Canvas.Cooperative
 
 
         onPaint: {
@@ -318,7 +319,7 @@ Item {
         id: monthCanvas
         anchors.fill: parent
         antialiasing: true
-        renderTarget: Canvas.FramebufferObject
+        renderStrategy: Canvas.Cooperative
 
         property int month: 0
 

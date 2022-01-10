@@ -60,7 +60,7 @@ Item {
         anchors.fill: parent
         antialiasing: true
         smooth: true
-        renderTarget: Canvas.FramebufferObject 
+        renderStrategy: Canvas.Cooperative
 
         property var hour: 0
         property var minute: 0
@@ -82,8 +82,9 @@ Item {
     Canvas {
         id: amPmCanvas
         anchors.fill: parent
-        renderTarget: Canvas.FramebufferObject
-        property var am: false
+        renderStrategy: Canvas.Cooperative
+
+        property bool am: false
 
         onPaint: {
             var ctx = getContext("2d")
@@ -111,7 +112,7 @@ Item {
         anchors.fill: parent
         antialiasing: true
         smooth: true
-        renderTarget: Canvas.FramebufferObject 
+        renderStrategy: Canvas.Cooperative
 
         property var date: 0
 
