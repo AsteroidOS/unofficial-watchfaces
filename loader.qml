@@ -9,7 +9,7 @@ ApplicationWindow {
     property bool displayAmbient: ambientCheckBox.checked
     property var nameOfWatchfaceToBeTested: Qt.application.arguments[1]
     readonly property var initialStaticTime: new Date('2021-12-02T13:37:42')
-    readonly property var mouseWheelScale: 1 / 15
+    readonly property real mouseWheelScale: 1 / 15
 
     minimumWidth: 640
     minimumHeight: 640 + header.height
@@ -17,11 +17,10 @@ ApplicationWindow {
     Rectangle {
         id: watchfaceDisplayFrame
 
-        function snapshot() {
+        function snapshot(suffix) {
             watchfaceDisplayFrame.grabToImage(function(result) {
-                result.saveToFile(appRoot.nameOfWatchfaceToBeTested 
-                        + (roundCheckBox.checked ? "-round.jpg" : ".jpg"));
-            }, Qt.size(320, 320));
+                result.saveToFile(appRoot.nameOfWatchfaceToBeTested + suffix);
+            }, Qt.size(640, 640));
         }
 
         height: halfSize.checked ? 320 : 640
@@ -68,7 +67,7 @@ ApplicationWindow {
         Item {
             id: use12H
 
-            property var value: twelveHourCheckBox.checked
+            property bool value: twelveHourCheckBox.checked
         }
 
         Item {
@@ -99,47 +98,6 @@ ApplicationWindow {
             RowLayout {
                 Layout.alignment: Qt.AlignCenter
 
-                CheckBox {
-                    id: roundCheckBox
-
-                    font.pixelSize: 30
-                    text: "\u25EF"
-                    ToolTip.visible: hovered
-                    ToolTip.delay: 600
-                    ToolTip.text: qsTr("Show the watchface as it would look on a round watch")
-                    checked: true
-                }
-
-                CheckBox {
-                    id: ambientCheckBox
-
-                    font.pixelSize: 40
-                    text: "\u263D"
-                    ToolTip.visible: hovered
-                    ToolTip.delay: 600
-                    ToolTip.text: qsTr("Switch to AmbientMode on black background")
-                }
-
-                CheckBox {
-                    id: halfSize
-
-                    text: qsTr("320px")
-                    ToolTip.visible: hovered
-                    ToolTip.delay: 600
-                    ToolTip.text: qsTr("Scale down view to 320x320px from 640px")
-                }
-
-                Button {
-                    id: screenshotButton
-
-                    flat: false
-                    text: qsTr("Screenshot")
-                    ToolTip.visible: hovered
-                    ToolTip.delay: 600
-                    ToolTip.text: qsTr("Take screenshot and store it named for use in /.thumbnail")
-                    onClicked: watchfaceDisplayFrame.snapshot()
-                }
-
                 Button {
                     id: reloadButton
 
@@ -149,34 +107,137 @@ ApplicationWindow {
                     ToolTip.delay: 600
                     ToolTip.text: qsTr("Reload qml code")
                     onClicked: {
-                        watchfaceLoader.source = appRoot.nameOfWatchfaceToBeTested 
-                                + "/usr/share/asteroid-launcher/watchfaces/" 
-                                + appRoot.nameOfWatchfaceToBeTested + ".qml?" 
+                        watchfaceLoader.source = appRoot.nameOfWatchfaceToBeTested
+                                + "/usr/share/asteroid-launcher/watchfaces/"
+                                + appRoot.nameOfWatchfaceToBeTested + ".qml?"
                                 + Math.random();
                     }
+                }
+
+                Button {
+                    id: screenshotButton
+
+                    flat: false
+                    text: qsTr("Screenshot")
+                    ToolTip.visible: hovered
+                    ToolTip.delay: 600
+                    ToolTip.text: qsTr("Take a 640px screenshot and store it as PNG image")
+                    onClicked: roundCheckBox.checked ? watchfaceDisplayFrame.snapshot("-screenshot.png") : watchfaceDisplayFrame.snapshot(".png")
+                }
+
+                Button {
+                    id: assetsButton
+
+                    property real sequencer: 0
+
+                    function transSnapshots() {
+                        if (sequencer === 0) {
+                            watchfaceDisplayFrame.color = "transparent";
+                            background.source = "";
+                            frame.color = "transparent";
+                            watchfaceDisplayFrame.snapshot("-trans.png");
+                        }
+
+                        if (sequencer === 1) {
+                            background.source = "background-round.jpg";
+                            watchfaceDisplayFrame.snapshot("-round.png");
+                        }
+
+                        if (sequencer === 2) {
+                            background.source = "background.jpg";
+                            roundCheckBox.checked = false;
+                            watchfaceDisplayFrame.snapshot(".png");
+                        }
+
+                        if (sequencer === 3) {
+                            frame.color = "black";
+                            watchfaceDisplayFrame.color = "white";
+                            roundCheckBox.checked = true;
+                            sequencer = 0;
+                            snapshotsTimer.running = false;
+                        }
+                    }
+
+                    Timer {
+                        id: snapshotsTimer
+                        interval: 500; running: false; repeat: true
+                        onTriggered: {
+                            assetsButton.transSnapshots()
+                            assetsButton.sequencer++
+                        }
+
+                    }
+
+                    flat: false
+                    text: qsTr("Generate previews")
+                    ToolTip.visible: hovered
+                    ToolTip.delay: 600
+                    ToolTip.text: qsTr("Generate preview images for the .thumbnails and watchfacepreview folders")
+                    onClicked: snapshotsTimer.running = true
                 }
             }
 
             RowLayout {
                 Layout.alignment: Qt.AlignCenter
 
-                CheckBox {
-                    id: twelveHourCheckBox
+                ColumnLayout {
+                    Layout.alignment: Qt.AlignCenter
 
-                    text: qsTr("12h")
-                    ToolTip.delay: 600
-                    ToolTip.visible: hovered
-                    ToolTip.text: qsTr("Switch to 2x 12h day format with am/pm")
+                    CheckBox {
+                        id: roundCheckBox
+
+                        font.pixelSize: 30
+                        text: "\u25EF"
+                        ToolTip.visible: hovered
+                        ToolTip.delay: 600
+                        ToolTip.text: qsTr("Show the watchface as it would look on a round watch")
+                        checked: true
+                    }
+
+                    CheckBox {
+                        id: ambientCheckBox
+
+                        font.pixelSize: 40
+                        text: "\u263D"
+                        ToolTip.visible: hovered
+                        ToolTip.delay: 600
+                        ToolTip.text: qsTr("Switch to AmbientMode on black background")
+                    }
+
+                    CheckBox {
+                        id: halfSize
+
+                        text: qsTr("320px")
+                        ToolTip.visible: hovered
+                        ToolTip.delay: 600
+                        ToolTip.text: qsTr("Scale down view to 320x320px from 640px")
+                    }
+
                 }
 
-                CheckBox {
-                    id: setStaticTimeCheckBox
+                ColumnLayout {
+                    Layout.alignment: Qt.AlignCenter
 
-                    text: qsTr("Set Time")
-                    ToolTip.delay: 600
-                    ToolTip.visible: hovered
-                    ToolTip.text: qsTr("Set a custom time by draging the tumblers or use the mouse wheel above them")
-                    checked: false
+                    CheckBox {
+                        id: twelveHourCheckBox
+
+                        text: qsTr("12h")
+                        ToolTip.delay: 600
+                        ToolTip.visible: hovered
+                        ToolTip.text: qsTr("Switch to 2x 12h day format with am/pm")
+                    }
+
+                    CheckBox {
+                        id: setStaticTimeCheckBox
+
+                        text: qsTr("Set Time")
+                        ToolTip.delay: 600
+                        ToolTip.visible: hovered
+                        ToolTip.text: qsTr("Set a custom time by draging the tumblers or use the mouse wheel above them")
+                        checked: false
+                    }
+
+
                 }
 
                 Frame {
