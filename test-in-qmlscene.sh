@@ -31,7 +31,7 @@ do
             echo "$(tput setaf 2)Custom background.jpg found and is used as background.$(tput sgr0)"
         else
             echo "$(tput setaf 214)Downloading background.jpg from AsteroidOS Github repo. Place a background.jpg to this folder to avoid download.$(tput sgr0)"
-            wget -O  background.jpg https://raw.githubusercontent.com/AsteroidOS/asteroid-wallpapers/master/480x480/000-flatmesh.jpg
+            wget -O  background.jpg https://raw.githubusercontent.com/AsteroidOS/asteroid-wallpapers/master/full/000-flatmesh.jpg
         fi
         qmlscene ${opt::-1} loader.qml
     else
