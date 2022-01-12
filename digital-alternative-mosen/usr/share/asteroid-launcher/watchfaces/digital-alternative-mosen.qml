@@ -75,7 +75,7 @@ Item {
             ctx.font = "50 " +parent.height*0.25 + "px " + "GeneraleMono";
             ctx.fillText(text,
                         parent.width*0.5,
-                        parent.height*0.5);
+                        parent.height*0.546);
         }
     }
 
@@ -93,7 +93,7 @@ Item {
             var px = "px "
             var centerX =parent.width/2
             var centerY =parent.height*0.382
-            var verticalOffset = -parent.height*0.013
+            var verticalOffset = -parent.height*0.003
 
             var text;
             text = wallClock.time.toLocaleString(Qt.locale(), "ap").toUpperCase()
@@ -123,7 +123,7 @@ Item {
             ctx.font = "0 " +parent.height*0.0725 + "px " + "GeneraleMono";
             ctx.fillText(wallClock.time.toLocaleString(Qt.locale(), "ddd dd MMM"),
                         parent.width*0.5,
-                        parent.height*0.682);
+                        parent.height*0.692);
         }
     }
 
