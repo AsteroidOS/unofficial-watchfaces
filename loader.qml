@@ -151,7 +151,6 @@ ApplicationWindow {
 
                         if (sequencer === 3) {
                             frame.color = "black";
-                            watchfaceDisplayFrame.color = "white";
                             roundCheckBox.checked = true;
                             sequencer = 0;
                             snapshotsTimer.running = false;
