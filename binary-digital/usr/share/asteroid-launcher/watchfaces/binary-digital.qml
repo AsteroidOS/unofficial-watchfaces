@@ -99,14 +99,14 @@ Rectangle {
 
         Text {
             id: hourDisplay
-            property var hoffset: parent.width * .022
+            property real hoffset: parent.width * .022
             font.pixelSize: parent.height / 3
             font.family: 'Simpleness-Regular'
             color: "white"
             style: Text.Outline; styleColor: Qt.rgba(0, 0, 0, .4)
             anchors {
                 centerIn: parent
-                verticalCenterOffset: -parent.height * .077
+                verticalCenterOffset: parent.height * .038
                 horizontalCenterOffset: -parent.height * .235 + hoffset
             }
             text: if (use12H.value) {
@@ -117,14 +117,14 @@ Rectangle {
 
         Text {
             id: minuteDisplay
-            property var hoffset: parent.width * .022
+            property real hoffset: parent.width * .022
             font.pixelSize: parent.height / 3
             font.family: 'Simpleness-Regular'
             color: "white"
             style: Text.Outline; styleColor: Qt.rgba(0, 0, 0, .4)
             anchors {
                 centerIn: parent
-                verticalCenterOffset: -parent.height * .077
+                verticalCenterOffset: parent.height * .038
                 horizontalCenterOffset: parent.height * .235 + hoffset
             }
             text: wallClock.time.toLocaleString(Qt.locale(), "mm")
