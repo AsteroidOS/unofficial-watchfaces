@@ -15,22 +15,22 @@ done < <(find */ -maxdepth 0 -type d -print0 )
 if ! command -v qmlscene &> /dev/null
 then
     echo "
-$(tput setaf 1)Qmlscene could not be found. Install qtcreator from your package manager.$(tput sgr0)"
+$(tput setaf 1)qmlscene could not be found. Install qtcreator from your package manager.$(tput sgr0)"
     exit
 else
     echo "
-$(tput setaf 2)Qmlscene found, proceeding...$(tput sgr0)
+$(tput setaf 2)qmlscene found, proceeding...$(tput sgr0)
          "
 fi
 
-if ! command -v magick &> /dev/null
+if ! command -v mogrify &> /dev/null
 then
     echo "
-$(tput setaf 1)Image magick could not be found. Install imagemagick from your package manager.$(tput sgr0)"
+$(tput setaf 1)mogrify could not be found. Install mogrify (Image Magick) from your package manager.$(tput sgr0)"
     exit
 else
     echo "
-$(tput setaf 2)Image magick found, proceeding...$(tput sgr0)
+$(tput setaf 2)mogrify found, proceeding...$(tput sgr0)
          "
 fi
 
