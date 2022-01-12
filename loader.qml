@@ -126,7 +126,7 @@ ApplicationWindow {
                 }
 
                 Button {
-                    id: assetsButton
+                    id: previewButton
 
                     property real sequencer: 0
 
@@ -162,10 +162,9 @@ ApplicationWindow {
                         id: snapshotsTimer
                         interval: 500; running: false; repeat: true
                         onTriggered: {
-                            assetsButton.transSnapshots()
-                            assetsButton.sequencer++
+                            previewButton.transSnapshots()
+                            previewButton.sequencer++
                         }
-
                     }
 
                     flat: false
@@ -212,7 +211,6 @@ ApplicationWindow {
                         ToolTip.delay: 600
                         ToolTip.text: qsTr("Scale down view to 320x320px from 640px")
                     }
-
                 }
 
                 ColumnLayout {
@@ -236,8 +234,6 @@ ApplicationWindow {
                         ToolTip.text: qsTr("Set a custom time by draging the tumblers or use the mouse wheel above them")
                         checked: false
                     }
-
-
                 }
 
                 Frame {
