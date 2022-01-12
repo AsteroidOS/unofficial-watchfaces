@@ -45,6 +45,7 @@ do
         else
             echo "$(tput setaf 214)Downloading background.jpg from AsteroidOS Github repo. Place a background.jpg to this folder to avoid download.$(tput sgr0)"
             wget -O  background.jpg https://raw.githubusercontent.com/AsteroidOS/asteroid-wallpapers/master/full/000-flatmesh.jpg
+            cp background.jpg background-round.jpg
         fi
         qmlscene ${opt::-1} loader.qml
         if [[ -f "${opt::-1}-round.png" ]]
