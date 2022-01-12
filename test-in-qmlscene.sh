@@ -50,20 +50,24 @@ do
         if [[ -f "${opt::-1}-round.png" ]]
         then
             mogrify -resize $webResolutionx$webResolution -adaptive-sharpen 0x.4 -quality 85 -path .thumbnails -format webp ${opt::-1}-round.png
+            rm ${opt::-1}-round.png
             echo "$(tput setaf 2)Round preview found and converted to webp in .thumbnails folder.$(tput sgr0)"
         fi
         if [[ -f "${opt::-1}.png" ]]
         then
             mogrify -resize $webResolutionx$webResolution -adaptive-sharpen 0x.4 -quality 85 -path .thumbnails -format webp ${opt::-1}.png
+            rm ${opt::-1}.png
             echo "$(tput setaf 2)Square preview found and converted to webp in .thumbnails folder.$(tput sgr0)"
         fi
         if [[ -f "${opt::-1}-trans.png" ]]
         then
             echo "$(tput setaf 2)Transparent preview found.$(tput sgr0)"
+            mv ${opt::-1}-trans.png ${opt::-1}.png
             for res in "${previewResolutions[@]}" ; do
-                mogrify -resize $resx$res -adaptive-sharpen 0x.8 -quality 70 -format png -path .watchfacespreview/$res ${opt::-1}-trans.png
+                mogrify -resize $resx$res -adaptive-sharpen 0x.8 -quality 70 -format png -path .watchfacespreview/$res ${opt::-1}.png
                 echo "$res px resize done."
             done
+            rm ${opt::-1}.png
             echo "$(tput setaf 2)Transparent previews generated successfully in .watchfacespreview.$(tput sgr0)"
 
         fi
