@@ -31,7 +31,7 @@ Rectangle {
     id: root
     color:"transparent"
     width: parent.width
-    height: parent.height
+    height: width
     property int radius: Math.min(root.width / 24, root.height / 16)
 
     Component {
@@ -39,7 +39,9 @@ Rectangle {
         Rectangle {
             width: root.radius * 9.7
             height: root.radius * 1.5
-            color: 1 << index & modelData ? Qt.rgba(0.98, 0.651, 0.196, 0.9) : Qt.rgba(0, 0, 0, 0.25)
+            color: 1 << index & modelData ?
+                       Qt.rgba(0.98, .651, .196, .9) :
+                       Qt.rgba(0, 0, 0, .25)
         }
     }
 
@@ -48,21 +50,22 @@ Rectangle {
         Rectangle {
             width: root.radius * 9.7
             height: root.radius * 1.5
-            color: 1 << index & modelData ? Qt.rgba(0.016, 0.667, 0.988, 0.9) : Qt.rgba(0, 0, 0, 0.25)
+            color: 1 << index & modelData ?
+                       Qt.rgba(0.016, .667, .988, .9) :
+                       Qt.rgba(0, 0, 0, .25)
         }
     }
 
     Item {
-        anchors.verticalCenter: parent.verticalCenter
-        anchors.horizontalCenter: parent.horizontalCenter
-        anchors.horizontalCenterOffset: parent.width*0.235
+        anchors.centerIn: parent
+        anchors.horizontalCenterOffset: parent.width * .235
 
         transform: Rotation { axis { x: 0; y: 0; z: 1 } angle: 90 }
         Row {
             anchors.centerIn: parent
             spacing: root.radius
             Column {
-                spacing: root.radius*0.33
+                spacing: root.radius * .33
                 Repeater {
                     property int led: wallClock.time.getMinutes()
                     delegate: draw_led_minute; model: [led, led, led, led, led, led]
@@ -72,16 +75,15 @@ Rectangle {
     }
 
     Item {
-        anchors.verticalCenter: parent.verticalCenter
-        anchors.horizontalCenter: parent.horizontalCenter
-        anchors.horizontalCenterOffset: -parent.height*0.235
+        anchors.centerIn: parent
+        anchors.horizontalCenterOffset: -parent.height * .235
 
         transform: Rotation { axis { x: 0; y: 0; z: 1 } angle: 90 }
         Row {
             anchors.centerIn: parent
             spacing: root.radius
             Column {
-                spacing: root.radius*0.33
+                spacing: root.radius * .33
                 Repeater {
                     property int led: wallClock.time.getHours()
                     delegate: draw_led_hour; model: [led, led, led, led, led, led]
@@ -93,21 +95,19 @@ Rectangle {
     Item {
         id: digitalDisplay
         width: parent.width
-        height: parent.height
+        height: width
 
         Text {
             id: hourDisplay
-            property var hoffset: parent.width*0.022
-            font.pixelSize: parent.height/3
+            property var hoffset: parent.width * .022
+            font.pixelSize: parent.height / 3
             font.family: 'Simpleness-Regular'
             color: "white"
-            style: Text.Outline; styleColor: Qt.rgba(0, 0, 0, 0.4)
-            horizontalAlignment: Text.AlignHCenter
+            style: Text.Outline; styleColor: Qt.rgba(0, 0, 0, .4)
             anchors {
-                verticalCenterOffset: -parent.height*0.077
-                verticalCenter: parent.verticalCenter
-                horizontalCenter: parent.horizontalCenter
-                horizontalCenterOffset: -parent.height*0.235+hoffset
+                centerIn: parent
+                verticalCenterOffset: -parent.height * .077
+                horizontalCenterOffset: -parent.height * .235 + hoffset
             }
             text: if (use12H.value) {
                       wallClock.time.toLocaleString(Qt.locale(), "hh ap").slice(0, 2)}
@@ -117,17 +117,15 @@ Rectangle {
 
         Text {
             id: minuteDisplay
-            property var hoffset: parent.width*0.022
-            font.pixelSize: parent.height/3
+            property var hoffset: parent.width * .022
+            font.pixelSize: parent.height / 3
             font.family: 'Simpleness-Regular'
             color: "white"
-            style: Text.Outline; styleColor: Qt.rgba(0, 0, 0, 0.4)
-            horizontalAlignment: Text.AlignHCenter
+            style: Text.Outline; styleColor: Qt.rgba(0, 0, 0, .4)
             anchors {
-                verticalCenterOffset: -parent.height*0.077
-                verticalCenter: parent.verticalCenter
-                horizontalCenter: parent.horizontalCenter
-                horizontalCenterOffset: parent.height*0.235+hoffset
+                centerIn: parent
+                verticalCenterOffset: -parent.height * .077
+                horizontalCenterOffset: parent.height * .235 + hoffset
             }
             text: wallClock.time.toLocaleString(Qt.locale(), "mm")
         }
