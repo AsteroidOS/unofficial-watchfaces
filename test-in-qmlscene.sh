@@ -65,12 +65,11 @@ do
             echo "$(tput setaf 2)Transparent preview found.$(tput sgr0)"
             mv ${opt::-1}-trans.png ${opt::-1}.png
             for res in "${previewResolutions[@]}" ; do
-                mogrify -resize $resx$res -adaptive-sharpen 0x.8 -quality 70 -format png -path .watchfacespreview/$res ${opt::-1}.png
+                mogrify -resize $resx$res -adaptive-sharpen 0x.8 -quality 70 -format png -path watchfaces-preview/$res ${opt::-1}.png
                 echo "$res px resize done."
             done
             rm ${opt::-1}.png
-            echo "$(tput setaf 2)Transparent previews generated successfully in .watchfacespreview.$(tput sgr0)"
-
+            echo "$(tput setaf 2)Transparent previews generated successfully into the watchfaces-preview folder.$(tput sgr0)"
         fi
     else
       break
