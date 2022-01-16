@@ -65,7 +65,7 @@ do
             echo "$(tput setaf 2)Transparent preview found.$(tput sgr0)"
             mv ${opt::-1}-trans.png ${opt::-1}.png
             for res in "${previewResolutions[@]}" ; do
-                mogrify -resize $resx$res -adaptive-sharpen 0x.8 -quality 70 -format png -path watchfaces-preview/$res ${opt::-1}.png
+                mogrify -resize $resx$res -adaptive-sharpen 0x.8 -quality 70 -format png -path ${opt::-1}/usr/share/asteroid-launcher/watchfaces-preview/$res ${opt::-1}.png
                 echo "$res px resize done."
             done
             rm ${opt::-1}.png
