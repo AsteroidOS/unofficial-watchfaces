@@ -23,7 +23,7 @@
 
 import QtQuick 2.1
 import QtGraphicalEffects 1.15
-import org.freedesktop.contextkit 1.0
+import Nemo.Mce 1.0
 import org.asteroid.controls 1.0
 import org.asteroid.utils 1.0
 
@@ -32,11 +32,8 @@ Item {
     property string imgPath: "../watchfaces-img/analog-scientific-v2-"
     property real rad: 0.01745
 
-    ContextProperty {
+    MceBatteryLevel {
         id: batteryChargePercentage
-        key: "Battery.ChargePercentage"
-        value: "100"
-        Component.onCompleted: batteryChargePercentage.subscribe()
     }
 
     Repeater {
@@ -377,7 +374,7 @@ Item {
 
     Item {
         id: batteryBox
-        property int value: batteryChargePercentage.value
+        property int value: batteryChargePercentage.percent
         onValueChanged: batteryArc.requestPaint()
         anchors {
             centerIn: parent
@@ -417,16 +414,16 @@ Item {
                                                          parent.width * 0.46
                                                          )
                 gradient.addColorStop(0.44,
-                                      batteryChargePercentage.value < 30 ?
+                                      batteryChargePercentage.percent < 30 ?
                                           "#00EF476F" :
-                                          batteryChargePercentage.value < 60 ?
+                                          batteryChargePercentage.percent < 60 ?
                                               "#00D0E562" :
                                               "#0023F0C7"
                                       )
                 gradient.addColorStop(0.97,
-                                      batteryChargePercentage.value < 30 ?
+                                      batteryChargePercentage.percent < 30 ?
                                           "#ffEF476F" :
-                                          batteryChargePercentage.value < 60 ?
+                                          batteryChargePercentage.percent < 60 ?
                                               "#ffD0E562" :
                                               "#ff23F0C7"
                                       )
@@ -438,7 +435,7 @@ Item {
                         parent.height / 2,
                         parent.width * 0.456,
                         270 * rad,
-                        ((batteryChargePercentage.value/100*360)+270) * rad,
+                        ((batteryChargePercentage.percent/100*360)+270) * rad,
                         false
                         );
                 ctx.lineTo(parent.width / 2,
@@ -459,7 +456,7 @@ Item {
             font.family: "Outfit"
             font.styleName:"Thin"
             color: "#ffffffff"
-            text: batteryChargePercentage.value
+            text: batteryChargePercentage.percent
 
             Text {
                  z: 9
