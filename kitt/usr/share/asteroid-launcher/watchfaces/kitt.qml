@@ -14,7 +14,7 @@
  */
 
 import QtQuick 2.1
-import org.freedesktop.contextkit 1.0
+import Nemo.Mce 1.0
 import org.asteroid.controls 1.0
 import org.asteroid.utils 1.0
 import Nemo.Ngf 1.0
@@ -23,12 +23,6 @@ Item {
     id: watchFace
     property var time: wallClock.time //new Date() //
     property string imgPath: "../watchfaces-img/"
-
-    function formatAll(){
-        secondsDisplay.format()
-        dateDisplay.text = Qt.binding(function() { return watchFace.time.toLocaleString(Qt.locale(), "<b>ddd</b> d MMM") })
-        timeDisplay.format()
-    }
 
     FontLoader { id: localFont
         name:'Digital-7 Mono'
@@ -79,10 +73,10 @@ Item {
                 style: Text.Outline; styleColor: Qt.rgba(255,255,255,0.5)
                 opacity: 0.9
                 horizontalAlignment: Text.AlignHCenter
-                text: if (use12H.value) {
-                          wallClock.time.toLocaleString(Qt.locale(), "hh ap").slice(0, 2) + wallClock.time.toLocaleString(Qt.locale(), ":mm")}
+                text: if (use12H.value)
+                          wallClock.time.toLocaleString(Qt.locale(), "hh:mm ap").slice(0, 5)
                       else
-                          wallClock.time.toLocaleString(Qt.locale(), "HH") + wallClock.time.toLocaleString(Qt.locale(), ":mm")
+                          wallClock.time.toLocaleString(Qt.locale(), "HH:mm")
 
             }
 
@@ -91,19 +85,11 @@ Item {
                 anchors.topMargin: parent.width * 0.01
                 anchors.right: parent.right
                 anchors.top: parent.top
-                text: '00'
+                text: wallClock.time.toLocaleString(Qt.locale(), "ss")
                 font { family: localFont.name; pixelSize:timeDisplay.font.pixelSize * 0.5; capitalization: Font.Capitalize }
                 color: timeDisplay.color
                 style: timeDisplay.style
                 styleColor: timeDisplay.styleColor
-                Component.onCompleted: format()
-                function format(){
-                    var sec = watchFace.time.getSeconds();
-                    if (sec < 10) {
-                        sec = "0" + sec;
-                    }
-                    text = sec
-                }
             }
         }
 
@@ -116,11 +102,11 @@ Item {
         width: parent.width * 0.289
         height: parent.width  * 0.115
         Rectangle {
-            color: batteryChargePercentage.value < 50 ? 'red': 'green'
+            color: batteryChargePercentage.percent < 50 ? 'red': 'green'
             anchors.top: parent.top
             anchors.left: parent.left
             anchors.bottom: parent.bottom
-            width: batteryChargePercentage.value * parent.width/100
+            width: batteryChargePercentage.percent * parent.width/100
             opacity: 0.5
         }
         Icon {
@@ -132,7 +118,7 @@ Item {
             anchors.verticalCenter: parent.verticalCenter
             opacity: 0.4
             rotation: 270
-            visible: batteryIsCharging.value
+            visible: batteryChargeState.value == MceBatteryState.Charging
         }
     }
 
@@ -145,7 +131,7 @@ Item {
         sourceSize.height: parent.width
         sourceSize.width: parent.width
         fillMode: Image.PreserveAspectFit
-        source: "./kitt-compass.svg"
+        source: "kitt-compass.svg"
     }
 
     Image {
@@ -188,24 +174,12 @@ Item {
         id: btStatus
     }
 
-    ContextProperty {
+    MceBatteryLevel {
         id: batteryChargePercentage
-        key: "Battery.ChargePercentage"
-        value: "100"
-        Component.onCompleted: batteryChargePercentage.subscribe()
     }
 
-    ContextProperty {
-        id: batteryIsCharging
-        key: "Battery.IsCharging"
-        value: false
-    }
+    MceBatteryState {
+        id: batteryChargeState
+    } 
 
-    Connections {
-        target: wallClock
-        onTimeChanged: {
-            formatAll()
-        }
-    }
-    Component.onCompleted: formatAll()
 }
