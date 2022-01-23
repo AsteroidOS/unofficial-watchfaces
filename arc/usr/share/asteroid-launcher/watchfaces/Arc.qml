@@ -18,7 +18,7 @@
  */
 
 import QtQuick 2.1
-import org.freedesktop.contextkit 1.0
+import Nemo.Mce 1.0
 import org.asteroid.utils 1.0
 
 Item {
@@ -102,12 +102,12 @@ Item {
                             color: watchFace.arccolor
                         }
                         GradientStop {
-                            position: Math.max(0.01, (batteryChargePercentage.value/100) - 0.011)
+                            position: Math.max(0.01, (batteryChargePercentage.percent/100) - 0.011)
                             color: watchFace.arccolor
                         }
                         GradientStop {
                             id: batteryGradientStop
-                            position: Math.min(0.99, (batteryChargePercentage.value/100) + 0.011)
+                            position: Math.min(0.99, (batteryChargePercentage.percent/100) + 0.011)
                             color: watchFace.arcbatterylowcolor
                         }
                         GradientStop {
@@ -354,17 +354,9 @@ Item {
         }
 
     }
-    ContextProperty {
-        id: batteryChargePercentage
-        key: "Battery.ChargePercentage"
-        value: "100"
-        Component.onCompleted: batteryChargePercentage.subscribe()
-    }
 
-    ContextProperty {
-        id: batteryIsCharging
-        key: "Battery.IsCharging"
-        value: false
+    MceBatteryLevel {
+        id: batteryChargePercentage
     }
 
 }
