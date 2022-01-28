@@ -22,7 +22,7 @@
  */
 
 import QtQuick 2.1
-import org.freedesktop.contextkit 1.0
+import Nemo.Mce 1.0
 import org.asteroid.controls 1.0
 import org.asteroid.utils 1.0
 
@@ -137,8 +137,8 @@ Item {
             //topMargin: -parent.height*0.03
             horizontalCenter: parent.horizontalCenter
         }
-        color: batteryChargePercentage.value < 30 ? 'red': batteryChargePercentage.value < 60 ? 'yellow': Qt.rgba(0, 1, 0, 1)
-        width: parent.width/100*batteryChargePercentage.value
+        color: batteryChargePercentage.percent < 30 ? 'red': batteryChargePercentage.percent < 60 ? 'yellow': Qt.rgba(0, 1, 0, 1)
+        width: parent.width/100*batteryChargePercentage.percent
         height: parent.height * 0.004
     }
 
@@ -147,20 +147,17 @@ Item {
         id: batteryDisplay
         font.pixelSize: parent.height*0.05
         font.family: "Elektra"
-        color: batteryChargePercentage.value < 30 ? 'red': batteryChargePercentage.value < 60 ? 'yellow': Qt.rgba(0, 1, 0, 1)
+        color: batteryChargePercentage.percent < 30 ? 'red': batteryChargePercentage.percent < 60 ? 'yellow': Qt.rgba(0, 1, 0, 1)
         horizontalAlignment: Text.AlignHCenter
         anchors {
             top: batteryBack.bottom
             topMargin: -parent.height*0.0055
             horizontalCenter: parent.horizontalCenter
         }
-        text: batteryChargePercentage.value
+        text: batteryChargePercentage.percent
     }
 
-    ContextProperty {
+    MceBatteryLevel {
         id: batteryChargePercentage
-        key: "Battery.ChargePercentage"
-        value: "100"
-        Component.onCompleted: batteryChargePercentage.subscribe()
     }
 }

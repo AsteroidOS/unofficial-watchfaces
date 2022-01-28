@@ -24,7 +24,7 @@
 
 import QtQuick 2.15
 import QtGraphicalEffects 1.15
-import org.freedesktop.contextkit 1.0
+import Nemo.Mce 1.0
 import org.asteroid.controls 1.0
 import org.asteroid.utils 1.0
 
@@ -39,12 +39,8 @@ Item {
 
     anchors.fill: parent
 
-    ContextProperty {
-            id: batteryChargePercentage
-
-            key: "Battery.ChargePercentage"
-            value: "100"
-            Component.onCompleted: batteryChargePercentage.subscribe()
+    MceBatteryLevel {
+        id: batteryChargePercentage
     }
 
     Image {
@@ -370,7 +366,7 @@ Item {
         Item {
             id: batteryBox
 
-            property int value: batteryChargePercentage.value
+            property int value: batteryChargePercentage.percent
 
             onValueChanged: batteryArc.requestPaint()
 
@@ -406,14 +402,14 @@ Item {
                     ctx.closePath()
                     ctx.lineWidth = root.height * .005
                     ctx.lineCap="round"
-                    ctx.strokeStyle = batteryChargePercentage.value < 30 ?
+                    ctx.strokeStyle = batteryChargePercentage.percent < 30 ?
                                 accColor : "#44BBA4"
                     ctx.beginPath()
                     ctx.arc(parent.width / 2,
                             parent.height / 2,
                             parent.width * .456,
                             270 * rad,
-                            ((batteryChargePercentage.value / 100 * 360) + 270) * rad,
+                            ((batteryChargePercentage.percent / 100 * 360) + 270) * rad,
                             false
                             );
                     ctx.stroke()
@@ -433,7 +429,7 @@ Item {
                     styleName:"Condensed Light"
                 }
                 color: highColor
-                text: batteryChargePercentage.value
+                text: batteryChargePercentage.percent
 
                 Text {
                      id: batteryPercent

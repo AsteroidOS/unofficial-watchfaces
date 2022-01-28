@@ -22,7 +22,7 @@
  */
 
 import QtQuick 2.1
-import org.freedesktop.contextkit 1.0
+import Nemo.Mce 1.0
 import org.asteroid.controls 1.0
 import org.asteroid.utils 1.0
 
@@ -301,13 +301,13 @@ Item {
             ctx.shadowOffsetY = 0
             ctx.shadowBlur = 2
             var gradient = ctx.createRadialGradient (parent.width/2, parent.height/2, 0, parent.width/2, parent.height/2, parent.width *0.46)
-            gradient.addColorStop(0.39, batteryChargePercentage.value < 30 ? 'red': Qt.rgba(0.318, 1, 0.051, 0.0))
-            gradient.addColorStop(0.95, batteryChargePercentage.value < 30 ? 'red': Qt.rgba(0.318, 1, 0.051, 0.9))
+            gradient.addColorStop(0.39, batteryChargePercentage.percent < 30 ? 'red': Qt.rgba(0.318, 1, 0.051, 0.0))
+            gradient.addColorStop(0.95, batteryChargePercentage.percent < 30 ? 'red': Qt.rgba(0.318, 1, 0.051, 0.9))
             ctx.lineWidth = parent.height*0.007
             ctx.lineCap="round"
             ctx.strokeStyle = gradient
             ctx.beginPath()
-            ctx.arc(parent.width/2, parent.height/2, parent.width *0.46, 270* 0.01745, ((batteryChargePercentage.value/100*360)+270)* 0.01745, false);
+            ctx.arc(parent.width/2, parent.height/2, parent.width *0.46, 270* 0.01745, ((batteryChargePercentage.percent/100*360)+270)* 0.01745, false);
             ctx.lineTo(parent.width/2,
                        parent.height/2)
             ctx.stroke()
@@ -319,7 +319,7 @@ Item {
         z: 9
         id: batteryDisplay
         renderType: Text.NativeRendering
-        property var rotB: (batteryChargePercentage.value-25)/100
+        property var rotB: (batteryChargePercentage.percent-25)/100
         property var centerX: parent.width/2-width/2
         property var centerY: parent.height/2-height/2
         font.pixelSize: parent.height/16
@@ -330,7 +330,7 @@ Item {
         style: Text.Outline; styleColor: "#80000000"
         x: centerX+Math.cos(rotB * 2 * Math.PI)*height*4.5
         y: centerY+Math.sin(rotB * 2 * Math.PI)*height*4.5
-        text: "<b>" + batteryChargePercentage.value + "</b>"
+        text: "<b>" + batteryChargePercentage.percent + "</b>"
     }
 
     Text {
@@ -388,11 +388,8 @@ Item {
         text: wallClock.time.toLocaleString(Qt.locale(), "dd MMMM")
     }
 
-    ContextProperty {
+    MceBatteryLevel {
         id: batteryChargePercentage
-        key: "Battery.ChargePercentage"
-        value: "100"
-        Component.onCompleted: batteryChargePercentage.subscribe()
     }
 
     Connections {
