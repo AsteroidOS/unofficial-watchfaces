@@ -19,21 +19,32 @@
 import QtQuick 2.1
 
 Item {
+    // these three constants describe metric time
+    readonly property int metricHoursPerStandardDay: 10
+    readonly property int metricMinutesPerMetricHour: 100
+    readonly property int metricSecondsPerMetricMinute: 100
+
+    // this constant adjusts the minutes ticks on the watchface
+    readonly property int majorMinuteTicksEvery: 5
+
+    // these are derived constants
+    readonly property int metricSecondsPerStandardDay: metricHoursPerStandardDay * metricMinutesPerMetricHour * metricSecondsPerMetricMinute
+    readonly property double metricSecondsScaleFactor: metricSecondsPerStandardDay / 86400
 
     function getMetricMilliseconds(t) {
         return (t.getHours() * 3600000
             + t.getMinutes() * 60000
             + t.getSeconds() * 1000
-            + t.getMilliseconds()) / 0.864
+            + t.getMilliseconds()) * metricSecondsScaleFactor
     }
 
     function getMetricHours(metricMilli){
-        return getMetricMilliseconds(wallClock.time) / 10000000
+        return getMetricMilliseconds(wallClock.time) / metricMinutesPerMetricHour / metricSecondsPerMetricMinute / 1000
     }
 
     Repeater{
         id: hourTicks
-        model: 10
+        model: metricHoursPerStandardDay
         Rectangle {
             z: 2
             id: decimalHourTick
@@ -43,12 +54,12 @@ Item {
             height: parent.height*0.03
             opacity: displayAmbient ? 0.3 : 0.6
             transform: [
-                Rotation { 
+                Rotation {
                     origin.x: decimalHourTick.width/2
                     origin.y: decimalHourTick.height + parent.height*0.36
-                    angle: (index)*360/hourTicks.count 
+                    angle: (index)*360/hourTicks.count
                 },
-                Translate { 
+                Translate {
                     x: (parent.width - decimalHourTick.width)/2
                     y: parent.height/2 - (decimalHourTick.height + parent.height * 0.36)
                 }
@@ -58,7 +69,7 @@ Item {
 
     Repeater{
         id: minuteTicks
-        model: 100
+        model: metricMinutesPerMetricHour
         Rectangle {
             z: 1
             id: decimalHourTick
@@ -66,15 +77,15 @@ Item {
             antialiasing : true
             color: "lightgreen"
             width: parent.width*0.005
-            height: parent.height*(index % 5 == 0 ? 0.030 : 0.015)
+            height: parent.height*(index % majorMinuteTicksEvery == 0 ? 0.030 : 0.015)
             opacity: 0.6
             transform: [
-                Rotation { 
+                Rotation {
                     origin.x: decimalHourTick.width/2
                     origin.y: decimalHourTick.height + parent.height*0.36
-                    angle: (index)*360/minuteTicks.count 
+                    angle: (index)*360/minuteTicks.count
                 },
-                Translate { 
+                Translate {
                     x: (parent.width - decimalHourTick.width)/2
                     y: parent.height/2 - (decimalHourTick.height + parent.height * 0.36)
                 }
@@ -84,7 +95,7 @@ Item {
 
     Repeater{
         id: hourLabels
-        model: 10
+        model: metricHoursPerStandardDay
         Text {
             z: 3
             font.pixelSize: parent.height*0.08
@@ -96,12 +107,12 @@ Item {
             opacity: displayAmbient ? 0.3 : 0.6
             text: index ? index : hourLabels.count
             transform: [
-                Rotation { 
+                Rotation {
                     origin.x: hourLabel.width/2
                     origin.y: hourLabel.height + parent.height*0.40
-                    angle: (index)*360/hourTicks.count 
+                    angle: (index)*360/hourTicks.count
                 },
-                Translate { 
+                Translate {
                     x: (parent.width - hourLabel.width)/2
                     y: parent.height/2 - (hourLabel.height + parent.height * 0.40)
                 }
@@ -170,16 +181,15 @@ Item {
         source: "../watchfaces-img/asteroid-logo.svg"
         width: parent.width/12
         height: parent.height/12
-        transform : [ 
+        transform : [
             Rotation {
                 origin.x : logoAsteroid.width/2
                 origin.y : logoAsteroid.height + parent.height * 0.275
-                angle: getMetricHours(wallClock.time)*36
-                // angle: wallClock.time.getSeconds()*6
+                angle: getMetricHours(wallClock.time) * 360 / metricHoursPerStandardDay
             },
             Translate {
                 x: (parent.width - logoAsteroid.width)/2
-                y: parent.height/2 - (logoAsteroid.height + parent.height * 0.275) 
+                y: parent.height/2 - (logoAsteroid.height + parent.height * 0.275)
             }
         ]
     }
