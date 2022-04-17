@@ -24,7 +24,7 @@ ApplicationWindow {
         }
 
         height: halfSize.checked ? 320 : 640
-        width: halfSize.checked ? 320 : 640
+        width: nonSquare.checked ? height * 0.85 : height
 
         Rectangle {
             id: frame
@@ -189,6 +189,17 @@ ApplicationWindow {
                         ToolTip.visible: hovered
                         ToolTip.delay: 600
                         ToolTip.text: qsTr("Show the watchface as it would look on a round watch")
+                        checked: true
+                    }
+
+                    CheckBox {
+                        id: nonSquare
+
+                        font.pixelSize: 30
+                        text: "\u25AF"
+                        ToolTip.visible: hovered
+                        ToolTip.delay: 600
+                        ToolTip.text: qsTr("Show the watchface as it would look on a non-square watch")
                         checked: true
                     }
 
