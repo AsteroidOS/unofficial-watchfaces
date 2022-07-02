@@ -1,5 +1,6 @@
 /*
- * Copyright (C) 2021 - Timo Könnecke <github.com/eLtMosen>
+ * Copyright (C) 2022 - Ivo Hulsman <github.com/ivohulsman>
+ *               2021 - Timo Könnecke <github.com/eLtMosen>
  *               2016 - Sylvia van Os <iamsylvie@openmailbox.org>
  *               2015 - Florent Revest <revestflo@gmail.com>
  *               2012 - Vasiliy Sorokin <sorokin.vasiliy@gmail.com>
@@ -29,26 +30,16 @@ import org.asteroid.utils 1.0
 
 Item {
     id: root
-    property string imgPath: "../watchfaces-img/analog-modern-"
+    property string imgPath: "../watchfaces-img/analog-commander-"
     property real rad: 0.01745
-  
     MceBatteryLevel {
         id: batteryChargePercentage
     }
-
-
-// Development Battery Mocking
-/*  
-    Item {
-        id: batteryChargePercentage
-        property var percent: (featureSlider.value * 100).toFixed(0)
-    }
-*/
     Repeater {
         model: 60
+        id: minuteStrokes
         Rectangle {
             z: 0
-            id: minuteStrokes
             antialiasing : true
             property real rotM: (index - 15) / 60
             property real centerX: root.width / 2 - width / 2
@@ -58,19 +49,19 @@ Item {
             y: index % 5 ? centerY+Math.sin(rotM * 2 * Math.PI) * parent.width * 0.430 :
                            centerY+Math.sin(rotM * 2 * Math.PI) * parent.width * 0.388
             color: index % 5 ? "#ff949494" : "#ff949494"
-			radius: 60
-	    	opacity: (index%5)==0 && displayAmbient ? 0.2
-	    	       : (index%5)==0 ? 0.6 
-				   : displayAmbient ? 0.2
-				   : 0.5
-        	width: index % 5 ? parent.width * 0.0050 : parent.width * 0.018
-			
-	    	visible: ([0, 30].includes(index)) ? 0
-	    	       : 1
+            radius: 60
+            opacity: (index%5)==0 && displayAmbient ? 0.2
+                   : (index%5)==0 ? 0.6
+                   : displayAmbient ? 0.2
+                   : 0.5
+            width: index % 5 ? parent.width * 0.0050 : parent.width * 0.018
 
-	    	height: ([15, 45].includes(index)) ? parent.height * 0.060
-                  : index % 5 ? parent.height * 0.026 
-				  : parent.height * 0.105
+            visible: ([0, 30].includes(index)) ? 0
+                   : 1
+
+            height: ([15, 45].includes(index)) ? parent.height * 0.060
+                  : index % 5 ? parent.height * 0.026
+                  : parent.height * 0.105
 
             transform: Rotation {
                 origin.x: width / 2
@@ -82,9 +73,9 @@ Item {
 
     Repeater {
         model: 12
+        id: secondDots
         Rectangle {
             z: 0
-            id: secondDots
             antialiasing : true
             property real rotM: (index + 2.5) / 12 
             property real centerX: root.width / 2 - width / 2
@@ -106,35 +97,35 @@ Item {
     }
 
 
-    Repeater {
-	model: 4
+Repeater {
+        id: hourNumbers
+        model: 4
         Text {
-            z: 0
-            id: hourNumbers
-            font.pixelSize: parent.height*0.130
-            font.family: "Teko"
-            font.styleName: "Regular"
+            font {
+                family: "Teko"
+                styleName: "Regular"
+                pixelSize: parent.height*0.130
+            }
+            property real angle: ((index) * 2 * Math.PI / hourNumbers.count - Math.PI/2) 
+            property var extraY: [0.175, 0.044, -0.075 , 0.058 ]
             horizontalAlignment: Text.AlignHCenter
-			property real rotM: ((index * 15 ) - 15)/60
-            property real centerX: parent.width / 2 - width / 2
-            property real centerY: parent.height / 2 - height / 2
-	        opacity: displayAmbient ? 0.2
-		    	   : 0.8
-            x :centerX + Math.cos(rotM * 2 * Math.PI) * parent.width * 0.462
-            y: index === 0 ?
-                   centerY + Math.sin(rotM * 2 * Math.PI) * parent.width * 0.430 :
-	    	   centerY + Math.sin(rotM * 2 * Math.PI) * parent.width * 0.445
+            opacity: displayAmbient ? 0.2 : 0.8
+            anchors.centerIn: parent
+            transform: 
+                Translate {
+                    x: Math.cos(angle) * (parent.width + width) * 0.445
+                    y: Math.sin(angle) * (parent.height + height) * 0.388 + height * extraY[index]
+                }
             color: "#ff949494"
-			text: (index === 0) ? "12"
-			: index*3
+            text: 3 * (index === 0 ? hourNumbers.count : index)
         }
     }
-
+	
     Repeater {
-	model: 60
+    model: 60
+    id: secondNumbers
         Text {
             z: 0
-            id: secondNumbers
             font.pixelSize: parent.height*0.030
             font.family: "Michroma"
             font.styleName: "Regular"
@@ -142,23 +133,23 @@ Item {
             property real rotM: (index - 15) / 60
             property real centerX: parent.width / 2 - width / 2
             property real centerY: parent.height / 2 - height / 2
+			property bool south: index > 15 && index < 45
             x: centerX + Math.cos(rotM * 2 * Math.PI) * parent.width * 0.463
             y: centerY + Math.sin(rotM * 2 * Math.PI) * parent.width * 0.463
-	        opacity: displayAmbient ? 0.5
-		    	   : 0.9
+            opacity: displayAmbient ? 0.5
+                   : 0.9
             color: "#ff949494"
             transform: Rotation {
                 origin.x: width / 2
                 origin.y: height / 2
-                angle: (index) * 6
+               // angle: (index) * 6
+			    angle: (index) * 6 + (south ? 180 : 0)
             }
-			text: (index === 5) ? "05"
-	    	    : (index*5) ? index
-				: index*3
-	   
-	    	visible: ([0, 15, 30, 45].includes(index)) ? 0
-				   : (index%5)==0 ? 1 
-	    	   	   : 0
+			text: (100+index).toString().substring(1)
+
+			//visible: (index%5)==0 && (index%15)
+			visible: [5, 10, 20, 25, 35, 40, 50, 55].includes(index)
+			
         }
     }
 
@@ -167,7 +158,7 @@ Item {
         id: asteroidLogo
         opacity: displayAmbient ? 0.1
 			   : 0.7
-        source: "../watchfaces-img/analog-modern-asteroid-logo.svg"
+        source: "../watchfaces-img/analog-commander-asteroid-logo.svg"
         antialiasing: true
         anchors {
             centerIn: parent
@@ -263,7 +254,7 @@ Item {
                 font.styleName: currentMonthHighlight ?
                                     "Regular" :
                                     "Light"
-				opacity: !displayAmbient ? 1 : 0.3
+                opacity: !displayAmbient ? 1 : 0.3
                 property real rotM: ((index * 5) - 15) / 60
                 property real centerX: parent.width / 2 - width / 2
                 property real centerY: parent.height / 2 - height / 2
@@ -284,17 +275,21 @@ Item {
         Text {
             z: 2
             id: monthDisplay
-            anchors {
-                centerIn: parent
-            }
+			anchors {
+				centerIn: parent
+            	verticalCenterOffset: -parent.height * -0.0200
+			}	
+            y: (parent.height + height) * -0.075
             renderType: Text.NativeRendering
-            font.pixelSize: parent.height * 0.366
-            font.family: "Teko"
-            font.styleName:"Light"
-            font.letterSpacing: -root.width * 0.0018
+			font { 
+				pixelSize: parent.height * 0.39
+            	family: "Teko"
+            	styleName:"Light"
+            	letterSpacing: -root.width * 0.0018
+			}
             color: "#ddffffff"
             opacity: !displayAmbient ? 1 : 0.3
-            text: wallClock.time.toLocaleString(Qt.locale(), "MMM").slice(0, 3).toUpperCase()
+            text: wallClock.time.toLocaleString(Qt.locale(), "dd").slice(0, 3)
         }
     }
     
@@ -376,13 +371,16 @@ Item {
         Text {
             z: 2
             id: batteryDisplay
-            anchors {
-                centerIn: parent
-            }
+			anchors {
+				centerIn: parent
+            	verticalCenterOffset: -parent.height * -0.0200 
+			}	
             renderType: Text.NativeRendering
-            font.pixelSize: parent.height * 0.39
-            font.family: "Teko"
-            font.styleName:"Thin"
+			font {
+				pixelSize: parent.height * 0.39
+            	family: "Teko"
+            	styleName:"Light"
+			}
             color: "#ffffffff"
             text: batteryChargePercentage.percent
             opacity: !displayAmbient ? 0.8 : 0.3
@@ -421,98 +419,80 @@ Item {
 
     Item {
         id: handBox
-        z:3
-        width: parent.width
-        height: parent.height
-	    opacity: displayAmbient ? 0.4
-			   : 0.9
+
+        z: 3
+        anchors.fill: parent
 
         Image {
             id: hourSVG
+
             z: 3
-            source: imgPath + "hour.svg"
-            antialiasing: true
-            anchors.centerIn: parent
-            width: parent.width
-            height: parent.height
+            source:imgPath + "hour.svg"
+            anchors.fill: parent
+
             transform: Rotation {
                 origin.x: parent.width / 2
                 origin.y: parent.height / 2
-                angle: hourSVG.toggle24h ?
-                           (wallClock.time.getHours() * 15) + (wallClock.time.getMinutes() * 0.25) :
-                           (wallClock.time.getHours() * 30) + (wallClock.time.getMinutes() * 0.5)
-                Behavior on angle {
-                    RotationAnimation {
-                        duration: 500
-                        direction: RotationAnimation.Clockwise
-                        easing.type: Easing.InOutQuad
-                    }
-                }
+                angle: (wallClock.time.getHours()*30) + (wallClock.time.getMinutes() * 0.5)
             }
+
+            layer.enabled: true
+            layer.effect: DropShadow {
+                transparentBorder: true
+                horizontalOffset: 2
+                verticalOffset: 2
+                radius: 5.0
+                samples: 11
+                color: Qt.rgba(0, 0, 0, .2)
+            }
+        }
+
+        Image {
+            id: minuteSVG
+
+            z: 4
+            source: imgPath + "minute.svg"
+            anchors.fill: parent
+
+            transform: Rotation {
+                origin.x: parent.width / 2
+                origin.y: parent.height / 2
+                angle: (wallClock.time.getMinutes()*6)+(wallClock.time.getSeconds() * 6 / 60)
+            }
+
+            layer.enabled: true
+            layer.effect: DropShadow {
+                transparentBorder: true
+                horizontalOffset: 3
+                verticalOffset: 3
+                radius: 6.0
+                samples: 13
+                color: Qt.rgba(0, 0, 0, .3)
+            }
+        }
+
+        Image {
+            id: secondSVG
+
+            z: 5
+            visible: !displayAmbient
+            source: imgPath + "second.svg"
+            anchors.fill: parent
+
+            transform: Rotation {
+                origin.x: parent.width / 2
+                origin.y: parent.height / 2
+                angle: (wallClock.time.getSeconds() * 6)
+            }
+
             layer.enabled: true
             layer.effect: DropShadow {
                 transparentBorder: true
                 horizontalOffset: 4
                 verticalOffset: 4
                 radius: 8.0
-                samples: 12
-                color: Qt.rgba(0, 0, 0, 0.2)
-            }
-        }
-
-        Image {
-            id: minuteSVG
-            z: 4
-            source: imgPath + "minute.svg"
-            antialiasing: true
-            smooth: true
-            anchors.centerIn: parent
-            width: parent.width
-            height: parent.height
-            transform: Rotation {
-                origin.x: parent.width / 2
-                origin.y: parent.height / 2
-                angle: (wallClock.time.getMinutes() * 6) + (wallClock.time.getSeconds() * 6 / 60)
-                Behavior on angle {
-                    RotationAnimation {
-                        duration: 1000
-                        direction: RotationAnimation.Clockwise
-                    }
-                }
-            }
-            layer.enabled: true
-            layer.effect: DropShadow {
-                transparentBorder: true
-                horizontalOffset: 5
-                verticalOffset: 5
-                radius: 10.0
-                samples: 13
-                color: Qt.rgba(0, 0, 0, 0.2)
-            }
-        }
-
-        Image {
-            id: secondSVG
-            z: 5
-            antialiasing: true
-            visible: !displayAmbient
-            source: imgPath + "second.svg"
-            anchors.centerIn: parent
-            width: parent.width
-            height: parent.height
-            transform: Rotation {
-                origin.x: parent.width / 2
-                origin.y: parent.height / 2
-                angle: (wallClock.time.getSeconds() * 6)
-            }
-            layer.enabled: true
-            layer.effect: DropShadow {
-                transparentBorder: true
-                horizontalOffset: 8
-                verticalOffset: 8
-                radius: 10.0
-                samples: 13
-                color: Qt.rgba(0, 0, 0, 0.2)
+                samples: 17
+                color: Qt.rgba(0, 0, 0, .3)
             }
         }
     }
