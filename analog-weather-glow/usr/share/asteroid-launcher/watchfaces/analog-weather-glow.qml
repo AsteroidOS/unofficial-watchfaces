@@ -61,12 +61,12 @@ Item {
     property string boxColor: "#E8DCB9" // Dutch White
     property string switchColor: "#A2D6F9" // Uranian Blue
 
-    // HRM initialisation. Needs to be declared global for since hrmBox and hrmSwitch both need it.
+    // HRM initialisation. Needs to be declared global since hrmBox and hrmSwitch both need it.
     property int hrmBpm: 0
     property bool hrmSensorActive: false
     property var hrmUpdated: wallClock.time
 
-    // Set day to use in the weatherBox to today, Needs to be declared globally in the root item to work for both, hrmSwitch and hrmBox
+    // Set day to use in the weatherBox to today.
     property int dayNb: 0
 
     function kelvinToTemperatureString(kelvin) {
@@ -246,6 +246,7 @@ Item {
         }
         width: switchSize
         height: width
+        visible: !displayAmbient || hrmSensorActive
 
         Canvas {
             id: hrmSwitchArc
@@ -665,6 +666,7 @@ Item {
         }
         width: switchSize
         height: width
+        visible: !displayAmbient || btStatusOn
 
         Canvas {
             id: btSwitchArc
@@ -735,6 +737,7 @@ Item {
         }
         width: switchSize
         height: width
+        visible: !displayAmbient || wifiStatusOn
 
         Canvas {
             id: wifiSwitchArc
