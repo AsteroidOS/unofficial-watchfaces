@@ -991,4 +991,11 @@ Item {
         samples: 13
         color: Qt.rgba(0, 0, 0, .7)
     }
+
+    Connections {
+        target: compositor
+        function onDisplayAmbientEntered() {
+            hrmSensorActive = false
+        }
+    }
 }
