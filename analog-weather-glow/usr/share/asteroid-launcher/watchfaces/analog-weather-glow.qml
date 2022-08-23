@@ -1,5 +1,7 @@
 ﻿/*
  * Copyright (C) 2022 - Timo Könnecke <github.com/eLtMosen>
+ *               2022 - Darrel Griët <dgriet@gmail.com>
+ *               2022 - Ed Beroset <github.com/beroset>
  *               2016 - Sylvia van Os <iamsylvie@openmailbox.org>
  *               2015 - Florent Revest <revestflo@gmail.com>
  *               2012 - Vasiliy Sorokin <sorokin.vasiliy@gmail.com>
@@ -21,7 +23,8 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-import QtQuick 2.9
+import QtQuick 2.15
+import QtQuick.Shapes 1.15
 import QtSensors 5.11
 import QtGraphicalEffects 1.15
 import org.asteroid.controls 1.0
@@ -91,6 +94,86 @@ Item {
         hrmSwitchArc.requestPaint()
     }
 
+    MceBatteryState {
+        id: batteryChargeState
+    }
+
+    MceCableState {
+        id: mceCableState
+    }
+
+    MceBatteryLevel {
+        id: batteryChargePercentage
+    }
+
+    Item {
+        id: dockMode
+
+        readonly property bool active: mceCableState.connected //ready || (nightstandEnabled.value && holdoff)
+        //readonly property bool ready: nightstandEnabled.value && mceCableState.connected
+        property int batteryPercentChanged: batteryChargePercentage.percent
+
+        anchors.fill: parent
+        visible: dockMode.active
+        layer {
+            enabled: true
+            samples: 4
+            smooth: true
+            textureSize: Qt.size(dockMode.width * 2, dockMode.height * 2)
+        }
+
+        Shape {
+            id: chargeArc
+
+            property real angle: batteryChargePercentage.percent * 360 / 100
+            // radius of arc is scalefactor * height or width
+            property real arcStrokeWidth: 0.02
+            property real scalefactor: 0.414 - (arcStrokeWidth / 2)
+            property var chargecolor: Math.floor(batteryChargePercentage.percent / 33.35)
+            readonly property var colorArray: [ "red", "yellow", Qt.rgba(0.318, 1, 0.051, 0.9)]
+
+            anchors.fill: parent
+
+            ShapePath {
+                fillColor: "transparent"
+                strokeColor: chargeArc.colorArray[chargeArc.chargecolor]
+                strokeWidth: parent.height * chargeArc.arcStrokeWidth
+                capStyle: ShapePath.RoundCap
+                joinStyle: ShapePath.MiterJoin
+                startX: width / 2
+                startY: height * ( 0.5 - chargeArc.scalefactor)
+
+                PathAngleArc {
+                    centerX: parent.width / 2
+                    centerY: parent.height / 2
+                    radiusX: chargeArc.scalefactor * parent.width
+                    radiusY: chargeArc.scalefactor * parent.height
+                    startAngle: -90
+                    sweepAngle: chargeArc.angle
+                    moveToStart: false
+                }
+            }
+        }
+
+        Text {
+            id: batteryDockPercent
+
+            anchors {
+                centerIn: parent
+                verticalCenterOffset: parent.width * 0.25
+            }
+            font {
+                pixelSize: parent.width * .15
+                family: "Noto Sans"
+                styleName: "Condensed Light"
+            }
+            visible: dockMode.active
+            color: chargeArc.colorArray[chargeArc.chargecolor]
+            style: Text.Outline; styleColor: "#80000000"
+            text: batteryChargePercentage.percent
+        }
+    }
+
     Repeater {
         // Hour numerals. hourModeSwitch toggles the 12/24hour display.
         model: 12
@@ -139,6 +222,7 @@ Item {
         }
         width: boxSize
         height: width
+        visible: !dockMode.active && !displayAmbient
 
         Text {
             id: hourModeSwitchText
@@ -171,7 +255,7 @@ Item {
 
         anchors {
             centerIn: root
-            verticalCenterOffset: -root.width * .29
+            verticalCenterOffset: dockMode.active ? -root.width * .24 : -root.width * .29
         }
         width: boxSize
         height: width
@@ -246,7 +330,7 @@ Item {
         }
         width: switchSize
         height: width
-        visible: !displayAmbient || hrmSensorActive
+        visible: (!displayAmbient || hrmSensorActive) && !dockMode.active
 
         Canvas {
             id: hrmSwitchArc
@@ -353,6 +437,7 @@ Item {
             anchors.fill: parent
             opacity: inactiveArcOpacity
             smooth: true
+            visible: !dockMode.active
             onPaint: {
                 var ctx = getContext("2d")
                 ctx.reset()
@@ -448,6 +533,7 @@ Item {
             anchors.fill: parent
             opacity: inactiveArcOpacity
             smooth: true
+            visible: !dockMode.active
             onPaint: {
                 var ctx = getContext("2d")
                 ctx.reset()
@@ -492,7 +578,7 @@ Item {
                 styleName: "Bold"
             }
             color: "#ffffffff"
-            opacity: activeContentOpacity
+            opacity: displayAmbient ? inactiveArcOpacity : activeContentOpacity
             text: wallClock.time.toLocaleString(Qt.locale(), "ddd").slice(0, 3).toUpperCase()
         }
 
@@ -525,7 +611,7 @@ Item {
                 styleName: "Bold"
             }
             color: "#ffffffff"
-            opacity: activeContentOpacity
+            opacity: displayAmbient ? inactiveArcOpacity : activeContentOpacity
             text: wallClock.time.toLocaleString(Qt.locale(), "MMM").slice(0, 3).toUpperCase()
         }
     }
@@ -666,7 +752,7 @@ Item {
         }
         width: switchSize
         height: width
-        visible: !displayAmbient || btStatusOn
+        visible: (!displayAmbient || btStatusOn) && !dockMode.active
 
         Canvas {
             id: btSwitchArc
@@ -737,7 +823,7 @@ Item {
         }
         width: switchSize
         height: width
-        visible: !displayAmbient || wifiStatusOn
+        visible: (!displayAmbient || wifiStatusOn) && !dockMode.active
 
         Canvas {
             id: wifiSwitchArc
@@ -790,14 +876,6 @@ Item {
         // MceBatteryLevel and MceBatteryState depend on Nemo.Mce 1.0
         id: batteryBox
 
-        MceBatteryLevel {
-            id: batteryChargePercentage
-        }
-
-        MceBatteryState {
-            id: batteryChargeState
-        }
-
         property int value: batteryChargePercentage.percent
 
         onValueChanged: batteryArc.requestPaint()
@@ -808,6 +886,8 @@ Item {
         }
         width: boxSize
         height: width
+        visible: !dockMode.active
+
         Canvas {
             id: batteryArc
 
@@ -878,7 +958,6 @@ Item {
             color: "#ffffffff"
             opacity: activeContentOpacity
             text: batteryBox.value
-
         }
 
         Text {
