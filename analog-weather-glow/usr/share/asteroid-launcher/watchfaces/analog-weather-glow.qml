@@ -127,8 +127,8 @@ Item {
 
             property real angle: batteryChargePercentage.percent * 360 / 100
             // radius of arc is scalefactor * height or width
-            property real arcStrokeWidth: 0.02
-            property real scalefactor: 0.414 - (arcStrokeWidth / 2)
+            property real arcStrokeWidth: 0.016
+            property real scalefactor: 0.39 - (arcStrokeWidth / 2)
             property var chargecolor: Math.floor(batteryChargePercentage.percent / 33.35)
             readonly property var colorArray: [ "red", "yellow", Qt.rgba(0.318, 1, 0.051, 0.9)]
 
@@ -160,7 +160,7 @@ Item {
 
             anchors {
                 centerIn: parent
-                verticalCenterOffset: parent.width * 0.25
+                verticalCenterOffset: parent.width * 0.22
             }
             font {
                 pixelSize: parent.width * .15
@@ -255,9 +255,9 @@ Item {
 
         anchors {
             centerIn: root
-            verticalCenterOffset: dockMode.active ? -root.width * .24 : -root.width * .29
+            verticalCenterOffset: dockMode.active ? -root.width * .21 : -root.width * .29
         }
-        width: boxSize
+        width: !dockMode.active ? boxSize : boxSize * .84
         height: width
         opacity: activeContentOpacity
 
@@ -338,6 +338,7 @@ Item {
             anchors.fill: parent
             opacity: hrmSensorActive ? activeArcOpacity : inactiveArcOpacity
             smooth: true
+            renderStrategy : Canvas.Cooperative
             onPaint: {
                 var ctx = getContext("2d")  // Returns a drawing context on the canvas
                 ctx.reset()                 // Initialize and clear canvas
@@ -396,7 +397,7 @@ Item {
 
         anchors {
             centerIn: root
-            horizontalCenterOffset: -boxPosition
+            horizontalCenterOffset: !dockMode.active ? -boxPosition : -boxPosition * .78
         }
         width: boxSize
         height: width
@@ -438,6 +439,7 @@ Item {
             opacity: inactiveArcOpacity
             smooth: true
             visible: !dockMode.active
+            renderStrategy : Canvas.Cooperative
             onPaint: {
                 var ctx = getContext("2d")
                 ctx.reset()
@@ -521,7 +523,7 @@ Item {
 
         anchors {
             centerIn: root
-            horizontalCenterOffset: boxPosition
+            horizontalCenterOffset: !dockMode.active ? boxPosition : boxPosition * .78
         }
         width: boxSize
         height: width
@@ -534,6 +536,7 @@ Item {
             opacity: inactiveArcOpacity
             smooth: true
             visible: !dockMode.active
+            renderStrategy : Canvas.Cooperative
             onPaint: {
                 var ctx = getContext("2d")
                 ctx.reset()
@@ -644,6 +647,7 @@ Item {
             anchors.fill: parent
             opacity: hrmSensorActive ? activeArcOpacity : inactiveArcOpacity
             smooth: true
+            renderStrategy : Canvas.Cooperative
             onPaint: {
                 var ctx = getContext("2d")
                 ctx.reset()
@@ -760,6 +764,7 @@ Item {
             anchors.fill: parent
             smooth: true
             opacity: btStatus.powered ? activeArcOpacity : inactiveArcOpacity
+            renderStrategy : Canvas.Cooperative
             onPaint: {
                 var ctx = getContext("2d")
                 ctx.reset()
@@ -831,6 +836,7 @@ Item {
             anchors.fill: parent
             opacity: wifiStatus.powered ? activeArcOpacity : inactiveArcOpacity
             smooth: true
+            renderStrategy : Canvas.Cooperative
             onPaint: {
                 var ctx = getContext("2d")
                 ctx.reset()
@@ -894,6 +900,7 @@ Item {
             anchors.fill: parent
             opacity: activeArcOpacity
             smooth: true
+            renderStrategy : Canvas.Cooperative
             onPaint: {
                 var ctx = getContext("2d")
                 ctx.reset()
