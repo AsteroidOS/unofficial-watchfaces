@@ -30,7 +30,7 @@ Item {
     onArcEndChanged: canvas.requestPaint()
 
     Canvas {
-            id: canvas
+            id: seconds
             visible: !displayAmbient
             anchors.fill: parent
             rotation: -90
@@ -48,7 +48,6 @@ Item {
                     ctx.strokeStyle = "#CCC"
                     ctx.stroke()
             }
-            layer.enabled: true
     }
 
     Text {
@@ -112,7 +111,7 @@ Item {
     }
 
     Text {
-            id: monthDisplay
+            id: dateDisplay
 
             renderType: Text.NativeRendering
             horizontalAlignment: Text.AlignHCenter
