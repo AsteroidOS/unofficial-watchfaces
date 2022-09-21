@@ -16,6 +16,12 @@ ApplicationWindow {
 
     RowLayout {
         ToolBar {
+            id: controls
+            Layout.fillHeight: true
+            padding: 5
+            background: Rectangle {
+                color: "lightblue"
+            }
             ColumnLayout {
                 RowLayout {
                     Layout.alignment: Qt.AlignCenter
@@ -305,12 +311,6 @@ ApplicationWindow {
                         text: featureSlider.value.toFixed(3)
                     }
                 }
-            }
-
-            id: controls
-            Layout.fillHeight: true
-            background: Rectangle {
-                color: "lightblue"
             }
         }
 
