@@ -131,25 +131,25 @@ ApplicationWindow {
                     property real sequencer: 0
 
                     function transSnapshots() {
-                        if (sequencer === 0) {
+                        if (sequencer === 1) {
                             watchfaceDisplayFrame.color = "transparent";
                             background.source = "";
                             frame.color = "transparent";
                             watchfaceDisplayFrame.snapshot("-trans.png");
                         }
 
-                        if (sequencer === 1) {
+                        if (sequencer === 2) {
                             background.source = "background-round.jpg";
                             watchfaceDisplayFrame.snapshot("-round.png");
                         }
 
-                        if (sequencer === 2) {
+                        if (sequencer === 3) {
                             background.source = "background.jpg";
                             roundCheckBox.checked = false;
                             watchfaceDisplayFrame.snapshot(".png");
                         }
 
-                        if (sequencer === 3) {
+                        if (sequencer === 4) {
                             frame.color = "black";
                             roundCheckBox.checked = true;
                             sequencer = 0;
@@ -161,8 +161,8 @@ ApplicationWindow {
                         id: snapshotsTimer
                         interval: 500; running: false; repeat: true
                         onTriggered: {
-                            previewButton.transSnapshots()
                             previewButton.sequencer++
+                            previewButton.transSnapshots()
                         }
                     }
 
