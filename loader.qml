@@ -14,85 +14,6 @@ ApplicationWindow {
     minimumWidth: 640
     minimumHeight: 640 + header.height
 
-    Rectangle {
-        id: watchfaceDisplayFrame
-
-        function snapshot(suffix) {
-            watchfaceDisplayFrame.grabToImage(function(result) {
-                result.saveToFile(appRoot.nameOfWatchfaceToBeTested + suffix);
-            }, Qt.size(640, 640));
-        }
-
-        height: halfSize.checked ? 320 : 640
-        width: nonSquare.checked ? height * 0.85 : height
-
-        Rectangle {
-            id: frame
-
-            anchors.fill: parent
-            color: "black"
-            focus: true
-            layer.enabled: roundCheckBox.checked
-            Keys.onReturnPressed: watchfaceDisplayFrame.snapshot()
-
-            Image {
-                id: background
-
-                visible: !appRoot.displayAmbient
-                source: "background.jpg"
-                anchors.fill: parent
-            }
-
-            Loader {
-                id: watchfaceLoader
-
-                anchors.fill: parent
-                source: appRoot.nameOfWatchfaceToBeTested 
-                        + "/usr/share/asteroid-launcher/watchfaces/" 
-                        + appRoot.nameOfWatchfaceToBeTested + ".qml"
-            }
-
-            layer.effect: OpacityMask {
-                anchors.fill: parent
-                source: frame
-
-                maskSource: Rectangle {
-                    width: frame.width
-                    height: frame.height
-                    radius: frame.width / 2
-                }
-            }
-        }
-
-        Item {
-            id: use12H
-
-            property bool value: twelveHourCheckBox.checked
-        }
-
-        Item {
-            id: wallClock
-
-            property var time: getDisplayTime()
-
-            function getDisplayTime(statictime) {
-                var displayTime = new Date();
-                if (setStaticTimeCheckBox.checked) {
-                    displayTime.setHours(hoursTumbler.currentIndex, minutesTumbler.currentIndex, secondsTumbler.currentIndex);
-                    displayTime.setMonth(monthsTumbler.currentIndex, daysTumbler.currentIndex + 1);
-                }
-                return displayTime;
-            }
-
-            Timer {
-                interval: 1000
-                running: true
-                repeat: true
-                onTriggered: wallClock.time = wallClock.getDisplayTime()
-            }
-        }
-    }
-
     header: ToolBar {
         ColumnLayout {
             RowLayout {
@@ -143,7 +64,7 @@ ApplicationWindow {
                             roundCheckBox.checked = false;
                             watchfaceDisplayFrame.snapshot(".png");
                         }
-                        
+
                         if (sequencer === 3) {
                             background.source = "background-round.jpg";
                             roundCheckBox.checked = true;
@@ -384,6 +305,85 @@ ApplicationWindow {
 
         background: Rectangle {
             color: "lightblue"
+        }
+    }
+
+    Rectangle {
+        id: watchfaceDisplayFrame
+
+        function snapshot(suffix) {
+            watchfaceDisplayFrame.grabToImage(function(result) {
+                result.saveToFile(appRoot.nameOfWatchfaceToBeTested + suffix);
+            }, Qt.size(640, 640));
+        }
+
+        height: halfSize.checked ? 320 : 640
+        width: nonSquare.checked ? height * 0.85 : height
+
+        Rectangle {
+            id: frame
+
+            anchors.fill: parent
+            color: "black"
+            focus: true
+            layer.enabled: roundCheckBox.checked
+            Keys.onReturnPressed: watchfaceDisplayFrame.snapshot()
+
+            Image {
+                id: background
+
+                visible: !appRoot.displayAmbient
+                source: "background.jpg"
+                anchors.fill: parent
+            }
+
+            Loader {
+                id: watchfaceLoader
+
+                anchors.fill: parent
+                source: appRoot.nameOfWatchfaceToBeTested 
+                        + "/usr/share/asteroid-launcher/watchfaces/" 
+                        + appRoot.nameOfWatchfaceToBeTested + ".qml"
+            }
+
+            layer.effect: OpacityMask {
+                anchors.fill: parent
+                source: frame
+
+                maskSource: Rectangle {
+                    width: frame.width
+                    height: frame.height
+                    radius: frame.width / 2
+                }
+            }
+        }
+
+        Item {
+            id: use12H
+
+            property bool value: twelveHourCheckBox.checked
+        }
+
+        Item {
+            id: wallClock
+
+            property var time: getDisplayTime()
+
+            function getDisplayTime(statictime) {
+                var displayTime = new Date();
+                if (setStaticTimeCheckBox.checked) {
+                    displayTime.setHours(hoursTumbler.currentIndex, minutesTumbler.currentIndex, secondsTumbler.currentIndex);
+                    displayTime.setMonth(monthsTumbler.currentIndex, daysTumbler.currentIndex + 1);
+                }
+                return displayTime;
+            }
+
+            Timer {
+                interval: 1000
+                running: true
+                repeat: true
+                onTriggered: wallClock.time = wallClock.getDisplayTime()
+            }
         }
     }
 }
