@@ -27,7 +27,7 @@ Item {
     id: root
     
     property real arcEnd: wallClock.time.getSeconds() * 6
-    onArcEndChanged: canvas.requestPaint()
+    onArcEndChanged: seconds.requestPaint()
 
     Canvas {
             id: seconds
