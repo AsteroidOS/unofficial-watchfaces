@@ -139,19 +139,19 @@ ApplicationWindow {
                         }
 
                         if (sequencer === 2) {
-                            background.source = "background-round.jpg";
-                            watchfaceDisplayFrame.snapshot("-round.png");
-                        }
-
-                        if (sequencer === 3) {
                             background.source = "background.jpg";
                             roundCheckBox.checked = false;
                             watchfaceDisplayFrame.snapshot(".png");
                         }
+                        
+                        if (sequencer === 3) {
+                            background.source = "background-round.jpg";
+                            roundCheckBox.checked = true;
+                            watchfaceDisplayFrame.snapshot("-round.png");
+                        }
 
                         if (sequencer === 4) {
                             frame.color = "black";
-                            roundCheckBox.checked = true;
                             sequencer = 0;
                             snapshotsTimer.running = false;
                         }
