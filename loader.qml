@@ -15,6 +15,7 @@ ApplicationWindow {
     minimumHeight: 640
 
     RowLayout {
+        spacing: 0
         ToolBar {
             id: controls
             Layout.fillHeight: true
