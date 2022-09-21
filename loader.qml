@@ -97,10 +97,10 @@ ApplicationWindow {
                     }
                 }
 
-                RowLayout {
+                ColumnLayout {
                     Layout.alignment: Qt.AlignCenter
 
-                    ColumnLayout {
+                    RowLayout {
                         Layout.alignment: Qt.AlignCenter
 
                         CheckBox {
@@ -144,7 +144,7 @@ ApplicationWindow {
                         }
                     }
 
-                    ColumnLayout {
+                    RowLayout {
                         Layout.alignment: Qt.AlignCenter
 
                         CheckBox {
@@ -167,99 +167,103 @@ ApplicationWindow {
                         }
                     }
 
-                    Frame {
-                        padding: 0
+                    RowLayout {
+                        Layout.alignment: Qt.AlignHCenter
+                        Frame {
+                            padding: 0
 
-                        Row {
-                            Tumbler {
-                                id: monthsTumbler
+                            Row {
+                                Tumbler {
+                                    id: monthsTumbler
 
-                                enabled: setStaticTimeCheckBox.checked
-                                currentIndex: appRoot.initialStaticTime.getMonth()
-                                model: 12
+                                    enabled: setStaticTimeCheckBox.checked
+                                    currentIndex: appRoot.initialStaticTime.getMonth()
+                                    model: 12
 
-                                WheelHandler {
-                                    property: "currentIndex"
-                                    rotationScale: appRoot.mouseWheelScale
+                                    WheelHandler {
+                                        property: "currentIndex"
+                                        rotationScale: appRoot.mouseWheelScale
+                                    }
+
+                                    delegate: Label {
+                                        text: appRoot.locale.standaloneMonthName(index, Locale.ShortFormat)
+                                        horizontalAlignment: Text.AlignHCenter
+                                        verticalAlignment: Text.AlignVCenter
+                                    }
                                 }
 
-                                delegate: Label {
-                                    text: appRoot.locale.standaloneMonthName(index, Locale.ShortFormat)
-                                    horizontalAlignment: Text.AlignHCenter
-                                    verticalAlignment: Text.AlignVCenter
+                                Tumbler {
+                                    id: daysTumbler
+
+                                    enabled: setStaticTimeCheckBox.checked
+                                    currentIndex: appRoot.initialStaticTime.getDate() - 1
+                                    model: 31
+
+                                    WheelHandler {
+                                        property: "currentIndex"
+                                        rotationScale: appRoot.mouseWheelScale
+                                    }
+
+                                    delegate: Label {
+                                        text: index + 1
+                                        horizontalAlignment: Text.AlignHCenter
+                                        verticalAlignment: Text.AlignVCenter
+                                    }
                                 }
                             }
+                        }
 
-                            Tumbler {
-                                id: daysTumbler
+                        Frame {
+                            padding: 0
 
-                                enabled: setStaticTimeCheckBox.checked
-                                currentIndex: appRoot.initialStaticTime.getDate() - 1
-                                model: 31
+                            Row {
+                                Tumbler {
+                                    id: hoursTumbler
 
-                                WheelHandler {
-                                    property: "currentIndex"
-                                    rotationScale: appRoot.mouseWheelScale
+                                    enabled: setStaticTimeCheckBox.checked
+                                    currentIndex: appRoot.initialStaticTime.getHours()
+                                    model: 24
+
+                                    WheelHandler {
+                                        property: "currentIndex"
+                                        rotationScale: appRoot.mouseWheelScale
+                                    }
                                 }
 
-                                delegate: Label {
-                                    text: index + 1
-                                    horizontalAlignment: Text.AlignHCenter
-                                    verticalAlignment: Text.AlignVCenter
+                                Tumbler {
+                                    id: minutesTumbler
+
+                                    enabled: setStaticTimeCheckBox.checked
+                                    currentIndex: appRoot.initialStaticTime.getMinutes()
+                                    model: 60
+
+                                    WheelHandler {
+                                        property: "currentIndex"
+                                        rotationScale: appRoot.mouseWheelScale
+                                    }
+                                }
+
+                                Tumbler {
+                                    id: secondsTumbler
+
+                                    enabled: setStaticTimeCheckBox.checked
+                                    currentIndex: appRoot.initialStaticTime.getSeconds()
+                                    model: 60
+
+                                    WheelHandler {
+                                        property: "currentIndex"
+                                        rotationScale: appRoot.mouseWheelScale
+                                    }
                                 }
                             }
                         }
                     }
 
-                    Frame {
-                        padding: 0
-
-                        Row {
-                            Tumbler {
-                                id: hoursTumbler
-
-                                enabled: setStaticTimeCheckBox.checked
-                                currentIndex: appRoot.initialStaticTime.getHours()
-                                model: 24
-
-                                WheelHandler {
-                                    property: "currentIndex"
-                                    rotationScale: appRoot.mouseWheelScale
-                                }
-                            }
-
-                            Tumbler {
-                                id: minutesTumbler
-
-                                enabled: setStaticTimeCheckBox.checked
-                                currentIndex: appRoot.initialStaticTime.getMinutes()
-                                model: 60
-
-                                WheelHandler {
-                                    property: "currentIndex"
-                                    rotationScale: appRoot.mouseWheelScale
-                                }
-                            }
-
-                            Tumbler {
-                                id: secondsTumbler
-
-                                enabled: setStaticTimeCheckBox.checked
-                                currentIndex: appRoot.initialStaticTime.getSeconds()
-                                model: 60
-
-                                WheelHandler {
-                                    property: "currentIndex"
-                                    rotationScale: appRoot.mouseWheelScale
-                                }
-                            }
-                        }
-                    }
                 }
 
                 RowLayout {
+                    Layout.alignment: Qt.AlignHCenter
                     Text {
-                        leftPadding: 100
                         text: qsTr("featureSlider")
                     }
 
