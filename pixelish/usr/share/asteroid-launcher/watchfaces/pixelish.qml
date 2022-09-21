@@ -1,6 +1,6 @@
 /*
- * Copyright (C) 2021 - Timo Könnecke <github.com/eLtMosen>
  * Copyright (C) 2022 - Commenter25 <github.com/Commenter25>
+ * Copyright (C) 2021 - Timo Könnecke <github.com/eLtMosen>
  *
  * All rights reserved.
  *
@@ -29,20 +29,6 @@ Item {
 	property real arcEnd: wallClock.time.getSeconds() * 6
 	onArcEndChanged: canvas.requestPaint()
 
-	/* Uncomment this block for smooth seconds 
-	TODO: fix animating looping back to 0 */
-	/*
-	Behavior on arcEnd {
-			id: animationArcEnd
-			enabled: true
-			NumberAnimation {
-					duration: 1000
-					easing.type: Easing.Linear
-			}
-	}
-	*/
-	
-
 	Canvas {
 			id: canvas
 			visible: !displayAmbient
@@ -57,14 +43,13 @@ Item {
 					ctx.reset()
 					ctx.beginPath()
 					ctx.lineCap="round"
-					ctx.arc(x, y, (root.width / 2) - parent.height*0.124 / 2, start, end, false)
+					ctx.arc(x, y, (root.width / 2) - parent.height * 0.124 / 2, start, end, false)
 					ctx.lineWidth = parent.height * 0.03
 					ctx.strokeStyle = "#CCC"
 					ctx.stroke()
 			}
 			layer.enabled: true
 	}
-
 
 	Text {
 			id: colon
@@ -74,14 +59,14 @@ Item {
 			color: "#ffffff"
 			font {
 				pixelSize: root.height * .28
-				family: "Open Sans"
+				family: "Noto Sans"
 			}
-
 			anchors {
 					centerIn: root
 					horizontalCenterOffset: root.width * 0.01
 					verticalCenterOffset: root.width * -0.05
 			}
+
 			text: wallClock.time.toLocaleString(Qt.locale(), ":")
 	}
 
@@ -94,9 +79,8 @@ Item {
 			font {
 					pixelSize: root.height * .25
 					letterSpacing: root.height * .004
-					family: "Open Sans"
+					family: "Noto Sans"
 			}
-
 			anchors {
 					right: colon.left
 					bottom: colon.bottom
@@ -117,9 +101,8 @@ Item {
 		font {
 				pixelSize: root.height * .25
 				letterSpacing: root.height * .004
-				family: "Open Sans"
+				family: "Noto Sans"
 		}
-
 		anchors {
 				left: colon.right
 				bottom: colon.bottom
@@ -137,14 +120,14 @@ Item {
 			font {
 				pixelSize: root.height * .07
 				letterSpacing: root.height * .006
-				family: "Open Sans"
+				family: "Noto Sans"
 			}
-
 			anchors {
 					horizontalCenter: root.horizontalCenter
 					top: colon.bottom
-					topMargin: root.height * -0.15 /* -0.04 for build, -0.15 for qmlscene */
+					topMargin: root.height * -0.04
 			}
+			
 			text: wallClock.time.toLocaleString(Qt.locale(), "ddd, MMM dd").replace(".","")
 	}
 
