@@ -18,30 +18,57 @@ Available options:
 EOF
 }
 
-function pushWatchface {
+function doWatchCommand {
+    local user="$1"
+    local cmd=$2
+    case ${user} in 
+        root)
+            if [ "$ADB" == true ] ; then
+                adb shell "${cmd}"
+            else
+                ssh -p "${WATCHPORT}" -t root@"${WATCHADDR}" ${cmd}
+            fi
+            ;;
+        ceres)
+            if [ "$ADB" == true ] ; then
+                printf -v cmd %q "${cmd}"
+                adb shell "su -l -c ${cmd} ceres"
+            else
+                ssh -p "${WATCHPORT}" -t ceres@"${WATCHADDR}" ${cmd}
+            fi
+            ;;
+        *)
+            echo "Error: unknown watch user ${user}"
+            ;;
+    esac
+}
+
+function setDconf {
+    local dconfsetting="$1"
+    local filename="$2"
+    doWatchCommand "ceres" "dconf write ${dconfsetting} '\"file://${filename}\"'"
+}
+
+function pushFiles {
+    local sourcedir="$1"
+    local destdir="$2"
     if [ "$ADB" = true ] ; then
-        adb push "$opt"/usr/share/* /usr/share/
+        adb push ${sourcedir} "${destdir}"
     else
-        scp -P"${WATCHPORT}" -r "$opt"/usr/share/* root@"${WATCHADDR}":/usr/share/
+        scp -P"${WATCHPORT}" -r ${sourcedir} "root@${WATCHADDR}:${destdir}"
     fi
+}
+
+function pushWatchface {
+    pushFiles "${opt}"'/usr/share/*' "/usr/share/"
 }
 
 function restartCeres {
-    if [ "$ADB" = true ] ; then
-        adb shell systemctl restart user@1000
-    else
-        ssh -p "${WATCHPORT}" root@"${WATCHADDR}" -t "systemctl restart user@1000"
-    fi
+    doWatchCommand "root" "systemctl restart user@1000"
 }
 
 function activateWatchface {
-    printf -v cmd %q "file:///usr/share/asteroid-launcher/watchfaces/${opt::-1}.qml"
-    if [ "$ADB" = true ] ; then
-        printf -v cmd %q "dconf write /desktop/asteroid/watchface \'${cmd}\'"
-        adb shell "su ceres -c ${cmd}"
-    else
-        ssh -p "${WATCHPORT}" -t ceres@"${WATCHADDR}" "dconf write /desktop/asteroid/watchface \"'$cmd'\""
-    fi
+    setDconf "/desktop/asteroid/watchface" "/usr/share/asteroid-launcher/watchfaces/${opt::-1}.qml"
 }
 
 function showCommsOptions {
