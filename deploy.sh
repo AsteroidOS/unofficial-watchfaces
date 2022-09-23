@@ -13,35 +13,70 @@ Available options:
 -a or --adb     uses ADB command to communicate with watch
 -p or --port    specifies a port to use for ssh and scp commands
 -r or --remote  specifies the remote (watch)  name or address for ssh and scp commands
+-w or --wall    push the named picture to the watch as wallpaper
 -q or --qemu    communicates with QEMU emulated watch (same as -r localhost -p 2222 )
 
 EOF
 }
 
-function pushWatchface {
+function doWatchCommand {
+    local user="$1"
+    local cmd=$2
+    case ${user} in 
+        root)
+            if [ "$ADB" == true ] ; then
+                adb shell "${cmd}"
+            else
+                ssh -p "${WATCHPORT}" -t root@"${WATCHADDR}" ${cmd}
+            fi
+            ;;
+        ceres)
+            if [ "$ADB" == true ] ; then
+                printf -v cmd %q "${cmd}"
+                adb shell "su -l -c ${cmd} ceres"
+            else
+                ssh -p "${WATCHPORT}" -t ceres@"${WATCHADDR}" ${cmd}
+            fi
+            ;;
+        *)
+            echo "Error: unknown watch user ${user}"
+            ;;
+    esac
+}
+
+function setDconf {
+    local dconfsetting="$1"
+    local filename="$2"
+    doWatchCommand "ceres" "dconf write ${dconfsetting} '\"file://${filename}\"'"
+}
+
+function pushFiles {
+    local sourcedir="$1"
+    local destdir="$2"
     if [ "$ADB" = true ] ; then
-        adb push "$opt"/usr/share/* /usr/share/
+        adb push ${sourcedir} "${destdir}"
     else
-        scp -P"${WATCHPORT}" -r "$opt"/usr/share/* root@"${WATCHADDR}":/usr/share/
+        scp -P"${WATCHPORT}" -r ${sourcedir} "root@${WATCHADDR}:${destdir}"
     fi
+}
+
+function pushWatchface {
+    pushFiles "${opt}"'/usr/share/*' "/usr/share/"
+}
+
+function pushWallpaper {
+    local wallpaper="$1"
+    local wp_path="/usr/share/asteroid-launcher/wallpapers/full"
+    pushFiles "${wallpaper}" "${wp_path}/${wallpaper}"
+    setDconf "/desktop/asteroid/background-filename" "${wp_path}/${wallpaper}"
 }
 
 function restartCeres {
-    if [ "$ADB" = true ] ; then
-        adb shell systemctl restart user@1000
-    else
-        ssh -p "${WATCHPORT}" root@"${WATCHADDR}" -t "systemctl restart user@1000"
-    fi
+    doWatchCommand "root" "systemctl restart user@1000"
 }
 
 function activateWatchface {
-    printf -v cmd %q "file:///usr/share/asteroid-launcher/watchfaces/${opt::-1}.qml"
-    if [ "$ADB" = true ] ; then
-        printf -v cmd %q "dconf write /desktop/asteroid/watchface \'${cmd}\'"
-        adb shell "su ceres -c ${cmd}"
-    else
-        ssh -p "${WATCHPORT}" -t ceres@"${WATCHADDR}" "dconf write /desktop/asteroid/watchface \"'$cmd'\""
-    fi
+    setDconf "/desktop/asteroid/watchface" "/usr/share/asteroid-launcher/watchfaces/${opt::-1}.qml"
 }
 
 function showCommsOptions {
@@ -64,6 +99,8 @@ QEMUPORT=2222
 QEMUADDR=localhost
 # Assume no ADB unless told otherwise
 ADB=false
+
+wallpaper=""
 
 options=("DEPLOY-ALL" */)
 
@@ -88,6 +125,11 @@ while [[ $# -gt 0 ]] ; do
             shift
             shift
             ;;
+        -w|--wall)
+            wallpaper="$2"
+            shift
+            shift
+            ;;
         -h|--help)
             showHelp
             exit 1
@@ -100,6 +142,9 @@ while [[ $# -gt 0 ]] ; do
 done 
 
 showCommsOptions
+if [ -f "${wallpaper}" ] ; then
+    pushWallpaper "${wallpaper}"
+fi
 
 select opt in "${options[@]}" ; do
     if [ "${opt}" == "DEPLOY-ALL" ] ; then
