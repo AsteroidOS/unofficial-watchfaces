@@ -195,6 +195,7 @@ Item {
             opacity: !displayAmbient ? 1 : 0.3
             anchors.fill: parent
             smooth: true
+            renderStrategy: Canvas.Cooperative
             onPaint: {
                 var ctx = getContext("2d")
                 ctx.reset()
@@ -291,6 +292,7 @@ Item {
             opacity: !displayAmbient ? 1 : 0.3
             anchors.fill: parent
             smooth: true
+            renderStrategy: Canvas.Cooperative
             onPaint: {
                 var ctx = getContext("2d")
                 ctx.reset()
@@ -387,9 +389,10 @@ Item {
             z: 1
             id: batteryArc
             opacity: !displayAmbient ? 1 : 0.3
-            property var hour: 0
+            property int hour: 0
             anchors.fill: parent
             smooth: true
+            renderStrategy: Canvas.Cooperative
             onPaint: {
                 var ctx = getContext("2d")
                 ctx.reset()
