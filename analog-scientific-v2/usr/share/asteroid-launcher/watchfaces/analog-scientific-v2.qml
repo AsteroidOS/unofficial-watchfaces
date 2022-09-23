@@ -539,7 +539,7 @@ Item {
             id: hourSVG
 
             anchors.centerIn: parent
-            source: imgPath + "hour.svg"
+            source: imgPath + (displayAmbient ? "hour-bw.svg" : "hour.svg")
             antialiasing: true
             width: parent.width
             height: parent.height
@@ -577,7 +577,7 @@ Item {
             id: minuteSVG
 
             anchors.centerIn: parent
-            source: imgPath + "minute.svg"
+            source: imgPath + (displayAmbient ? "minute-bw.svg" : "minute.svg")
             antialiasing: true
             width: parent.width
             height: parent.height
