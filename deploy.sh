@@ -13,6 +13,7 @@ Available options:
 -a or --adb     uses ADB command to communicate with watch
 -p or --port    specifies a port to use for ssh and scp commands
 -r or --remote  specifies the remote (watch)  name or address for ssh and scp commands
+-w or --wall    push the named picture to the watch as wallpaper
 -q or --qemu    communicates with QEMU emulated watch (same as -r localhost -p 2222 )
 
 EOF
@@ -63,6 +64,13 @@ function pushWatchface {
     pushFiles "${opt}"'/usr/share/*' "/usr/share/"
 }
 
+function pushWallpaper {
+    local wallpaper="$1"
+    local wp_path="/usr/share/asteroid-launcher/wallpapers/full"
+    pushFiles "${wallpaper}" "${wp_path}/${wallpaper}"
+    setDconf "/desktop/asteroid/background-filename" "${wp_path}/${wallpaper}"
+}
+
 function restartCeres {
     doWatchCommand "root" "systemctl restart user@1000"
 }
@@ -92,6 +100,8 @@ QEMUADDR=localhost
 # Assume no ADB unless told otherwise
 ADB=false
 
+wallpaper=""
+
 options=("DEPLOY-ALL" */)
 
 while [[ $# -gt 0 ]] ; do
@@ -115,6 +125,11 @@ while [[ $# -gt 0 ]] ; do
             shift
             shift
             ;;
+        -w|--wall)
+            wallpaper="$2"
+            shift
+            shift
+            ;;
         -h|--help)
             showHelp
             exit 1
@@ -127,6 +142,9 @@ while [[ $# -gt 0 ]] ; do
 done 
 
 showCommsOptions
+if [ -f "${wallpaper}" ] ; then
+    pushWallpaper "${wallpaper}"
+fi
 
 select opt in "${options[@]}" ; do
     if [ "${opt}" == "DEPLOY-ALL" ] ; then
