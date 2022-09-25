@@ -47,7 +47,7 @@ Item {
     // Element sizes, linewidth and opacity
     property real switchSize: root.width * .1375
     property real boxSize: root.width * .35
-    property real switchPosition: root.width * .27
+    property real switchPosition: root.width * .26
     property real boxPosition: root.width * .25
     property real innerArcLineWidth: root.height * .008
     property real outerArcLineWidth: root.height * .016
@@ -175,6 +175,31 @@ Item {
     }
 
     Repeater {
+            model: 60
+
+            Rectangle {
+                id: minuteStrokes
+
+                property real rotM: (index - 15) / 60
+                property real centerX: root.width / 2 - width / 2
+                property real centerY: root.height / 2 - height / 2
+
+                x: centerX+Math.cos(rotM * 2 * Math.PI) * parent.width * .46
+                y: centerY+Math.sin(rotM * 2 * Math.PI) * parent.width * .46
+                visible: index % 5
+                antialiasing : true
+                color: "#55ffffff"
+                width: parent.width * .005
+                height: parent.height * .018
+                transform: Rotation {
+                    origin.x: width / 2
+                    origin.y: height / 2
+                    angle: (index) * 6
+                }
+            }
+        }
+
+    Repeater {
         // Hour numerals. hourModeSwitch toggles the 12/24hour display.
         model: 12
 
@@ -195,7 +220,6 @@ Item {
             y: centerY + Math.sin(rotM * 2 * Math.PI) * root.width * .46
             color: hourSVG.toggle24h && index === 0 ? customGreen : "white"
             opacity: inactiveContentOpacity
-            visible: !displayAmbient
             text: hourSVG.toggle24h ?
                       index === 0 ? 24 : index * 2 :
                       index === 0 ? 12 : index
@@ -1020,14 +1044,19 @@ Item {
                 }
             }
             // DropShadow depends on import QtGraphicalEffects 1.15
-            layer.enabled: true
-            layer.effect: DropShadow {
-                transparentBorder: true
-                horizontalOffset: 3
-                verticalOffset: 3
-                radius: 8.0
-                samples: 17
-                color: Qt.rgba(0, 0, 0, .1)
+            layer {
+                enabled: true
+                samples: 4
+                smooth: true
+                textureSize: Qt.size(root.width * 2, root.height * 2)
+                effect: DropShadow {
+                    transparentBorder: true
+                    horizontalOffset: 3
+                    verticalOffset: 3
+                    radius: 8.0
+                    samples: 17
+                    color: Qt.rgba(0, 0, 0, .2)
+                }
             }
         }
 
@@ -1054,14 +1083,59 @@ Item {
                 }
             }
 
-            layer.enabled: true
-            layer.effect: DropShadow {
-                transparentBorder: true
-                horizontalOffset: 5
-                verticalOffset: 5
-                radius: 10.0
-                samples: 21
-                color: Qt.rgba(0, 0, 0, .2)
+            layer {
+                enabled: true
+                samples: 4
+                smooth: true
+                textureSize: Qt.size(root.width * 2, root.height * 2)
+                effect: DropShadow {
+                    transparentBorder: true
+                    horizontalOffset: 5
+                    verticalOffset: 5
+                    radius: 10.0
+                    samples: 21
+                    color: Qt.rgba(0, 0, 0, .2)
+                }
+            }
+        }
+
+        Image {
+            id: secondSVG
+
+            anchors.centerIn: parent
+            width: parent.width
+            height: width
+            source: imgPath + "second.svg"
+            antialiasing: true
+            smooth: true
+            visible: !displayAmbient && !dockMode.active
+
+            transform: Rotation {
+                origin.x: parent.width / 2
+                origin.y: parent.height / 2
+                angle: wallClock.time.getSeconds() * 6
+
+                Behavior on angle {
+                    RotationAnimation {
+                        duration: 1000
+                        direction: RotationAnimation.Clockwise
+                    }
+                }
+            }
+
+            layer {
+                enabled: true
+                samples: 4
+                smooth: true
+                textureSize: Qt.size(root.width * 2, root.height * 2)
+                effect: DropShadow {
+                    transparentBorder: true
+                    horizontalOffset: 5
+                    verticalOffset: 5
+                    radius: 10.0
+                    samples: 21
+                    color: Qt.rgba(0, 0, 0, .2)
+                }
             }
         }
     }
