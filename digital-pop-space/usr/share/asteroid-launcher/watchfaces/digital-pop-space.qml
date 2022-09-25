@@ -46,13 +46,13 @@ Item {
 
         anchors {
             centerIn: parent
-            verticalCenterOffset: -parent.height * 0.185
+            verticalCenterOffset: -parent.height * 0.18
         }
         font {
-            pixelSize: parent.height * 0.27
-            family: "StreakerFreaker"
-            styleName: "Bold"
-            letterSpacing: -parent.height * 0.005
+            pixelSize: parent.height * 0.19
+            family: "outrun future"
+            styleName: "Regular"
+            letterSpacing: -parent.height * 0.004
         }
         renderType: Text.NativeRendering
         antialiasing: true
@@ -61,9 +61,9 @@ Item {
         styleColor: "#000"
         text: if (use12H.value) {
                   wallClock.time.toLocaleString(Qt.locale(), "hh ap").slice(0, 2) +
-                  wallClock.time.toLocaleString(Qt.locale(), ":mm")}
+                  wallClock.time.toLocaleString(Qt.locale(), " mm")}
               else
-                  wallClock.time.toLocaleString(Qt.locale(), "HH:mm")
+                  wallClock.time.toLocaleString(Qt.locale(), "HH mm")
         layer.enabled: true
         layer.effect: DropShadow {
             transparentBorder: true
@@ -80,7 +80,7 @@ Item {
 
         anchors {
             centerIn: parent
-            verticalCenterOffset: -parent.height * 0.0034
+            verticalCenterOffset: parent.height * 0.024
         }
         font {
             pixelSize: parent.height * 0.061
@@ -93,7 +93,6 @@ Item {
         style: Text.Sunken
         styleColor: "#000"
         color: "white"
-        opacity: 0.75
         horizontalAlignment: Text.AlignHCenter
         text: wallClock.time.toLocaleString(Qt.locale(), "MMMM ").toUpperCase() +
               wallClock.time.toLocaleString(Qt.locale(), "<b>dd</b>")
@@ -104,10 +103,10 @@ Item {
 
         anchors {
             centerIn: parent
-            verticalCenterOffset: parent.height * 0.046
+            verticalCenterOffset: parent.height * 0.07
         }
         font {
-            pixelSize: parent.height * 0.046
+            pixelSize: parent.height * 0.048
             family: "Baloo Tammudu 2"
             styleName: "Light"
             letterSpacing: -parent.height * 0.0034
@@ -116,7 +115,6 @@ Item {
         styleColor: "#000"
         visible: !displayAmbient
         color: "white"
-        opacity: 0.75
         horizontalAlignment: Text.AlignHCenter
         text: wallClock.time.toLocaleString(Qt.locale(), "dddd ").toUpperCase()
     }
@@ -126,13 +124,13 @@ Item {
 
         anchors {
             centerIn: parent
-            verticalCenterOffset: parent.height * 0.125
+            verticalCenterOffset: parent.height * 0.165
         }
         font {
-            pixelSize: parent.height * 0.19
-            family: "StreakerFreaker"
-            styleName: "Bold"
-            letterSpacing: -parent.height * 0.005
+            pixelSize: parent.height * 0.16
+            family: "outrun future"
+            styleName: "Regular"
+            letterSpacing: -parent.height * 0.002
         }
         color: "#ddffff00"
         style: Text.Sunken
