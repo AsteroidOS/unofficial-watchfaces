@@ -20,16 +20,19 @@ import QtQuick 2.9
 import QtGraphicalEffects 1.15
 
 Item {
+    id: rootitem
+
     Image {
         id: background
 
-        source: "../watchface-img/background-digital-pop-space.svg"
         anchors {
             centerIn: parent
+            verticalCenter: parent.verticalCenter
         }
-        anchors.verticalCenter: parent.verticalCenter
         width: parent.width
         height: parent.height
+        source: "../watchface-img/background-digital-pop-space.svg"
+
         layer.enabled: true
         layer.effect: DropShadow {
             transparentBorder: true
@@ -46,13 +49,13 @@ Item {
 
         anchors {
             centerIn: parent
-            verticalCenterOffset: -parent.height * 0.18
+            verticalCenterOffset: -parent.height * .18
         }
         font {
-            pixelSize: parent.height * 0.19
+            pixelSize: parent.height * .19
             family: "outrun future"
             styleName: "Regular"
-            letterSpacing: -parent.height * 0.004
+            letterSpacing: -parent.height * .004
         }
         renderType: Text.NativeRendering
         antialiasing: true
@@ -80,19 +83,19 @@ Item {
 
         anchors {
             centerIn: parent
-            verticalCenterOffset: parent.height * 0.024
+            verticalCenterOffset: parent.height * .024
         }
         font {
-            pixelSize: parent.height * 0.061
+            pixelSize: parent.height * .061
             family: "Baloo Tammudu 2"
             styleName: "Light"
-            letterSpacing: -parent.height * 0.0034
+            letterSpacing: -parent.height * .0034
         }
-        visible: !displayAmbient
         renderType: Text.NativeRendering
+        antialiasing: true
+        color: "white"
         style: Text.Sunken
         styleColor: "#000"
-        color: "white"
         horizontalAlignment: Text.AlignHCenter
         text: wallClock.time.toLocaleString(Qt.locale(), "MMMM ").toUpperCase() +
               wallClock.time.toLocaleString(Qt.locale(), "<b>dd</b>")
@@ -103,18 +106,19 @@ Item {
 
         anchors {
             centerIn: parent
-            verticalCenterOffset: parent.height * 0.07
+            verticalCenterOffset: parent.height * .07
         }
         font {
-            pixelSize: parent.height * 0.048
+            pixelSize: parent.height * .048
             family: "Baloo Tammudu 2"
             styleName: "Light"
-            letterSpacing: -parent.height * 0.0034
+            letterSpacing: -parent.height * .0034
         }
+        renderType: Text.NativeRendering
+        antialiasing: true
+        color: "white"
         style: Text.Sunken
         styleColor: "#000"
-        visible: !displayAmbient
-        color: "white"
         horizontalAlignment: Text.AlignHCenter
         text: wallClock.time.toLocaleString(Qt.locale(), "dddd ").toUpperCase()
     }
@@ -124,19 +128,22 @@ Item {
 
         anchors {
             centerIn: parent
-            verticalCenterOffset: parent.height * 0.165
+            verticalCenterOffset: parent.height * .165
         }
         font {
-            pixelSize: parent.height * 0.16
+            pixelSize: parent.height * .16
             family: "outrun future"
             styleName: "Regular"
-            letterSpacing: -parent.height * 0.002
+            letterSpacing: -parent.height * .002
         }
+        renderType: Text.NativeRendering
+        antialiasing: true
         color: "#ddffff00"
         style: Text.Sunken
         styleColor: "#000"
         horizontalAlignment: Text.AlignHCenter
         text: wallClock.time.toLocaleString(Qt.locale(), "<b>ap</b>")
+
         layer.enabled: true
         layer.effect: DropShadow {
             transparentBorder: true
@@ -149,14 +156,11 @@ Item {
     }
 
     Image {
-
         id: backgroundWave
-        z: 3
-        source: "../watchface-img/backgroundwave-digital-pop-space.svg"
-        anchors {
-            centerIn: parent
-        }
+
+        anchors.centerIn: parent
         width: parent.width
         height: parent.height
+        source: "../watchface-img/backgroundwave-digital-pop-space.svg"
     }
  }
