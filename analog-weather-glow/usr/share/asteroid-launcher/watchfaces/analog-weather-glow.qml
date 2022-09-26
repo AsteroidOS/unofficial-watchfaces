@@ -57,9 +57,9 @@ Item {
     property real inactiveContentOpacity: !displayAmbient ? .5 : .3
 
     // Color definition
-    property string customRed: "#DB5461" // Indian Red "#FF595E" // Red Salsa
+    property string customRed: "#DB5461" // Indian Red
     property string customBlue: "#1E96FC" // Dodger Blue
-    property string customGreen: "#26C485" // Ocean Green "#5EFC8D" // Spring Green
+    property string customGreen: "#26C485" // Ocean Green
     property string customOrange: "#FFC600" // Mikado Yellow
     property string boxColor: "#E8DCB9" // Dutch White
     property string switchColor: "#A2D6F9" // Uranian Blue
@@ -67,7 +67,7 @@ Item {
     // HRM initialisation. Needs to be declared global since hrmBox and hrmSwitch both need it.
     property int hrmBpm: 0
     property bool hrmSensorActive: false
-    property var hrmUpdated: wallClock.time
+    property var hrmBpmTime: wallClock.time
 
     // Set day to use in the weatherBox to today.
     property int dayNb: 0
@@ -179,10 +179,10 @@ Item {
                 property real centerX: root.width / 2 - width / 2
                 property real centerY: root.height / 2 - height / 2
 
-                x: centerX+Math.cos(rotM * 2 * Math.PI) * parent.width * .46
-                y: centerY+Math.sin(rotM * 2 * Math.PI) * parent.width * .46
+                x: centerX + Math.cos(rotM * 2 * Math.PI) * parent.width * .46
+                y: centerY + Math.sin(rotM * 2 * Math.PI) * parent.width * .46
                 visible: index % 5
-                antialiasing : true
+                antialiasing: true
                 color: "#55ffffff"
                 width: parent.width * .005
                 height: parent.height * .018
@@ -215,9 +215,7 @@ Item {
             y: centerY + Math.sin(rotM * 2 * Math.PI) * root.width * .46
             color: hourSVG.toggle24h && index === 0 ? customGreen : "white"
             opacity: inactiveContentOpacity
-            text: hourSVG.toggle24h ?
-                      index === 0 ? 24 : index * 2 :
-                      index === 0 ? 12 : index
+            text: (index === 0 ? 12 : index) * (hourSVG.toggle24h ? 2 : 1)
 
             transform: Rotation {
                 origin.x: width / 2
@@ -261,10 +259,7 @@ Item {
 
         MouseArea {
             anchors.fill: hourModeSwitch
-            onClicked:
-                hourSVG.toggle24h ?
-                    hourSVG.toggle24h = false :
-                    hourSVG.toggle24h = true
+            onClicked: hourSVG.toggle24h = !hourSVG.toggle24h
         }
     }
 
@@ -647,7 +642,7 @@ Item {
             active: !displayAmbient && hrmSensorActive
             onReadingChanged: {
                 root.hrmBpm = reading.bpm;
-                root.hrmUpdated = wallClock.time
+                root.hrmBpmTime = wallClock.time
                 hrmArc.requestPaint()
             }
         }
@@ -734,7 +729,7 @@ Item {
         Text {
             id: updateDisplay
 
-            property bool bpmIsRecent: parseInt((wallClock.time - hrmUpdated) / 60000) === 0
+            property bool bpmIsRecent: parseInt((wallClock.time - hrmBpmTime) / 60000) === 0
 
             anchors {
                 centerIn: parent
@@ -749,7 +744,7 @@ Item {
             opacity: inactiveContentOpacity
             text: bpmIsRecent ?
                       "NOW" :
-                      parseInt((wallClock.time - hrmUpdated) / 60000) + "m ago"
+                      parseInt((wallClock.time - hrmBpmTime) / 60000) + "m ago"
         }
     }
 
