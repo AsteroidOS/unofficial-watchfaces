@@ -44,7 +44,7 @@ Item {
     // Radian per degree used by all canvas arcs
     property real rad: .01745
 
-    // Element sizes, linewidth and opacity
+    // Element sizes, positioning, linewidth and opacity
     property real switchSize: root.width * .1375
     property real boxSize: root.width * .35
     property real switchPosition: root.width * .26
@@ -98,10 +98,6 @@ Item {
         id: batteryChargeState
     }
 
-    MceCableState {
-        id: mceCableState
-    }
-
     MceBatteryLevel {
         id: batteryChargePercentage
     }
@@ -109,8 +105,7 @@ Item {
     Item {
         id: dockMode
 
-        readonly property bool active: mceCableState.connected //ready || (nightstandEnabled.value && holdoff)
-        //readonly property bool ready: nightstandEnabled.value && mceCableState.connected
+        readonly property bool active: nightstand
         property int batteryPercentChanged: batteryChargePercentage.percent
 
         anchors.fill: parent
@@ -274,7 +269,7 @@ Item {
     }
 
     Item {
-        // Wrapper box for digital time related objects. Hour, minute and AP following units setting.
+        // Wrapper for digital time related objects. Hour, minute and AP following units setting.
         id: digitalBox
 
         anchors {
@@ -414,7 +409,7 @@ Item {
     }
 
     Item {
-        // Wrapper box for weather related elements. Contains a weatherIcon and maxTemp display.
+        // Wrapper for weather related elements. Contains a weatherIcon and maxTemp display.
         // "No weather data" text is shown when no data is available.
         // ConfigurationValue depends on Nemo.Configuration 1.0
         id: weatherBox
@@ -542,7 +537,7 @@ Item {
     }
 
     Item {
-        // Wrapper box for date related objects, day name, day number and month short code.
+        // Wrapper for date related objects, day name, day number and month short code.
         id: dayBox
 
         anchors {
@@ -644,7 +639,7 @@ Item {
     }
 
     Item {
-        // Wrapper box for heart rate monitor related elements.
+        // Wrapper for heart rate monitor related elements.
         // HrmSensor depends on import QtSensors 5.11
         id: hrmBox
 
@@ -902,7 +897,7 @@ Item {
     }
 
     Item {
-        // Wrapper box for the battery related elements
+        // Wrapper for the battery related elements
         // MceBatteryLevel and MceBatteryState depend on Nemo.Mce 1.0
         id: batteryBox
 
@@ -1010,7 +1005,7 @@ Item {
     }
 
     Item {
-        // Wrapper box for the analog hands
+        // Wrapper for the analog hands
         id: handBox
 
         width: root.width
@@ -1043,12 +1038,12 @@ Item {
                     }
                 }
             }
-            // DropShadow depends on import QtGraphicalEffects 1.15
             layer {
                 enabled: true
                 samples: 4
                 smooth: true
                 textureSize: Qt.size(root.width * 2, root.height * 2)
+                // DropShadow depends on import QtGraphicalEffects 1.15
                 effect: DropShadow {
                     transparentBorder: true
                     horizontalOffset: 3
