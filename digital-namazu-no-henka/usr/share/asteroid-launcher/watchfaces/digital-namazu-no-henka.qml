@@ -31,6 +31,8 @@ Item {
     property string imgPath: "../watchfaces-img/digital-namazu-no-henka-"
 
     Item {
+        id: digitalTime
+
         width: parent.width
         height: width
 
@@ -88,6 +90,69 @@ Item {
             smooth: true
             sourceSize: Qt.size(parent.width*0.25, parent.height*0.25)
             source: imgPath + wallClock.time.toLocaleString(Qt.locale(), "mm").slice(1, 2) + ".svg"
+        }
+    }
+
+    Item {
+        id: digitalDate
+
+        width: parent.width
+        height: width
+
+        Image {
+            id: day1
+
+            anchors {
+                right: parent.horizontalCenter
+                rightMargin: parent.height * 0.288
+                top: parent.verticalCenter
+                topMargin: parent.height * 0.0606
+            }
+            smooth: true
+            sourceSize: Qt.size(parent.width*0.076, parent.height*0.076)
+            source: imgPath + wallClock.time.toLocaleString(Qt.locale(), "MM").slice(0, 1) + "-small.svg"
+        }
+
+        Image {
+            id: day2
+
+            anchors {
+                right: parent.horizontalCenter
+                rightMargin: parent.height * 0.229
+                top: parent.verticalCenter
+                topMargin: parent.height * 0.0606
+            }
+            smooth: true
+            sourceSize: Qt.size(parent.width*0.076, parent.height*0.076)
+            source: imgPath + wallClock.time.toLocaleString(Qt.locale(), "MM").slice(1, 2) + "-small.svg"
+        }
+
+        Image {
+            id: month1
+
+            anchors {
+                left: parent.horizontalCenter
+                leftMargin: -parent.height * 0.187
+                top: parent.verticalCenter
+                topMargin: parent.height * 0.0606
+            }
+            smooth: true
+            sourceSize: Qt.size(parent.width*0.076, parent.height*0.076)
+            source: imgPath + wallClock.time.toLocaleString(Qt.locale(), "dd").slice(0, 1) + "-small.svg"
+        }
+
+        Image {
+            id: month2
+
+            anchors {
+                left: parent.horizontalCenter
+                leftMargin: -parent.height * 0.127
+                top: parent.verticalCenter
+                topMargin: parent.height * 0.0606
+            }
+            smooth: true
+            sourceSize: Qt.size(parent.width*0.076, parent.height*0.076)
+            source: imgPath + wallClock.time.toLocaleString(Qt.locale(), "dd").slice(1, 2) + "-small.svg"
         }
     }
 }
