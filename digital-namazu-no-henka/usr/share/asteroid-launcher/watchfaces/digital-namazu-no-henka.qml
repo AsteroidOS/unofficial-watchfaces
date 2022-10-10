@@ -26,96 +26,68 @@ import QtQuick 2.9
 import QtGraphicalEffects 1.12
 
 Item {
-    property int length: width > height ? height : width
-    property string imgPath: "../watchfaces-img/digital-namazu-no-henka-"
-
     id: root
 
+    property string imgPath: "../watchfaces-img/digital-namazu-no-henka-"
+
     Item {
-        x: (root.width != length ? root.width/2 - length/2 : 0)
-        y: (root.height != length ? root.height/2 - length/2 : 0)
-        width: length
-        height: length
-
-        Rectangle {
-            id: greenColor
-            anchors.fill: parent
-            smooth: true
-            visible: false
-            color: "#b0e60d"
-        }
-        Rectangle {
-            id: whiteColor
-            anchors.fill: parent
-            smooth: true
-            visible: false
-            color: "#ffffff"
-        }
+        width: parent.width
+        height: width
 
         Image {
-            id: topLeft
-            visible: false
+            id: hour1
+
+            anchors {
+                right: parent.horizontalCenter
+                rightMargin: -parent.height * 0.01
+                bottom: parent.verticalCenter
+                bottomMargin: -parent.height * 0.02
+            }
             smooth: true
-            fillMode: Image.PreserveAspectFit
-            x: parseInt(parent.width*0.135)
-            y: parseInt(parent.height*0.045)
-            sourceSize: Qt.size(parent.width/2 - parent.width*0.15, parent.height/2 - parent.height*0.15)
-            source: imgPath + wallClock.time.toLocaleString(Qt.locale(), "HH").slice(0, 1) + ".svg"
-        }
-        Image {
-            id: topRight
-            visible: false
-            smooth: true
-            fillMode: Image.PreserveAspectFit
-            x: parseInt(parent.width/2 + parent.width*0.03)
-            y: parseInt(parent.height*0.045)
-            sourceSize: Qt.size(parent.width/2 - parent.width*0.15, parent.height/2 - parent.height*0.15)
+            sourceSize: Qt.size(parent.width*0.25, parent.height*0.25)
             source: imgPath + wallClock.time.toLocaleString(Qt.locale(), "HH").slice(1, 2) + ".svg"
         }
+
         Image {
-            id: bottomLeft
-            visible: false
+            id: hour2
+
+            anchors {
+                right: parent.horizontalCenter
+                rightMargin: (-parent.height * 0.01) + (parent.height * 0.165)
+                bottom: parent.verticalCenter
+                bottomMargin: -parent.height * 0.02
+            }
             smooth: true
-            fillMode: Image.PreserveAspectFit
-            x: parseInt(parent.width*0.135)
-            y: parseInt(parent.height/2 + parent.height*0.025)
-            sourceSize: Qt.size(parent.width/2 - parent.width*0.15, parent.height/2 - parent.height*0.15)
-            source: imgPath + wallClock.time.toLocaleString(Qt.locale(), "mm").slice(0, 1) + ".svg"
-        }
-        Image {
-            id: bottomRight
-            visible: false
-            smooth: true
-            fillMode: Image.PreserveAspectFit
-            x: parseInt(parent.width/2 + parent.width*0.03)
-            y: parseInt(parent.height/2 + parent.height*0.025)
-            sourceSize: Qt.size(parent.width/2 - parent.width*0.15, parent.height/2 - parent.height*0.15)
-            source: imgPath + wallClock.time.toLocaleString(Qt.locale(), "mm").slice(1, 2) + ".svg"
+            sourceSize: Qt.size(parent.width*0.25, parent.height*0.25)
+            source: imgPath + wallClock.time.toLocaleString(Qt.locale(), "HH").slice(0, 1) + ".svg"
         }
 
-        OpacityMask {
-            invert: false
-            anchors.fill: topLeft
-            source: greenColor
-            maskSource: topLeft
+        Image {
+            id: minute1
+
+            anchors {
+                left: parent.horizontalCenter
+                leftMargin: (parent.height * 0.155) + (-parent.height * 0.165)
+                bottom: parent.verticalCenter
+                bottomMargin: -parent.height * 0.02
+            }
+            smooth: true
+            sourceSize: Qt.size(parent.width*0.25, parent.height*0.25)
+            source: imgPath + wallClock.time.toLocaleString(Qt.locale(), "mm").slice(0, 1) + ".svg"
         }
-        OpacityMask {
-            invert: false
-            anchors.fill: topRight
-            source: greenColor
-            maskSource: topRight
-        }
-        OpacityMask {
-            invert: false
-            anchors.fill: bottomLeft
-            source: whiteColor
-            maskSource: bottomLeft
-        }
-        OpacityMask {
-            invert: false
-            anchors.fill: bottomRight
-            source: whiteColor
-            maskSource: bottomRight
+
+        Image {
+            id: minute2
+
+            anchors {
+                left: parent.horizontalCenter
+                leftMargin: parent.height * 0.157
+                bottom: parent.verticalCenter
+                bottomMargin: -parent.height * 0.02
+            }
+            smooth: true
+            sourceSize: Qt.size(parent.width*0.25, parent.height*0.25)
+            source: imgPath + wallClock.time.toLocaleString(Qt.locale(), "mm").slice(1, 2) + ".svg"
         }
     }
 }
