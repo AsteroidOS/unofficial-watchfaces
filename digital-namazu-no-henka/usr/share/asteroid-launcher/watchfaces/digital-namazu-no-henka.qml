@@ -1,6 +1,6 @@
 /*
- * Copyright (C) 2021 - Darrel Griët <dgriet@gmail.com>
- *               2021 - Timo Könnecke <github.com/eLtMosen>
+ * Copyright (C) 2022 - Timo Könnecke <github.com/eLtMosen>
+ *               2021 - Darrel Griët <dgriet@gmail.com>
  *               2016 - Sylvia van Os <iamsylvie@openmailbox.org>
  *               2015 - Florent Revest <revestflo@gmail.com>
  *               2012 - Vasiliy Sorokin <sorokin.vasiliy@gmail.com>
@@ -22,19 +22,27 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-import QtQuick 2.9
-import QtGraphicalEffects 1.12
+import QtQuick 2.15
+import QtGraphicalEffects 1.15
 
 Item {
     id: root
 
     property string imgPath: "../watchfaces-img/digital-namazu-no-henka-"
+    property var largeNumeralSize: Qt.size(parent.width * .25, parent.height * .25)
+    property var smallNumeralSize: Qt.size(parent.width * .076, parent.height * .076)
+    property real largeNumeralOffset: -parent.height * .02
+    property real smallNumeralOffset: parent.height * 0.0606
+
+    Item {
+          id: batteryChargePercentage
+          property real value: (featureSlider.value * 100).toFixed(0)
+    }
 
     Item {
         id: digitalTime
 
-        width: parent.width
-        height: width
+        anchors.fill: parent
 
         Image {
             id: hour1
@@ -43,10 +51,10 @@ Item {
                 right: parent.horizontalCenter
                 rightMargin: -parent.height * 0.01
                 bottom: parent.verticalCenter
-                bottomMargin: -parent.height * 0.02
+                bottomMargin: largeNumeralOffset
             }
             smooth: true
-            sourceSize: Qt.size(parent.width*0.25, parent.height*0.25)
+            sourceSize: largeNumeralSize
             source: imgPath + wallClock.time.toLocaleString(Qt.locale(), "HH").slice(1, 2) + ".svg"
         }
 
@@ -57,11 +65,24 @@ Item {
                 right: parent.horizontalCenter
                 rightMargin: (-parent.height * 0.01) + (parent.height * 0.165)
                 bottom: parent.verticalCenter
-                bottomMargin: -parent.height * 0.02
+                bottomMargin: largeNumeralOffset
             }
             smooth: true
-            sourceSize: Qt.size(parent.width*0.25, parent.height*0.25)
+            sourceSize: largeNumeralSize
             source: imgPath + wallClock.time.toLocaleString(Qt.locale(), "HH").slice(0, 1) + ".svg"
+        }
+
+        Image {
+            id: colon
+
+            anchors {
+                horizontalCenter: parent.horizontalCenter
+                bottom: parent.verticalCenter
+                bottomMargin: largeNumeralOffset
+            }
+            smooth: true
+            sourceSize: largeNumeralSize
+            source: imgPath + "colon.svg"
         }
 
         Image {
@@ -71,10 +92,10 @@ Item {
                 left: parent.horizontalCenter
                 leftMargin: (parent.height * 0.155) + (-parent.height * 0.165)
                 bottom: parent.verticalCenter
-                bottomMargin: -parent.height * 0.02
+                bottomMargin: largeNumeralOffset
             }
             smooth: true
-            sourceSize: Qt.size(parent.width*0.25, parent.height*0.25)
+            sourceSize: largeNumeralSize
             source: imgPath + wallClock.time.toLocaleString(Qt.locale(), "mm").slice(0, 1) + ".svg"
         }
 
@@ -85,10 +106,10 @@ Item {
                 left: parent.horizontalCenter
                 leftMargin: parent.height * 0.157
                 bottom: parent.verticalCenter
-                bottomMargin: -parent.height * 0.02
+                bottomMargin: largeNumeralOffset
             }
             smooth: true
-            sourceSize: Qt.size(parent.width*0.25, parent.height*0.25)
+            sourceSize: largeNumeralSize
             source: imgPath + wallClock.time.toLocaleString(Qt.locale(), "mm").slice(1, 2) + ".svg"
         }
     }
@@ -96,8 +117,7 @@ Item {
     Item {
         id: digitalDate
 
-        width: parent.width
-        height: width
+        anchors.fill: parent
 
         Image {
             id: day1
@@ -106,10 +126,10 @@ Item {
                 right: parent.horizontalCenter
                 rightMargin: parent.height * 0.288
                 top: parent.verticalCenter
-                topMargin: parent.height * 0.0606
+                topMargin: smallNumeralOffset
             }
             smooth: true
-            sourceSize: Qt.size(parent.width*0.076, parent.height*0.076)
+            sourceSize: smallNumeralSize
             source: imgPath + wallClock.time.toLocaleString(Qt.locale(), "MM").slice(0, 1) + "-small.svg"
         }
 
@@ -120,11 +140,25 @@ Item {
                 right: parent.horizontalCenter
                 rightMargin: parent.height * 0.229
                 top: parent.verticalCenter
-                topMargin: parent.height * 0.0606
+                topMargin: smallNumeralOffset
             }
             smooth: true
-            sourceSize: Qt.size(parent.width*0.076, parent.height*0.076)
+            sourceSize: smallNumeralSize
             source: imgPath + wallClock.time.toLocaleString(Qt.locale(), "MM").slice(1, 2) + "-small.svg"
+        }
+
+        Image {
+            id: hyphen
+
+            anchors {
+                right: parent.horizontalCenter
+                rightMargin: parent.height * 0.17
+                top: parent.verticalCenter
+                topMargin: smallNumeralOffset
+            }
+            smooth: true
+            sourceSize: smallNumeralSize
+            source: imgPath + "hyphen-small.svg"
         }
 
         Image {
@@ -134,10 +168,10 @@ Item {
                 left: parent.horizontalCenter
                 leftMargin: -parent.height * 0.187
                 top: parent.verticalCenter
-                topMargin: parent.height * 0.0606
+                topMargin: smallNumeralOffset
             }
             smooth: true
-            sourceSize: Qt.size(parent.width*0.076, parent.height*0.076)
+            sourceSize: smallNumeralSize
             source: imgPath + wallClock.time.toLocaleString(Qt.locale(), "dd").slice(0, 1) + "-small.svg"
         }
 
@@ -148,10 +182,10 @@ Item {
                 left: parent.horizontalCenter
                 leftMargin: -parent.height * 0.127
                 top: parent.verticalCenter
-                topMargin: parent.height * 0.0606
+                topMargin: smallNumeralOffset
             }
             smooth: true
-            sourceSize: Qt.size(parent.width*0.076, parent.height*0.076)
+            sourceSize: smallNumeralSize
             source: imgPath + wallClock.time.toLocaleString(Qt.locale(), "dd").slice(1, 2) + "-small.svg"
         }
     }
