@@ -40,6 +40,12 @@ Item {
     property string month: wallClock.time.toLocaleString(Qt.locale(), "MM")
     property string day: wallClock.time.toLocaleString(Qt.locale(), "dd")
 
+    function pad(num, size) {
+        num = num.toString();
+        while (num.length < size) num = "0" + num;
+        return num;
+    }
+
     Item {
           id: batteryChargePercentage
           property real value: (featureSlider.value * 100).toFixed(0)
@@ -197,46 +203,51 @@ Item {
     }
 
     Item {
-        id: batteryDisplay
+        id: batteryDigits
+
+        property string batteryChargeString: pad((batteryChargePercentage.value), 3)
 
         anchors.fill: parent
 
-        layer {
-            enabled: true
-            samples: 4
+        Image {
+            id: batDigit1
+
+            anchors {
+                right: parent.horizontalCenter
+                rightMargin: parent.height * 0.021
+                top: parent.verticalCenter
+                topMargin: parent.height * 0.3
+            }
             smooth: true
-            textureSize: Qt.size(root.width * 2, root.height * 2)
+            sourceSize: smallNumeralSize
+            source: imgPath + batteryDigits.batteryChargeString.slice(0, 1) + "-small.svg"
         }
 
-        Shape {
-            id: chargeArc
+        Image {
+            id: batDigit2
 
-            property real angle: -batteryChargePercentage.value * 360 / 860
-            // radius of arc is scalefactor * height or width
-            property real arcStrokeWidth: 0.026
-            property real scalefactor: 0.456 - (arcStrokeWidth / 2)
-
-            anchors.fill: parent
-
-            ShapePath {
-                fillColor: "transparent"
-                strokeColor: "blue"
-                strokeWidth: parent.height * chargeArc.arcStrokeWidth
-                capStyle: ShapePath.FlatCap
-                joinStyle: ShapePath.MiterJoin
-                startX: parent.width / 2
-                startY: parent.height * ( 0.5 - chargeArc.scalefactor)
-
-                PathAngleArc {
-                    centerX: parent.width / 2
-                    centerY: parent.height / 2
-                    radiusX: chargeArc.scalefactor * parent.width
-                    radiusY: chargeArc.scalefactor * parent.height
-                    startAngle: -249
-                    sweepAngle: chargeArc.angle
-                    moveToStart: true
-                }
+            anchors {
+                horizontalCenter: parent.horizontalCenter
+                top: parent.verticalCenter
+                topMargin: parent.height * 0.3
             }
+            smooth: true
+            sourceSize: smallNumeralSize
+            source: imgPath + batteryDigits.batteryChargeString.slice(1, 2) + "-small.svg"
+        }
+
+        Image {
+            id: batDigit3
+
+            anchors {
+                left: parent.horizontalCenter
+                leftMargin: parent.height * 0.021
+                top: parent.verticalCenter
+                topMargin: parent.height * 0.3
+            }
+            smooth: true
+            sourceSize: smallNumeralSize
+            source: imgPath + batteryDigits.batteryChargeString.slice(2, 3) + "-small.svg"
         }
     }
 
@@ -257,10 +268,10 @@ Item {
 
             property real inputValue: batteryChargePercentage.value / 100
             property int segmentAmount: 5
-            property int start: -90
+            property int start: -159
             property int gap: 2
-            property int endFromStart: 90
-            property bool clockwise: true
+            property int endFromStart: 44
+            property bool clockwise: false
             property real arcStrokeWidth: 0.026
             property real scalefactor: 0.456 - (arcStrokeWidth / 2)
 
@@ -269,7 +280,7 @@ Item {
             Shape {
                 id: segment
 
-                visible: ((index/segmentedArc.segmentAmount) < segmentedArc.inputValue)
+                visible: index === 0 ? true : (index/segmentedArc.segmentAmount) < segmentedArc.inputValue
 
                 ShapePath {
                     fillColor: "transparent"
@@ -285,14 +296,23 @@ Item {
                         centerY: parent.height / 2
                         radiusX: segmentedArc.scalefactor * parent.width
                         radiusY: segmentedArc.scalefactor * parent.height
-                        startAngle: -90 + (index * (sweepAngle + segmentedArc.gap)) + segmentedArc.start
+                        startAngle: -90 + index * (sweepAngle + (segmentedArc.clockwise ? +segmentedArc.gap : -segmentedArc.gap)) + segmentedArc.start
                         sweepAngle: segmentedArc.clockwise ? (segmentedArc.endFromStart / segmentedArc.segmentAmount) - segmentedArc.gap :
-                                                             -(segmentedArc.endFromStart / segmentedArc.segmentAmount) - segmentedArc.gap
-                        //(segmentedArc.clockwise ? segmentedArc.inputValue : -segmentedArc.inputValue) * (segmentedArc.endFromStart)
+                                                             -(segmentedArc.endFromStart / segmentedArc.segmentAmount) + segmentedArc.gap
                         moveToStart: true
                     }
                 }
             }
         }
+    }
+
+    layer.enabled: true
+    layer.effect: DropShadow {
+        transparentBorder: true
+        horizontalOffset: 0
+        verticalOffset: 0
+        radius: 8.0
+        samples: 17
+        color: Qt.rgba(0, 0, 0, .7)
     }
 }
