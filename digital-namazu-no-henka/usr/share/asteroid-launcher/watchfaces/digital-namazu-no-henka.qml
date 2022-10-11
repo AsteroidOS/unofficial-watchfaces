@@ -24,6 +24,8 @@
 
 import QtQuick 2.15
 import QtGraphicalEffects 1.15
+import QtQuick.Shapes 1.15
+
 
 Item {
     id: root
@@ -33,6 +35,10 @@ Item {
     property var smallNumeralSize: Qt.size(parent.width * .076, parent.height * .076)
     property real largeNumeralOffset: -parent.height * .02
     property real smallNumeralOffset: parent.height * 0.0606
+    property string hour: wallClock.time.toLocaleString(Qt.locale(), "HH")
+    property string minute: wallClock.time.toLocaleString(Qt.locale(), "mm")
+    property string month: wallClock.time.toLocaleString(Qt.locale(), "MM")
+    property string day: wallClock.time.toLocaleString(Qt.locale(), "dd")
 
     Item {
           id: batteryChargePercentage
@@ -55,7 +61,7 @@ Item {
             }
             smooth: true
             sourceSize: largeNumeralSize
-            source: imgPath + wallClock.time.toLocaleString(Qt.locale(), "HH").slice(1, 2) + ".svg"
+            source: imgPath + hour.slice(1, 2) + ".svg"
         }
 
         Image {
@@ -69,7 +75,7 @@ Item {
             }
             smooth: true
             sourceSize: largeNumeralSize
-            source: imgPath + wallClock.time.toLocaleString(Qt.locale(), "HH").slice(0, 1) + ".svg"
+            source: imgPath + hour.slice(0, 1) + ".svg"
         }
 
         Image {
@@ -96,7 +102,7 @@ Item {
             }
             smooth: true
             sourceSize: largeNumeralSize
-            source: imgPath + wallClock.time.toLocaleString(Qt.locale(), "mm").slice(0, 1) + ".svg"
+            source: imgPath + minute.slice(0, 1) + ".svg"
         }
 
         Image {
@@ -110,7 +116,7 @@ Item {
             }
             smooth: true
             sourceSize: largeNumeralSize
-            source: imgPath + wallClock.time.toLocaleString(Qt.locale(), "mm").slice(1, 2) + ".svg"
+            source: imgPath + minute.slice(1, 2) + ".svg"
         }
     }
 
@@ -130,7 +136,7 @@ Item {
             }
             smooth: true
             sourceSize: smallNumeralSize
-            source: imgPath + wallClock.time.toLocaleString(Qt.locale(), "MM").slice(0, 1) + "-small.svg"
+            source: imgPath + month.slice(0, 1) + "-small.svg"
         }
 
         Image {
@@ -144,7 +150,7 @@ Item {
             }
             smooth: true
             sourceSize: smallNumeralSize
-            source: imgPath + wallClock.time.toLocaleString(Qt.locale(), "MM").slice(1, 2) + "-small.svg"
+            source: imgPath + month.slice(1, 2) + "-small.svg"
         }
 
         Image {
@@ -172,7 +178,7 @@ Item {
             }
             smooth: true
             sourceSize: smallNumeralSize
-            source: imgPath + wallClock.time.toLocaleString(Qt.locale(), "dd").slice(0, 1) + "-small.svg"
+            source: imgPath + day.slice(0, 1) + "-small.svg"
         }
 
         Image {
@@ -186,7 +192,107 @@ Item {
             }
             smooth: true
             sourceSize: smallNumeralSize
-            source: imgPath + wallClock.time.toLocaleString(Qt.locale(), "dd").slice(1, 2) + "-small.svg"
+            source: imgPath + day.slice(1, 2) + "-small.svg"
+        }
+    }
+
+    Item {
+        id: batteryDisplay
+
+        anchors.fill: parent
+
+        layer {
+            enabled: true
+            samples: 4
+            smooth: true
+            textureSize: Qt.size(root.width * 2, root.height * 2)
+        }
+
+        Shape {
+            id: chargeArc
+
+            property real angle: -batteryChargePercentage.value * 360 / 860
+            // radius of arc is scalefactor * height or width
+            property real arcStrokeWidth: 0.026
+            property real scalefactor: 0.456 - (arcStrokeWidth / 2)
+
+            anchors.fill: parent
+
+            ShapePath {
+                fillColor: "transparent"
+                strokeColor: "blue"
+                strokeWidth: parent.height * chargeArc.arcStrokeWidth
+                capStyle: ShapePath.FlatCap
+                joinStyle: ShapePath.MiterJoin
+                startX: parent.width / 2
+                startY: parent.height * ( 0.5 - chargeArc.scalefactor)
+
+                PathAngleArc {
+                    centerX: parent.width / 2
+                    centerY: parent.height / 2
+                    radiusX: chargeArc.scalefactor * parent.width
+                    radiusY: chargeArc.scalefactor * parent.height
+                    startAngle: -249
+                    sweepAngle: chargeArc.angle
+                    moveToStart: true
+                }
+            }
+        }
+    }
+
+    Item {
+        id: batterySegments
+
+        anchors.fill: parent
+
+        layer {
+            enabled: true
+            samples: 4
+            smooth: true
+            textureSize: Qt.size(root.width * 2, root.height * 2)
+        }
+
+        Repeater {
+            id: segmentedArc
+
+            property real inputValue: batteryChargePercentage.value / 100
+            property int segmentAmount: 5
+            property int start: -90
+            property int gap: 2
+            property int endFromStart: 90
+            property bool clockwise: true
+            property real arcStrokeWidth: 0.026
+            property real scalefactor: 0.456 - (arcStrokeWidth / 2)
+
+            model: segmentAmount
+
+            Shape {
+                id: segment
+
+                visible: ((index/segmentedArc.segmentAmount) < segmentedArc.inputValue)
+
+                ShapePath {
+                    fillColor: "transparent"
+                    strokeColor: "green"
+                    strokeWidth: parent.height * segmentedArc.arcStrokeWidth
+                    capStyle: ShapePath.FlatCap
+                    joinStyle: ShapePath.MiterJoin
+                    startX: parent.width / 2
+                    startY: parent.height * ( 0.5 - segmentedArc.scalefactor)
+
+                    PathAngleArc {
+                        centerX: parent.width / 2
+                        centerY: parent.height / 2
+                        radiusX: segmentedArc.scalefactor * parent.width
+                        radiusY: segmentedArc.scalefactor * parent.height
+                        startAngle: -90 + (index * (sweepAngle + segmentedArc.gap)) + segmentedArc.start
+                        sweepAngle: segmentedArc.clockwise ? (segmentedArc.endFromStart / segmentedArc.segmentAmount) - segmentedArc.gap :
+                                                             -(segmentedArc.endFromStart / segmentedArc.segmentAmount) - segmentedArc.gap
+                        //(segmentedArc.clockwise ? segmentedArc.inputValue : -segmentedArc.inputValue) * (segmentedArc.endFromStart)
+                        moveToStart: true
+                    }
+                }
+            }
         }
     }
 }
