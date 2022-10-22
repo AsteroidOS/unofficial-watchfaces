@@ -311,8 +311,8 @@ Item {
         transparentBorder: true
         horizontalOffset: 0
         verticalOffset: 0
-        radius: 8.0
-        samples: 17
-        color: Qt.rgba(0, 0, 0, .7)
+        radius: 10.0
+        samples: 21
+        color: Qt.rgba(0, 0, 0, .75)
     }
 }
