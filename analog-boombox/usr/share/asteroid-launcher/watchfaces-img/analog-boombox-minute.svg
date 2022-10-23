@@ -23,9 +23,9 @@
      inkscape:deskcolor="#d1d1d1"
      showgrid="true"
      showguides="true"
-     inkscape:zoom="1"
-     inkscape:cx="56"
-     inkscape:cy="213.5"
+     inkscape:zoom="2.5838177"
+     inkscape:cx="467.13822"
+     inkscape:cy="201.05908"
      inkscape:window-width="1920"
      inkscape:window-height="1003"
      inkscape:window-x="0"
@@ -217,9 +217,9 @@
   </defs>
   <path
      id="path420"
-     style="fill:#ff9955;stroke-width:0.352779;stroke-linecap:square;stroke-linejoin:bevel"
-     d="m 132.29131,7.93749 c -11.69007,-9.1e-6 -21.16677,9.476686 -21.16675,21.16676 l 2.2e-4,103.18714 c 2e-5,11.69006 9.47669,21.16675 21.16676,21.16675 11.69006,0 21.16679,-9.47669 21.16676,-21.16675 l -2.3e-4,-103.18714 c -3e-5,-11.690074 -9.4767,-21.1667691 -21.16676,-21.16676 z"
-     inkscape:transform-center-x="0.0014659947"
-     inkscape:transform-center-y="-60.162371"
+     style="fill:#f9b9f2;stroke-width:0.396875;stroke-linecap:square;stroke-linejoin:bevel;fill-opacity:1"
+     d="m 132.2915,10.58332 c -13.15129,-10e-6 -23.81252,10.661242 -23.81253,23.812539 l -8e-5,97.895501 c -1e-5,13.15128 10.66125,23.81253 23.81254,23.81253 13.15128,0 23.81253,-10.66125 23.81254,-23.81253 l 7e-5,-97.895501 C 156.10405,21.244562 145.44278,10.58331 132.2915,10.58332 Z"
+     inkscape:transform-center-x="0.0011071573"
+     inkscape:transform-center-y="-58.042866"
      sodipodi:nodetypes="sssssss" />
 </svg>

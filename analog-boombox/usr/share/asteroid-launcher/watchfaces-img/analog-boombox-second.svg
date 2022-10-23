@@ -23,9 +23,9 @@
      inkscape:deskcolor="#d1d1d1"
      showgrid="true"
      showguides="true"
-     inkscape:zoom="1"
-     inkscape:cx="107"
-     inkscape:cy="213.5"
+     inkscape:zoom="3.596496"
+     inkscape:cx="441.54088"
+     inkscape:cy="78.826724"
      inkscape:window-width="1920"
      inkscape:window-height="1003"
      inkscape:window-x="0"
@@ -217,9 +217,9 @@
   </defs>
   <path
      id="path420"
-     style="fill:#ff0000;stroke-width:0.0441276;stroke-linecap:square;stroke-linejoin:bevel"
-     d="m 132.28964,2.64401 c -1.46226,0 -2.64765,1.18539 -2.64765,2.64765 l 2e-5,29.10413 c 0,1.46226 1.1854,2.64766 2.64766,2.64766 1.46226,0 2.64766,-1.1854 2.64766,-2.64766 l -3e-5,-29.10413 c 0,-1.46226 -1.1854,-2.64765 -2.64766,-2.64765 z"
-     inkscape:transform-center-x="-0.00025204835"
-     inkscape:transform-center-y="-6.453808"
+     style="fill:#d64550;fill-opacity:1;stroke-width:0.066174;stroke-linecap:square;stroke-linejoin:bevel"
+     d="m 132.28981,1.3212309 c -2.19282,0 -3.9707,1.777617 -3.97044,3.9704291 l 0.003,27.781215 c 2.7e-4,2.192812 1.77763,3.970444 3.97044,3.970444 2.19282,0 3.97071,-1.777632 3.97045,-3.970444 l -0.003,-27.781215 c -2.6e-4,-2.1928121 -1.77762,-3.9704291 -3.97043,-3.9704291 z"
+     inkscape:transform-center-x="-0.00037704835"
+     inkscape:transform-center-y="-9.6781625"
      sodipodi:nodetypes="sssssss" />
 </svg>

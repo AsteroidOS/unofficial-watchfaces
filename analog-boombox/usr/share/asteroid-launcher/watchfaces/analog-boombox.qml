@@ -25,7 +25,7 @@
 import QtQuick 2.15
 import QtGraphicalEffects 1.15
 import QtQuick.Shapes 1.15
-import Nemo.Mce 1.0
+//import Nemo.Mce 1.0
 
 Item {
     id: root
@@ -34,81 +34,14 @@ Item {
 
     anchors.fill: parent
 
-    MceBatteryLevel {
+    /*MceBatteryLevel {
         id: batteryChargePercentage
-    }
+    }*/
 
     Item {
-        id: nightstandMode
-
-        anchors.fill: parent
-        visible: nightstand
-
-        Item {
-            id: batterySegments
-
-            anchors.fill: parent
-
-            layer {
-                enabled: true
-                samples: 4
-                smooth: true
-                textureSize: Qt.size(root.width * 2, root.height * 2)
-            }
-
-            Repeater {
-                id: segmentedArc
-
-                property real inputValue: batteryChargePercentage.percent
-                property int segmentAmount: 12
-                property int start: 0
-                property int gap: 8
-                property int endFromStart: 360
-                property bool clockwise: true
-                property real arcStrokeWidth: .02
-                property real scalefactor: .33 - (arcStrokeWidth / 2)
-
-                model: segmentAmount
-
-                Shape {
-                    id: segment
-
-                    visible: index === 0 ? true : (index/segmentedArc.segmentAmount) < segmentedArc.inputValue
-
-                    ShapePath {
-                        fillColor: "transparent"
-                        strokeColor: "green"
-                        strokeWidth: parent.height * segmentedArc.arcStrokeWidth
-                        capStyle: ShapePath.RoundCap
-                        joinStyle: ShapePath.MiterJoin
-                        startX: parent.width / 2
-                        startY: parent.height * ( .5 - segmentedArc.scalefactor)
-
-                        PathAngleArc {
-                            centerX: parent.width / 2
-                            centerY: parent.height / 2
-                            radiusX: segmentedArc.scalefactor * parent.width
-                            radiusY: segmentedArc.scalefactor * parent.height
-                            startAngle: -90 + index * (sweepAngle + (segmentedArc.clockwise ? +segmentedArc.gap : -segmentedArc.gap)) + segmentedArc.start
-                            sweepAngle: segmentedArc.clockwise ? (segmentedArc.endFromStart / segmentedArc.segmentAmount) - segmentedArc.gap :
-                                                                 -(segmentedArc.endFromStart / segmentedArc.segmentAmount) + segmentedArc.gap
-                            moveToStart: true
-                        }
-                    }
-                }
-            }
-        }
-
-        layer.enabled: true
-        layer.effect: DropShadow {
-            transparentBorder: true
-            horizontalOffset: 0
-            verticalOffset: 0
-            radius: 4.0
-            samples: 9
-            color: Qt.rgba(0, 0, 0, .75)
-        }
-    }
+           id: batteryChargePercentage
+           property var percent: featureSlider.value
+       }
 
     Item {
         id: handBox
@@ -127,16 +60,6 @@ Item {
                 origin.y: parent.height / 2
                 angle: (wallClock.time.getSeconds() * 6)
             }
-
-            layer.enabled: true
-            layer.effect: DropShadow {
-                transparentBorder: true
-                horizontalOffset: 2
-                verticalOffset: 2
-                radius: 4
-                samples: 9
-                color: Qt.rgba(0, 0, 0, .3)
-            }
         }
 
         Image {
@@ -149,16 +72,6 @@ Item {
                 origin.x: parent.width / 2
                 origin.y: parent.height / 2
                 angle: (wallClock.time.getMinutes() * 6) + (wallClock.time.getSeconds() * 6 / 60)
-            }
-
-            layer.enabled: true
-            layer.effect: DropShadow {
-                transparentBorder: true
-                horizontalOffset: 2
-                verticalOffset: 2
-                radius: 4.0
-                samples: 9
-                color: Qt.rgba(0, 0, 0, .3)
             }
         }
 
@@ -173,53 +86,115 @@ Item {
                 origin.y: parent.height / 2
                 angle: (wallClock.time.getHours() * 30) + (wallClock.time.getMinutes() * .5)
             }
+        }
 
-            layer.enabled: true
-            layer.effect: DropShadow {
+        layer {
+            enabled: true
+            samples: 4
+            smooth: true
+            textureSize: Qt.size(root.width * 2, root.height * 2)
+            effect: DropShadow {
                 transparentBorder: true
-                horizontalOffset: 2
-                verticalOffset: 2
-                radius: 4.0
-                samples: 9
-                color: Qt.rgba(0, 0, 0, .2)
+                horizontalOffset: 0
+                verticalOffset: 0
+                radius: 10.0
+                samples: 21
+                color: Qt.rgba(0, 0, 0, .4)
             }
         }
+    }
 
-        Text {
-            id: hourDisplay
+    Text {
+        id: hourDisplay
 
-            property real rotH: (wallClock.time.getHours() - 3 + wallClock.time.getMinutes() / 60) / 12
-            property real centerX: parent.width / 2 - width / 2
-            property real centerY: parent.height / 2 - height / 2.04
+        property real rotH: (wallClock.time.getHours() - 3 + wallClock.time.getMinutes() / 60) / 12
+        property real centerX: parent.width / 2 - width / 2
+        property real centerY: parent.height / 2 - height / 2.04
 
-            font {
-                pixelSize: parent.height * .1
-                family: "Dangrek"
-            }
-            color: "black"
-            x: centerX + Math.cos(rotH * 2 * Math.PI) * parent.height * 0.204
-            y: centerY + Math.sin(rotH * 2 * Math.PI) * parent.width * 0.204
-            text: if (use12H.value) {
-                      wallClock.time.toLocaleString(Qt.locale(), "hh ap").slice(0, 2) }
-                  else
-                      wallClock.time.toLocaleString(Qt.locale(), "HH")
+        font {
+            pixelSize: parent.height * .114
+            family: "Dangrek"
+            letterSpacing: -parent.height * .003
+        }
+        color: "black"
+        x: centerX + Math.cos(rotH * 2 * Math.PI) * parent.height * 0.204
+        y: centerY + Math.sin(rotH * 2 * Math.PI) * parent.width * 0.204
+        text: if (use12H.value) {
+                  wallClock.time.toLocaleString(Qt.locale(), "hh ap").slice(0, 2) }
+              else
+                  wallClock.time.toLocaleString(Qt.locale(), "HH")
+    }
+
+    Text {
+        id: minuteDisplay
+
+        property real rotM: ((wallClock.time.getMinutes() - 15 + (wallClock.time.getSeconds() / 60)) / 60)
+        property real centerX: parent.width / 2 - width / 2
+        property real centerY: parent.height / 2 - height / 2.04
+
+        font{
+            pixelSize: parent.height * .114
+            family: "Dangrek"
+            letterSpacing: -parent.height * .003
+        }
+        color: "black"
+        x: centerX + Math.cos(rotM * 2 * Math.PI) * parent.height * .369
+        y: centerY + Math.sin(rotM * 2 * Math.PI) * parent.width * .369
+        text: wallClock.time.toLocaleString(Qt.locale(), "mm")
+    }
+
+    Item {
+        id: batterySegments
+
+        anchors.fill: parent
+
+        layer {
+            enabled: true
+            samples: 4
+            smooth: true
+            textureSize: Qt.size(root.width * 2, root.height * 2)
         }
 
-        Text {
-            id: minuteDisplay
+        Repeater {
+            id: segmentedArc
 
-            property real rotM: ((wallClock.time.getMinutes() - 15 + (wallClock.time.getSeconds() / 60)) / 60)
-            property real centerX: parent.width / 2 - width / 2
-            property real centerY: parent.height / 2 - height / 2.04
+            property real inputValue: batteryChargePercentage.percent
+            property int segmentAmount: 5
+            property int start: 0
+            property int gap: 28
+            property int endFromStart: 360
+            property bool clockwise: true
+            property real arcStrokeWidth: .017
+            property real scalefactor: .058 - (arcStrokeWidth / 2)
 
-            font{
-                pixelSize: parent.height * .1
-                family: "Dangrek"
+            model: segmentAmount
+
+            Shape {
+                id: segment
+
+                visible: index === 0 ? true : (index/segmentedArc.segmentAmount) < segmentedArc.inputValue
+
+                ShapePath {
+                    fillColor: "transparent"
+                    strokeColor: "#26C485"
+                    strokeWidth: parent.height * segmentedArc.arcStrokeWidth
+                    capStyle: ShapePath.RoundCap
+                    joinStyle: ShapePath.MiterJoin
+                    startX: parent.width / 2
+                    startY: parent.height * ( .5 - segmentedArc.scalefactor)
+
+                    PathAngleArc {
+                        centerX: parent.width / 2
+                        centerY: parent.height / 2
+                        radiusX: segmentedArc.scalefactor * parent.width
+                        radiusY: segmentedArc.scalefactor * parent.height
+                        startAngle: -90 + index * (sweepAngle + (segmentedArc.clockwise ? +segmentedArc.gap : -segmentedArc.gap)) + segmentedArc.start
+                        sweepAngle: segmentedArc.clockwise ? (segmentedArc.endFromStart / segmentedArc.segmentAmount) - segmentedArc.gap :
+                                                             -(segmentedArc.endFromStart / segmentedArc.segmentAmount) + segmentedArc.gap
+                        moveToStart: true
+                    }
+                }
             }
-            color: "black"
-            x: centerX + Math.cos(rotM * 2 * Math.PI) * parent.height * .39
-            y: centerY + Math.sin(rotM * 2 * Math.PI) * parent.width * .39
-            text: wallClock.time.toLocaleString(Qt.locale(), "mm")
         }
     }
 }
