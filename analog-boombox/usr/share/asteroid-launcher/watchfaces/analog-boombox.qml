@@ -25,7 +25,7 @@
 import QtQuick 2.15
 import QtGraphicalEffects 1.15
 import QtQuick.Shapes 1.15
-//import Nemo.Mce 1.0
+import Nemo.Mce 1.0
 
 Item {
     id: root
@@ -34,14 +34,9 @@ Item {
 
     anchors.fill: parent
 
-    /*MceBatteryLevel {
+    MceBatteryLevel {
         id: batteryChargePercentage
-    }*/
-
-    Item {
-           id: batteryChargePercentage
-           property var percent: featureSlider.value
-       }
+    }
 
     Item {
         id: handBox
@@ -117,8 +112,8 @@ Item {
             letterSpacing: -parent.height * .003
         }
         color: "black"
-        x: centerX + Math.cos(rotH * 2 * Math.PI) * parent.height * 0.204
-        y: centerY + Math.sin(rotH * 2 * Math.PI) * parent.width * 0.204
+        x: centerX + Math.cos(rotH * 2 * Math.PI) * parent.height * .204
+        y: centerY + Math.sin(rotH * 2 * Math.PI) * parent.width * .204
         text: if (use12H.value) {
                   wallClock.time.toLocaleString(Qt.locale(), "hh ap").slice(0, 2) }
               else
