@@ -231,7 +231,6 @@ Item {
         font{
             pixelSize: parent.height * .08
             family: "Roboto Flex"
-            styleName: "Ligth"
             letterSpacing: -parent.height * .006
         }
         color: "white"
