@@ -1,5 +1,7 @@
 /*
  * Copyright (C) 2022 - Timo Könnecke <github.com/eLtMosen>
+ *               2022 - Darrel Griët <dgriet@gmail.com>
+ *               2022 - Ed Beroset <github.com/beroset>
  *               2016 - Sylvia van Os <iamsylvie@openmailbox.org>
  *               2015 - Florent Revest <revestflo@gmail.com>
  *               2012 - Vasiliy Sorokin <sorokin.vasiliy@gmail.com>
@@ -37,11 +39,6 @@ Item {
     MceBatteryLevel {
         id: batteryChargePercentage
     }
-
-    /*Item {
-        id: batteryChargePercentage
-        property real percent: featureSlider.value * 100
-    }*/
 
     Item {
         id: batterySegments
@@ -137,6 +134,42 @@ Item {
             }
         }
 
+        Text {
+            id: secondDisplay
+
+            property real rotM: ((wallClock.time.getSeconds() - 15) / 60)
+            property real centerX: parent.width / 2 - width / 1.9
+            property real centerY: parent.height / 2 - height / 2.06
+
+            visible: !displayAmbient
+
+            font{
+                pixelSize: parent.height * .082
+                family: "Roboto Flex"
+                letterSpacing: -parent.height * .005
+            }
+            color: "white"
+            x: centerX + Math.cos(rotM * 2 * Math.PI) * parent.height * .366
+            y: centerY + Math.sin(rotM * 2 * Math.PI) * parent.width * .366
+            text: wallClock.time.toLocaleString(Qt.locale(), "ss")
+
+            Behavior on x {
+                enabled: !displayAmbient
+
+                NumberAnimation {
+                    duration: 1000
+                }
+            }
+
+            Behavior on y {
+                enabled: !displayAmbient
+
+                NumberAnimation {
+                    duration: 1000
+                }
+            }
+        }
+
         Image {
             id: minuteSVG
 
@@ -160,6 +193,25 @@ Item {
                     color: Qt.rgba(0, 0, 0, .8)
                 }
             }
+        }
+
+        Text {
+            id: minuteDisplay
+
+            property real rotM: ((wallClock.time.getMinutes() - 15 + (wallClock.time.getSeconds() / 60)) / 60)
+            property real centerX: parent.width / 2 - width / 1.92
+            property real centerY: parent.height / 2 - height / 2.04
+
+            font{
+                pixelSize: parent.height * .12
+                family: "Roboto Flex"
+                styleName: "Medium"
+                letterSpacing: -parent.height * .006
+            }
+            color: "black"
+            x: centerX + Math.cos(rotM * 2 * Math.PI) * parent.height * .214
+            y: centerY + Math.sin(rotM * 2 * Math.PI) * parent.width * .214
+            text: wallClock.time.toLocaleString(Qt.locale(), "mm")
         }
 
         Image {
@@ -187,73 +239,19 @@ Item {
 
         anchors {
             centerIn: parent
-            verticalCenterOffset: parent.height * .006
+            verticalCenterOffset: parent.height * .004
+            horizontalCenterOffset: -parent.height * .0012
         }
         font {
             pixelSize: parent.height * .18
             family: "Roboto Flex"
             styleName: "Medium"
-            letterSpacing: -parent.height * .006
+            letterSpacing: -parent.height * .005
         }
         color: "black"
         text: if (use12H.value) {
                   wallClock.time.toLocaleString(Qt.locale(), "hh ap").slice(0, 2) }
               else
                   wallClock.time.toLocaleString(Qt.locale(), "HH")
-    }
-
-    Text {
-        id: minuteDisplay
-
-        property real rotM: ((wallClock.time.getMinutes() - 15 + (wallClock.time.getSeconds() / 60)) / 60)
-        property real centerX: parent.width / 2 - width / 2
-        property real centerY: parent.height / 2 - height / 2.04
-
-        font{
-            pixelSize: parent.height * .12
-            family: "Roboto Flex"
-            styleName: "Medium"
-            letterSpacing: -parent.height * .006
-        }
-        color: "black"
-        x: centerX + Math.cos(rotM * 2 * Math.PI) * parent.height * .214
-        y: centerY + Math.sin(rotM * 2 * Math.PI) * parent.width * .214
-        text: wallClock.time.toLocaleString(Qt.locale(), "mm")
-    }
-
-    Text {
-        id: secondDisplay
-
-        property real rotM: ((wallClock.time.getSeconds() - 15) / 60)
-        property real centerX: parent.width / 2 - width / 2
-        property real centerY: parent.height / 2 - height / 2.04
-
-        visible: !displayAmbient
-
-        font{
-            pixelSize: parent.height * .08
-            family: "Roboto Flex"
-            letterSpacing: -parent.height * .006
-        }
-        color: "white"
-        x: centerX + Math.cos(rotM * 2 * Math.PI) * parent.height * .366
-        y: centerY + Math.sin(rotM * 2 * Math.PI) * parent.width * .366
-        text: wallClock.time.toLocaleString(Qt.locale(), "ss")
-
-        Behavior on x {
-            enabled: !displayAmbient
-
-            RotationAnimation {
-                duration: 1000
-            }
-        }
-
-        Behavior on y {
-            enabled: !displayAmbient
-
-            RotationAnimation {
-                duration: 1000
-            }
-        }
     }
 }
