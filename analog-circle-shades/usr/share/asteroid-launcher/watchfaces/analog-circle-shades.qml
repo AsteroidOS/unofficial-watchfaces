@@ -40,7 +40,60 @@ Item {
 
     Item {
         id: batteryChargePercentage
-        property real percent: featureSlider.value
+        property real percent: featureSlider.value * 100
+    }
+
+    Item {
+        id: batterySegments
+
+        anchors.fill: parent
+
+        layer {
+            enabled: true
+            samples: 4
+            smooth: true
+            textureSize: Qt.size(root.width * 2, root.height * 2)
+        }
+
+        Repeater {
+            id: segmentedArc
+
+            property real inputValue: batteryChargePercentage.percent
+            property int segmentAmount: 12
+            property int start: 0
+            property int gap: 6
+            property int endFromStart: 360
+            property bool clockwise: true
+            property real arcStrokeWidth: .011
+            property real scalefactor: .374 - (arcStrokeWidth / 2)
+
+            model: segmentAmount
+
+            Shape {
+                id: segment
+
+                ShapePath {
+                    fillColor: "transparent"
+                    strokeColor: index / segmentedArc.segmentAmount < segmentedArc.inputValue / 100 ? "#26C485" : "black"
+                    strokeWidth: parent.height * segmentedArc.arcStrokeWidth
+                    capStyle: ShapePath.RoundCap
+                    joinStyle: ShapePath.MiterJoin
+                    startX: parent.width / 2
+                    startY: parent.height * ( .5 - segmentedArc.scalefactor)
+
+                    PathAngleArc {
+                        centerX: parent.width / 2
+                        centerY: parent.height / 2
+                        radiusX: segmentedArc.scalefactor * parent.width
+                        radiusY: segmentedArc.scalefactor * parent.height
+                        startAngle: -90 + index * (sweepAngle + (segmentedArc.clockwise ? +segmentedArc.gap : -segmentedArc.gap)) + segmentedArc.start
+                        sweepAngle: segmentedArc.clockwise ? (segmentedArc.endFromStart / segmentedArc.segmentAmount) - segmentedArc.gap :
+                                                             -(segmentedArc.endFromStart / segmentedArc.segmentAmount) + segmentedArc.gap
+                        moveToStart: true
+                    }
+                }
+            }
+        }
     }
 
     Item {
@@ -59,6 +112,13 @@ Item {
                 origin.x: parent.width / 2
                 origin.y: parent.height / 2
                 angle: (wallClock.time.getSeconds() * 6)
+
+                Behavior on angle {
+                    RotationAnimation {
+                        duration: 1000
+                        direction: RotationAnimation.Clockwise
+                    }
+                }
             }
 
             layer {
@@ -168,66 +228,23 @@ Item {
         font{
             pixelSize: parent.height * .08
             family: "Roboto Flex"
-            styleName: "Medium"
+            styleName: "Ligth"
             letterSpacing: -parent.height * .006
         }
-        color: "black"
+        color: "white"
         x: centerX + Math.cos(rotM * 2 * Math.PI) * parent.height * .366
         y: centerY + Math.sin(rotM * 2 * Math.PI) * parent.width * .366
         text: wallClock.time.toLocaleString(Qt.locale(), "ss")
-    }
 
-    Item {
-        id: batterySegments
-
-        anchors.fill: parent
-
-        layer {
-            enabled: true
-            samples: 4
-            smooth: true
-            textureSize: Qt.size(root.width * 2, root.height * 2)
+        Behavior on x {
+            RotationAnimation {
+                duration: 1000
+            }
         }
 
-        Repeater {
-            id: segmentedArc
-
-            property real inputValue: batteryChargePercentage.percent
-            property int segmentAmount: 5
-            property int start: 0
-            property int gap: 28
-            property int endFromStart: 360
-            property bool clockwise: true
-            property real arcStrokeWidth: .017
-            property real scalefactor: .058 - (arcStrokeWidth / 2)
-
-            model: segmentAmount
-
-            Shape {
-                id: segment
-
-                visible: index === 0 ? true : (index/segmentedArc.segmentAmount) < segmentedArc.inputValue
-
-                ShapePath {
-                    fillColor: "transparent"
-                    strokeColor: "#26C485"
-                    strokeWidth: parent.height * segmentedArc.arcStrokeWidth
-                    capStyle: ShapePath.RoundCap
-                    joinStyle: ShapePath.MiterJoin
-                    startX: parent.width / 2
-                    startY: parent.height * ( .5 - segmentedArc.scalefactor)
-
-                    PathAngleArc {
-                        centerX: parent.width / 2
-                        centerY: parent.height / 2
-                        radiusX: segmentedArc.scalefactor * parent.width
-                        radiusY: segmentedArc.scalefactor * parent.height
-                        startAngle: -90 + index * (sweepAngle + (segmentedArc.clockwise ? +segmentedArc.gap : -segmentedArc.gap)) + segmentedArc.start
-                        sweepAngle: segmentedArc.clockwise ? (segmentedArc.endFromStart / segmentedArc.segmentAmount) - segmentedArc.gap :
-                                                             -(segmentedArc.endFromStart / segmentedArc.segmentAmount) + segmentedArc.gap
-                        moveToStart: true
-                    }
-                }
+        Behavior on y {
+            RotationAnimation {
+                duration: 1000
             }
         }
     }

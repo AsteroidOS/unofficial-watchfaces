@@ -9,6 +9,7 @@
    inkscape:version="1.2.1 (9c6d41e410, 2022-07-14, custom)"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:xlink="http://www.w3.org/1999/xlink"
    xmlns="http://www.w3.org/2000/svg"
    xmlns:svg="http://www.w3.org/2000/svg">
   <sodipodi:namedview
@@ -22,9 +23,9 @@
      inkscape:deskcolor="#d1d1d1"
      showgrid="true"
      showguides="true"
-     inkscape:zoom="0.87065339"
-     inkscape:cx="219.37547"
-     inkscape:cy="401.42266"
+     inkscape:zoom="1.6185666"
+     inkscape:cx="469.24234"
+     inkscape:cy="516.19746"
      inkscape:window-width="1920"
      inkscape:window-height="1003"
      inkscape:window-x="0"
@@ -47,6 +48,18 @@
   </sodipodi:namedview>
   <defs
      id="defs39">
+    <linearGradient
+       inkscape:collect="always"
+       id="linearGradient16264">
+      <stop
+         style="stop-color:#ffffff;stop-opacity:1;"
+         offset="0.65951341"
+         id="stop16260" />
+      <stop
+         style="stop-color:#d9d9d9;stop-opacity:1;"
+         offset="1"
+         id="stop16262" />
+    </linearGradient>
     <linearGradient
        id="e">
       <stop
@@ -126,11 +139,21 @@
          offset="1"
          id="stop36" />
     </linearGradient>
+    <radialGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient16264"
+       id="radialGradient16266"
+       cx="132.2915"
+       cy="132.2915"
+       fx="132.2915"
+       fy="132.2915"
+       r="38.364532"
+       gradientUnits="userSpaceOnUse" />
   </defs>
   <circle
-     style="fill:#ffffff;stroke-width:1.21828;stroke-linecap:square;stroke-linejoin:bevel;-inkscape-stroke:none;stop-color:#000000"
+     style="fill:url(#radialGradient16266);fill-opacity:1;stroke-width:1.26179;stroke-linecap:square;stroke-linejoin:bevel;-inkscape-stroke:none;stop-color:#000000"
      id="path386"
      cx="132.2915"
      cy="132.2915"
-     r="37.041615" />
+     r="38.364532" />
 </svg>
