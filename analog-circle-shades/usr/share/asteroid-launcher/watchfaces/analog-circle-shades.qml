@@ -47,6 +47,7 @@ Item {
         id: batterySegments
 
         anchors.fill: parent
+        visible: !displayAmbient
 
         layer {
             enabled: true
@@ -224,6 +225,8 @@ Item {
         property real rotM: ((wallClock.time.getSeconds() - 15) / 60)
         property real centerX: parent.width / 2 - width / 2
         property real centerY: parent.height / 2 - height / 2.04
+
+        visible: !displayAmbient
 
         font{
             pixelSize: parent.height * .08
