@@ -47,7 +47,7 @@ Item {
         id: batterySegments
 
         anchors.fill: parent
-        visible: !displayAmbient
+        visible: !displayAmbient || nightstand
 
         layer {
             enabled: true
@@ -115,6 +115,8 @@ Item {
                 angle: (wallClock.time.getSeconds() * 6)
 
                 Behavior on angle {
+                    enabled: !displayAmbient
+
                     RotationAnimation {
                         duration: 1000
                         direction: RotationAnimation.Clockwise
@@ -153,8 +155,8 @@ Item {
                     transparentBorder: true
                     horizontalOffset: 0
                     verticalOffset: 0
-                    radius: 10.0
-                    samples: 21
+                    radius: 15.0
+                    samples: 31
                     color: Qt.rgba(0, 0, 0, .8)
                 }
             }
@@ -239,12 +241,16 @@ Item {
         text: wallClock.time.toLocaleString(Qt.locale(), "ss")
 
         Behavior on x {
+            enabled: !displayAmbient
+
             RotationAnimation {
                 duration: 1000
             }
         }
 
         Behavior on y {
+            enabled: !displayAmbient
+
             RotationAnimation {
                 duration: 1000
             }
