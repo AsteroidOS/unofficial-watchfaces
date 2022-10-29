@@ -10,6 +10,7 @@ ApplicationWindow {
     property var nameOfWatchfaceToBeTested: Qt.application.arguments[1]
     readonly property var initialStaticTime: new Date('2021-12-02T13:37:42')
     readonly property real mouseWheelScale: 1 / 15
+    title: nameOfWatchfaceToBeTested
 
     minimumWidth: 640 + controls.width
     minimumHeight: 640
