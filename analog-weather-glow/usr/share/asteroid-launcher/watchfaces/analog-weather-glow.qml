@@ -1024,14 +1024,6 @@ Item {
                 angle: hourSVG.toggle24h ?
                            (wallClock.time.getHours() * 15) + (wallClock.time.getMinutes() * .25) :
                            (wallClock.time.getHours() * 30) + (wallClock.time.getMinutes() * .5)
-
-                Behavior on angle {
-                    RotationAnimation {
-                        duration: 500
-                        direction: RotationAnimation.Clockwise
-                        easing.type: Easing.InOutQuad
-                    }
-                }
             }
             layer {
                 enabled: true
@@ -1064,13 +1056,6 @@ Item {
                 origin.x: parent.width / 2
                 origin.y: parent.height / 2
                 angle: (wallClock.time.getMinutes() * 6) + (wallClock.time.getSeconds() * 6 / 60)
-
-                Behavior on angle {
-                    RotationAnimation {
-                        duration: 1000
-                        direction: RotationAnimation.Clockwise
-                    }
-                }
             }
 
             layer {
@@ -1106,6 +1091,7 @@ Item {
                 angle: wallClock.time.getSeconds() * 6
 
                 Behavior on angle {
+                    enabled: !displayAmbient && !nightstand
                     RotationAnimation {
                         duration: 1000
                         direction: RotationAnimation.Clockwise
