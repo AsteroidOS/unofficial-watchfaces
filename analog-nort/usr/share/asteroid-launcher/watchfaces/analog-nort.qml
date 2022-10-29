@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2021 - Timo Könnecke <github.com/eLtMosen>
+ * Copyright (C) 2022 - Timo Könnecke <github.com/eLtMosen>
  *               2016 - Sylvia van Os <iamsylvie@openmailbox.org>
  *               2015 - Florent Revest <revestflo@gmail.com>
  *               2012 - Vasiliy Sorokin <sorokin.vasiliy@gmail.com>
@@ -21,7 +21,7 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-import QtQuick 2.9
+import QtQuick 2.15
 import QtGraphicalEffects 1.15
 
 Item {
@@ -31,17 +31,17 @@ Item {
 
     Image {
         id: hourSVG
-        z: 0
+
+        anchors.centerIn: root
         source: imgPath + "hour.svg"
-        anchors {
-            centerIn: root
-        }
         width: root.width
         height: root.height
+
         transform: Rotation {
             origin.x: root.width / 2
             origin.y: root.height / 2
-            angle: (wallClock.time.getHours() * 30) + (wallClock.time.getMinutes() * 0.5)
+            angle: (wallClock.time.getHours() * 30) + (wallClock.time.getMinutes() * .5)
+
             Behavior on angle {
                 RotationAnimation {
                     duration: 1000
@@ -49,26 +49,16 @@ Item {
                 }
             }
         }
-        layer.enabled: true
-        layer.effect: DropShadow {
-            transparentBorder: true
-            horizontalOffset: 0
-            verticalOffset: 0
-            radius: 8.0
-            samples: 12
-            color: "#66fbfb"
-        }
     }
 
     Image {
         id: minuteSVG
-        z: 1
+
+        anchors.centerIn: root
         source: imgPath + "minute.svg"
-        anchors {
-            centerIn: root
-        }
         width: root.width
         height: root.height
+
         transform: Rotation {
             origin.x: root.width / 2
             origin.y: root.height / 2
@@ -80,8 +70,34 @@ Item {
                 }
             }
         }
-        layer.enabled: true
-        layer.effect: DropShadow {
+    }
+
+    Image {
+        id: secondSVG
+
+        anchors.centerIn: root
+        source: imgPath + "second.svg"
+        width: root.width
+        height: root.height
+        visible: !displayAmbient
+
+        transform: Rotation {
+            origin.x: root.width / 2
+            origin.y: root.height / 2
+            angle: (wallClock.time.getSeconds() * 6)
+
+            Behavior on angle {
+                RotationAnimation {
+                    duration: 1000
+                    direction: RotationAnimation.Clockwise
+                }
+            }
+        }
+    }
+
+    layer {
+        enabled: true
+        effect: DropShadow {
             transparentBorder: true
             horizontalOffset: 0
             verticalOffset: 0
@@ -90,36 +106,4 @@ Item {
             color: "#66fbfb"
         }
     }
-
-    Image {
-        id: secondSVG
-        z: 2
-        visible: !displayAmbient
-        source: imgPath + "second.svg"
-        anchors {
-            centerIn: root
-        }
-        width: root.width
-        height: root.height
-        transform: Rotation {
-            origin.x: root.width / 2
-            origin.y: root.height / 2
-            angle: (wallClock.time.getSeconds() * 6)
-            Behavior on angle {
-                RotationAnimation {
-                    duration: 1000
-                    direction: RotationAnimation.Clockwise
-                }
-            }
-        }
-        layer.enabled: true
-        layer.effect: DropShadow {
-            transparentBorder: true
-            horizontalOffset: 0
-            verticalOffset: 0
-            radius: 8.0
-            samples: 12
-            color: "#ffc312"
-        }
-    }
- }
+}
