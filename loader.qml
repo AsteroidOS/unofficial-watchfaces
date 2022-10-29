@@ -3,6 +3,7 @@ import QtQuick 2.15
 import QtQuick.Controls 2.15
 import QtQuick.Dialogs 1.1
 import QtQuick.Layouts 1.2
+import Qt.labs.settings 1.0
 
 ApplicationWindow {
     id: appRoot
@@ -14,6 +15,15 @@ ApplicationWindow {
 
     minimumWidth: 640 + controls.width
     minimumHeight: 640
+
+    Settings {
+        property alias round: roundCheckBox.checked
+        property alias nonSquare: nonSquare.checked
+        property alias displayAmbient: ambientCheckBox.checked
+        property alias halfSize: halfSize.checked
+        property alias twelveHour: twelveHourCheckBox.checked
+        property alias staticTime: setStaticTimeCheckBox.checked
+    }
 
     RowLayout {
         spacing: 0
