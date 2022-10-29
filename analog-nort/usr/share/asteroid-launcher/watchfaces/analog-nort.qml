@@ -41,13 +41,6 @@ Item {
             origin.x: root.width / 2
             origin.y: root.height / 2
             angle: (wallClock.time.getHours() * 30) + (wallClock.time.getMinutes() * .5)
-
-            Behavior on angle {
-                RotationAnimation {
-                    duration: 1000
-                    direction: RotationAnimation.Clockwise
-                }
-            }
         }
     }
 
@@ -63,12 +56,6 @@ Item {
             origin.x: root.width / 2
             origin.y: root.height / 2
             angle: (wallClock.time.getMinutes() * 6)+(wallClock.time.getSeconds() * 6 / 60)
-            Behavior on angle {
-                RotationAnimation {
-                    duration: 1000
-                    direction: RotationAnimation.Clockwise
-                }
-            }
         }
     }
 
@@ -87,6 +74,8 @@ Item {
             angle: (wallClock.time.getSeconds() * 6)
 
             Behavior on angle {
+                enabled: !displayAmbient
+
                 RotationAnimation {
                     duration: 1000
                     direction: RotationAnimation.Clockwise
