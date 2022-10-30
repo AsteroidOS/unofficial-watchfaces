@@ -25,7 +25,7 @@
 import QtQuick 2.15
 import QtGraphicalEffects 1.15
 import QtQuick.Shapes 1.15
-
+import Nemo.Mce 1.0
 
 Item {
     id: root
@@ -46,9 +46,8 @@ Item {
         return num;
     }
 
-    Item {
-          id: batteryChargePercentage
-          property real value: (featureSlider.value * 100).toFixed(0)
+    MceBatteryLevel {
+        id: batteryChargePercentage
     }
 
     Item {
@@ -205,7 +204,7 @@ Item {
     Item {
         id: batteryDigits
 
-        property string batteryChargeString: pad((batteryChargePercentage.value), 3)
+        property string batteryChargeString: pad((batteryChargePercentage.percent), 3)
 
         anchors.fill: parent
 
@@ -266,7 +265,7 @@ Item {
         Repeater {
             id: segmentedArc
 
-            property real inputValue: batteryChargePercentage.value / 100
+            property real inputValue: batteryChargePercentage.percent / 100
             property int segmentAmount: 5
             property int start: -159
             property int gap: 2
@@ -280,7 +279,7 @@ Item {
             Shape {
                 id: segment
 
-                visible: index === 0 ? true : (index/segmentedArc.segmentAmount) < segmentedArc.inputValue
+                visible: index === 0 ? true : (index / segmentedArc.segmentAmount) < segmentedArc.inputValue
 
                 ShapePath {
                     fillColor: "transparent"
