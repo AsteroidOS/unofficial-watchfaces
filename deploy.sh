@@ -51,12 +51,12 @@ function setDconf {
 }
 
 function pushFiles {
-    local sourcedir="$1"
-    local destdir="$2"
+    local source="$1"
+    local destination="$2"
     if [ "$ADB" = true ] ; then
-        adb push ${sourcedir} "${destdir}"
+        adb push "${source}" "${destination}"
     else
-        scp -P"${WATCHPORT}" -r ${sourcedir} "root@${WATCHADDR}:${destdir}"
+        scp -P"${WATCHPORT}" -r "${source}" "root@${WATCHADDR}:${destination}"
     fi
 }
 
@@ -65,10 +65,11 @@ function pushWatchface {
 }
 
 function pushWallpaper {
-    local wallpaper="$1"
-    local wp_path="/usr/share/asteroid-launcher/wallpapers/full"
-    pushFiles "${wallpaper}" "${wp_path}/${wallpaper}"
-    setDconf "/desktop/asteroid/background-filename" "${wp_path}/${wallpaper}"
+    local source="$1"
+    local wallpaper="$(basename "$1")"
+    local destination="/usr/share/asteroid-launcher/wallpapers/full/${wallpaper}"
+    pushFiles "${source}" "${destination}"
+    setDconf "/desktop/asteroid/background-filename" "${destination}"
 }
 
 function restartCeres {
