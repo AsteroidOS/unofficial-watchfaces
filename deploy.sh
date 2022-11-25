@@ -53,10 +53,11 @@ function setDconf {
 function pushFiles {
     local source="$1"
     local destination="$2"
+    IFS=
     if [ "$ADB" = true ] ; then
-        adb push "${source}" "${destination}"
+        adb push ${source} "${destination}"
     else
-        scp -P"${WATCHPORT}" -r "${source}" "root@${WATCHADDR}:${destination}"
+        scp -P"${WATCHPORT}" -r ${source} "root@${WATCHADDR}:${destination}"
     fi
 }
 
