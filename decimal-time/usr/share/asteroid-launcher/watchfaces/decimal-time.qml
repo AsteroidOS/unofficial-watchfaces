@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2021 - Ed Beroset <github.com/beroset>
+ * Copyright (C) 2021,2022 - Ed Beroset <github.com/beroset>
  * All rights reserved.
  *
  * This program is free software: you can redistribute it and/or modify
@@ -26,6 +26,9 @@ Item {
 
     // this constant adjusts the minutes ticks on the watchface
     readonly property int majorMinuteTicksEvery: 5
+    // this adjusts the number of revolutions per day 
+    // (e.g. 2 twelve-hour revolutions for a standard 24 hour day)
+    readonly property int revolutionsPerDay: 1
 
     // these are derived constants
     readonly property int metricSecondsPerStandardDay: metricHoursPerStandardDay * metricMinutesPerMetricHour * metricSecondsPerMetricMinute
@@ -44,7 +47,7 @@ Item {
 
     Repeater{
         id: hourTicks
-        model: metricHoursPerStandardDay
+        model: metricHoursPerStandardDay / revolutionsPerDay
         Rectangle {
             z: 2
             id: decimalHourTick
@@ -69,7 +72,7 @@ Item {
 
     Repeater{
         id: minuteTicks
-        model: metricMinutesPerMetricHour
+        model: metricMinutesPerMetricHour / revolutionsPerDay
         Rectangle {
             z: 1
             id: decimalHourTick
@@ -95,7 +98,7 @@ Item {
 
     Repeater{
         id: hourLabels
-        model: metricHoursPerStandardDay
+        model: metricHoursPerStandardDay / revolutionsPerDay
         Text {
             z: 3
             font.pixelSize: parent.height*0.08
@@ -185,7 +188,7 @@ Item {
             Rotation {
                 origin.x : logoAsteroid.width/2
                 origin.y : logoAsteroid.height + parent.height * 0.275
-                angle: getMetricHours(wallClock.time) * 360 / metricHoursPerStandardDay
+                angle: getMetricHours(wallClock.time) * 360 * revolutionsPerDay / metricHoursPerStandardDay
             },
             Translate {
                 x: (parent.width - logoAsteroid.width)/2
