@@ -149,7 +149,7 @@ Item {
                     color: currentDayHighlight ?
                                highColor :
                                lowColor
-                    text: new Date(2022, 1, index).toLocaleString(Qt.locale(), "ddd").slice(0, 2).toUpperCase()
+                    text: new Date(2017, 1, index).toLocaleString(Qt.locale(), "ddd").slice(0, 2).toUpperCase()
 
                     transform: Rotation {
                         origin.x: width / 2
