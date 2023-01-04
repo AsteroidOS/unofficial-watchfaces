@@ -1004,7 +1004,7 @@ Item {
         id: handBox
 
         width: root.width
-        height: width
+        height: root.height
 
         Image {
             id: hourSVG
@@ -1013,7 +1013,7 @@ Item {
 
             anchors.centerIn: parent
             width: parent.width
-            height: width
+            height: parent.height
             source: imgPath + (hourSVG.toggle24h ? "hour-24h.svg" : "hour-12h.svg")
             antialiasing: true
             smooth: true
@@ -1025,6 +1025,7 @@ Item {
                            (wallClock.time.getHours() * 15) + (wallClock.time.getMinutes() * .25) :
                            (wallClock.time.getHours() * 30) + (wallClock.time.getMinutes() * .5)
             }
+
             layer {
                 enabled: true
                 samples: 4
@@ -1047,7 +1048,7 @@ Item {
 
             anchors.centerIn: parent
             width: parent.width
-            height: width
+            height: parent.height
             source: imgPath + "minute.svg"
             antialiasing: true
             smooth: true
@@ -1079,7 +1080,7 @@ Item {
 
             anchors.centerIn: parent
             width: parent.width
-            height: width
+            height: parent.height
             source: imgPath + "second.svg"
             antialiasing: true
             smooth: true
