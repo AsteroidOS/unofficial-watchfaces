@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="32" height="64">
+  <defs>
+      <path id="res" d="M16 0 v14 l-6 3 l12 6 l-12 6 l12 6 l-12 6 l12 6 l-6 3 v14"/>
+  </defs>
+  <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#res" stroke="orange" stroke-width="3" stroke-linejoin="miter" fill="none"></use>
+  <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#res" stroke="black" stroke-width="1" stroke-linejoin="miter" fill="none"></use>
+</svg>
+
