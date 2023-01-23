@@ -122,7 +122,7 @@ Item {
             visible: !displayAmbient
             color: "white"
             horizontalAlignment: Text.AlignHCenter
-            text: "<b>AsteroidOS</b><br>Hack Your Wrist"
+            text: "<b>AsteroidOS</b><br>Free Your Wrist"
         }
         MouseArea {
             anchors.fill: parent
