@@ -55,7 +55,7 @@ Item {
                     centerIn: parent
                     verticalCenterOffset: -parent.height * 0.005
                 }
-                text: "<b>AsteroidOS</b><br>Hack Your Wrist"
+                text: "<b>AsteroidOS</b><br>Free Your Wrist"
             }
         }
         MouseArea {
