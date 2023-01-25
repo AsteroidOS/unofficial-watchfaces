@@ -15,13 +15,14 @@ over ssh, but can also use "ADB Mode" using ADB.
 Available options:
 -h or --help    prints this help screen and quits
 -a or --adb     uses ADB command to communicate with watch
+-g or --gui     use the GTK+ gui
 -p or --port    specifies a port to use for ssh and scp commands
 -r or --remote  specifies the remote (watch)  name or address for ssh and scp commands
 -q or --qemu    communicates with QEMU emulated watch (same as -r localhost -p 2222 )
 -v or --version displays the version of this program
+-w or --wall WP sets the wallpaper for deploy or test to the named file
 
 Available commands:
-wallpaper WP    sets the wallpaper on the watch to named file WP
 deploy WF       pushes the named watchface to the watch and activates it
 clone WF NEWWF  clones the named watchface WF to new watchface NEWWF
 test WF         sets the active watchface to the named watchface
@@ -32,7 +33,7 @@ EOF
 function doWatchCommand {
     local user="$1"
     local cmd=$2
-    case ${user} in 
+    case ${user} in
         root)
             if [ "$ADB" == true ] ; then
                 adb shell "${cmd}"
@@ -88,7 +89,8 @@ function pushWatchface {
 
 function pushWallpaper {
     local source="$1"
-    local wallpaper="$(basename "$1")"
+    local wallpaper
+    wallpaper="$(basename "$1")"
     local destination="/usr/share/asteroid-launcher/wallpapers/full/${wallpaper}"
     pushFiles "root" "${source}" "${destination}"
     setDconf "/desktop/asteroid/background-filename" "${destination}"
@@ -107,7 +109,7 @@ function setTimeZone {
 }
 
 function forgetKeys {
-    ssh-keygen -R ${WATCHADDR}
+    ssh-keygen -R "${WATCHADDR}"
     ssh-keygen -R watch
 }
 
@@ -131,12 +133,19 @@ function deployface {
     echo "Deploying $1"
     pushWatchface "$1"
     activateWatchface "$1"
+    if [ -n "${WALLPAPER}" ] ; then
+        pushWallpaper "${WALLPAPER}"
+    fi
     restartCeres
 }
 
 function testface {
     echo "Testing $1"
-    qmlscene "$1" loader.qml
+    if [ -n "${WALLPAPER}" ] ; then
+        qmlscene "$1" "${WALLPAPER}" loader.qml
+    else
+        qmlscene "$1" "background.jpg" loader.qml
+    fi
 }
 
 function cloneface {
@@ -154,6 +163,82 @@ function cloneface {
     watchfaceClone "${SOURCE}" "${DEST}"
 }
 
+function doGUI {
+    local watchface
+    local action
+    if ! watchface=$(find . -maxdepth 3 -type d -path "*/usr/share" -printf "%h\n" | awk -F '/' '{print $2}' | sort | zenity --title="Choose a watchface" --list --column="Name"); then
+        exit
+    fi
+    if ! action=$(zenity --title="Select action" --list --radiolist \
+        --column="selected" --column="action" \
+        TRUE deploy \
+        FALSE clone \
+        FALSE test); then
+        exit
+    fi
+    zenity --question --title="Confirming" --text="${action} ${watchface}"
+    case $? in
+        0)
+            echo "OK!"
+            if [ "${action}" = "clone" ] ; then
+                if newface=$(zenity --entry --title="Cloning ${watchface}" \
+                    --text="Enter name of new watchface:" \
+                    --entry-text "newface")
+                then "${action}"face "${watchface}" "${newface}"
+                else echo "No name entered"
+                fi
+            else
+                "${action}"face "${watchface}"
+            fi
+            ;;
+        1)
+            echo "Canceled"
+            ;;
+    esac
+}
+
+function textmenu {
+    local watchfaces
+    local args
+    local watchface
+    local newface
+    mapfile -t watchfaces < <(find . -maxdepth 3 -type d -path "*/usr/share" -printf "%h\n" | sort | awk -F '/' '{print $2}' )
+    declare -a args=("--title" "Watchfaces" "--clear" "--menu" "Choose a watchface:" 25 78 15 "--" )
+    for wf in "${watchfaces[@]}" ; do
+        args+=("${wf}" "")
+    done
+    if ! watchface=$("${MENUPROGRAM}" "${args[@]}" 3>&1 1>&2 2>&3); then
+        exit
+    fi
+    if ! action=$("${MENUPROGRAM}" --title "Select action" --clear --radiolist \
+        "Select action" 0 0 3 \
+        "deploy" "Deploy watchface to watch" ON \
+        "clone" "Clone watchface to new name" OFF \
+        "test" "Test watchface on computer" OFF \
+        3>&1 1>&2 2>&3); then
+        exit
+    fi
+    if ("${MENUPROGRAM}" --clear --title "Confirming" --yesno "${action} ${watchface}" 0 0); then
+        echo "OK!"
+        if [ "${action}" = "clone" ] ; then
+            if newface=$("${MENUPROGRAM}" \
+                --title "Cloning ${watchface}" --clear \
+                --inputbox "Enter name of new watchface:" \
+                8 50 "newface" \
+                3>&1 1>&2 2>&3)
+            then
+                "${action}"face "${watchface}" "${newface}"
+            else
+                echo "No name entered"
+            fi
+        else
+            "${action}"face "${watchface}"
+        fi
+    else
+        echo "Canceled"
+    fi
+}
+
 # These are the defaults for SSH access
 WATCHPORT=22
 WATCHADDR=192.168.2.15
@@ -162,17 +247,28 @@ QEMUPORT=2222
 QEMUADDR=localhost
 # Assume no ADB unless told otherwise
 ADB=false
-# get this host's IPv4 address
-MYADDR=$(hostname -I |grep -oP 192.168.2.[[:digit:]]+)
+# Assume no GUI unless told otherwise
+GUI=false
 # we're not done until we say we are
 DONE=false
 # No wallpaper unless asked
 WALLPAPER=""
+# Assume Dialog unless unavailable
+if hash dialog 2>/dev/null; then
+    MENUPROGRAM=dialog
+else
+    MENUPROGRAM=whiptail
+fi
+
 
 while [[ $# -gt 0 ]] ; do
-    case $1 in 
+    case $1 in
         -a|--adb)
             ADB=true
+            shift
+            ;;
+        -g|--gui)
+            GUI=true
             shift
             ;;
         -q|--qemu)
@@ -202,7 +298,6 @@ while [[ $# -gt 0 ]] ; do
             WALLPAPER="$2"
             shift
             shift
-            DONE=true
             ;;
         clone)
             cloneface "$2" "$3"
@@ -228,32 +323,12 @@ while [[ $# -gt 0 ]] ; do
             shift
             ;;
     esac
-done 
+done
 
 if [ "${DONE}" != "true" ] ; then
-    watchface=$(find . -maxdepth 3 -type d -path "*/usr/share" -printf "%h\n" | awk -F '/' '{print $2}' | sort | zenity --title="Choose a watchface" --list --column="Name")
-    action=$(zenity --title="Select action" --list --radiolist \
-        --column="selected" --column="action" \
-        TRUE deploy \
-        FALSE clone \
-        FALSE test)
-    zenity --question --title="Confirming" --text="${action} ${watchface}"
-    case $? in 
-        0)
-            echo "OK!"
-            if [ "${action}" = "clone" ] ; then
-                if newface=$(zenity --entry --title="Cloning watchface" \
-                    --text="Enter name of new watchface:" \
-                    --entry-text "newface")
-                then ${action}face ${watchface} ${newface}
-                else echo "No name entered"
-                fi
-            else 
-                ${action}face ${watchface}
-            fi
-            ;;
-        1)
-            echo "Canceled"
-            ;;
-    esac
+    if [ "${GUI}" = "true" ] ; then
+        doGUI
+    else
+        textmenu
+    fi
 fi

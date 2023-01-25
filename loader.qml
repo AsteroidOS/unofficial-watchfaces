@@ -9,6 +9,7 @@ ApplicationWindow {
     id: appRoot
     property bool displayAmbient: ambientCheckBox.checked
     property var nameOfWatchfaceToBeTested: Qt.application.arguments[1]
+    property var backgroundImage: Qt.application.arguments[2]
     readonly property var initialStaticTime: new Date('2021-12-02T13:37:42')
     readonly property real mouseWheelScale: 1 / 15
     title: nameOfWatchfaceToBeTested
@@ -79,13 +80,13 @@ ApplicationWindow {
                             }
 
                             if (sequencer === 2) {
-                                background.source = "background.jpg";
+                                background.source = appRoot.backgroundImage;
                                 roundCheckBox.checked = false;
                                 watchfaceDisplayFrame.snapshot(".png");
                             }
 
                             if (sequencer === 3) {
-                                background.source = "background-round.jpg";
+                                background.source = appRoot.backgroundImage;
                                 roundCheckBox.checked = true;
                                 watchfaceDisplayFrame.snapshot("-round.png");
                             }
@@ -351,7 +352,7 @@ ApplicationWindow {
                     id: background
 
                     visible: !appRoot.displayAmbient
-                    source: "background.jpg"
+                    source: appRoot.backgroundImage
                     anchors.fill: parent
                 }
 
