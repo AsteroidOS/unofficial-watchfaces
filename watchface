@@ -130,37 +130,55 @@ function watchfaceClone {
 }
 
 function deployface {
-    echo "Deploying $1"
-    pushWatchface "$1"
-    activateWatchface "$1"
-    if [ -n "${WALLPAPER}" ] ; then
-        pushWallpaper "${WALLPAPER}"
+    # trim trailing / if present
+    local face="${1%/*}"
+    if [ -d "${face}/usr/share/asteroid-launcher/watchfaces/" ] ; then
+        echo "Deploying ${face}"
+        pushWatchface "${face}"
+        activateWatchface "${face}"
+        if [ -n "${WALLPAPER}" ] ; then
+            pushWallpaper "${WALLPAPER}"
+        fi
+        restartCeres
+    else
+        echo "Error: ${face} does not appear to be a watchface"
     fi
-    restartCeres
 }
 
 function testface {
-    echo "Testing $1"
-    if [ -n "${WALLPAPER}" ] ; then
-        qmlscene "$1" "${WALLPAPER}" loader.qml
+    # trim trailing / if present
+    local face="${1%/*}"
+    if [ -d "${face}/usr/share/asteroid-launcher/watchfaces/" ] ; then
+        echo "Testing ${face}"
+        if [ -n "${WALLPAPER}" ] ; then
+            qmlscene "${face}" "${WALLPAPER}" loader.qml
+        else
+            qmlscene "${face}" "background.jpg" loader.qml
+        fi
     else
-        qmlscene "$1" "background.jpg" loader.qml
+        echo "Error: ${face} does not appear to be a watchface"
     fi
 }
 
 function cloneface {
-    local SOURCE="$1"
-    local DEST="$2"
-    echo "Cloning $1 into $2"
-    if [ ! -d "${SOURCE}" ] ; then
-        echo "Error:  ${SOURCE} does not exist, exiting program"
-        exit
+    # trim trailing / if present
+    local face="${1%/*}"
+    if [ -d "${face}/usr/share/asteroid-launcher/watchfaces/" ] ; then
+        local SOURCE="${face}"
+        local DEST="$2"
+        echo "Cloning ${face} into $2"
+        if [ ! -d "${SOURCE}" ] ; then
+            echo "Error:  ${SOURCE} does not exist, exiting program"
+            exit
+        fi
+        if [ -e "${DEST}" ] ; then
+            echo "Error:  ${DEST} already exists, exiting program"
+            exit
+        fi
+        watchfaceClone "${SOURCE}" "${DEST}"
+    else
+        echo "Error: ${face} does not appear to be a watchface"
     fi
-    if [ -e "${DEST}" ] ; then
-        echo "Error:  ${DEST} already exists, exiting program"
-        exit
-    fi
-    watchfaceClone "${SOURCE}" "${DEST}"
 }
 
 function doGUI {
