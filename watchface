@@ -1,0 +1,259 @@
+#! /bin/bash
+VERSION="1.0"
+
+function showVersion {
+    echo "watchface v${VERSION}"
+}
+
+function showHelp {
+    showVersion
+    cat << EOF
+watchface [option] [command...]
+Utility functions for AsteroidOS watchfaces.  By default, uses "Developer Mode"
+over ssh, but can also use "ADB Mode" using ADB.
+
+Available options:
+-h or --help    prints this help screen and quits
+-a or --adb     uses ADB command to communicate with watch
+-p or --port    specifies a port to use for ssh and scp commands
+-r or --remote  specifies the remote (watch)  name or address for ssh and scp commands
+-q or --qemu    communicates with QEMU emulated watch (same as -r localhost -p 2222 )
+-v or --version displays the version of this program
+
+Available commands:
+wallpaper WP    sets the wallpaper on the watch to named file WP
+deploy WF       pushes the named watchface to the watch and activates it
+clone WF NEWWF  clones the named watchface WF to new watchface NEWWF
+test WF         sets the active watchface to the named watchface
+
+EOF
+}
+
+function doWatchCommand {
+    local user="$1"
+    local cmd=$2
+    case ${user} in 
+        root)
+            if [ "$ADB" == true ] ; then
+                adb shell "${cmd}"
+            else
+                ssh -p "${WATCHPORT}" -t root@"${WATCHADDR}" ${cmd}
+            fi
+            ;;
+        ceres)
+            if [ "$ADB" == true ] ; then
+                printf -v cmd %q "${cmd}"
+                adb shell "su -l -c ${cmd} ceres"
+            else
+                ssh -p "${WATCHPORT}" -t ceres@"${WATCHADDR}" ${cmd}
+            fi
+            ;;
+        *)
+            echo "Error: unknown watch user ${user}"
+            ;;
+    esac
+}
+
+function setDconf {
+    local dconfsetting="$1"
+    local filename="$2"
+    doWatchCommand "ceres" "dconf write ${dconfsetting} '\"file://${filename}\"'"
+}
+
+function pushFiles {
+    local user="$1"
+    local sourcedir="$2"
+    local destdir="$3"
+    if [ "$ADB" = true ] ; then
+        adb push ${sourcedir} "${destdir}"
+    else
+        scp -P"${WATCHPORT}" -r ${sourcedir} "${user}@${WATCHADDR}:${destdir}"
+    fi
+}
+
+function pullFiles {
+    local user="$1"
+    local sourcedir="$2"
+    local destdir="$3"
+    if [ "$ADB" = true ] ; then
+        adb pull ${sourcedir} "${destdir}"
+    else
+        scp -P"${WATCHPORT}" -r "${user}@${WATCHADDR}:${sourcedir}" "${destdir}"
+    fi
+}
+
+function pushWatchface {
+    pushFiles "root" "${1}"'/usr/share/*' "/usr/share/"
+}
+
+function pushWallpaper {
+    local source="$1"
+    local wallpaper="$(basename "$1")"
+    local destination="/usr/share/asteroid-launcher/wallpapers/full/${wallpaper}"
+    pushFiles "root" "${source}" "${destination}"
+    setDconf "/desktop/asteroid/background-filename" "${destination}"
+}
+
+function restartCeres {
+    doWatchCommand "root" "systemctl restart user@1000"
+}
+
+function activateWatchface {
+    setDconf "/desktop/asteroid/watchface" "/usr/share/asteroid-launcher/watchfaces/${1}.qml"
+}
+
+function setTimeZone {
+    doWatchCommand "root" "timedatectl set-timezone $1"
+}
+
+function forgetKeys {
+    ssh-keygen -R ${WATCHADDR}
+    ssh-keygen -R watch
+}
+
+function watchfaceClone {
+    local files
+    mapfile -t files <<<"$(find . -path './'"$1"'/*' -type f | awk '{ dst=$0 ; gsub(/'"$1"'/,"mmmm",dst);  print $0 " " dst }')"
+    for myfile in "${files[@]}" ; do
+        IFS=" " read -r -a onefile <<< "${myfile}"
+        #echo "Copying from ${onefile[0]} to ${onefile[1]}"
+        destdir="${onefile[1]%/*}"
+        extension="${onefile[1]##*.}"
+        mkdir -p "${destdir}"
+        cp "${onefile[0]}" "${onefile[1]}"
+        if [ "${extension}" = "qml" ] ; then
+            sed -i "s/$1/$2/g" "${onefile[1]}"
+        fi
+    done
+}
+
+function deployface {
+    echo "Deploying $1"
+    pushWatchface "$1"
+    activateWatchface "$1"
+    restartCeres
+}
+
+function testface {
+    echo "Testing $1"
+    qmlscene "$1" loader.qml
+}
+
+function cloneface {
+    local SOURCE="$1"
+    local DEST="$2"
+    echo "Cloning $1 into $2"
+    if [ ! -d "${SOURCE}" ] ; then
+        echo "Error:  ${SOURCE} does not exist, exiting program"
+        exit
+    fi
+    if [ -e "${DEST}" ] ; then
+        echo "Error:  ${DEST} already exists, exiting program"
+        exit
+    fi
+    watchfaceClone "${SOURCE}" "${DEST}"
+}
+
+# These are the defaults for SSH access
+WATCHPORT=22
+WATCHADDR=192.168.2.15
+# These are the defaults for local QEMU target
+QEMUPORT=2222
+QEMUADDR=localhost
+# Assume no ADB unless told otherwise
+ADB=false
+# get this host's IPv4 address
+MYADDR=$(hostname -I |grep -oP 192.168.2.[[:digit:]]+)
+# we're not done until we say we are
+DONE=false
+# No wallpaper unless asked
+WALLPAPER=""
+
+while [[ $# -gt 0 ]] ; do
+    case $1 in 
+        -a|--adb)
+            ADB=true
+            shift
+            ;;
+        -q|--qemu)
+            WATCHPORT=${QEMUPORT}
+            WATCHADDR=${QEMUADDR}
+            shift
+            ;;
+        -p|--port)
+            WATCHPORT="$2"
+            shift
+            shift
+            ;;
+        -r|--remote)
+            WATCHADDR="$2"
+            shift
+            shift
+            ;;
+        -h|--help)
+            showHelp
+            exit 1
+            ;;
+        -v|--version)
+            showVersion
+            shift
+            ;;
+        -w|--wall)
+            WALLPAPER="$2"
+            shift
+            shift
+            DONE=true
+            ;;
+        clone)
+            cloneface "$2" "$3"
+            shift
+            shift
+            shift
+            DONE=true
+            ;;
+        deploy)
+            deployface "$2"
+            shift
+            shift
+            DONE=true
+            ;;
+        test)
+            testface "$2"
+            shift
+            shift
+            DONE=true
+            ;;
+        *)
+            echo "Ignoring unknown option $1"
+            shift
+            ;;
+    esac
+done 
+
+if [ "${DONE}" != "true" ] ; then
+    watchface=$(find . -maxdepth 3 -type d -path "*/usr/share" -printf "%h\n" | awk -F '/' '{print $2}' | sort | zenity --title="Choose a watchface" --list --column="Name")
+    action=$(zenity --title="Select action" --list --radiolist \
+        --column="selected" --column="action" \
+        TRUE deploy \
+        FALSE clone \
+        FALSE test)
+    zenity --question --title="Confirming" --text="${action} ${watchface}"
+    case $? in 
+        0)
+            echo "OK!"
+            if [ "${action}" = "clone" ] ; then
+                if newface=$(zenity --entry --title="Cloning watchface" \
+                    --text="Enter name of new watchface:" \
+                    --entry-text "newface")
+                then ${action}face ${watchface} ${newface}
+                else echo "No name entered"
+                fi
+            else 
+                ${action}face ${watchface}
+            fi
+            ;;
+        1)
+            echo "Canceled"
+            ;;
+    esac
+fi
