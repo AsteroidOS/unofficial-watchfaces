@@ -19,10 +19,10 @@ Available options:
 -p or --port    specifies a port to use for ssh and scp commands
 -r or --remote  specifies the remote (watch)  name or address for ssh and scp commands
 -q or --qemu    communicates with QEMU emulated watch (same as -r localhost -p 2222 )
--v or --version displays the version of this program
 -w or --wall WP sets the wallpaper for deploy or test to the named file
 
 Available commands:
+version         displays the version of this program and exits
 deploy WF       pushes the named watchface to the watch and activates it
 clone WF NEWWF  clones the named watchface WF to new watchface NEWWF
 test WF         sets the active watchface to the named watchface
@@ -35,14 +35,14 @@ function doWatchCommand {
     local cmd=$2
     case ${user} in
         root)
-            if [ "$ADB" == true ] ; then
+            if [ "$ADB" = "true" ] ; then
                 adb shell "${cmd}"
             else
                 ssh -p "${WATCHPORT}" -t root@"${WATCHADDR}" ${cmd}
             fi
             ;;
         ceres)
-            if [ "$ADB" == true ] ; then
+            if [ "$ADB" = "true" ] ; then
                 printf -v cmd %q "${cmd}"
                 adb shell "su -l -c ${cmd} ceres"
             else
@@ -65,7 +65,7 @@ function pushFiles {
     local user="$1"
     local sourcedir="$2"
     local destdir="$3"
-    if [ "$ADB" = true ] ; then
+    if [ "$ADB" = "true" ] ; then
         adb push ${sourcedir} "${destdir}"
     else
         scp -P"${WATCHPORT}" -r ${sourcedir} "${user}@${WATCHADDR}:${destdir}"
@@ -76,7 +76,7 @@ function pullFiles {
     local user="$1"
     local sourcedir="$2"
     local destdir="$3"
-    if [ "$ADB" = true ] ; then
+    if [ "$ADB" = "true" ] ; then
         adb pull ${sourcedir} "${destdir}"
     else
         scp -P"${WATCHPORT}" -r "${user}@${WATCHADDR}:${sourcedir}" "${destdir}"
@@ -132,14 +132,17 @@ function watchfaceClone {
 function deployface {
     # trim trailing / if present
     local face="${1%/*}"
+    local activate="$2"
     if [ -d "${face}/usr/share/asteroid-launcher/watchfaces/" ] ; then
         echo "Deploying ${face}"
         pushWatchface "${face}"
-        activateWatchface "${face}"
-        if [ -n "${WALLPAPER}" ] ; then
-            pushWallpaper "${WALLPAPER}"
+        if [ "${activate}" = "true" ] ; then
+            activateWatchface "${face}"
+            if [ -n "${WALLPAPER}" ] ; then
+                pushWallpaper "${WALLPAPER}"
+            fi
+            restartCeres
         fi
-        restartCeres
     else
         echo "Error: ${face} does not appear to be a watchface"
     fi
@@ -184,9 +187,6 @@ function cloneface {
 function doGUI {
     local watchface
     local action
-    if ! watchface=$(find . -maxdepth 3 -type d -path "*/usr/share" -printf "%h\n" | awk -F '/' '{print $2}' | sort | zenity --title="Choose a watchface" --list --column="Name"); then
-        exit
-    fi
     if ! action=$(zenity --title="Select action" --list --radiolist \
         --column="selected" --column="action" \
         TRUE deploy \
@@ -194,40 +194,47 @@ function doGUI {
         FALSE test); then
         exit
     fi
-    zenity --question --title="Confirming" --text="${action} ${watchface}"
-    case $? in
-        0)
-            echo "OK!"
-            if [ "${action}" = "clone" ] ; then
-                if newface=$(zenity --entry --title="Cloning ${watchface}" \
-                    --text="Enter name of new watchface:" \
-                    --entry-text "newface")
-                then "${action}"face "${watchface}" "${newface}"
-                else echo "No name entered"
-                fi
-            else
-                "${action}"face "${watchface}"
+    case $action in 
+        deploy)
+            if ! watchface=$(zenity --title="Choose watchfaces" --list --checklist --column="Selected" --column="Name" "${WATCHFACES[@]}"); then
+                exit
             fi
             ;;
-        1)
-            echo "Canceled"
+        clone|test)
+            if ! watchface=$(zenity --title="Choose a watchface" --list --column="Name" "${WATCHFACES[@]}"); then
+                exit
+            fi
             ;;
     esac
+    # convert | chars to spaces
+    watchface=${watchface//|/ }
+    if zenity --question --title="Confirming" --text="${action} ${watchface}" ; then
+        echo "OK!"
+        if [ "${action}" = "clone" ] ; then
+            if newface=$(zenity --entry --title="Cloning ${watchface}" \
+                --text="Enter name of new watchface:" \
+                --entry-text "newface")
+            then "${action}"face "${watchface}" "${newface}"
+            else echo "No name entered"
+            fi
+        elif [ "${action}" = "deploy" ] ; then
+            local first=true
+            for wf in ${watchface}; do
+                "${action}"face "${wf}" "${first}"
+                first=false
+            done
+        else
+            "${action}"face "${watchface}"
+        fi
+    else
+        echo "Canceled"
+    fi
 }
 
 function textmenu {
-    local watchfaces
     local args
     local watchface
     local newface
-    mapfile -t watchfaces < <(find . -maxdepth 3 -type d -path "*/usr/share" -printf "%h\n" | sort | awk -F '/' '{print $2}' )
-    declare -a args=("--title" "Watchfaces" "--clear" "--menu" "Choose a watchface:" 25 78 15 "--" )
-    for wf in "${watchfaces[@]}" ; do
-        args+=("${wf}" "")
-    done
-    if ! watchface=$("${MENUPROGRAM}" "${args[@]}" 3>&1 1>&2 2>&3); then
-        exit
-    fi
     if ! action=$("${MENUPROGRAM}" --title "Select action" --clear --radiolist \
         "Select action" 0 0 3 \
         "deploy" "Deploy watchface to watch" ON \
@@ -236,6 +243,26 @@ function textmenu {
         3>&1 1>&2 2>&3); then
         exit
     fi
+    case $action in 
+        deploy)
+            declare -a args=("--title" "Watchfaces" "--clear" "--checklist" "Choose watchfaces:" 25 78 15 "--" )
+            for wf in "${WATCHFACES[@]}" ; do
+                args+=("${wf}" "" OFF)
+            done
+            if ! watchface=$("${MENUPROGRAM}" "${args[@]}" 3>&1 1>&2 2>&3); then
+                exit
+            fi
+            ;;
+        clone|test)
+            declare -a args=("--title" "Watchfaces" "--clear" "--menu" "Choose a watchface:" 25 78 15 "--" )
+            for wf in "${WATCHFACES[@]}" ; do
+                args+=("${wf}" "")
+            done
+            if ! watchface=$("${MENUPROGRAM}" "${args[@]}" 3>&1 1>&2 2>&3); then
+                exit
+            fi
+            ;;
+    esac
     if ("${MENUPROGRAM}" --clear --title "Confirming" --yesno "${action} ${watchface}" 0 0); then
         echo "OK!"
         if [ "${action}" = "clone" ] ; then
@@ -249,8 +276,14 @@ function textmenu {
             else
                 echo "No name entered"
             fi
+        elif [ "${action}" = "deploy" ] ; then
+            local first=true
+            for wf in ${watchface}; do
+                "${action}"face "${wf}" "${first}"
+                first=false
+            done
         else
-            "${action}"face "${watchface}"
+            "${action}"face "${wf}"
         fi
     else
         echo "Canceled"
@@ -308,10 +341,6 @@ while [[ $# -gt 0 ]] ; do
             showHelp
             exit 1
             ;;
-        -v|--version)
-            showVersion
-            shift
-            ;;
         -w|--wall)
             WALLPAPER="$2"
             shift
@@ -325,7 +354,7 @@ while [[ $# -gt 0 ]] ; do
             DONE=true
             ;;
         deploy)
-            deployface "$2"
+            deployface "$2" true
             shift
             shift
             DONE=true
@@ -336,6 +365,11 @@ while [[ $# -gt 0 ]] ; do
             shift
             DONE=true
             ;;
+        version)
+            showVersion
+            shift
+            DONE=true
+            ;;
         *)
             echo "Ignoring unknown option $1"
             shift
@@ -343,6 +377,7 @@ while [[ $# -gt 0 ]] ; do
     esac
 done
 
+mapfile -t WATCHFACES < <(find . -maxdepth 3 -type d -path "*/usr/share" -printf "%h\n" | sort | awk -F '/' '{print $2}' )
 if [ "${DONE}" != "true" ] ; then
     if [ "${GUI}" = "true" ] ; then
         doGUI
