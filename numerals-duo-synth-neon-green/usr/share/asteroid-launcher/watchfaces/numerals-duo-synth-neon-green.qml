@@ -93,6 +93,10 @@ Item {
         y: DeviceInfo.hasRoundScreen ? length * 0.1 : (root.height != length ? root.height/2 - length/2 : !displayAmbient ? length * 0.1 : 0)
         width: DeviceInfo.hasRoundScreen ? length * 0.8 : displayAmbient ? length : length * 0.8
         height: DeviceInfo.hasRoundScreen ? length * 0.8 : displayAmbient ? length : length * 0.8
+        Behavior on x { NumberAnimation { duration: 50; easing.type: Easing.OutQuad } }
+        Behavior on y { NumberAnimation { duration: 50; easing.type: Easing.OutQuad } }
+        Behavior on width { NumberAnimation { duration: 50; easing.type: Easing.OutQuad } }
+        Behavior on height { NumberAnimation { duration: 50; easing.type: Easing.OutQuad } }
 
         LinearGradient {
             id: greenColor
