@@ -15,6 +15,7 @@ over ssh, but can also use "ADB Mode" using ADB.
 Available options:
 -h or --help    prints this help screen and quits
 -a or --adb     uses ADB command to communicate with watch
+-b or --boot    reboot watch after deploying multiple watchfaces
 -g or --gui     use the GTK+ gui
 -p or --port    specifies a port to use for ssh and scp commands
 -r or --remote  specifies the remote (watch)  name or address for ssh and scp commands
@@ -98,6 +99,10 @@ function pushWallpaper {
 
 function restartCeres {
     doWatchCommand "root" "systemctl restart user@1000"
+}
+
+function rebootWatch {
+    doWatchCommand "ceres" "reboot"
 }
 
 function activateWatchface {
@@ -223,6 +228,9 @@ function doGUI {
                 "${action}"face "${wf}" "${first}"
                 first=false
             done
+            if [ "${REBOOT}" = "true" ] ; then
+                rebootWatch
+            fi
         else
             "${action}"face "${watchface}"
         fi
@@ -282,6 +290,9 @@ function textmenu {
                 "${action}"face "${wf}" "${first}"
                 first=false
             done
+            if [ "${REBOOT}" = "true" ] ; then
+                rebootWatch
+            fi
         else
             "${action}"face "${wf}"
         fi
@@ -316,6 +327,10 @@ while [[ $# -gt 0 ]] ; do
     case $1 in
         -a|--adb)
             ADB=true
+            shift
+            ;;
+        -b|--boot)
+            REBOOT=true
             shift
             ;;
         -g|--gui)
