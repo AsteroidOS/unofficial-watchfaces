@@ -5,22 +5,65 @@ The creators of the below listed watchfaces are happy to answer your questions a
 Feel free to pull request your work here and if it suits the graphic guidelines of AsteroidOS, it can eventually be merged into the default set of watchfaces shipped with asteroid-launcher.
 
 
-### Install selected or all watchfaces using scripted SCP/ADB ###
+### Install selected or all watchfaces
 
 - Open a terminal and clone this unofficial-watchfaces repo to a new subfolder from your current location.\
 `git clone https://github.com/AsteroidOS/unofficial-watchfaces`
 - Cd into unofficial-watchfaces folder.\
 `cd unofficial-watchfaces/`
 - Connect your AsteroidOS Watch, configured to either ADB Mode (ADB transfer) or Developer Mode (SCP transfer) in Settings -> USB.
-- Start `./deploy.sh` to use SCP commands or `./deploy.sh -a` for ADB commands.
-- You can also use `./deploy.sh --help` to get a list of available options.
-- Select a single watchface to deploy to the watch with its given number or copy all available watchfaces at once with option 1.
-- You can then restart the ceres session and apply a single selected watchface with pressing 'y'.
+- Start `./watchface` to use SCP commands or `./watchface -a` for ADB commands.
+- You can also use `./watchface --help` to get a list of available options.
+- Select a single watchface to deploy to the watch with its given number or copy multiple watchfaces at once
+- The first selected watchface (if more than one is selected) will be activated
 
-Note that restarting the ceres session might be necessary when new fonts were installed along with the new watchfaces.
+Note that restarting the ceres session might be necessary when new fonts were installed along with the new watchfaces, so the script automatically restarts the ceres session after deploying one or more watchfaces.
 Restarting the ceres session might break things like Always On Mode or the battery display for the remaining uptime. Reboot the watch in that case.
-You may [restart the session or reboot the watch](https://asteroidos.org/wiki/useful-commands/#restart) manually.
+You may [reboot the watch](https://asteroidos.org/wiki/useful-commands/#restart) manually, or you may use the `--boot` option of `watchface`.
 
+### `watchface` summary
+If invoked without arguments, the `watchface` command will start a text menu (using [`dialog`](https://invisible-island.net/dialog/) if available, otherwise using [`whiptail`](https://en.wikibooks.org/wiki/Bash_Shell_Scripting/Whiptail)).  A GUI based menu (using [`zenity`](https://help.gnome.org/users/zenity/stable/) is also available using the `-g` option.
+```
+watchface [option] [command...]
+Utility functions for AsteroidOS watchfaces.  By default, uses "Developer Mode"
+over ssh, but can also use "ADB Mode" using ADB.
+
+Available options:
+-h or --help    prints this help screen and quits
+-a or --adb     uses ADB command to communicate with watch
+-b or --boot    reboot watch after deploying multiple watchfaces
+-g or --gui     use the GTK+ gui
+-p or --port    specifies a port to use for ssh and scp commands
+-r or --remote  specifies the remote (watch)  name or address for ssh and scp commands
+-q or --qemu    communicates with QEMU emulated watch (same as -r localhost -p 2222 )
+-w or --wall WP sets the wallpaper for deploy or test to the named file
+
+Available commands:
+version         displays the version of this program and exits
+deploy WF       pushes the named watchface to the watch and activates it
+clone WF NEWWF  clones the named watchface WF to new watchface NEWWF
+test WF         sets the active watchface to the named watchface
+```
+
+### Cloning a watchface
+Cloning a watchface can be done either via either of the two gui options mentioned above or by the command line argument listed above. 
+
+Example:
+```
+./watchface clone decimal-time mister-snerd
+```
+This will clone the `decimal-time` watchface into a new watchface named `mister-snerd` and make the appropriate substitutions within paths and qml files.  You can now make changes to your new `mister-snerd` and make it your own.
+
+See the [Watchface Creation](https://asteroidos.org/wiki/watchfaces-creation/) Guide for more details.
+
+### Testing a watchface
+Testing a watchface can be done either via either of the two gui options mentioned above or by the command line argument listed above.
+
+Example:
+```
+./watchface test decimal-time
+```
+This will start up a qmlscene tester for the named watch (`decimal-time` in this case) and allow you to see it operating or observe the effects of changes you make.  There are some limitations to the existing test script.  See the Watchface Creation [section on using the test script](https://asteroidos.org/wiki/watchfaces-creation/#scriptfeatures) for details.
 
 ### Following great community contributions are available ###
 
