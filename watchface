@@ -201,7 +201,11 @@ function doGUI {
     fi
     case $action in 
         deploy)
-            if ! watchface=$(zenity --title="Choose watchfaces" --list --checklist --column="Selected" --column="Name" "${WATCHFACES[@]}"); then
+            declare -a args=('--title="Choose watchfaces"' "--list" "--checklist" '--column="Selected"' '--column="Name"')
+            for wf in "${WATCHFACES[@]}" ; do
+                args+=(FALSE "${wf}")
+            done
+            if ! watchface=$(zenity "${args[@]}"); then
                 exit
             fi
             ;;
