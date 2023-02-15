@@ -26,7 +26,7 @@ Available commands:
 version         displays the version of this program and exits
 deploy WF       pushes the named watchface to the watch and activates it
 clone WF NEWWF  clones the named watchface WF to new watchface NEWWF
-test WF         sets the active watchface to the named watchface
+test WF         tests the named watchface on the computer using qmlscene
 
 EOF
 }
