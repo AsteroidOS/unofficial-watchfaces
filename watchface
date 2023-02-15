@@ -210,9 +210,10 @@ function guiMenu {
         elif [ "${action}" = "deploy" ] ; then
             local first=true
             for wf in ${watchface}; do
-                "${action}"face "${wf}" "${first}"
+                deployface "${wf}" "${first}"
                 first=false
             done
+            restartCeres
             if [ "${REBOOT}" = "true" ] ; then
                 rebootWatch
             fi
