@@ -100,73 +100,74 @@ function activateWatchface {
 
 function watchfaceClone {
     local files
-    mapfile -t files <<<"$(find . -path './'"$1"'/*' -type f | awk '{ dst=$0 ; gsub(/'"$1"'/,"mmmm",dst);  print $0 " " dst }')"
-    for myfile in "${files[@]}" ; do
-        IFS=" " read -r -a onefile <<< "${myfile}"
-        #echo "Copying from ${onefile[0]} to ${onefile[1]}"
-        destdir="${onefile[1]%/*}"
-        extension="${onefile[1]##*.}"
+    mapfile -t files <<<"$(find . -path './'"$1"'/*' -type f | awk '{ dst=$0 ; gsub(/'"$1"'/,"'"$2"'",dst);  print $0 "|" dst }')"
+    for filepair in "${files[@]}" ; do
+        IFS="|" read -r -a srcDstPaths <<< "${filepair}"
+        #echo "Copying from ${srcDstPaths[0]} to ${srcDstPaths[1]}"
+        destdir="${srcDstPaths[1]%/*}"
+        extension="${srcDstPaths[1]##*.}"
         mkdir -p "${destdir}"
-        cp "${onefile[0]}" "${onefile[1]}"
+        cp "${srcDstPaths[0]}" "${srcDstPaths[1]}"
         if [ "${extension}" = "qml" ] ; then
-            sed -i "s/$1/$2/g" "${onefile[1]}"
+            sed -i "s/$1/$2/g" "${srcDstPaths[1]}"
         fi
     done
 }
 
-function deployface {
+function sanitizeSourceWatchface {
     # trim trailing / if present
     local face="${1%/*}"
+    if [[ ! -d "${face}/usr/share/asteroid-launcher/watchfaces/" ]] ; then
+        echo "Error: ${face} does not appear to be a watchface" >&2
+        exit 1
+    fi
+    echo "${face}"
+}
+
+function deployface {
+    local sourcewatchface
     local activate="$2"
-    if [ -d "${face}/usr/share/asteroid-launcher/watchfaces/" ] ; then
-        echo "Deploying ${face}"
-        pushWatchface "${face}"
-        if [ "${activate}" = "true" ] ; then
-            activateWatchface "${face}"
-            if [ -n "${WALLPAPER}" ] ; then
-                pushWallpaper "${WALLPAPER}"
-            fi
-            restartCeres
+    sourcewatchface=$(sanitizeSourceWatchface "$1") 
+    if [ $? -ne 0 ] ; then
+        exit 1
+    fi
+    echo "Deploying ${sourcewatchface}"
+    pushWatchface "${sourcewatchface}"
+    if [ "${activate}" = "true" ] ; then
+        activateWatchface "${sourcewatchface}"
+        if [ -n "${WALLPAPER}" ] ; then
+            pushWallpaper "${WALLPAPER}"
         fi
-    else
-        echo "Error: ${face} does not appear to be a watchface"
     fi
 }
 
 function testface {
-    # trim trailing / if present
-    local face="${1%/*}"
-    if [ -d "${face}/usr/share/asteroid-launcher/watchfaces/" ] ; then
-        echo "Testing ${face}"
-        if [ -n "${WALLPAPER}" ] ; then
-            qmlscene "${face}" "${WALLPAPER}" loader.qml
-        else
-            qmlscene "${face}" "background.jpg" loader.qml
-        fi
+    local sourcewatchface
+    sourcewatchface=$(sanitizeSourceWatchface "$1")
+    if [ $? -ne 0 ] ; then
+        exit 1
+    fi
+    echo "Testing ${sourcewatchface}"
+    if [ -n "${WALLPAPER}" ] ; then
+        qmlscene "${sourcewatchface}" "${WALLPAPER}" loader.qml
     else
-        echo "Error: ${face} does not appear to be a watchface"
+        qmlscene "${sourcewatchface}" "background.jpg" loader.qml
     fi
 }
 
 function cloneface {
-    # trim trailing / if present
-    local face="${1%/*}"
-    if [ -d "${face}/usr/share/asteroid-launcher/watchfaces/" ] ; then
-        local SOURCE="${face}"
-        local DEST="$2"
-        echo "Cloning ${face} into $2"
-        if [ ! -d "${SOURCE}" ] ; then
-            echo "Error:  ${SOURCE} does not exist, exiting program"
-            exit
-        fi
-        if [ -e "${DEST}" ] ; then
-            echo "Error:  ${DEST} already exists, exiting program"
-            exit
-        fi
-        watchfaceClone "${SOURCE}" "${DEST}"
-    else
-        echo "Error: ${face} does not appear to be a watchface"
+    local sourcewatchface
+    local destwatchface="$2"
+    sourcewatchface=$(sanitizeSourceWatchface "$1")
+    if [ $? -ne 0 ] ; then
+        exit 1
     fi
+    echo "Cloning ${sourcewatchface} into ${destwatchface}"
+    if [ -e "${destwatchface}" ] ; then
+        echo "Error:  ${destwatchface} already exists, exiting program"
+        exit
+    fi
+    watchfaceClone "${sourcewatchface}" "${destwatchface}"
 }
 
 function doGUI {
