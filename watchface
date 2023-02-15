@@ -170,7 +170,7 @@ function cloneface {
     watchfaceClone "${sourcewatchface}" "${destwatchface}"
 }
 
-function doGUI {
+function guiMenu {
     local watchface
     local action
     if ! action=$(zenity --title="Select action" --list --radiolist \
@@ -224,7 +224,7 @@ function doGUI {
     fi
 }
 
-function textmenu {
+function textMenu {
     local args
     local watchface
     local newface
@@ -380,8 +380,8 @@ done
 mapfile -t WATCHFACES < <(find . -maxdepth 3 -type d -path "*/usr/share" -printf "%h\n" | sort | awk -F '/' '{print $2}' )
 if [ "${DONE}" != "true" ] ; then
     if [ "${GUI}" = "true" ] ; then
-        doGUI
+        guiMenu
     else
-        textmenu
+        textMenu
     fi
 fi
