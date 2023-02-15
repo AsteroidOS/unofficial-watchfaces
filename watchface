@@ -73,17 +73,6 @@ function pushFiles {
     fi
 }
 
-function pullFiles {
-    local user="$1"
-    local sourcedir="$2"
-    local destdir="$3"
-    if [ "$ADB" = "true" ] ; then
-        adb pull ${sourcedir} "${destdir}"
-    else
-        scp -P"${WATCHPORT}" -r "${user}@${WATCHADDR}:${sourcedir}" "${destdir}"
-    fi
-}
-
 function pushWatchface {
     pushFiles "root" "${1}"'/usr/share/*' "/usr/share/"
 }
@@ -107,15 +96,6 @@ function rebootWatch {
 
 function activateWatchface {
     setDconf "/desktop/asteroid/watchface" "/usr/share/asteroid-launcher/watchfaces/${1}.qml"
-}
-
-function setTimeZone {
-    doWatchCommand "root" "timedatectl set-timezone $1"
-}
-
-function forgetKeys {
-    ssh-keygen -R "${WATCHADDR}"
-    ssh-keygen -R watch
 }
 
 function watchfaceClone {
