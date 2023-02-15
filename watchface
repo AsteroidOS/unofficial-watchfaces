@@ -31,7 +31,7 @@ test WF         tests the named watchface on the computer using qmlscene
 EOF
 }
 
-function doWatchCommand {
+function runWatchCommand {
     local user="$1"
     local cmd=$2
     case ${user} in
@@ -59,7 +59,7 @@ function doWatchCommand {
 function setDconf {
     local dconfsetting="$1"
     local filename="$2"
-    doWatchCommand "ceres" "dconf write ${dconfsetting} '\"file://${filename}\"'"
+    runWatchCommand "ceres" "dconf write ${dconfsetting} '\"file://${filename}\"'"
 }
 
 function pushFiles {
@@ -87,11 +87,11 @@ function pushWallpaper {
 }
 
 function restartCeres {
-    doWatchCommand "root" "systemctl restart user@1000"
+    runWatchCommand "root" "systemctl restart user@1000"
 }
 
 function rebootWatch {
-    doWatchCommand "ceres" "reboot"
+    runWatchCommand "ceres" "reboot"
 }
 
 function activateWatchface {
