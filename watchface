@@ -204,7 +204,7 @@ function guiMenu {
             if newface=$(zenity --entry --title="Cloning ${watchface}" \
                 --text="Enter name of new watchface:" \
                 --entry-text "newface")
-            then "${action}"face "${watchface}" "${newface}"
+            then cloneface "${watchface}" "${newface}"
             else echo "No name entered"
             fi
         elif [ "${action}" = "deploy" ] ; then
@@ -218,7 +218,7 @@ function guiMenu {
                 rebootWatch
             fi
         else
-            "${action}"face "${watchface}"
+            testface "${watchface}"
         fi
     else
         echo "Canceled"
@@ -266,14 +266,14 @@ function textMenu {
                 8 50 "newface" \
                 3>&1 1>&2 2>&3)
             then
-                "${action}"face "${watchface}" "${newface}"
+                cloneface "${watchface}" "${newface}"
             else
                 echo "No name entered"
             fi
         elif [ "${action}" = "deploy" ] ; then
             local first=true
             for wf in ${watchface}; do
-                "${action}"face "${wf}" "${first}"
+                deployface "${wf}" "${first}"
                 first=false
             done
             if [ "${REBOOT}" = "true" ] ; then
