@@ -280,7 +280,7 @@ function textMenu {
                 rebootWatch
             fi
         else
-            "${action}"face "${wf}"
+            testface "${watchface}"
         fi
     else
         echo "Canceled"
