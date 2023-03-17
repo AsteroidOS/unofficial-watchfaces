@@ -1,4 +1,4 @@
-#! /bin/bash
+#!/bin/bash
 VERSION="1.1"
 
 function showVersion {
@@ -101,7 +101,7 @@ function activateWatchface {
 
 function watchfaceClone {
     local files
-    mapfile -t files <<<"$(find . -path './'"$1"'/*' -type f | awk '{ dst=$0 ; gsub(/'"$1"'/,"'"$2"'",dst);  print $0 "|" dst }')"
+    mapfile -t files <<< $(find . -path './'"$1"'/*' -type f | awk '{ dst=$0 ; gsub(/'"$1"'/,"'"$2"'",dst);  print $0 "|" dst }')
     for filepair in "${files[@]}" ; do
         IFS="|" read -r -a srcDstPaths <<< "${filepair}"
         #echo "Copying from ${srcDstPaths[0]} to ${srcDstPaths[1]}"
@@ -211,7 +211,7 @@ function guiMenu {
         elif [ "${action}" = "deploy" ] ; then
             local first=true
             for wf in ${watchface}; do
-                deployface "${wf}" "${first}"
+                deployface "${wf//\"/}" "${first}"
                 first=false
             done
             restartCeres
@@ -274,7 +274,7 @@ function textMenu {
         elif [ "${action}" = "deploy" ] ; then
             local first=true
             for wf in ${watchface}; do
-                deployface "${wf}" "${first}"
+                deployface "${wf//\"/}" "${first}"
                 first=false
             done
             if [ "${REBOOT}" = "true" ] ; then
