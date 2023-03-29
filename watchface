@@ -307,7 +307,7 @@ WALLPAPER=""
 if hash dialog 2>/dev/null; then
     MENUPROGRAM=dialog
 else
-    MENUPROGRAM=whiptail
+    MENUPROGRAM=whiptail --separate-output
 fi
 
 
