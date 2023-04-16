@@ -129,6 +129,7 @@ This will start up a qmlscene tester for the named watch (`decimal-time` in this
 | ![thumbnail](.thumbnails/retro-lcd-round.webp) |![thumbnail](.thumbnails/retro-lcd.jpg) | [retro-lcd](retro-lcd/usr/share/asteroid-launcher/watchfaces/retro-lcd.qml) | [Huntereb](mailto:Huntereb@lewd.pics), [eLtMosen](https://github.com/eLtMosen) |
 | ![thumbnail](.thumbnails/sporty-round-round.webp) |![thumbnail](.thumbnails/sporty-round.jpg) | [sporty-round](sporty-round/usr/share/asteroid-launcher/watchfaces/sporty-round.qml) | [eLtMosen](https://github.com/eLtMosen) |
 | ![thumbnail](.thumbnails/sporty-round-v2-round.webp) |![thumbnail](.thumbnails/sporty-round-v2.jpg) | [sporty-round-v2](sporty-round-v2/usr/share/asteroid-launcher/watchfaces/sporty-round-v2.qml) | [eLtMosen](https://github.com/eLtMosen) |
+| ![thumbnail](.thumbnails/words-worte-palabras-mots-opensans-round.webp) |![thumbnail](.thumbnails/words-worte-palabras-mots-opensans.webp) | [words-worte-palabras-mots-opensans](words-worte-palabras-mots-opensans/usr/share/asteroid-launcher/watchfaces/words-worte-palabras-mots-opensans.qml) | Aleksi Suomalainen, Florent Revest, Sylvia van Os, Timo Könnecke, Oliver Geneser |
 
 ### Licenses ###
 
