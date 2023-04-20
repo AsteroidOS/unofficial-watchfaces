@@ -306,10 +306,9 @@ WALLPAPER=""
 # Assume Dialog unless unavailable
 if hash dialog 2>/dev/null; then
     MENUPROGRAM=dialog
-else
+elif hash whiptail 2>/dev/null; then
     MENUPROGRAM=whiptail --separate-output
 fi
-
 
 while [[ $# -gt 0 ]] ; do
     case $1 in
@@ -389,8 +388,16 @@ done
 if [ "${SKIP_INTERACTIVE_PROMPT}" != "true" ] ; then
     mapfile -t WATCHFACES < <(find . -maxdepth 3 -type d -path "*/usr/share" -printf "%h\n" | sort | awk -F '/' '{print $2}' )
     if [ "${GUI}" = "true" ] ; then
-        guiMenu
+        if hash zenity 2>/dev/null; then
+            echo "Error: install 'zenity' to use gui menus."
+        else
+            guiMenu
+        fi
     else
-        textMenu
+        if [ -z "${MENUPROGRAM}" ] ; then
+            echo "Error: install either 'dialog' or 'whiptail' to use text menus."
+        else
+            textMenu
+        fi
     fi
 fi
