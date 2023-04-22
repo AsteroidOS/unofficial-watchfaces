@@ -16,6 +16,7 @@ Available options:
 -h or --help    print this help screen and quit
 -a or --adb     use ADB command to communicate with watch
 -b or --boot    reboot watch after deploying multiple watchfaces
+-e or --every   select every watchface (deploy only)
 -g or --gui     use the GTK+ gui
 -p or --port    specify an IP port to use for ssh and scp commands
 -r or --remote  specify the remote (watch)  name or address for ssh and scp commands
@@ -171,6 +172,7 @@ function cloneface {
 function guiMenu {
     local watchface
     local action
+    local default
     if ! action=$(zenity --title="Select action" --list --radiolist \
         --column="selected" --column="action" \
         TRUE deploy \
@@ -178,11 +180,16 @@ function guiMenu {
         FALSE test); then
         exit
     fi
+    if [ "${DEFAULTOPTION}" == "ON" ] ; then
+        default=TRUE
+    else
+        default=FALSE
+    fi
     case $action in 
         deploy)
             declare -a args=('--title="Choose watchfaces"' "--list" "--checklist" '--column="Selected"' '--column="Name"')
             for wf in "${WATCHFACES[@]}" ; do
-                args+=(FALSE "${wf}")
+                args+=("${default}" "${wf}")
             done
             if ! watchface=$(zenity "${args[@]}"); then
                 exit
@@ -239,7 +246,7 @@ function textMenu {
         deploy)
             declare -a args=("--title" "Watchfaces" "--clear" "--checklist" "Choose watchfaces:" 25 78 15 "--" )
             for wf in "${WATCHFACES[@]}" ; do
-                args+=("${wf}" "" OFF)
+                args+=("${wf}" "" "${DEFAULTOPTION}")
             done
             if ! watchface=$(${MENUPROGRAM} "${args[@]}" 3>&1 1>&2 2>&3); then
                 exit
@@ -300,6 +307,8 @@ GUI=false
 SKIP_INTERACTIVE_PROMPT=false
 # No wallpaper unless asked
 WALLPAPER=""
+# Default to all watchfaces unselected for deploy
+DEFAULTOPTION=OFF
 # Assume Dialog unless unavailable
 if hash dialog 2>/dev/null; then
     MENUPROGRAM="dialog"
@@ -316,6 +325,10 @@ while [[ $# -gt 0 ]] ; do
             ;;
         -b|--boot)
             REBOOT=true
+            shift
+            ;;
+        -e|--every)
+            DEFAULTOPTION=ON
             shift
             ;;
         -g|--gui)
