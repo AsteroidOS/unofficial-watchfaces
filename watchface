@@ -321,9 +321,9 @@ DEFAULTOPTION=OFF
 DEPLOY_ALL=false
 # Assume Dialog unless unavailable
 if hash dialog 2>/dev/null; then
-    MENUPROGRAM=dialog
+    MENUPROGRAM="dialog"
 elif hash whiptail 2>/dev/null; then
-    MENUPROGRAM=whiptail --separate-output
+    MENUPROGRAM="whiptail --separate-output"
 fi
 
 while [[ $# -gt 0 ]] ; do
