@@ -185,7 +185,7 @@ function guiMenu {
     else
         default=FALSE
     fi
-    case $action in 
+    case $action in
         deploy)
             declare -a args=('--title="Choose watchfaces"' "--list" "--checklist" '--column="Selected"' '--column="Name"')
             for wf in "${WATCHFACES[@]}" ; do
@@ -242,7 +242,7 @@ function textMenu {
         3>&1 1>&2 2>&3); then
         exit
     fi
-    case $action in 
+    case $action in
         deploy)
             declare -a args=("--title" "Watchfaces" "--clear" "--checklist" "Choose watchfaces:" 25 78 15 "--" )
             for wf in "${WATCHFACES[@]}" ; do
