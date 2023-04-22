@@ -16,6 +16,7 @@ Available options:
 -h or --help    print this help screen and quit
 -a or --adb     use ADB command to communicate with watch
 -b or --boot    reboot watch after deploying multiple watchfaces
+-e or --every   select every watchface (deploy only)
 -g or --gui     use the GTK+ gui
 -p or --port    specify an IP port to use for ssh and scp commands
 -r or --remote  specify the remote (watch)  name or address for ssh and scp commands
@@ -26,6 +27,7 @@ Available commands:
 update          use git to update your local copy of the unoffical-watchfaces repository
 version         display the version of this program and exit
 deploy WF       push the named watchface to the watch and activate it
+deployall       deploy all watchfaces
 clone WF NEWWF  clone the named watchface WF to new watchface NEWWF
 test WF         test the named watchface on the computer using qmlscene
 
@@ -128,8 +130,7 @@ function sanitizeSourceWatchface {
 function deployface {
     local sourcewatchface
     local activate="$2"
-    sourcewatchface=$(sanitizeSourceWatchface "$1") 
-    if [ $? -ne 0 ] ; then
+    if ! sourcewatchface=$(sanitizeSourceWatchface "$1") ; then
         exit 1
     fi
     echo "Deploying ${sourcewatchface}"
@@ -144,8 +145,7 @@ function deployface {
 
 function testface {
     local sourcewatchface
-    sourcewatchface=$(sanitizeSourceWatchface "$1")
-    if [ $? -ne 0 ] ; then
+    if ! sourcewatchface=$(sanitizeSourceWatchface "$1") ; then
         exit 1
     fi
     echo "Testing ${sourcewatchface}"
@@ -159,8 +159,7 @@ function testface {
 function cloneface {
     local sourcewatchface
     local destwatchface="$2"
-    sourcewatchface=$(sanitizeSourceWatchface "$1")
-    if [ $? -ne 0 ] ; then
+    if ! sourcewatchface=$(sanitizeSourceWatchface "$1") ; then
         exit 1
     fi
     echo "Cloning ${sourcewatchface} into ${destwatchface}"
@@ -174,6 +173,7 @@ function cloneface {
 function guiMenu {
     local watchface
     local action
+    local default
     if ! action=$(zenity --title="Select action" --list --radiolist \
         --column="selected" --column="action" \
         TRUE deploy \
@@ -181,11 +181,16 @@ function guiMenu {
         FALSE test); then
         exit
     fi
-    case $action in 
+    if [ "${DEFAULTOPTION}" == "ON" ] ; then
+        default=TRUE
+    else
+        default=FALSE
+    fi
+    case $action in
         deploy)
             declare -a args=('--title="Choose watchfaces"' "--list" "--checklist" '--column="Selected"' '--column="Name"')
             for wf in "${WATCHFACES[@]}" ; do
-                args+=(FALSE "${wf}")
+                args+=("${default}" "${wf}")
             done
             if ! watchface=$(zenity "${args[@]}"); then
                 exit
@@ -230,7 +235,7 @@ function textMenu {
     local args
     local watchface
     local newface
-    if ! action=$("${MENUPROGRAM}" --title "Select action" --clear --radiolist \
+    if ! action=$(${MENUPROGRAM} --title "Select action" --clear --radiolist \
         "Select action" 0 0 3 \
         "deploy" "Deploy watchface to watch" ON \
         "clone" "Clone watchface to new name" OFF \
@@ -238,13 +243,13 @@ function textMenu {
         3>&1 1>&2 2>&3); then
         exit
     fi
-    case $action in 
+    case $action in
         deploy)
             declare -a args=("--title" "Watchfaces" "--clear" "--checklist" "Choose watchfaces:" 25 78 15 "--" )
             for wf in "${WATCHFACES[@]}" ; do
-                args+=("${wf}" "" OFF)
+                args+=("${wf}" "" "${DEFAULTOPTION}")
             done
-            if ! watchface=$("${MENUPROGRAM}" "${args[@]}" 3>&1 1>&2 2>&3); then
+            if ! watchface=$(${MENUPROGRAM} "${args[@]}" 3>&1 1>&2 2>&3); then
                 exit
             fi
             ;;
@@ -253,15 +258,15 @@ function textMenu {
             for wf in "${WATCHFACES[@]}" ; do
                 args+=("${wf}" "")
             done
-            if ! watchface=$("${MENUPROGRAM}" "${args[@]}" 3>&1 1>&2 2>&3); then
+            if ! watchface=$(${MENUPROGRAM} "${args[@]}" 3>&1 1>&2 2>&3); then
                 exit
             fi
             ;;
     esac
-    if ("${MENUPROGRAM}" --clear --title "Confirming" --yesno "${action} ${watchface}" 0 0); then
+    if (${MENUPROGRAM} --clear --title "Confirming" --yesno "${action} ${watchface}" 0 0); then
         echo "OK!"
         if [ "${action}" = "clone" ] ; then
-            if newface=$("${MENUPROGRAM}" \
+            if newface=$(${MENUPROGRAM} \
                 --title "Cloning ${watchface}" --clear \
                 --inputbox "Enter name of new watchface:" \
                 8 50 "newface" \
@@ -288,6 +293,13 @@ function textMenu {
     fi
 }
 
+function deployall {
+    for wf in "${WATCHFACES[@]}" ; do
+        deployface "${wf}" false
+    done
+}
+
+
 # These are the defaults for SSH access
 WATCHPORT=22
 WATCHADDR=192.168.2.15
@@ -303,11 +315,15 @@ GUI=false
 SKIP_INTERACTIVE_PROMPT=false
 # No wallpaper unless asked
 WALLPAPER=""
+# Default to all watchfaces unselected for deploy
+DEFAULTOPTION=OFF
+# Default to not deploying all watchfaces
+DEPLOY_ALL=false
 # Assume Dialog unless unavailable
 if hash dialog 2>/dev/null; then
-    MENUPROGRAM=dialog
+    MENUPROGRAM="dialog"
 elif hash whiptail 2>/dev/null; then
-    MENUPROGRAM=whiptail --separate-output
+    MENUPROGRAM="whiptail --separate-output"
 fi
 
 while [[ $# -gt 0 ]] ; do
@@ -318,6 +334,10 @@ while [[ $# -gt 0 ]] ; do
             ;;
         -b|--boot)
             REBOOT=true
+            shift
+            ;;
+        -e|--every)
+            DEFAULTOPTION=ON
             shift
             ;;
         -g|--gui)
@@ -355,6 +375,11 @@ while [[ $# -gt 0 ]] ; do
             shift
             SKIP_INTERACTIVE_PROMPT=true
             ;;
+        deployall)
+            DEPLOY_ALL=true
+            shift
+            SKIP_INTERACTIVE_PROMPT=true
+            ;;
         deploy)
             deployface "$2" true
             restartCeres
@@ -385,8 +410,8 @@ while [[ $# -gt 0 ]] ; do
     esac
 done
 
+mapfile -t WATCHFACES < <(find . -maxdepth 3 -type d -path "*/usr/share" -printf "%h\n" | sort | awk -F '/' '{print $2}' )
 if [ "${SKIP_INTERACTIVE_PROMPT}" != "true" ] ; then
-    mapfile -t WATCHFACES < <(find . -maxdepth 3 -type d -path "*/usr/share" -printf "%h\n" | sort | awk -F '/' '{print $2}' )
     if [ "${GUI}" = "true" ] ; then
         if hash zenity 2>/dev/null; then
             echo "Error: install 'zenity' to use gui menus."
@@ -400,4 +425,6 @@ if [ "${SKIP_INTERACTIVE_PROMPT}" != "true" ] ; then
             textMenu
         fi
     fi
+elif [ "${DEPLOY_ALL}" == "true" ] ; then
+    deployall
 fi
