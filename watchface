@@ -227,7 +227,7 @@ function textMenu {
     local args
     local watchface
     local newface
-    if ! action=$("${MENUPROGRAM}" --title "Select action" --clear --radiolist \
+    if ! action=$(${MENUPROGRAM} --title "Select action" --clear --radiolist \
         "Select action" 0 0 3 \
         "deploy" "Deploy watchface to watch" ON \
         "clone" "Clone watchface to new name" OFF \
@@ -241,7 +241,7 @@ function textMenu {
             for wf in "${WATCHFACES[@]}" ; do
                 args+=("${wf}" "" OFF)
             done
-            if ! watchface=$("${MENUPROGRAM}" "${args[@]}" 3>&1 1>&2 2>&3); then
+            if ! watchface=$(${MENUPROGRAM} "${args[@]}" 3>&1 1>&2 2>&3); then
                 exit
             fi
             ;;
@@ -250,15 +250,15 @@ function textMenu {
             for wf in "${WATCHFACES[@]}" ; do
                 args+=("${wf}" "")
             done
-            if ! watchface=$("${MENUPROGRAM}" "${args[@]}" 3>&1 1>&2 2>&3); then
+            if ! watchface=$(${MENUPROGRAM} "${args[@]}" 3>&1 1>&2 2>&3); then
                 exit
             fi
             ;;
     esac
-    if ("${MENUPROGRAM}" --clear --title "Confirming" --yesno "${action} ${watchface}" 0 0); then
+    if (${MENUPROGRAM} --clear --title "Confirming" --yesno "${action} ${watchface}" 0 0); then
         echo "OK!"
         if [ "${action}" = "clone" ] ; then
-            if newface=$("${MENUPROGRAM}" \
+            if newface=$(${MENUPROGRAM} \
                 --title "Cloning ${watchface}" --clear \
                 --inputbox "Enter name of new watchface:" \
                 8 50 "newface" \
@@ -302,9 +302,9 @@ SKIP_INTERACTIVE_PROMPT=false
 WALLPAPER=""
 # Assume Dialog unless unavailable
 if hash dialog 2>/dev/null; then
-    MENUPROGRAM=dialog
+    MENUPROGRAM="dialog"
 else
-    MENUPROGRAM=whiptail --separate-output
+    MENUPROGRAM="whiptail --separate-output"
 fi
 
 
