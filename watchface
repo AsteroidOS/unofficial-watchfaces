@@ -128,8 +128,7 @@ function sanitizeSourceWatchface {
 function deployface {
     local sourcewatchface
     local activate="$2"
-    sourcewatchface=$(sanitizeSourceWatchface "$1") 
-    if [ $? -ne 0 ] ; then
+    if ! sourcewatchface=$(sanitizeSourceWatchface "$1") ; then
         exit 1
     fi
     echo "Deploying ${sourcewatchface}"
@@ -144,8 +143,7 @@ function deployface {
 
 function testface {
     local sourcewatchface
-    sourcewatchface=$(sanitizeSourceWatchface "$1")
-    if [ $? -ne 0 ] ; then
+    if ! sourcewatchface=$(sanitizeSourceWatchface "$1") ; then
         exit 1
     fi
     echo "Testing ${sourcewatchface}"
@@ -159,8 +157,7 @@ function testface {
 function cloneface {
     local sourcewatchface
     local destwatchface="$2"
-    sourcewatchface=$(sanitizeSourceWatchface "$1")
-    if [ $? -ne 0 ] ; then
+    if ! sourcewatchface=$(sanitizeSourceWatchface "$1") ; then
         exit 1
     fi
     echo "Cloning ${sourcewatchface} into ${destwatchface}"
