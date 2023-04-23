@@ -17,7 +17,7 @@ import QtQuick 2.1
 import Nemo.Mce 1.0
 import org.asteroid.controls 1.0
 import org.asteroid.utils 1.0
-import Nemo.Ngf 1.0
+import QtSensors 5.3
 
 Item {
     id: watchFace
@@ -131,7 +131,7 @@ Item {
         sourceSize.height: parent.width
         sourceSize.width: parent.width
         fillMode: Image.PreserveAspectFit
-        source: "kitt-compass.svg"
+        source: imgPath + "kitt-compass.svg"
     }
 
     Image {
@@ -181,5 +181,12 @@ Item {
     MceBatteryState {
         id: batteryChargeState
     } 
+
+    Compass {
+        active: true
+        onReadingChanged: {
+            compassRotateImage.rotation = -reading.azimuth
+        }
+    }
 
 }
