@@ -99,7 +99,7 @@ Item {
             topMargin: parent.height * .24
             horizontalCenter: parent.horizontalCenter
         }
-        text: "<b>AsteroidOS</b><br>Hack Your Wrist"
+        text: "<b>AsteroidOS</b><br>Free Your Wrist"
         state: currentColor
         states: State { name: "black"
             PropertyChanges {
