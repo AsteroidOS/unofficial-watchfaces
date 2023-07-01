@@ -10,6 +10,7 @@ ApplicationWindow {
     property bool displayAmbient: ambientCheckBox.checked
     property var nameOfWatchfaceToBeTested: Qt.application.arguments[1]
     property var backgroundImage: Qt.application.arguments[2]
+    property var relativeRootDir: Qt.application.arguments[3]
     readonly property var initialStaticTime: new Date('2021-12-02T13:37:42')
     readonly property real mouseWheelScale: 1 / 15
     title: nameOfWatchfaceToBeTested
@@ -48,8 +49,7 @@ ApplicationWindow {
                         ToolTip.delay: 600
                         ToolTip.text: qsTr("Reload qml code")
                         onClicked: {
-                            watchfaceLoader.source = appRoot.nameOfWatchfaceToBeTested
-                                    + "/usr/share/asteroid-launcher/watchfaces/"
+                            watchfaceLoader.source = appRoot.relativeRootDir
                                     + appRoot.nameOfWatchfaceToBeTested + ".qml?"
                                     + Math.random();
                         }
@@ -360,8 +360,7 @@ ApplicationWindow {
                     id: watchfaceLoader
 
                     anchors.fill: parent
-                    source: appRoot.nameOfWatchfaceToBeTested
-                            + "/usr/share/asteroid-launcher/watchfaces/"
+                    source: appRoot.relativeRootDir
                             + appRoot.nameOfWatchfaceToBeTested + ".qml"
                 }
 

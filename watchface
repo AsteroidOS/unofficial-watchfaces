@@ -150,9 +150,9 @@ function testface {
     fi
     echo "Testing ${sourcewatchface}"
     if [ -n "${WALLPAPER}" ] ; then
-        qmlscene "${sourcewatchface}" "${WALLPAPER}" loader.qml
+        qmlscene "${sourcewatchface}" "${WALLPAPER}" "${sourcewatchface}/usr/share/asteroid-launcher/watchfaces/" loader.qml
     else
-        qmlscene "${sourcewatchface}" "background.jpg" loader.qml
+        qmlscene "${sourcewatchface}" "background.jpg" "${sourcewatchface}/usr/share/asteroid-launcher/watchfaces/" loader.qml
     fi
 }
 
