@@ -442,9 +442,7 @@ Item {
             defaultValue: 0
         }
 
-        // Work around for the beta release here. Currently catching for -273° string to display the no data message.
-        // Plan is to use the commented check. But the result is always false like used now. Likely due to timestamp0 expecting a listview or delegate?
-        property bool weatherSynced: kelvinToTemperatureString(maxTemp.value) !== "-273°" //availableDays(timestampDay0.value*1000) > 0
+        property bool weatherSynced: maxTemp.value != 0
 
         Canvas {
             id: weatherArc
