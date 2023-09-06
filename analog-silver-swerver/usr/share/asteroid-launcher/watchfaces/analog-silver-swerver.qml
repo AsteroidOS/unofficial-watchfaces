@@ -119,14 +119,6 @@ Item {
             }
         }
 
-        MceBatteryState {
-            id: batteryChargeState
-        }
-
-        MceCableState {
-            id: mceCableState
-        }
-
         Repeater {
             model: 12
 
