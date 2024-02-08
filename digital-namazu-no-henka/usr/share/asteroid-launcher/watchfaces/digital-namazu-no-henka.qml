@@ -279,7 +279,7 @@ Item {
             Shape {
                 id: segment
 
-                visible: index === 0 ? true : (index / segmentedArc.segmentAmount) < segmentedArc.inputValue
+                visible: index === 0 ? true : (index / segmentedArc.segmentAmount) <= (segmentedArc.inputValue - 0.1)
 
                 ShapePath {
                     fillColor: "transparent"
