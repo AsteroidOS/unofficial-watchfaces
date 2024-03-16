@@ -25,8 +25,6 @@
 import QtQuick 2.1
 import QtGraphicalEffects 1.15
 import Nemo.Mce 1.0
-import org.asteroid.controls 1.0
-import org.asteroid.utils 1.0
 
 Item {
     id: root
@@ -40,14 +38,14 @@ Item {
         id: minuteStrokes
         Rectangle {
             z: 0
-            antialiasing : true
+            antialiasing: true
             property real rotM: (index - 15) / 60
             property real centerX: root.width / 2 - width / 2
             property real centerY: root.height / 2 - height / 2
             x: index % 5 ? centerX+Math.cos(rotM * 2 * Math.PI) * parent.width * 0.430 :
                            centerX+Math.cos(rotM * 2 * Math.PI) * parent.width * 0.388
-            y: index % 5 ? centerY+Math.sin(rotM * 2 * Math.PI) * parent.width * 0.430 :
-                           centerY+Math.sin(rotM * 2 * Math.PI) * parent.width * 0.388
+            y: index % 5 ? centerY+Math.sin(rotM * 2 * Math.PI) * parent.height * 0.430 :
+                           centerY+Math.sin(rotM * 2 * Math.PI) * parent.height * 0.388
             color: index % 5 ? "#ff949494" : "#ff949494"
             radius: 60
             opacity: (index%5)==0 && displayAmbient ? 0.2
@@ -66,7 +64,7 @@ Item {
             transform: Rotation {
                 origin.x: width / 2
                 origin.y: height / 2
-                angle: (index) * 6
+                angle: index * 6
             }
         }
     }
@@ -81,21 +79,20 @@ Item {
             property real centerX: root.width / 2 - width / 2
             property real centerY: root.height / 2 - height / 2
             x: centerX+Math.cos(rotM * 2 * Math.PI) * parent.width * 0.463
-            y: centerY+Math.sin(rotM * 2 * Math.PI) * parent.width * 0.463
+            y: centerY+Math.sin(rotM * 2 * Math.PI) * parent.height * 0.463
             color: "#ff949494"
-	        opacity: displayAmbient ? 0.2
-		    	   : 0.5
-	        radius: 60
+            opacity: displayAmbient ? 0.2
+                   : 0.5
+            radius: 60
             width: parent.width * 0.022
             height: parent.height * 0.022
             transform: Rotation {
                 origin.x: width / 2
                 origin.y: height / 2
-                angle: (index) * 6
+                angle: index * 6
             }
         }
     }
-
 
 Repeater {
         id: hourNumbers
@@ -120,36 +117,36 @@ Repeater {
             text: 3 * (index === 0 ? hourNumbers.count : index)
         }
     }
-	
+
     Repeater {
     model: 60
     id: secondNumbers
         Text {
             z: 0
-            font.pixelSize: parent.height*0.030
-            font.family: "Michroma"
-            font.styleName: "Regular"
+            font {
+                family: "Michroma"
+                styleName: "Regular"
+                pixelSize: parent.height*0.030
+            }
             horizontalAlignment: Text.AlignHCenter
             property real rotM: (index - 15) / 60
             property real centerX: parent.width / 2 - width / 2
             property real centerY: parent.height / 2 - height / 2
-			property bool south: index > 15 && index < 45
+            property bool south: index > 15 && index < 45
             x: centerX + Math.cos(rotM * 2 * Math.PI) * parent.width * 0.463
-            y: centerY + Math.sin(rotM * 2 * Math.PI) * parent.width * 0.463
+            y: centerY + Math.sin(rotM * 2 * Math.PI) * parent.height * 0.463
             opacity: displayAmbient ? 0.5
                    : 0.9
             color: "#ff949494"
             transform: Rotation {
                 origin.x: width / 2
                 origin.y: height / 2
-               // angle: (index) * 6
-			    angle: (index) * 6 + (south ? 180 : 0)
+                angle: (index) * 6 + (south ? 180 : 0)
             }
-			text: (100+index).toString().substring(1)
+            text: (100+index).toString().substring(1)
 
-			//visible: (index%5)==0 && (index%15)
-			visible: [5, 10, 20, 25, 35, 40, 50, 55].includes(index)
-			
+            visible: [5, 10, 20, 25, 35, 40, 50, 55].includes(index)
+
         }
     }
 
@@ -157,7 +154,7 @@ Repeater {
         z: 1
         id: asteroidLogo
         opacity: displayAmbient ? 0.1
-			   : 0.7
+               : 0.7
         source: "../watchfaces-img/analog-commander-asteroid-logo.svg"
         antialiasing: true
         anchors {
@@ -170,8 +167,10 @@ Repeater {
         Text {
             z: 2
             id: asteroidSlogan
-            font.pixelSize: parent.height * 0.28
-            font.family: "Raleway"
+            font {
+                pixelSize: parent.height * 0.28
+                family: "Raleway"
+            }
             color: "white"
             horizontalAlignment: Text.AlignHCenter
             anchors {
@@ -183,9 +182,7 @@ Repeater {
 
         MouseArea {
             anchors.fill: parent
-            onPressAndHold: asteroidLogo.visible ?
-                                asteroidLogo.visible = false :
-                                asteroidLogo.visible = true
+            onPressAndHold: asteroidLogo.visible = !asteroidLogo.visible
         }
     }
 
@@ -195,7 +192,6 @@ Repeater {
         onMonthChanged: monthArc.requestPaint()
         anchors {
             centerIn: parent
-            verticalCenterOffset: parent.width * 0.00
             horizontalCenterOffset: -parent.width * 0.22
         }
         width: parent.width * 0.22
@@ -246,14 +242,16 @@ Repeater {
                 property bool currentMonthHighlight: Number(wallClock.time.toLocaleString(Qt.locale(), "MM")) === index ||
                                                      Number(wallClock.time.toLocaleString(Qt.locale(), "MM")) === index + 12
                 antialiasing: true
-                font.pixelSize: currentMonthHighlight ?
+                font {
+                    pixelSize: currentMonthHighlight ?
                                     root.height * 0.036 :
                                     root.height * 0.03
-                font.letterSpacing: parent.width * 0.004
-                font.family: "Teko"
-                font.styleName: currentMonthHighlight ?
+                    letterSpacing: parent.width * 0.004
+                    family: "Teko"
+                    styleName: currentMonthHighlight ?
                                     "Regular" :
                                     "Light"
+                }
                 opacity: !displayAmbient ? 1 : 0.3
                 property real rotM: ((index * 5) - 15) / 60
                 property real centerX: parent.width / 2 - width / 2
@@ -275,24 +273,23 @@ Repeater {
         Text {
             z: 2
             id: monthDisplay
-			anchors {
-				centerIn: parent
-            	verticalCenterOffset: -parent.height * -0.0200
-			}	
+            anchors {
+                centerIn: parent
+                verticalCenterOffset: -parent.height * -0.0200
+            }
             y: (parent.height + height) * -0.075
             renderType: Text.NativeRendering
-			font { 
-				pixelSize: parent.height * 0.39
-            	family: "Teko"
-            	styleName:"Light"
-            	letterSpacing: -root.width * 0.0018
-			}
+            font { 
+                pixelSize: parent.height * 0.39
+                family: "Teko"
+                styleName:"Light"
+                letterSpacing: -root.width * 0.0018
+            }
             color: "#ddffffff"
             opacity: !displayAmbient ? 1 : 0.3
             text: wallClock.time.toLocaleString(Qt.locale(), "dd").slice(0, 3)
         }
     }
-    
 
     Item {
         id: batteryBox
@@ -351,7 +348,7 @@ Repeater {
                                               "#ff23F0C7"
                                       )
                 ctx.lineWidth = root.height * 0.005
-                ctx.lineCap="round"
+                ctx.lineCap = "round"
                 ctx.strokeStyle = gradient
                 ctx.beginPath()
                 ctx.arc(parent.width / 2,
@@ -371,16 +368,16 @@ Repeater {
         Text {
             z: 2
             id: batteryDisplay
-			anchors {
-				centerIn: parent
-            	verticalCenterOffset: -parent.height * -0.0200 
-			}	
+            anchors {
+                centerIn: parent
+                verticalCenterOffset: -parent.height * -0.0200 
+            }
             renderType: Text.NativeRendering
-			font {
-				pixelSize: parent.height * 0.39
-            	family: "Teko"
-            	styleName:"Light"
-			}
+            font {
+                pixelSize: parent.height * 0.39
+                family: "Teko"
+                styleName:"Light"
+            }
             color: "#ffffffff"
             text: batteryChargePercentage.percent
             opacity: !displayAmbient ? 0.8 : 0.3
@@ -393,9 +390,11 @@ Repeater {
                      verticalCenterOffset: parent.height*0.34
                  }
                  renderType: Text.NativeRendering
-                 font.pixelSize: parent.height * 0.194
-                 font.family: "Teko"
-                 font.styleName:"Regular"
+                 font {
+                    pixelSize: parent.height * 0.194
+                    family: "Teko"
+                    styleName:"Regular"
+                 }
                  lineHeightMode: Text.FixedHeight
                  lineHeight: parent.height * 0.94
                  horizontalAlignment: Text.AlignHCenter
@@ -427,7 +426,7 @@ Repeater {
             id: hourSVG
 
             z: 3
-            source:imgPath + "hour.svg"
+            source: imgPath + "hour.svg"
             anchors.fill: parent
 
             transform: Rotation {
