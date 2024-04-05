@@ -65,7 +65,7 @@ Item {
 
         Text {
             function generateTimeEn(time) {
-                var minutesList = ["'o clock", "<b>five</b><br>past", "<b>ten</b><br>past", "<b>quarter</b><br>past", "<b>twenty</b>", "twenty<br>five", "<b>thirty</b>", "thirty<br>five", "<b>forty</b>", "<b>quarter</b><br>to", "<b>ten</b><br>to", "<b>five</b><br>to", "'o clock"]
+                var minutesList = ["o' clock", "<b>five</b><br>past", "<b>ten</b><br>past", "<b>quarter</b><br>past", "<b>twenty</b>", "twenty<br>five", "<b>thirty</b>", "thirty<br>five", "<b>forty</b>", "<b>quarter</b><br>to", "<b>ten</b><br>to", "<b>five</b><br>to", "'o clock"]
                 var hoursList = ["<b>twelve</b>", "<b>one</b>", "<b>two</b>", "<b>three</b>", "<b>four</b>", "<b>five</b>", "<b>six</b>", "<b>seven</b>", "<b>eight</b>", "<b>nine</b>", "<b>ten</b>", "<b>eleven</b>"]
                 var minutesFirst = [false, true, true, true, false, false, false, false, false, true, true, true, false]
                 var nextHour = [false, false, false, false, false, false, false, false, false, true, true, true, true]
