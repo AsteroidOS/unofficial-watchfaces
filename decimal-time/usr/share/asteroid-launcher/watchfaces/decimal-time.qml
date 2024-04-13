@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2021,2022 - Ed Beroset <github.com/beroset>
+ * Copyright (C) 2021-2024 - Ed Beroset <github.com/beroset>
  * All rights reserved.
  *
  * This program is free software: you can redistribute it and/or modify
@@ -45,54 +45,51 @@ Item {
         return getMetricMilliseconds(wallClock.time) / metricMinutesPerMetricHour / metricSecondsPerMetricMinute / 1000
     }
 
-    Repeater{
-        id: hourTicks
-        model: metricHoursPerStandardDay / revolutionsPerDay
-        Rectangle {
-            z: 2
-            id: decimalHourTick
-            antialiasing : true
-            color: "lightgreen"
-            width: parent.width*0.01
-            height: parent.height*0.03
-            opacity: displayAmbient ? 0.3 : 0.6
-            transform: [
-                Rotation {
-                    origin.x: decimalHourTick.width/2
-                    origin.y: decimalHourTick.height + parent.height*0.36
-                    angle: (index)*360/hourTicks.count
-                },
-                Translate {
-                    x: (parent.width - decimalHourTick.width)/2
-                    y: parent.height/2 - (decimalHourTick.height + parent.height * 0.36)
-                }
-            ]
-        }
+    component Tick: Rectangle {
+        id: thisTick
+        property bool outsideRing: true
+        property real angle: 0
+        property real radius: 0.72
+        antialiasing : true
+        transform: [
+            Rotation {
+                origin.x: thisTick.width/2
+                origin.y: outsideRing 
+                    ? thisTick.height + parent.width * radius / 2
+                    : parent.width * radius / 2
+                angle: thisTick.angle
+            },
+            Translate {
+                x: (parent.width - thisTick.width)/2
+                y: outsideRing
+                ? parent.height/2 - parent.width * radius / 2  - thisTick.height
+                : parent.height/2 - parent.width * radius / 2
+            }
+        ]
     }
 
     Repeater{
         id: minuteTicks
         model: metricMinutesPerMetricHour / revolutionsPerDay
-        Rectangle {
-            z: 1
-            id: decimalHourTick
-            visible: !displayAmbient
-            antialiasing : true
+        Tick {
+            angle: (index)*360/minuteTicks.count
             color: "lightgreen"
-            width: parent.width*0.005
-            height: parent.height*(index % majorMinuteTicksEvery == 0 ? 0.030 : 0.015)
             opacity: 0.6
-            transform: [
-                Rotation {
-                    origin.x: decimalHourTick.width/2
-                    origin.y: decimalHourTick.height + parent.height*0.36
-                    angle: (index)*360/minuteTicks.count
-                },
-                Translate {
-                    x: (parent.width - decimalHourTick.width)/2
-                    y: parent.height/2 - (decimalHourTick.height + parent.height * 0.36)
-                }
-            ]
+            visible: !displayAmbient
+            width: parent.width*0.005
+            height: parent.width*(index % majorMinuteTicksEvery == 0 ? 0.030 : 0.015)
+        }
+    }
+
+    Repeater{
+        id: hourTicks
+        model: metricHoursPerStandardDay / revolutionsPerDay
+        Tick {
+            angle: (index)*360/hourTicks.count
+            color: "lightgreen"
+            opacity: displayAmbient ? 0.3 : 0.6
+            width: parent.width*0.01
+            height: parent.width*0.03
         }
     }
 
@@ -100,11 +97,12 @@ Item {
         id: hourLabels
         model: metricHoursPerStandardDay / revolutionsPerDay
         Text {
-            z: 3
-            font.pixelSize: parent.height*0.08
-            font.family: "CPMono_v07"
+            font {
+                pixelSize: parent.height*0.08
+                family: "CPMono_v07"
+                styleName: "Plain"
+            }
             color: "lightblue"
-            font.styleName: "Plain"
             id: hourLabel
             antialiasing : true
             opacity: displayAmbient ? 0.3 : 0.6
@@ -112,89 +110,70 @@ Item {
             transform: [
                 Rotation {
                     origin.x: hourLabel.width/2
-                    origin.y: hourLabel.height + parent.height*0.40
-                    angle: (index)*360/hourTicks.count
+                    origin.y: hourLabel.height + parent.width * 0.40
+                    angle: (index)*360/ (metricHoursPerStandardDay / revolutionsPerDay)
                 },
                 Translate {
                     x: (parent.width - hourLabel.width)/2
-                    y: parent.height/2 - (hourLabel.height + parent.height * 0.40)
+                    y: parent.height/2 - parent.width * 0.40 - hourLabel.height
                 }
             ]
         }
     }
 
-    Text {
-        id: conventionalTime
-        z: 4
-        font.pixelSize: parent.height*0.06
-        font.family: "CPMono_v07"
+    Image {
+        id: logoAsteroid
+        antialiasing: true
+        opacity: displayAmbient ? 0.6 : 1.0
+        source: "../watchfaces-img/asteroid-logo.svg"
+        width: parent.width/12
+        height: width
+        transform : [
+            Rotation {
+                origin.x : logoAsteroid.width/2
+                origin.y : logoAsteroid.height + parent.width * 0.275
+                angle: getMetricHours(wallClock.time) * 360 * revolutionsPerDay / metricHoursPerStandardDay
+            },
+            Translate {
+                x: (parent.width - logoAsteroid.width)/2
+                y: parent.height/2 - logoAsteroid.height - parent.width * 0.275
+            }
+        ]
+    }
+
+    component PlainText : Text {
+        font {
+            pixelSize: parent.height*0.06
+            family: "CPMono_v07"
+            styleName: "Plain"
+        }
         color: "white"
-        font.styleName: "Plain"
         visible: !displayAmbient
         horizontalAlignment: Text.AlignHCenter
-        anchors {
-            centerIn: parent
-            verticalCenterOffset: +parent.width*0.18
-        }
+        anchors.centerIn: parent
+    }
+
+    PlainText {
+        id: conventionalTime
+        anchors.verticalCenterOffset: +parent.width*0.18
         text: if (use12H.value)
                   wallClock.time.toLocaleString(Qt.locale(), "hh:mm:ss ap")
               else
                   wallClock.time.toLocaleString(Qt.locale(), "HH:mm:ss")
     }
 
-    Text {
+    PlainText {
         id: conventionalDate
-        z: 4
-        visible: !displayAmbient
-        font.pixelSize: parent.height*0.06
-        font.family: "CPMono_v07"
-        color: "white"
-        font.styleName: "Plain"
-        horizontalAlignment: Text.AlignHCenter
-        anchors {
-            centerIn: parent
-            verticalCenterOffset: -parent.width*0.18
-        }
+        anchors.verticalCenterOffset: -parent.width*0.18
         text: wallClock.time.toLocaleDateString(Qt.locale(), Locale.ShortFormat)
     }
 
-    Text {
+    PlainText {
         id: decimalHours
-        z: 4
-        visible: !displayAmbient
-        font.pixelSize: parent.height*0.15
-        font.family: "CPMono_v07"
-        font.styleName: "Plain"
-        color: "white"
-        horizontalAlignment: Text.AlignHCenter
-        anchors {
-            centerIn: parent
-            verticalCenterOffset: parent.width*0.016
-        }
+        font.pixelSize: parent.width*0.15
+        anchors.verticalCenterOffset: parent.width*0.016
         textFormat: Text.RichText
         text: getMetricHours(wallClock.time).toPrecision(5)
-
-    }
-
-    Image {
-        id: logoAsteroid
-        z: 3
-        antialiasing: true
-        opacity: displayAmbient ? 0.6 : 1.0
-        source: "../watchfaces-img/asteroid-logo.svg"
-        width: parent.width/12
-        height: parent.height/12
-        transform : [
-            Rotation {
-                origin.x : logoAsteroid.width/2
-                origin.y : logoAsteroid.height + parent.height * 0.275
-                angle: getMetricHours(wallClock.time) * 360 * revolutionsPerDay / metricHoursPerStandardDay
-            },
-            Translate {
-                x: (parent.width - logoAsteroid.width)/2
-                y: parent.height/2 - (logoAsteroid.height + parent.height * 0.275)
-            }
-        ]
     }
 
 }
