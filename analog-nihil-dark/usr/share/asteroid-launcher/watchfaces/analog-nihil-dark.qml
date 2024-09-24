@@ -1,5 +1,6 @@
 /*
- * Copyright (C) 2022 - Timo Könnecke <github.com/eLtMosen>
+ * Copyright (C) 2024 - github.com/turretkeeper
+ *               2022 - Timo Könnecke <github.com/eLtMosen>
  *               2016 - Sylvia van Os <iamsylvie@openmailbox.org>
  *               2015 - Florent Revest <revestflo@gmail.com>
  *               2012 - Vasiliy Sorokin <sorokin.vasiliy@gmail.com>
@@ -27,7 +28,7 @@ import QtGraphicalEffects 1.15
 Item {
     id: root
 
-    property string imgPath: "../watchfaces-img/analog-nothing-dark-"
+    property string imgPath: "../watchfaces-img/analog-nihil-dark-"
 
     Image {
         id: hourSVG
