@@ -39,11 +39,6 @@ import QtQuick 2.1
 
 Item {
 
-    function twoDigits(x) {
-        if (x<10) return "0"+x;
-        else      return x;
-    }
-
     function prepareContext(ctx) {
         ctx.reset()
         ctx.fillStyle = "white"
@@ -62,15 +57,15 @@ Item {
         smooth: true
         renderStrategy: Canvas.Cooperative
 
-        property var hour: 0
-        property var minute: 0
-
         onPaint: {
             var ctx = getContext("2d")
             prepareContext(ctx)
 
             var text;
-            text = twoDigits(hour) + ":" + twoDigits(minute)
+            if (use12H.value)
+                text = wallClock.time.toLocaleString(Qt.locale(), "hh:mm ap").substring(0, 5)
+            else
+                text = wallClock.time.toLocaleString(Qt.locale(), "HH:mm")
 
             ctx.font = "50 " +parent.height*0.25 + "px " + "GeneraleMono";
             ctx.fillText(text,
@@ -84,8 +79,6 @@ Item {
         anchors.fill: parent
         renderStrategy: Canvas.Cooperative
 
-        property bool am: false
-
         onPaint: {
             var ctx = getContext("2d")
             prepareContext(ctx)
@@ -96,7 +89,7 @@ Item {
             var verticalOffset = -parent.height*0.003
 
             var text;
-            text = wallClock.time.toLocaleString(Qt.locale(), "ap").toUpperCase()
+            text = wallClock.time.toLocaleString(Qt.locale(), "AP")
 
             var fontSize =parent.height*0.072
             var fontFamily = "GeneraleMono"
@@ -114,8 +107,6 @@ Item {
         smooth: true
         renderStrategy: Canvas.Cooperative
 
-        property var date: 0
-
         onPaint: {
             var ctx = getContext("2d")
             prepareContext(ctx)
@@ -130,47 +121,16 @@ Item {
     Connections {
         target: wallClock
         function onTimeChanged() {
-            var newHour = wallClock.time.getHours()
-            if(use12H.value) {
-                newHour = newHour % 12
-                if (newHour == 0) newHour = 12
-            }
-            if(hourMinuteCanvas.hour != newHour || hourMinuteCanvas.minute != wallClock.time.getMinutes()) {
-                hourMinuteCanvas.hour = newHour
-                hourMinuteCanvas.minute = wallClock.time.getMinutes()
-                hourMinuteCanvas.requestPaint()
-            }
-            if(dateCanvas.date != wallClock.time.getDate()) {
-                dateCanvas.date = wallClock.time.getDate()
-                dateCanvas.requestPaint()
-            }
+            hourMinuteCanvas.requestPaint()
+            dateCanvas.requestPaint()
+            amPmCanvas.requestPaint()
         }
     }
 
     Component.onCompleted: {
-        var hour = wallClock.time.getHours()
-        var minute = wallClock.time.getMinutes()
-        var date = wallClock.time.getDate()
-        var am = hour < 12
-        if(use12H.value) {
-            hour = hour % 12
-            if (hour == 0) hour = 12
-        }
-        hourMinuteCanvas.hour = hour
-        hourMinuteCanvas.minute = minute
         hourMinuteCanvas.requestPaint()
-        dateCanvas.date = date
         dateCanvas.requestPaint()
-        amPmCanvas.am = am
         amPmCanvas.requestPaint()
-    }
-
-    Connections {
-        target: use12H
-        onValueChanged: {
-            hourMinuteCanvas.hour = wallClock.time.getHours() % 12 || 12;
-            amPmCanvas.requestPaint();
-        }
     }
 
     Connections {
