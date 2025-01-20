@@ -166,6 +166,14 @@ Item {
     }
 
     Connections {
+        target: use12H
+        onValueChanged: {
+            hourMinuteCanvas.hour = wallClock.time.getHours() % 12 || 12;
+            amPmCanvas.requestPaint();
+        }
+    }
+
+    Connections {
         target: localeManager
         function onChangesObserverChanged() {
             hourMinuteCanvas.requestPaint()
