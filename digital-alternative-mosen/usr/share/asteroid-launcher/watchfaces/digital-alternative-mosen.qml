@@ -130,13 +130,18 @@ Item {
     Connections {
         target: wallClock
         function onTimeChanged() {
-            var minute = wallClock.time.getMinutes()
-            var date = wallClock.time.getDate()
-            if(hourMinuteCanvas.minute != minute) {
-                hourMinuteCanvas.minute = minute
+            var newHour = wallClock.time.getHours()
+            if(use12H.value) {
+                newHour = newHour % 12
+                if (newHour == 0) newHour = 12
+            }
+            if(hourMinuteCanvas.hour != newHour || hourMinuteCanvas.minute != wallClock.time.getMinutes()) {
+                hourMinuteCanvas.hour = newHour
+                hourMinuteCanvas.minute = wallClock.time.getMinutes()
                 hourMinuteCanvas.requestPaint()
-            } if(dateCanvas.date != date) {
-                dateCanvas.date = date
+            }
+            if(dateCanvas.date != wallClock.time.getDate()) {
+                dateCanvas.date = wallClock.time.getDate()
                 dateCanvas.requestPaint()
             }
         }
