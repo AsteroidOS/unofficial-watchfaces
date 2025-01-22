@@ -102,6 +102,22 @@ Item {
         id: batteryChargePercentage
     }
 
+    Timer {
+        id: canvasUpdateTimer
+        interval: 1000 // Update every second
+        repeat: true
+        running: true
+        onTriggered: {
+            hrmSwitchArc.requestPaint()
+            weatherArc.requestPaint()
+            batteryArc.requestPaint()
+            dayArc.requestPaint()
+            hrmArc.requestPaint()
+            wifiSwitchArc.requestPaint()
+            btSwitchArc.requestPaint()
+        }
+    }
+
     Item {
         id: dockMode
 
@@ -352,7 +368,7 @@ Item {
             anchors.fill: parent
             opacity: hrmSensorActive ? activeArcOpacity : inactiveArcOpacity
             smooth: true
-            renderStrategy : Canvas.Cooperative
+            renderStrategy: Canvas.NoPaint // Only redraw when explicitly requested
             onPaint: {
                 var ctx = getContext("2d")  // Returns a drawing context on the canvas
                 ctx.reset()                 // Initialize and clear canvas
@@ -451,7 +467,7 @@ Item {
             opacity: inactiveArcOpacity
             smooth: true
             visible: !dockMode.active
-            renderStrategy : Canvas.Cooperative
+            renderStrategy: Canvas.NoPaint // Only redraw when explicitly requested
             onPaint: {
                 var ctx = getContext("2d")
                 ctx.reset()
@@ -548,7 +564,7 @@ Item {
             opacity: inactiveArcOpacity
             smooth: true
             visible: !dockMode.active
-            renderStrategy : Canvas.Cooperative
+            renderStrategy: Canvas.NoPaint // Only redraw when explicitly requested
             onPaint: {
                 var ctx = getContext("2d")
                 ctx.reset()
@@ -659,7 +675,7 @@ Item {
             anchors.fill: parent
             opacity: hrmSensorActive ? activeArcOpacity : inactiveArcOpacity
             smooth: true
-            renderStrategy : Canvas.Cooperative
+            renderStrategy: Canvas.NoPaint // Only redraw when explicitly requested
             onPaint: {
                 var ctx = getContext("2d")
                 ctx.reset()
@@ -776,7 +792,7 @@ Item {
             anchors.fill: parent
             smooth: true
             opacity: btStatus.powered ? activeArcOpacity : inactiveArcOpacity
-            renderStrategy : Canvas.Cooperative
+            renderStrategy: Canvas.NoPaint // Only redraw when explicitly requested
             onPaint: {
                 var ctx = getContext("2d")
                 ctx.reset()
@@ -848,7 +864,7 @@ Item {
             anchors.fill: parent
             opacity: wifiStatus.powered ? activeArcOpacity : inactiveArcOpacity
             smooth: true
-            renderStrategy : Canvas.Cooperative
+            renderStrategy: Canvas.NoPaint // Only redraw when explicitly requested
             onPaint: {
                 var ctx = getContext("2d")
                 ctx.reset()
@@ -912,7 +928,7 @@ Item {
             anchors.fill: parent
             opacity: activeArcOpacity
             smooth: true
-            renderStrategy : Canvas.Cooperative
+            renderStrategy: Canvas.NoPaint // Only redraw when explicitly requested
             onPaint: {
                 var ctx = getContext("2d")
                 ctx.reset()
