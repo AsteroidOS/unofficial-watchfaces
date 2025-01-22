@@ -1113,26 +1113,10 @@ Item {
                     }
                 }
             }
-
-            layer {
-                enabled: true
-                samples: 4
-                smooth: true
-                textureSize: Qt.size(root.width * 2, root.height * 2)
-                effect: DropShadow {
-                    transparentBorder: true
-                    horizontalOffset: 5
-                    verticalOffset: 5
-                    radius: 10.0
-                    samples: 21
-                    color: Qt.rgba(0, 0, 0, .2)
-                }
-            }
         }
     }
 
     // Slight dropshadow under all Items.
-    // Causes a double dropshadow for the handBox.
     layer.enabled: true
     layer.effect: DropShadow {
         transparentBorder: true
