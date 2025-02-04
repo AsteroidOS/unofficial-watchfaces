@@ -1,3 +1,8 @@
+
+/*
+  based on 'Amazfit Ranger V2.wfz' by Lawrnz & Osmat
+  converted with amazteroid.js
+  */
 import QtQuick 2.9
 
 Item {
