@@ -352,7 +352,7 @@ Item {
             anchors.fill: parent
             opacity: hrmSensorActive ? activeArcOpacity : inactiveArcOpacity
             smooth: true
-            renderStrategy : Canvas.Cooperative
+            renderStrategy: Canvas.Cooperative
             onPaint: {
                 var ctx = getContext("2d")  // Returns a drawing context on the canvas
                 ctx.reset()                 // Initialize and clear canvas
@@ -451,7 +451,7 @@ Item {
             opacity: inactiveArcOpacity
             smooth: true
             visible: !dockMode.active
-            renderStrategy : Canvas.Cooperative
+            renderStrategy: Canvas.Cooperative
             onPaint: {
                 var ctx = getContext("2d")
                 ctx.reset()
@@ -548,7 +548,7 @@ Item {
             opacity: inactiveArcOpacity
             smooth: true
             visible: !dockMode.active
-            renderStrategy : Canvas.Cooperative
+            renderStrategy: Canvas.Cooperative
             onPaint: {
                 var ctx = getContext("2d")
                 ctx.reset()
@@ -659,7 +659,7 @@ Item {
             anchors.fill: parent
             opacity: hrmSensorActive ? activeArcOpacity : inactiveArcOpacity
             smooth: true
-            renderStrategy : Canvas.Cooperative
+            renderStrategy: Canvas.Cooperative
             onPaint: {
                 var ctx = getContext("2d")
                 ctx.reset()
@@ -776,7 +776,7 @@ Item {
             anchors.fill: parent
             smooth: true
             opacity: btStatus.powered ? activeArcOpacity : inactiveArcOpacity
-            renderStrategy : Canvas.Cooperative
+            renderStrategy: Canvas.Cooperative
             onPaint: {
                 var ctx = getContext("2d")
                 ctx.reset()
@@ -848,7 +848,7 @@ Item {
             anchors.fill: parent
             opacity: wifiStatus.powered ? activeArcOpacity : inactiveArcOpacity
             smooth: true
-            renderStrategy : Canvas.Cooperative
+            renderStrategy: Canvas.Cooperative
             onPaint: {
                 var ctx = getContext("2d")
                 ctx.reset()
@@ -912,7 +912,7 @@ Item {
             anchors.fill: parent
             opacity: activeArcOpacity
             smooth: true
-            renderStrategy : Canvas.Cooperative
+            renderStrategy: Canvas.Cooperative
             onPaint: {
                 var ctx = getContext("2d")
                 ctx.reset()
@@ -1023,22 +1023,6 @@ Item {
                            (wallClock.time.getHours() * 15) + (wallClock.time.getMinutes() * .25) :
                            (wallClock.time.getHours() * 30) + (wallClock.time.getMinutes() * .5)
             }
-
-            layer {
-                enabled: true
-                samples: 4
-                smooth: true
-                textureSize: Qt.size(root.width * 2, root.height * 2)
-                // DropShadow depends on import QtGraphicalEffects 1.15
-                effect: DropShadow {
-                    transparentBorder: true
-                    horizontalOffset: 3
-                    verticalOffset: 3
-                    radius: 8.0
-                    samples: 17
-                    color: Qt.rgba(0, 0, 0, .2)
-                }
-            }
         }
 
         Image {
@@ -1055,21 +1039,6 @@ Item {
                 origin.x: parent.width / 2
                 origin.y: parent.height / 2
                 angle: (wallClock.time.getMinutes() * 6) + (wallClock.time.getSeconds() * 6 / 60)
-            }
-
-            layer {
-                enabled: true
-                samples: 4
-                smooth: true
-                textureSize: Qt.size(root.width * 2, root.height * 2)
-                effect: DropShadow {
-                    transparentBorder: true
-                    horizontalOffset: 5
-                    verticalOffset: 5
-                    radius: 10.0
-                    samples: 21
-                    color: Qt.rgba(0, 0, 0, .2)
-                }
             }
         }
 
@@ -1088,35 +1057,11 @@ Item {
                 origin.x: parent.width / 2
                 origin.y: parent.height / 2
                 angle: wallClock.time.getSeconds() * 6
-
-                Behavior on angle {
-                    enabled: !displayAmbient && !nightstand
-                    RotationAnimation {
-                        duration: 1000
-                        direction: RotationAnimation.Clockwise
-                    }
-                }
-            }
-
-            layer {
-                enabled: true
-                samples: 4
-                smooth: true
-                textureSize: Qt.size(root.width * 2, root.height * 2)
-                effect: DropShadow {
-                    transparentBorder: true
-                    horizontalOffset: 5
-                    verticalOffset: 5
-                    radius: 10.0
-                    samples: 21
-                    color: Qt.rgba(0, 0, 0, .2)
-                }
             }
         }
     }
 
     // Slight dropshadow under all Items.
-    // Causes a double dropshadow for the handBox.
     layer.enabled: true
     layer.effect: DropShadow {
         transparentBorder: true
