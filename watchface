@@ -90,7 +90,7 @@ function pushWallpaper {
 }
 
 function restartCeres {
-    runWatchCommand "root" "systemctl restart user@1000"
+    runWatchCommand "ceres" "killall asteroid-launcher"
 }
 
 function rebootWatch {

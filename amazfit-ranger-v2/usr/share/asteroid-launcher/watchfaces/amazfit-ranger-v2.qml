@@ -1,3 +1,4 @@
+
 /*
   based on 'Amazfit Ranger V2.wfz'
   author Lawrnz
@@ -85,17 +86,57 @@ Item {
         }
     }
 
-    Item {
+    Row {
         id: timedigital
         x: 50 * xmul
         y: 205 * xmul
         width: 120 * xmul
         height: 32 * xmul
+        spacing: 1
 
-        Rectangle {
-            width: parent.width
+        Image {
+            id: hour1
+            source: imgPath + "amazfit-ranger-v2-font-" + wallClock.time.toLocaleString(Qt.locale(),
+                                                                                        "HH").slice(0, 1) + ".png"
             height: parent.height
-            color: "blue"
+            sourceSize.height: parent.height
+            fillMode: Image.PreserveAspectFit
+        }
+
+        Image {
+            id: hour2
+            source: imgPath + "amazfit-ranger-v2-font-" + wallClock.time.toLocaleString(Qt.locale(),
+                                                                                        "HH").slice(1, 2) + ".png"
+            height: parent.height
+            sourceSize.height: parent.height
+            fillMode: Image.PreserveAspectFit
+        }
+
+        Image {
+            id: sep
+            source: imgPath + "amazfit-ranger-v2-font-sep.png"
+            height: parent.height
+            sourceSize.height: parent.height
+            fillMode: Image.PreserveAspectFit
+            opacity: displayAmbient ? 1 : (wallClock.time.getSeconds() % 2) ? 0.1 : 1
+        }
+
+        Image {
+            id: min1
+            source: imgPath + "amazfit-ranger-v2-font-" + wallClock.time.toLocaleString(Qt.locale(),
+                                                                                        "mm").slice(0, 1) + ".png"
+            height: parent.height
+            sourceSize.height: parent.height
+            fillMode: Image.PreserveAspectFit
+        }
+
+        Image {
+            id: min2
+            source: imgPath + "amazfit-ranger-v2-font-" + wallClock.time.toLocaleString(Qt.locale(),
+                                                                                        "mm").slice(1, 2) + ".png"
+            height: parent.height
+            sourceSize.height: parent.height
+            fillMode: Image.PreserveAspectFit
         }
     }
 
