@@ -9,8 +9,8 @@ import QtQuick 2.9
 Item {
     id: root
     property string imgPath: "../watchfaces-img/"
-    property double xmul: root.width / 320
-    property double ymul: root.height / 320
+    property double xmul: width / 320
+    property double ymul: height / 320
 
     Image {
         z: 0
@@ -18,10 +18,10 @@ Item {
         source: imgPath + "amazfit-ranger-v2-background-00.png"
         opacity: displayAmbient ? 0.1 : 1
         anchors {
-            centerIn: root
+            centerIn: parent
         }
-        width: root.width
-        height: root.height
+        width: parent.width
+        height: parent.height
     }
 
     Item {
@@ -37,14 +37,14 @@ Item {
             z: 0
             source: imgPath + "amazfit-ranger-v2-timehand-00-hour.png"
             anchors {
-                centerIn: timehand
+                centerIn: parent
             }
-            width: timehand.width
-            height: timehand.height
+            width: parent.width
+            height: parent.height
             fillMode: Image.PreserveAspectFit
             transform: Rotation {
-                origin.x: timehand.width / 2
-                origin.y: timehand.height / 2
+                origin.x: parent.width / 2
+                origin.y: parent.height / 2
                 angle: (wallClock.time.getHours() * 30) + (wallClock.time.getMinutes() * 0.5)
             }
         }
@@ -54,14 +54,14 @@ Item {
             z: 1
             source: imgPath + "amazfit-ranger-v2-timehand-00-minute.png"
             anchors {
-                centerIn: timehand
+                centerIn: parent
             }
-            width: timehand.width
-            height: timehand.height
+            width: parent.width
+            height: parent.height
             fillMode: Image.PreserveAspectFit
             transform: Rotation {
-                origin.x: timehand.width / 2
-                origin.y: timehand.height / 2
+                origin.x: parent.width / 2
+                origin.y: parent.height / 2
                 angle: (wallClock.time.getMinutes() * 6) + (wallClock.time.getSeconds() * 6 / 60)
             }
         }
@@ -72,40 +72,100 @@ Item {
             visible: !displayAmbient
             source: imgPath + "amazfit-ranger-v2-timehand-00-seconds.png"
             anchors {
-                centerIn: timehand
+                centerIn: parent
             }
-            width: timehand.width
-            height: timehand.height
+            width: parent.width
+            height: parent.height
             fillMode: Image.PreserveAspectFit
             transform: Rotation {
-                origin.x: timehand.width / 2
-                origin.y: timehand.height / 2
+                origin.x: parent.width / 2
+                origin.y: parent.height / 2
                 angle: (wallClock.time.getSeconds() * 6)
             }
         }
     }
 
-    Image {
+    Item {
         id: timedigital
+        x: 50 * xmul
+        y: 205 * xmul
+        width: 120 * xmul
+        height: 32 * xmul
+
+        Rectangle {
+            width: parent.width
+            height: parent.height
+            color: "blue"
+        }
     }
 
-    Image {
+    Item {
         id: datawidget_10_4
+        x: 50 * xmul
+        y: 250 * xmul
+        width: 60 * xmul
+        height: 20 * xmul
+
+        Rectangle {
+            width: parent.width
+            height: parent.height
+            color: "green"
+        }
     }
 
-    Image {
+    Item {
         id: datawidget_8_4
+        x: 170 * xmul
+        y: 250 * xmul
+        width: 60 * xmul
+        height: 20 * xmul
+
+        Rectangle {
+            width: parent.width
+            height: parent.height
+            color: "green"
+        }
     }
 
-    Image {
+    Item {
         id: datawidget_1_4
+        x: 180 * xmul
+        y: 215 * xmul
+        width: 60 * xmul
+        height: 20 * xmul
+
+        Rectangle {
+            width: parent.width
+            height: parent.height
+            color: "green"
+        }
     }
 
-    Image {
+    Item {
         id: datawidget_6_2
+        x: 35 * xmul
+        y: 150 * xmul
+        width: 60 * xmul
+        height: 20 * xmul
+
+        Rectangle {
+            width: parent.width
+            height: parent.height
+            color: "green"
+        }
     }
 
-    Image {
+    Item {
         id: datawidget_6_1
+        x: 160 * xmul
+        y: 150 * xmul
+        width: 60 * xmul
+        height: 20 * xmul
+
+        Rectangle {
+            width: parent.width
+            height: parent.height
+            color: "green"
+        }
     }
 }
