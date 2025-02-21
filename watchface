@@ -307,6 +307,10 @@ if [ $script_is_sourced -gt 0 ]; then
 fi
 
 
+SCRIPT_DIRPATH="$(dirname "$(readlink -f "${BASH_SOURCE[0]}")")"
+echo "Script is located in directory path \"$SCRIPT_DIRPATH\""
+
+
 # These are the defaults for SSH access
 WATCHPORT=22
 WATCHADDR=192.168.2.15
