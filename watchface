@@ -300,6 +300,13 @@ function deployall {
 }
 
 
+(return 0 2>/dev/null) && script_is_sourced=1 || script_is_sourced=0
+if [ $script_is_sourced -gt 0 ]; then
+    echo "You are trying to source this script. It is not meant to be sourced." >&2
+    return
+fi
+
+
 # These are the defaults for SSH access
 WATCHPORT=22
 WATCHADDR=192.168.2.15
