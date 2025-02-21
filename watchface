@@ -160,8 +160,12 @@ function watchfaceClone {
 function sanitizeSourceWatchface {
     # trim trailing / if present
     local face="${1%/*}"
+    if [[ "x${face}" = "x" ]] ; then
+        echo "Error: no watchface specified" >&2
+        exit 1
+    fi
     if [[ ! -d "${face}/usr/share/asteroid-launcher/watchfaces/" ]] ; then
-        echo "Error: ${face} does not appear to be a watchface" >&2
+        echo "Error: \"${face}\" does not appear to be a watchface" >&2
         exit 1
     fi
     echo "${face}"
