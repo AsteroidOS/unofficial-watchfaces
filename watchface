@@ -13,15 +13,15 @@ Utility functions for AsteroidOS watchfaces.  By default, uses "Developer Mode"
 over ssh, but can also use "ADB Mode" using ADB.
 
 Available options:
--h or --help    print this help screen and quit
--a or --adb     use ADB command to communicate with watch
--b or --boot    reboot watch after deploying multiple watchfaces
--e or --every   select every watchface (deploy only)
--g or --gui     use the GTK+ gui
--p or --port    specify an IP port to use for ssh and scp commands
--r or --remote  specify the remote (watch)  name or address for ssh and scp commands
--q or --qemu    communicate with QEMU emulated watch (same as -r localhost -p 2222 )
--w or --wall WP set the wallpaper for deploy or test to the named file
+-h or --help      print this help screen and quit
+-a or --adb       use ADB command to communicate with watch
+-b or --boot      reboot watch after deploying multiple watchfaces
+-e or --every     select every watchface (deploy only)
+-g or --gui       use the GTK+ gui
+-p or --port      specify an IP port to use for ssh and scp commands
+-r or --remote    specify the remote (watch)  name or address for ssh and scp commands
+-q or --qemu      communicate with QEMU emulated watch (same as -r localhost -p 2222 )
+-w or --wall WP   set the wallpaper for deploy or test to the named file (WP)
 
 Available commands:
 update          use git to update your local copy of the unoffical-watchfaces repository
@@ -33,6 +33,36 @@ test WF         test the named watchface on the computer using qmlscene
 
 EOF
 }
+
+
+# Environment variables which are set based on
+# parsed command line switches
+
+# These are the defaults for SSH access
+WATCHPORT=22
+WATCHADDR=192.168.2.15
+# These are the defaults for local QEMU target
+QEMUPORT=2222
+QEMUADDR=localhost
+# Assume no ADB unless told otherwise
+ADB=false
+# Assume no GUI unless told otherwise
+GUI=false
+# Only show interactive prompt if the user hasn't
+# already specified a command on the command line
+SKIP_INTERACTIVE_PROMPT=false
+# No wallpaper unless asked
+WALLPAPER=""
+# Default to all watchfaces unselected for deploy
+DEFAULTOPTION=OFF
+# Default to not deploying all watchfaces
+DEPLOY_ALL=false
+
+# Command to execute
+COMMAND=""
+# Arguments for the command
+declare -a COMMAND_ARGS=()
+
 
 function runWatchCommand {
     local user="$1"
@@ -306,26 +336,6 @@ if [ $script_is_sourced -gt 0 ]; then
     return
 fi
 
-
-# These are the defaults for SSH access
-WATCHPORT=22
-WATCHADDR=192.168.2.15
-# These are the defaults for local QEMU target
-QEMUPORT=2222
-QEMUADDR=localhost
-# Assume no ADB unless told otherwise
-ADB=false
-# Assume no GUI unless told otherwise
-GUI=false
-# Only show interactive prompt if the user hasn't
-# already specified a command on the command line
-SKIP_INTERACTIVE_PROMPT=false
-# No wallpaper unless asked
-WALLPAPER=""
-# Default to all watchfaces unselected for deploy
-DEFAULTOPTION=OFF
-# Default to not deploying all watchfaces
-DEPLOY_ALL=false
 # Assume Dialog unless unavailable
 if hash dialog 2>/dev/null; then
     MENUPROGRAM="dialog"
@@ -333,90 +343,141 @@ elif hash whiptail 2>/dev/null; then
     MENUPROGRAM="whiptail --separate-output"
 fi
 
-while [[ $# -gt 0 ]] ; do
-    case $1 in
-        -a|--adb)
+# Preprocess command line switches with getopt to rearrange
+# them for easier parsing, separating non-option arguments
+# and option arguments.
+REARRANGED_OPTS=$(getopt -o 'abegqp:r:hw:' --long 'adb,boot,every,gui,qemu,port:,remote:,help,wall:' -n "$0" -- "$@")
+if [[ $? -ne 0 ]]; then
+    echo "Error parsing arguments" >&2
+    showHelp
+    exit 1
+fi
+# Replace existing arguments with the rearranged ones
+eval set -- "$REARRANGED_OPTS"
+unset REARRANGED_OPTS
+
+# Process options
+while true; do
+    case "$1" in
+        '-a'|'--adb')
             ADB=true
             shift
             ;;
-        -b|--boot)
+        '-b'|'--boot')
             REBOOT=true
             shift
             ;;
-        -e|--every)
+        '-e'|'--every')
             DEFAULTOPTION=ON
             shift
             ;;
-        -g|--gui)
+        '-g'|'--gui')
             GUI=true
             shift
             ;;
-        -q|--qemu)
+        '-q'|'--qemu')
             WATCHPORT=${QEMUPORT}
             WATCHADDR=${QEMUADDR}
             shift
             ;;
-        -p|--port)
+        '-p'|'--port')
             WATCHPORT="$2"
-            shift
-            shift
+            shift 2
             ;;
-        -r|--remote)
+        '-r'|'--remote')
             WATCHADDR="$2"
-            shift
-            shift
+            shift 2
             ;;
-        -h|--help)
+        '-h'|'--help')
             showHelp
             exit 1
             ;;
-        -w|--wall)
+        '-w'|'--wall')
             WALLPAPER="$2"
-            shift
-            shift
+            shift 2
             ;;
-        clone)
-            cloneface "$2" "$3"
+        '--')
             shift
-            shift
-            shift
-            SKIP_INTERACTIVE_PROMPT=true
-            ;;
-        deployall)
-            DEPLOY_ALL=true
-            shift
-            SKIP_INTERACTIVE_PROMPT=true
-            ;;
-        deploy)
-            deployface "$2" true
-            restartCeres
-            shift
-            shift
-            SKIP_INTERACTIVE_PROMPT=true
-            ;;
-        test)
-            testface "$2"
-            shift
-            shift
-            SKIP_INTERACTIVE_PROMPT=true
-            ;;
-        update)
-            git pull
-            shift
-            SKIP_INTERACTIVE_PROMPT=true
-            ;;
-        version)
-            showVersion
-            shift
-            SKIP_INTERACTIVE_PROMPT=true
+            break
             ;;
         *)
-            echo "Ignoring unknown option $1"
-            shift
+            echo "Internal error parsing arguments" >&2
+            exit 1
             ;;
     esac
 done
 
+# Process remaining arguments as command and its arguments
+if [[ $# -gt 0 ]]; then
+    COMMAND="$1"
+    shift
+    COMMAND_ARGS=("$@")
+fi
+
+# Validate command and arguments
+case "$COMMAND" in
+    "clone")
+        if [[ ${#COMMAND_ARGS[@]} -ne 2 ]]; then
+            echo "Error: clone command requires exactly 2 arguments (source and destination)" >&2
+            exit 1
+        fi
+        ;;
+    "deploy"|"test")
+        if [[ ${#COMMAND_ARGS[@]} -ne 1 ]]; then
+            echo "Error: $COMMAND command requires exactly 1 argument (watchface name)" >&2
+            exit 1
+        fi
+        ;;
+    "deployall"|"update"|"version")
+        if [[ ${#COMMAND_ARGS[@]} -ne 0 ]]; then
+            echo "Error: $COMMAND command takes no arguments" >&2
+            exit 1
+        fi
+        ;;
+    "")
+        # No command specified - this might be OK for interactive mode
+        ;;
+    *)
+        echo "Error: Unknown command '$COMMAND'" >&2
+        showUsage
+        exit 1
+        ;;
+esac
+
+# Execute the command
+case "$COMMAND" in
+    "clone")
+        cloneface "${COMMAND_ARGS[0]}" "${COMMAND_ARGS[1]}"
+        SKIP_INTERACTIVE_PROMPT=true
+        ;;
+    "deployall")
+        DEPLOY_ALL=true
+        SKIP_INTERACTIVE_PROMPT=true
+        ;;
+    "deploy")
+        deployface "${COMMAND_ARGS[0]}" true
+        restartCeres
+        SKIP_INTERACTIVE_PROMPT=true
+        ;;
+    "test")
+        testface "${COMMAND_ARGS[0]}"
+        SKIP_INTERACTIVE_PROMPT=true
+        ;;
+    "update")
+        git pull
+        SKIP_INTERACTIVE_PROMPT=true
+        ;;
+    "version")
+        showVersion
+        SKIP_INTERACTIVE_PROMPT=true
+        ;;
+    "")
+        # No command - continue with interactive mode
+        echo "No command specified, entering interactive mode"
+        ;;
+esac
+
+# If needed, start the interactive dialog, either via TUI or via GUI.
 mapfile -t WATCHFACES < <(find . -maxdepth 3 -type d -path "*/usr/share" -printf "%h\n" | sort | awk -F '/' '{print $2}' )
 if [ "${SKIP_INTERACTIVE_PROMPT}" != "true" ] ; then
     if [ "${GUI}" = "true" ] ; then
