@@ -22,6 +22,7 @@ Available options:
 -r or --remote    specify the remote (watch)  name or address for ssh and scp commands
 -q or --qemu      communicate with QEMU emulated watch (same as -r localhost -p 2222 )
 -w or --wall WP   set the wallpaper for deploy or test to the named file (WP)
+-v or --verbose   print verbose messages (useful for debugging)
 
 Available commands:
 update          use git to update your local copy of the unoffical-watchfaces repository
@@ -57,6 +58,8 @@ WALLPAPER=""
 DEFAULTOPTION=OFF
 # Default to not deploying all watchfaces
 DEPLOY_ALL=false
+# Print verbose messages to stderr
+VERBOSE_MESSAGES=false
 
 # Command to execute
 COMMAND=""
@@ -87,6 +90,13 @@ function runWatchCommand {
             echo "Error: unknown watch user ${user}"
             ;;
     esac
+}
+
+function printVerbose {
+   local message="$1"
+   if [ "${VERBOSE_MESSAGES}" = "true" ] ; then
+       echo "$message"
+   fi
 }
 
 function setDconf {
@@ -346,7 +356,7 @@ fi
 # Preprocess command line switches with getopt to rearrange
 # them for easier parsing, separating non-option arguments
 # and option arguments.
-REARRANGED_OPTS=$(getopt -o 'abegqp:r:hw:' --long 'adb,boot,every,gui,qemu,port:,remote:,help,wall:' -n "$0" -- "$@")
+REARRANGED_OPTS=$(getopt -o 'abegqp:r:hw:v' --long 'adb,boot,every,gui,qemu,port:,remote:,help,wall:,verbose' -n "$0" -- "$@")
 if [[ $? -ne 0 ]]; then
     echo "Error parsing arguments" >&2
     showHelp
@@ -395,6 +405,10 @@ while true; do
         '-w'|'--wall')
             WALLPAPER="$2"
             shift 2
+            ;;
+        '-v'|'--verbose')
+            VERBOSE_MESSAGES=true
+            shift
             ;;
         '--')
             shift
