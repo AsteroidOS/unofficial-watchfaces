@@ -353,6 +353,8 @@ elif hash whiptail 2>/dev/null; then
     MENUPROGRAM="whiptail --separate-output"
 fi
 
+SCRIPT_DIRPATH="$(dirname "$(readlink -f "${BASH_SOURCE[0]}")")"
+
 # Preprocess command line switches with getopt to rearrange
 # them for easier parsing, separating non-option arguments
 # and option arguments.
@@ -457,6 +459,8 @@ case "$COMMAND" in
         exit 1
         ;;
 esac
+
+printVerbose "Script is located in directory path \"$SCRIPT_DIRPATH\""
 
 # Execute the command
 case "$COMMAND" in
