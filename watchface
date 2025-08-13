@@ -400,7 +400,7 @@ function deployall {
 
 
 (return 0 2>/dev/null) && script_is_sourced=1 || script_is_sourced=0
-if [ $script_is_sourced -gt 0 ]; then
+if [ "$script_is_sourced" -gt 0 ]; then
     echo "You are trying to source this script. It is not meant to be sourced." >&2
     return
 fi
@@ -514,7 +514,7 @@ case "$COMMAND" in
         ;;
     *)
         echo "Error: Unknown command '$COMMAND'" >&2
-        showUsage
+        showHelp
         exit 1
         ;;
 esac
