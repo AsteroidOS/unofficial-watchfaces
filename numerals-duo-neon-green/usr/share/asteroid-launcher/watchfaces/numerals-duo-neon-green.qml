@@ -34,10 +34,10 @@ Item {
     id: root
 
     Item {
-        x: DeviceInfo.hasRoundScreen ? length * 0.1 : (root.width != length ? root.width/2 - length/2 : 0)
-        y: DeviceInfo.hasRoundScreen ? length * 0.1 : (root.height != length ? root.height/2 - length/2 : 0)
-        width: DeviceInfo.hasRoundScreen ? length * 0.8 : length
-        height: DeviceInfo.hasRoundScreen ? length * 0.8 : length
+        x: DeviceSpecs.hasRoundScreen ? length * 0.1 : (root.width != length ? root.width/2 - length/2 : 0)
+        y: DeviceSpecs.hasRoundScreen ? length * 0.1 : (root.height != length ? root.height/2 - length/2 : 0)
+        width: DeviceSpecs.hasRoundScreen ? length * 0.8 : length
+        height: DeviceSpecs.hasRoundScreen ? length * 0.8 : length
 
         Rectangle {
             id: greenColor
