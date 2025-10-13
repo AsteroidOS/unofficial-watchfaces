@@ -291,7 +291,7 @@ function yadGuiMenu {
     fi
     case $action in
         deploy)
-            declare -a args=('--title=Choose watchfaces' "--width=375" "--height=500" "--list" "--checklist" "--print-column=2" \
+            declare -a args=('--title=Choose watchfaces' "--width=450" "--height=500" "--list" "--checklist" "--print-column=2" \
                 '--column=Selected' '--column=Name' '--column=Preview:IMG')
             for wf in "${WATCHFACES[@]}" ; do
                 args+=("${default}" "${wf}" "${wf}/usr/share/asteroid-launcher/watchfaces-preview/112/${wf}.png")
