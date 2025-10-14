@@ -130,7 +130,7 @@ function pushWallpaper {
 }
 
 function restartCeres {
-    runWatchCommand "root" "systemctl restart user@1000"
+    runWatchCommand "ceres" "killall asteroid-launcher"
 }
 
 function rebootWatch {
@@ -273,7 +273,70 @@ function cloneface {
     watchfaceClone "${sourcewatchface}" "${destwatchface}"
 }
 
-function guiMenu {
+function yadGuiMenu {
+    local watchface
+    local action
+    local default
+    if ! action=$(yad --title="Select action" --height=200 --list --column="action" \
+        deploy \
+        clone \
+        test \
+        | awk -F '|' '{print $1}'); then
+        exit
+    fi
+    if [ "${DEFAULTOPTION}" == "ON" ] ; then
+        default=TRUE
+    else
+        default=FALSE
+    fi
+    case $action in
+        deploy)
+            declare -a args=('--title=Choose watchfaces' "--width=450" "--height=500" "--list" "--checklist" "--print-column=2" \
+                '--column=Selected' '--column=Name' '--column=Preview:IMG')
+            for wf in "${WATCHFACES[@]}" ; do
+                args+=("${default}" "${wf}" "${wf}/usr/share/asteroid-launcher/watchfaces-preview/112/${wf}.png")
+            done
+            if ! watchface=$(yad "${args[@]}"); then
+                exit
+            fi
+            ;;
+        clone|test)
+            if ! watchface=$(yad --title="Choose a watchface" --height=250 --list --column="Name" "${WATCHFACES[@]}" \
+                | awk -F '|' '{print $1}'); then
+                exit
+            fi
+            ;;
+    esac
+    # convert | chars to spaces
+    watchface=${watchface//|/ }
+    if yad --question --title="Confirming" --text="${action} ${watchface}" ; then
+        echo "OK!"
+        if [ "${action}" = "clone" ] ; then
+            if newface=$(yad --entry --title="Cloning ${watchface}" \
+                --text="Enter name of new watchface:" \
+                --entry-text "newface")
+            then cloneface "${watchface}" "${newface}"
+            else echo "No name entered"
+            fi
+        elif [ "${action}" = "deploy" ] ; then
+            local first=true
+            for wf in ${watchface}; do
+                deployface "${wf}" "${first}"
+                first=false
+            done
+            restartCeres
+            if [ "${REBOOT}" = "true" ] ; then
+                rebootWatch
+            fi
+        else
+            testface "${watchface}"
+        fi
+    else
+        echo "Canceled"
+    fi
+}
+
+function zenityGuiMenu {
     local watchface
     local action
     local default
@@ -562,10 +625,12 @@ esac
 mapfile -t WATCHFACES < <(find . -maxdepth 3 -type d -path "*/usr/share" -printf "%h\n" | sort | awk -F '/' '{print $2}' )
 if [ "${SKIP_INTERACTIVE_PROMPT}" != "true" ] ; then
     if [ "${GUI}" = "true" ] ; then
-        if hash zenity 2>/dev/null; then
-            echo "Error: install 'zenity' to use gui menus."
+        if hash yad 2>/dev/null; then
+            yadGuiMenu
+        elif hash zenity 2>/dev/null; then
+            zenityGuiMenu
         else
-            guiMenu
+            echo "Error: install 'yad' or'zenity' to use gui menus."
         fi
     else
         if [ -z "${MENUPROGRAM}" ] ; then
