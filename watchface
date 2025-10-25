@@ -299,16 +299,21 @@ function yadGuiMenu {
             if ! watchface=$(yad "${args[@]}"); then
                 exit
             fi
+            watchface=${watchface//|/ }
             ;;
         clone|test)
-            if ! watchface=$(yad --title="Choose a watchface" --height=250 --list --column="Name" "${WATCHFACES[@]}" \
-                | awk -F '|' '{print $1}'); then
+            declare -a args=('--title=Choose watchfaces' "--width=450" "--height=500" "--list" "--print-column=1" \
+                '--column=Name' '--column=Preview:IMG')
+            for wf in "${WATCHFACES[@]}" ; do
+                args+=("${wf}" "${wf}/usr/share/asteroid-launcher/watchfaces-preview/112/${wf}.png")
+            done
+            if ! watchface=$(yad "${args[@]}"); then
                 exit
             fi
-            ;;
+            watchface=${watchface//|}
+           ;;
     esac
     # convert | chars to spaces
-    watchface=${watchface//|/ }
     if yad --question --title="Confirming" --text="${action} ${watchface}" ; then
         echo "OK!"
         if [ "${action}" = "clone" ] ; then
