@@ -1,0 +1,5 @@
+module Nemo.Mce
+singleton Global 1.0 Global.qml
+MceBatteryState 1.0 MceBatteryState.qml
+MceBatteryLevel 1.0 MceBatteryLevel.qml
+MceChargerType 1.0 MceChargerType.qml

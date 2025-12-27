@@ -1,0 +1,2 @@
+module Nemo.Configuration
+ConfigurationValue 1.0 ConfigurationValue.qml
