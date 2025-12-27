@@ -4,6 +4,7 @@ import QtQuick.Controls 2.15
 import QtQuick.Dialogs 1.1
 import QtQuick.Layouts 1.2
 import Qt.labs.settings 1.0
+import Nemo.Mce 1.0
 
 ApplicationWindow {
     id: appRoot
@@ -23,9 +24,20 @@ ApplicationWindow {
         property alias round: roundCheckBox.checked
         property alias nonSquare: nonSquare.checked
         property alias displayAmbient: ambientCheckBox.checked
+        property alias nightstand: nightstandCheckBox.checked
         property alias halfSize: halfSize.checked
         property alias twelveHour: twelveHourCheckBox.checked
         property alias staticTime: setStaticTimeCheckBox.checked
+    }
+    Binding {
+        target: Global
+        property: "heartrate"
+        value: heartRate.value
+    }
+    Binding {
+        target: Global
+        property: "battery"
+        value: batteryCharge.value
     }
 
     RowLayout {
@@ -169,6 +181,15 @@ ApplicationWindow {
                         Layout.alignment: Qt.AlignCenter
 
                         CheckBox {
+                            id: nightstandCheckBox
+
+                            text: qsTr("Nightstand")
+                            ToolTip.visible: hovered
+                            ToolTip.delay: 600
+                            ToolTip.text: qsTr("Switch to Nightstand mode")
+                        }
+
+                        CheckBox {
                             id: twelveHourCheckBox
 
                             text: qsTr("12h")
@@ -282,48 +303,144 @@ ApplicationWindow {
 
                 }
 
-                RowLayout {
-                    Layout.alignment: Qt.AlignHCenter
-                    Text {
-                        text: qsTr("featureSlider")
-                    }
+                Frame {
+                    RowLayout {
+                        Layout.alignment: Qt.AlignHCenter
+                        Text {
+                            text: qsTr("batteryCharge")
+                        }
 
-                    Slider {
-                        id: featureSlider
+                        Slider {
+                            id: batteryCharge
 
-                        width: 700
-                        from: 0
-                        value: 0.5
-                        to: 1
-                        ToolTip.visible: hovered
-                        ToolTip.delay: 600
-                        ToolTip.text: qsTr("Can be used to test a feature such as battery level.\nDevelopers can temporarily use 'featureSlider.value' in watchface code.")
+                            width: 700
+                            from: 0
+                            value: 50
+                            to: 100
+                            ToolTip.visible: hovered
+                            ToolTip.delay: 600
+                            ToolTip.text: qsTr("Represents the state of charge of the battery")
 
-                        Repeater {
-                            model: 25
+                            Repeater {
+                                model: 25
 
-                            delegate: Rectangle {
-                                anchors.bottom: parent.bottom
-                                x: parent.horizontalPadding + parent.availableWidth * index / 24
-                                implicitWidth: 1
-                                implicitHeight: 8
-                                color: "brown"
+                                delegate: Rectangle {
+                                    anchors.bottom: parent.bottom
+                                    x: parent.horizontalPadding + parent.availableWidth * index / 24
+                                    implicitWidth: 1
+                                    implicitHeight: 8
+                                    color: "brown"
+                                }
+                            }
+
+                            Text {
+                                text: "0"
+                                anchors.left: parent.left
+                            }
+
+                            Text {
+                                text: "100"
+                                anchors.right: parent.right
                             }
                         }
 
                         Text {
-                            text: "0.0"
-                            anchors.left: parent.left
+                            text: batteryCharge.value.toFixed(0)
+                        }
+                    }
+                }
+
+                Frame {
+                    RowLayout {
+                        Layout.alignment: Qt.AlignHCenter
+                        Text {
+                            text: qsTr("HeartRate")
+                        }
+
+                        Slider {
+                            id: heartRate
+
+                            width: 700
+                            from: 45
+                            value: 60
+                            to: 220
+                            ToolTip.visible: hovered
+                            ToolTip.delay: 600
+                            ToolTip.text: qsTr("Represents user's heart rate in bpm")
+
+                            Repeater {
+                                model: 25
+
+                                delegate: Rectangle {
+                                    anchors.bottom: parent.bottom
+                                    x: parent.horizontalPadding + parent.availableWidth * index / 24
+                                    implicitWidth: 1
+                                    implicitHeight: 8
+                                    color: "brown"
+                                }
+                            }
+
+                            Text {
+                                text: heartRate.from
+                                anchors.left: parent.left
+                            }
+
+                            Text {
+                                text: heartRate.to
+                                anchors.right: parent.right
+                            }
                         }
 
                         Text {
-                            text: "1.0"
-                            anchors.right: parent.right
+                            text: heartRate.value.toFixed(0)
                         }
                     }
+                }
 
-                    Text {
-                        text: featureSlider.value.toFixed(3)
+                Frame {
+                    RowLayout {
+                        Layout.alignment: Qt.AlignHCenter
+                        Text {
+                            text: qsTr("featureSlider")
+                        }
+
+                        Slider {
+                            id: featureSlider
+
+                            width: 700
+                            from: 0
+                            value: 0.5
+                            to: 1
+                            ToolTip.visible: hovered
+                            ToolTip.delay: 600
+                            ToolTip.text: qsTr("Can be used to test a feature such as battery level.\nDevelopers can temporarily use 'featureSlider.value' in watchface code.")
+
+                            Repeater {
+                                model: 25
+
+                                delegate: Rectangle {
+                                    anchors.bottom: parent.bottom
+                                    x: parent.horizontalPadding + parent.availableWidth * index / 24
+                                    implicitWidth: 1
+                                    implicitHeight: 8
+                                    color: "brown"
+                                }
+                            }
+
+                            Text {
+                                text: "0.0"
+                                anchors.left: parent.left
+                            }
+
+                            Text {
+                                text: "1.0"
+                                anchors.right: parent.right
+                            }
+                        }
+
+                        Text {
+                            text: featureSlider.value.toFixed(3)
+                        }
                     }
                 }
             }

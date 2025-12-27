@@ -255,9 +255,9 @@ EOF
     fi
 
     if [ -n "${WALLPAPER}" ] ; then
-        qmlscene "${sourcewatchface}" "${WALLPAPER}" "${WALLPAPER_ROUND}" "${sourcewatchface}/usr/share/asteroid-launcher/watchfaces/" loader.qml
+        qmlscene "${sourcewatchface}" "${WALLPAPER}" "${WALLPAPER_ROUND}" "${sourcewatchface}/usr/share/asteroid-launcher/watchfaces/" loader.qml -I fake-components
     else
-        qmlscene "${sourcewatchface}" "background.jpg" "background-round.jpg" "${sourcewatchface}/usr/share/asteroid-launcher/watchfaces/" loader.qml
+        qmlscene "${sourcewatchface}" "background.jpg" "background-round.jpg" "${sourcewatchface}/usr/share/asteroid-launcher/watchfaces/" loader.qml -I fake-components
     fi
     convertPreviews "${sourcewatchface}"
 }
@@ -451,6 +451,10 @@ if hash dialog 2>/dev/null; then
 elif hash whiptail 2>/dev/null; then
     MENUPROGRAM="whiptail --separate-output"
 fi
+# location of temporary font directory
+FONT_DIR="${HOME}/.fonts"
+# Temporary files and symlinks to delete
+declare -a DELETE_LIST=()
 
 SCRIPT_DIRPATH="$(dirname "$(readlink -f "${BASH_SOURCE[0]}")")"
 
