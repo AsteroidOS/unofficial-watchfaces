@@ -39,6 +39,11 @@ ApplicationWindow {
         property: "battery"
         value: batteryCharge.value
     }
+    Binding {
+        target: Global
+        property: "compassAzimuth"
+        value: compassAzimuth.value
+    }
 
     RowLayout {
         spacing: 0
@@ -393,6 +398,53 @@ ApplicationWindow {
 
                         Text {
                             text: heartRate.value.toFixed(0)
+                        }
+                    }
+                }
+
+                Frame {
+                    RowLayout {
+                        Layout.alignment: Qt.AlignHCenter
+                        Text {
+                            text: qsTr("Heading")
+                        }
+
+                        Slider {
+                            id: compassAzimuth
+
+                            width: 700
+                            from: 0
+                            value: 0
+                            to: 360
+                            ToolTip.visible: hovered
+                            ToolTip.delay: 600
+                            ToolTip.text: qsTr("Represents azimuth to true north in degrees")
+
+                            Repeater {
+                                model: 25
+
+                                delegate: Rectangle {
+                                    anchors.bottom: parent.bottom
+                                    x: parent.horizontalPadding + parent.availableWidth * index / 24
+                                    implicitWidth: 1
+                                    implicitHeight: 8
+                                    color: "brown"
+                                }
+                            }
+
+                            Text {
+                                text: compassAzimuth.from
+                                anchors.left: parent.left
+                            }
+
+                            Text {
+                                text: compassAzimuth.to
+                                anchors.right: parent.right
+                            }
+                        }
+
+                        Text {
+                            text: compassAzimuth.value.toFixed(0)
                         }
                     }
                 }
