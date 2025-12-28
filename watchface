@@ -198,8 +198,6 @@ function testface {
     if ! sourcewatchface=$(sanitizeSourceWatchface "$1") ; then
         exit 1
     fi
-    createTempFontSymlinks "${sourcewatchface}"
-    trap deleteTempFontSymlinks EXIT
     echo "Testing ${sourcewatchface}"
 
     WATCHFACE_FONTS_PATH="${SCRIPT_DIRPATH}/${sourcewatchface}/usr/share/fonts/"
