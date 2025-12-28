@@ -6,5 +6,6 @@ Item {
     property int batteryChargeState: 1
     property int batteryChargerType: 1
     property int heartrate: 62
+    property bool hrmSensorActive: false
     property bool wifiPowered: true
 }
