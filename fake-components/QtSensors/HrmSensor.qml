@@ -5,5 +5,10 @@ import Nemo.Mce 1.0
 Item {
     property string path
     property bool active: Global.hrmSensorActive
-    property bool onReadingChanged
+    property alias reading: reading
+    Item {
+        id: reading
+        property int bpm: Global.heartrate
+        onBpmChanged: parent.readingChanged()
+    }
 }
