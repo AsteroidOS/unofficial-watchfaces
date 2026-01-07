@@ -17,7 +17,7 @@ import QtQuick 2.1
 import Nemo.Mce 1.0
 import org.asteroid.controls 1.0
 import org.asteroid.utils 1.0
-import QtSensors 5.3
+import QtSensors 5.11
 
 Item {
     id: watchFace
