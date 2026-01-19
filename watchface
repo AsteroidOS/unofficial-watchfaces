@@ -20,8 +20,9 @@ Available options:
 -e or --every           select every watchface (deploy only)
 -g or --gui             use the GTK+ gui
 -p or --port            specify an IP port to use for ssh and scp commands
--r or --remote          specify the remote (watch)  name or address for ssh and scp commands
 -q or --qemu            communicate with QEMU emulated watch (same as -r localhost -p 2222 )
+-r or --remote          specify the remote (watch)  name or address for ssh and scp commands
+-t or --transport       when used win ADB mode, specifies the transport id
 -w or --wall WP         set the wallpaper for deploy or test to the named file (WP)
 -v or --verbose         print verbose messages (useful for debugging)
 
@@ -62,6 +63,8 @@ DEFAULTOPTION=OFF
 DEPLOY_ALL=false
 # Print verbose messages to stderr
 VERBOSE_MESSAGES=false
+# Transport id is not needed; only one watch
+TRANSPORT_ID=
 
 # Command to execute
 COMMAND=""
@@ -75,7 +78,7 @@ function runWatchCommand {
     case ${user} in
         root)
             if [ "$ADB" = "true" ] ; then
-                adb shell "${cmd}"
+                adb ${TRANSPORT_ID} shell "${cmd}"
             else
                 ssh -p "${WATCHPORT}" -t root@"${WATCHADDR}" ${cmd}
             fi
@@ -83,7 +86,7 @@ function runWatchCommand {
         ceres)
             if [ "$ADB" = "true" ] ; then
                 printf -v cmd %q "${cmd}"
-                adb shell "su -l -c ${cmd} ceres"
+                adb ${TRANSPORT_ID} shell "su -l -c ${cmd} ceres"
             else
                 ssh -p "${WATCHPORT}" -t ceres@"${WATCHADDR}" ${cmd}
             fi
@@ -112,7 +115,7 @@ function pushFiles {
     local sourcedir="$2"
     local destdir="$3"
     if [ "$ADB" = "true" ] ; then
-        adb push ${sourcedir} "${destdir}"
+        adb ${TRANSPORT_ID} push ${sourcedir} "${destdir}"
     else
         scp -P"${WATCHPORT}" -r ${sourcedir} "${user}@${WATCHADDR}:${destdir}"
     fi
@@ -457,7 +460,7 @@ SCRIPT_DIRPATH="$(dirname "$(readlink -f "${BASH_SOURCE[0]}")")"
 # Preprocess command line switches with getopt to rearrange
 # them for easier parsing, separating non-option arguments
 # and option arguments.
-REARRANGED_OPTS=$(getopt -o 'abc:egqp:r:hw:v' --long 'adb,boot,circlewall:,every,gui,qemu,port:,remote:,help,wall:,verbose' -n "$0" -- "$@")
+REARRANGED_OPTS=$(getopt -o 'abc:egqp:r:t:hw:v' --long 'adb,boot,circlewall:,every,gui,qemu,port:,remote:,transport:,help,wall:,verbose' -n "$0" -- "$@")
 if [[ $? -ne 0 ]]; then
     echo "Error parsing arguments" >&2
     showHelp
@@ -501,6 +504,10 @@ while true; do
             ;;
         '-r'|'--remote')
             WATCHADDR="$2"
+            shift 2
+            ;;
+        '-t'|'--transport')
+            TRANSPORT_ID="-t $2"
             shift 2
             ;;
         '-h'|'--help')
