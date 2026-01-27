@@ -293,11 +293,6 @@ function convertPreviews {
     fi
 }
  
- function cloneface {
--- 
-2.52.0
-}
-
 function cloneface {
     local sourcewatchface
     local destwatchface="$2"
