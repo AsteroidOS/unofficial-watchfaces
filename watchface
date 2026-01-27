@@ -257,6 +257,45 @@ EOF
     else
         qmlscene "${sourcewatchface}" "background.jpg" "${sourcewatchface}/usr/share/asteroid-launcher/watchfaces/" loader.qml
     fi
+    convertPreviews "${sourcewatchface}"
+}
+
+function convertPreviews {
+    local watchfacename="$1"
+    local transparent="${watchfacename}-trans.png"
+    local webResolution=320
+    if [ -f "${transparent}" ] ; then
+        echo "Converting ${transparent}"
+        if ! command -v magick &> /dev/null ; then
+            echo "Error: cannot find magick (part of ImageMagick) on path"
+            exit 1
+        fi
+        # generate the transparent thumbnail images for the watch
+        for res in 112 128 144 160 182 ; do
+            respath="${watchfacename}/usr/share/asteroid-launcher/watchfaces-preview/${res}"
+            mkdir -p "${respath}"
+            magick "${transparent}" \
+                -resize "${res}x${res}" -adaptive-sharpen 0x.8 -quality 70 -strip \
+                "${respath}/${watchfacename}.png"
+        done
+        # generate the thumbnail images for the web
+        for thumb in "${watchfacename}" "${watchfacename}-round" ; do
+            magick "${thumb}.png" \
+                -resize "${webResolution}x${webResolution}" -adaptive-sharpen 0x.4 -quality 85 \
+                ".thumbnails/${thumb}.webp"
+        done
+        # delete the files
+        rm "${watchfacename}.png" "${watchfacename}-round.png" "${transparent}"
+        echo "| ![thumbnail](.thumbnails/${watchfacename}-round.webp) |![thumbnail](.thumbnails/${watchfacename}.webp) | [${watchfacename}](${watchfacename}/usr/share/asteroid-launcher/watchfaces/${watchfacename}.qml) | [yourname](https://github.com/yourname) |" > "${watchfacename}.md"
+        echo "Add the contents of ${watchfacename}.md to README.md, adding font licenses and your name"
+    else
+        echo "Did not find ${transparent}"
+    fi
+}
+ 
+ function cloneface {
+-- 
+2.52.0
 }
 
 function cloneface {
