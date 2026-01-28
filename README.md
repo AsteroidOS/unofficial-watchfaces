@@ -24,25 +24,31 @@ You may [reboot the watch](https://asteroidos.org/wiki/useful-commands/#restart)
 ### `watchface` summary
 If invoked without arguments, the `watchface` command will start a text menu (using [`dialog`](https://invisible-island.net/dialog/) if available, otherwise using [`whiptail`](https://en.wikibooks.org/wiki/Bash_Shell_Scripting/Whiptail)).  A GUI based menu (using [`zenity`](https://help.gnome.org/users/zenity/stable/) is also available using the `-g` option.
 ```
+watchface v1.2
 watchface [option] [command...]
-Utility functions for AsteroidOS watchfaces.  By default, uses "Developer Mode"
+Utility functions for AsteroidOS watchfaces.  By default, uses "SSH Mode"
 over ssh, but can also use "ADB Mode" using ADB.
 
 Available options:
--h or --help    prints this help screen and quits
--a or --adb     uses ADB command to communicate with watch
--b or --boot    reboot watch after deploying multiple watchfaces
--g or --gui     use the GTK+ gui
--p or --port    specifies a port to use for ssh and scp commands
--r or --remote  specifies the remote (watch)  name or address for ssh and scp commands
--q or --qemu    communicates with QEMU emulated watch (same as -r localhost -p 2222 )
--w or --wall WP sets the wallpaper for deploy or test to the named file
+-h or --help            print this help screen and quit
+-a or --adb             use ADB command to communicate with watch
+-b or --boot            reboot watch after deploying multiple watchfaces
+-c or --circlewall WP   set the wallpaper for circular watchface thumbnail to the named file (WP)
+-e or --every           select every watchface (deploy only)
+-g or --gui             use the GTK+ gui
+-p or --port            specify an IP port to use for ssh and scp commands
+-r or --remote          specify the remote (watch)  name or address for ssh and scp commands
+-q or --qemu            communicate with QEMU emulated watch (same as -r localhost -p 2222 )
+-w or --wall WP         set the wallpaper for deploy or test to the named file (WP)
+-v or --verbose         print verbose messages (useful for debugging)
 
 Available commands:
-version         displays the version of this program and exits
-deploy WF       pushes the named watchface to the watch and activates it
-clone WF NEWWF  clones the named watchface WF to new watchface NEWWF
-test WF         sets the active watchface to the named watchface
+update          use git to update your local copy of the unoffical-watchfaces repository
+version         display the version of this program and exit
+deploy WF       push the named watchface to the watch and activate it
+deployall       deploy all watchfaces
+clone WF NEWWF  clone the named watchface WF to new watchface NEWWF
+test WF         test the named watchface on the computer using qmlscene
 ```
 
 ### Cloning a watchface
