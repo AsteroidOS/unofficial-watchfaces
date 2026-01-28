@@ -1,5 +1,5 @@
 #! /bin/bash
-VERSION="1.1"
+VERSION="1.2"
 
 function showVersion {
     echo "watchface v${VERSION}"
@@ -9,20 +9,21 @@ function showHelp {
     showVersion
     cat << EOF
 watchface [option] [command...]
-Utility functions for AsteroidOS watchfaces.  By default, uses "Developer Mode"
+Utility functions for AsteroidOS watchfaces.  By default, uses "SSH Mode"
 over ssh, but can also use "ADB Mode" using ADB.
 
 Available options:
--h or --help      print this help screen and quit
--a or --adb       use ADB command to communicate with watch
--b or --boot      reboot watch after deploying multiple watchfaces
--e or --every     select every watchface (deploy only)
--g or --gui       use the GTK+ gui
--p or --port      specify an IP port to use for ssh and scp commands
--r or --remote    specify the remote (watch)  name or address for ssh and scp commands
--q or --qemu      communicate with QEMU emulated watch (same as -r localhost -p 2222 )
--w or --wall WP   set the wallpaper for deploy or test to the named file (WP)
--v or --verbose   print verbose messages (useful for debugging)
+-h or --help            print this help screen and quit
+-a or --adb             use ADB command to communicate with watch
+-b or --boot            reboot watch after deploying multiple watchfaces
+-c or --circlewall WP   set the wallpaper for circular watchface thumbnail to the named file (WP)
+-e or --every           select every watchface (deploy only)
+-g or --gui             use the GTK+ gui
+-p or --port            specify an IP port to use for ssh and scp commands
+-r or --remote          specify the remote (watch)  name or address for ssh and scp commands
+-q or --qemu            communicate with QEMU emulated watch (same as -r localhost -p 2222 )
+-w or --wall WP         set the wallpaper for deploy or test to the named file (WP)
+-v or --verbose         print verbose messages (useful for debugging)
 
 Available commands:
 update          use git to update your local copy of the unoffical-watchfaces repository
@@ -54,6 +55,7 @@ GUI=false
 SKIP_INTERACTIVE_PROMPT=false
 # No wallpaper unless asked
 WALLPAPER=""
+WALLPAPER_ROUND=""
 # Default to all watchfaces unselected for deploy
 DEFAULTOPTION=OFF
 # Default to not deploying all watchfaces
@@ -253,9 +255,9 @@ EOF
     fi
 
     if [ -n "${WALLPAPER}" ] ; then
-        qmlscene "${sourcewatchface}" "${WALLPAPER}" "${sourcewatchface}/usr/share/asteroid-launcher/watchfaces/" loader.qml
+        qmlscene "${sourcewatchface}" "${WALLPAPER}" "${WALLPAPER_ROUND}" "${sourcewatchface}/usr/share/asteroid-launcher/watchfaces/" loader.qml
     else
-        qmlscene "${sourcewatchface}" "background.jpg" "${sourcewatchface}/usr/share/asteroid-launcher/watchfaces/" loader.qml
+        qmlscene "${sourcewatchface}" "background.jpg" "background-round.jpg" "${sourcewatchface}/usr/share/asteroid-launcher/watchfaces/" loader.qml
     fi
     convertPreviews "${sourcewatchface}"
 }
@@ -455,7 +457,7 @@ SCRIPT_DIRPATH="$(dirname "$(readlink -f "${BASH_SOURCE[0]}")")"
 # Preprocess command line switches with getopt to rearrange
 # them for easier parsing, separating non-option arguments
 # and option arguments.
-REARRANGED_OPTS=$(getopt -o 'abegqp:r:hw:v' --long 'adb,boot,every,gui,qemu,port:,remote:,help,wall:,verbose' -n "$0" -- "$@")
+REARRANGED_OPTS=$(getopt -o 'abc:egqp:r:hw:v' --long 'adb,boot,circlewall:,every,gui,qemu,port:,remote:,help,wall:,verbose' -n "$0" -- "$@")
 if [[ $? -ne 0 ]]; then
     echo "Error parsing arguments" >&2
     showHelp
@@ -475,6 +477,10 @@ while true; do
         '-b'|'--boot')
             REBOOT=true
             shift
+            ;;
+        '-c'|'--circlewall')
+            WALLPAPER_ROUND="$2"
+            shift 2
             ;;
         '-e'|'--every')
             DEFAULTOPTION=ON
