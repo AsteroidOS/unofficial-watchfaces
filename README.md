@@ -37,8 +37,9 @@ Available options:
 -e or --every           select every watchface (deploy only)
 -g or --gui             use the GTK+ gui
 -p or --port            specify an IP port to use for ssh and scp commands
--r or --remote          specify the remote (watch)  name or address for ssh and scp commands
 -q or --qemu            communicate with QEMU emulated watch (same as -r localhost -p 2222 )
+-r or --remote          specify the remote (watch)  name or address for ssh and scp commands
+-t or --transport       when used win ADB mode, specifies the transport id
 -w or --wall WP         set the wallpaper for deploy or test to the named file (WP)
 -v or --verbose         print verbose messages (useful for debugging)
 
