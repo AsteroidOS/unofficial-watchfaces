@@ -57,7 +57,7 @@ Item {
             horizontalOffset: 0
             verticalOffset: 0
             radius: 16.0
-            samples: 33
+            samples: 34
             color: Qt.rgba(0, 0, 0, .8)
         }
     }
