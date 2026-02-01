@@ -50,16 +50,6 @@ Item {
         anchors.fill: parent
         visible: !displayAmbient
         source: imgPath + "background.svg"
-
-        layer.enabled: true
-        layer.effect: DropShadow {
-            transparentBorder: true
-            horizontalOffset: 0
-            verticalOffset: 0
-            radius: 16.0
-            samples: 34
-            color: Qt.rgba(0, 0, 0, .8)
-        }
     }
 
     Image {
@@ -74,7 +64,7 @@ Item {
             transparentBorder: true
             horizontalOffset: 0
             verticalOffset: 0
-            radius: 8.0
+            radius: 8
             samples: 17
             color: Qt.rgba(0, 0, 0, 1)
         }
@@ -462,7 +452,7 @@ Item {
             transparentBorder: true
             horizontalOffset: 2
             verticalOffset: 2
-            radius: 10.0
+            radius: 10
             samples: 21
             color: Qt.rgba(0, 0, 0, .8)
         }
@@ -492,7 +482,7 @@ Item {
                 transparentBorder: true
                 horizontalOffset: 2
                 verticalOffset: 2
-                radius: 5.0
+                radius: 5
                 samples: 11
                 color: Qt.rgba(0, 0, 0, .2)
             }
@@ -516,7 +506,7 @@ Item {
                 transparentBorder: true
                 horizontalOffset: 3
                 verticalOffset: 3
-                radius: 6.0
+                radius: 6
                 samples: 13
                 color: Qt.rgba(0, 0, 0, .3)
             }
@@ -541,7 +531,7 @@ Item {
                 transparentBorder: true
                 horizontalOffset: 4
                 verticalOffset: 4
-                radius: 8.0
+                radius: 8
                 samples: 17
                 color: Qt.rgba(0, 0, 0, .3)
             }
@@ -554,7 +544,7 @@ Item {
         transparentBorder: true
         horizontalOffset: 2
         verticalOffset: 2
-        radius: 8.0
+        radius: 8
         samples: 17
         color: Qt.rgba(0, 0, 0, .3)
     }
