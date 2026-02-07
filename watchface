@@ -562,7 +562,8 @@ if [ "$script_is_sourced" -gt 0 ]; then
     return
 fi
 
-# Assume Dialog unless unavailable
+# Determine which menu program to use (dialog or whiptail)
+# Dialog is preferred if available, otherwise fall back to whiptail
 if hash dialog 2>/dev/null; then
     MENUPROGRAM="dialog"
 elif hash whiptail 2>/dev/null; then
@@ -736,9 +737,9 @@ mapfile -t WATCHFACES < <(printf '%s\n' "${CWD_WATCHFACES[@]}" "${SCRIPT_WATCHFA
 if [ "${SKIP_INTERACTIVE_PROMPT}" != "true" ] ; then
     if [ "${GUI}" = "true" ] ; then
         if hash zenity 2>/dev/null; then
-            echo "Error: install 'zenity' to use gui menus."
-        else
             guiMenu
+        else
+            echo "Error: install 'zenity' to use gui menus."
         fi
     else
         if [ -z "${MENUPROGRAM}" ] ; then
