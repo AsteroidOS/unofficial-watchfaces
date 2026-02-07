@@ -147,19 +147,60 @@ function activateWatchface {
 }
 
 function watchfaceClone {
+    # Args: $1 - source watchface path (can be absolute), $2 - destination watchface name (relative to CWD)
+    local source_path="$1"
+    local dest_name="$2"
     local files
-    mapfile -t files <<<"$(find . -path './'"$1"'/*' -type f | awk '{ dst=$0 ; gsub(/'"$1"'/,"'"$2"'",dst);  print $0 "|" dst }')"
-    for filepair in "${files[@]}" ; do
-        IFS="|" read -r -a srcDstPaths <<< "${filepair}"
-        #echo "Copying from ${srcDstPaths[0]} to ${srcDstPaths[1]}"
-        destdir="${srcDstPaths[1]%/*}"
-        extension="${srcDstPaths[1]##*.}"
+    
+    # Extract just the watchface name from the source path (last component)
+    local source_name=$(basename "${source_path}")
+    
+    # Find all files in the source watchface
+    mapfile -t files <<<"$(cd "${source_path}" && find . -type f | sed 's|^\./||')"
+    
+    for file in "${files[@]}" ; do
+        if [[ -z "${file}" ]] ; then
+            continue
+        fi
+        
+        # Replace source watchface name with destination name in the path
+        local dest_file="${file//${source_name}/${dest_name}}"
+        local destdir="${dest_name}/$(dirname "${dest_file}")"
+        
         mkdir -p "${destdir}"
-        cp "${srcDstPaths[0]}" "${srcDstPaths[1]}"
+        cp "${source_path}/${file}" "${dest_name}/${dest_file}"
+        
+        # Replace watchface name in QML files
+        local extension="${dest_file##*.}"
         if [ "${extension}" = "qml" ] ; then
-            sed -i "s/$1/$2/g" "${srcDstPaths[1]}"
+            sed -i "s/${source_name}/${dest_name}/g" "${dest_name}/${dest_file}"
         fi
     done
+}
+
+function findWatchface {
+    # Locate a watchface by name, searching CWD first, then script directory
+    # Args: $1 - watchface name (without trailing slash)
+    local watchface_name="$1"
+    local cwd_path="${watchface_name}"
+    local script_path="${SCRIPT_DIRPATH}/${watchface_name}"
+    
+    # Check CWD first
+    if [[ -d "${cwd_path}/usr/share/asteroid-launcher/watchfaces/" ]] ; then
+        printVerbose "Found watchface \"${watchface_name}\" in CWD"
+        echo "${cwd_path}"
+        return 0
+    fi
+    
+    # Then check script directory
+    if [[ -d "${script_path}/usr/share/asteroid-launcher/watchfaces/" ]] ; then
+        printVerbose "Found watchface \"${watchface_name}\" in script directory"
+        echo "${script_path}"
+        return 0
+    fi
+    
+    # Not found
+    return 1
 }
 
 function sanitizeSourceWatchface {
@@ -169,11 +210,16 @@ function sanitizeSourceWatchface {
         echo "Error: no watchface specified" >&2
         exit 1
     fi
-    if [[ ! -d "${face}/usr/share/asteroid-launcher/watchfaces/" ]] ; then
+    
+    # Try to locate the watchface
+    local found_path
+    if found_path=$(findWatchface "${face}") ; then
+        echo "${found_path}"
+        return 0
+    else
         echo "Error: \"${face}\" does not appear to be a watchface" >&2
         exit 1
     fi
-    echo "${face}"
 }
 
 function deployface {
@@ -205,7 +251,7 @@ function testface {
     fi
     echo "Testing ${sourcewatchface}"
 
-    WATCHFACE_FONTS_PATH="${SCRIPT_DIRPATH}/${sourcewatchface}/usr/share/fonts/"
+    WATCHFACE_FONTS_PATH="${sourcewatchface}/usr/share/fonts/"
 
     if [ -d "${WATCHFACE_FONTS_PATH}" ]; then
         printVerbose "Watchface has custom fonts in path \"${WATCHFACE_FONTS_PATH}\""
@@ -610,7 +656,11 @@ case "$COMMAND" in
 esac
 
 # If needed, start the interactive dialog, either via TUI or via GUI.
-mapfile -t WATCHFACES < <(find . -maxdepth 3 -type d -path "*/usr/share" -printf "%h\n" | sort | awk -F '/' '{print $2}' )
+# Find watchfaces in CWD first, then in script directory
+mapfile -t CWD_WATCHFACES < <(find . -maxdepth 3 -type d -path "*/usr/share" -printf "%h\n" 2>/dev/null | sort | awk -F '/' '{print $2}')
+mapfile -t SCRIPT_WATCHFACES < <(cd "${SCRIPT_DIRPATH}" && find . -maxdepth 3 -type d -path "*/usr/share" -printf "%h\n" 2>/dev/null | sort | awk -F '/' '{print $2}')
+# Combine both lists, removing duplicates (CWD takes precedence)
+mapfile -t WATCHFACES < <(printf '%s\n' "${CWD_WATCHFACES[@]}" "${SCRIPT_WATCHFACES[@]}" | awk '!seen[$0]++')
 if [ "${SKIP_INTERACTIVE_PROMPT}" != "true" ] ; then
     if [ "${GUI}" = "true" ] ; then
         if hash zenity 2>/dev/null; then

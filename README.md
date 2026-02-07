@@ -55,6 +55,8 @@ test WF         test the named watchface on the computer using qmlscene
 ### Cloning a watchface
 Cloning a watchface can be done either via either of the two gui options mentioned above or by the command line argument listed above. 
 
+The script will search for the source watchface in the current working directory first, and then in the script's directory. The cloned watchface will always be created in the current working directory.
+
 Example:
 ```
 ./watchface clone decimal-time mister-snerd
@@ -65,6 +67,8 @@ See the [Watchface Creation](https://asteroidos.org/wiki/watchfaces-creation/) G
 
 ### Testing a watchface
 Testing a watchface can be done either via either of the two gui options mentioned above or by the command line argument listed above.
+
+The script will automatically search for watchfaces in the current working directory first, and then in the script's directory. This allows you to work on watchfaces in any location.
 
 Example:
 ```
