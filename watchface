@@ -55,9 +55,9 @@ GUI=false
 # Only show interactive prompt if the user hasn't
 # already specified a command on the command line
 SKIP_INTERACTIVE_PROMPT=false
-# No wallpaper unless asked
-WALLPAPER=""
-WALLPAPER_ROUND=""
+# Default wallpaper unless asked
+WALLPAPER="background.jpg"
+WALLPAPER_ROUND="background-round.jpg"
 # Default to all watchfaces unselected for deploy
 DEFAULTOPTION=OFF
 # Default to not deploying all watchfaces
@@ -239,7 +239,7 @@ function deployface {
     pushWatchface "${sourcewatchface}"
     if [ "${activate}" = "true" ] ; then
         activateWatchface "${sourcewatchface}"
-        if [ -n "${WALLPAPER}" ] ; then
+        if [ -f "${WALLPAPER}" ] ; then
             pushWallpaper "${WALLPAPER}"
         fi
     fi
@@ -310,11 +310,13 @@ EOF
         printVerbose "Watchface has no custom fonts"
     fi
 
-    if [ -n "${WALLPAPER}" ] ; then
-        qmlscene "${sourcewatchface}" "${WALLPAPER}" "${WALLPAPER_ROUND}" "${sourcewatchface}/usr/share/asteroid-launcher/watchfaces/" loader.qml -I fake-components
-    else
-        qmlscene "${sourcewatchface}" "background.jpg" "background-round.jpg" "${sourcewatchface}/usr/share/asteroid-launcher/watchfaces/" loader.qml -I fake-components
+    if [ ! -f "${WALLPAPER}" ] ; then
+        WALLPAPER="${SCRIPT_DIRPATH}/${WALLPAPER}"
     fi
+    if [ ! -f "${WALLPAPER_ROUND}" ] ; then
+        WALLPAPER_ROUND="${SCRIPT_DIRPATH}/${WALLPAPER_ROUND}"
+    fi
+    qmlscene "${sourcewatchface}" "${WALLPAPER}" "${WALLPAPER_ROUND}" "${sourcewatchface}/usr/share/asteroid-launcher/watchfaces/" "${SCRIPT_DIRPATH}/loader.qml" -I "${SCRIPT_DIRPATH}/fake-components"
     convertPreviews "${sourcewatchface}"
 }
 
@@ -368,11 +370,13 @@ EOF
     
     # Run qmlscene with the raw QML file
     # Pass the QML name, wallpapers, and the directory containing the QML file
-    if [ -n "${WALLPAPER}" ] ; then
-        qmlscene "${qml_name}" "${WALLPAPER}" "${WALLPAPER_ROUND}" "${qml_dir}/" loader.qml -I fake-components
-    else
-        qmlscene "${qml_name}" "background.jpg" "background-round.jpg" "${qml_dir}/" loader.qml -I fake-components
+    if [ ! -f "${WALLPAPER}" ] ; then
+        WALLPAPER="${SCRIPT_DIRPATH}/${WALLPAPER}"
     fi
+    if [ ! -f "${WALLPAPER_ROUND}" ] ; then
+        WALLPAPER_ROUND="${SCRIPT_DIRPATH}/${WALLPAPER_ROUND}"
+    fi
+    qmlscene "${qml_name}" "${WALLPAPER}" "${WALLPAPER_ROUND}" "${qml_dir}/" "${SCRIPT_DIRPATH}/loader.qml" -I "${SCRIPT_DIRPATH}/fake-components"
 }
 
 function convertPreviews {
