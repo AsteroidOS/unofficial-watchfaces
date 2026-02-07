@@ -153,6 +153,12 @@ function watchfaceClone {
     local dest_name="$2"
     local files
     
+    # Validate source path exists
+    if [ ! -d "${source_path}" ] ; then
+        echo "Error: source watchface path \"${source_path}\" does not exist" >&2
+        exit 1
+    fi
+    
     # Extract just the watchface name from the source path (last component)
     local source_name=$(basename "${source_path}")
     
@@ -719,8 +725,8 @@ esac
 
 # If needed, start the interactive dialog, either via TUI or via GUI.
 # Find watchfaces in CWD first, then in script directory
-mapfile -t CWD_WATCHFACES < <(find . -maxdepth 3 -type d -path "*/usr/share" -printf "%h\n" 2>/dev/null | sort | awk -F '/' '{print $2}')
-mapfile -t SCRIPT_WATCHFACES < <(cd "${SCRIPT_DIRPATH}" && find . -maxdepth 3 -type d -path "*/usr/share" -printf "%h\n" 2>/dev/null | sort | awk -F '/' '{print $2}')
+mapfile -t CWD_WATCHFACES < <(find . -maxdepth 3 -type d -path "*/usr/share" 2>/dev/null | sed 's|/usr/share$||' | sort | awk -F '/' '{print $2}')
+mapfile -t SCRIPT_WATCHFACES < <(cd "${SCRIPT_DIRPATH}" && find . -maxdepth 3 -type d -path "*/usr/share" 2>/dev/null | sed 's|/usr/share$||' | sort | awk -F '/' '{print $2}')
 # Combine both lists, removing duplicates (CWD takes precedence)
 mapfile -t WATCHFACES < <(printf '%s\n' "${CWD_WATCHFACES[@]}" "${SCRIPT_WATCHFACES[@]}" | awk '!seen[$0]++')
 if [ "${SKIP_INTERACTIVE_PROMPT}" != "true" ] ; then
