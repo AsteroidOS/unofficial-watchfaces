@@ -50,6 +50,7 @@ deploy WF       push the named watchface to the watch and activate it
 deployall       deploy all watchfaces
 clone WF NEWWF  clone the named watchface WF to new watchface NEWWF
 test WF         test the named watchface on the computer using qmlscene
+raw QMLFILE     test a raw QML file without the standard directory structure
 ```
 
 ### Cloning a watchface
@@ -75,6 +76,15 @@ Example:
 ./watchface test decimal-time
 ```
 This will start up a qmlscene tester for the named watch (`decimal-time` in this case) and allow you to see it operating or observe the effects of changes you make.  There are some limitations to the existing test script.  See the Watchface Creation [section on using the test script](https://asteroidos.org/wiki/watchfaces-creation/#scriptfeatures) for details.
+
+### Testing a raw QML file
+You can also test a standalone QML file that doesn't follow the standard watchface directory structure using the `raw` command. This is useful for quick prototyping or testing QML files directly.
+
+Example:
+```
+./watchface raw my-watchface.qml
+```
+This will test the QML file directly without requiring the `usr/share/asteroid-launcher/watchfaces/` directory structure. If you have custom fonts, place them in a `fonts/` subdirectory next to your QML file.
 
 ### Following great community contributions are available ###
 

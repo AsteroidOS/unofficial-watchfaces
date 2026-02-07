@@ -33,6 +33,7 @@ deploy WF       push the named watchface to the watch and activate it
 deployall       deploy all watchfaces
 clone WF NEWWF  clone the named watchface WF to new watchface NEWWF
 test WF         test the named watchface on the computer using qmlscene
+raw QMLFILE     test a raw QML file without the standard directory structure
 
 EOF
 }
@@ -309,6 +310,63 @@ EOF
         qmlscene "${sourcewatchface}" "background.jpg" "background-round.jpg" "${sourcewatchface}/usr/share/asteroid-launcher/watchfaces/" loader.qml -I fake-components
     fi
     convertPreviews "${sourcewatchface}"
+}
+
+function testraw {
+    local qmlfile="$1"
+    
+    # Check if file exists
+    if [ ! -f "${qmlfile}" ] ; then
+        echo "Error: QML file \"${qmlfile}\" does not exist" >&2
+        exit 1
+    fi
+    
+    # Get absolute path and directory
+    local abs_qmlfile=$(readlink -f "${qmlfile}")
+    local qml_dir=$(dirname "${abs_qmlfile}")
+    local qml_basename=$(basename "${abs_qmlfile}")
+    local qml_name="${qml_basename%.qml}"
+    
+    echo "Testing raw QML file: ${abs_qmlfile}"
+    printVerbose "QML directory: ${qml_dir}"
+    
+    # Check for fonts in the same directory
+    if [ -d "${qml_dir}/fonts" ]; then
+        WATCHFACE_FONTS_PATH="${qml_dir}/fonts/"
+        printVerbose "Found fonts directory: ${WATCHFACE_FONTS_PATH}"
+        
+        LOCAL_FONTCONFIG_BASE_PATH="${XDG_CONFIG_HOME:-$HOME/.config}/fontconfig"
+        if [ ! -d "${LOCAL_FONTCONFIG_BASE_PATH}" ]; then
+            echo "Warning: Cannot generate temporary fontconfig config file; " \
+                 "fontconfig path ${LOCAL_FONTCONFIG_BASE_PATH} does not exist" >&2
+        else
+            LOCAL_FONTCONFIG_PATH="${LOCAL_FONTCONFIG_BASE_PATH}/conf.d"
+            mkdir -p "$LOCAL_FONTCONFIG_PATH"
+            local temp_font_config
+            temp_font_config=$(mktemp -p "$LOCAL_FONTCONFIG_PATH" --suffix=".conf"  -t 9999-temp_font_config.XXXXXX) || { echo "Failed to generate temporary fontconfig config file" >&2; exit 1; }
+            
+            printVerbose "Generating temporary fontconfig config file \"${temp_font_config}\""
+            
+            trap "deleteTempFontconfig \"${temp_font_config}\"" EXIT
+            
+            cat <<EOF > "${temp_font_config}"
+<?xml version="1.0"?><!DOCTYPE fontconfig SYSTEM "fonts.dtd">
+<fontconfig>
+    <dir>${WATCHFACE_FONTS_PATH}/</dir>
+</fontconfig>
+EOF
+        fi
+    else
+        printVerbose "No fonts directory found in ${qml_dir}"
+    fi
+    
+    # Run qmlscene with the raw QML file
+    # Pass the QML name, wallpapers, and the directory containing the QML file
+    if [ -n "${WALLPAPER}" ] ; then
+        qmlscene "${qml_name}" "${WALLPAPER}" "${WALLPAPER_ROUND}" "${qml_dir}/" loader.qml -I fake-components
+    else
+        qmlscene "${qml_name}" "background.jpg" "background-round.jpg" "${qml_dir}/" loader.qml -I fake-components
+    fi
 }
 
 function convertPreviews {
@@ -598,9 +656,9 @@ case "$COMMAND" in
             exit 1
         fi
         ;;
-    "deploy"|"test")
+    "deploy"|"test"|"raw")
         if [[ ${#COMMAND_ARGS[@]} -ne 1 ]]; then
-            echo "Error: $COMMAND command requires exactly 1 argument (watchface name)" >&2
+            echo "Error: $COMMAND command requires exactly 1 argument" >&2
             exit 1
         fi
         ;;
@@ -639,6 +697,10 @@ case "$COMMAND" in
         ;;
     "test")
         testface "${COMMAND_ARGS[0]}"
+        SKIP_INTERACTIVE_PROMPT=true
+        ;;
+    "raw")
+        testraw "${COMMAND_ARGS[0]}"
         SKIP_INTERACTIVE_PROMPT=true
         ;;
     "update")
