@@ -86,6 +86,28 @@ Example:
 ```
 This will test the QML file directly without requiring the `usr/share/asteroid-launcher/watchfaces/` directory structure. If you have custom fonts, place them in a `fonts/` subdirectory next to your QML file.
 
+### Testing the `watchface` script
+
+This repository includes an automated test suite for the `watchface` script to ensure reliability and catch regressions.
+
+#### Running Tests
+
+To run the test suite:
+```bash
+./tests/test_watchface.sh
+```
+
+The test suite validates:
+- Command-line argument parsing
+- Watchface cloning functionality
+- Error handling for invalid inputs
+- Help and version commands
+- File operations and validation
+
+Tests run automatically on every push and pull request via GitHub Actions.
+
+For more details about the test suite, see [tests/README.md](tests/README.md).
+
 ### Following great community contributions are available ###
 
 | Round Display | Square Display | Watchface Title | Creator |
