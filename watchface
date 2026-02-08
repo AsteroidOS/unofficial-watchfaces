@@ -160,7 +160,8 @@ function watchfaceClone {
     fi
     
     # Extract just the watchface name from the source path (last component)
-    local source_name=$(basename "${source_path}")
+    local source_name
+    source_name=$(basename "${source_path}")
     
     # Find all files in the source watchface
     mapfile -t files <<<"$(cd "${source_path}" && find . -type f | sed 's|^\./||')"
@@ -171,8 +172,10 @@ function watchfaceClone {
         fi
         
         # Replace source watchface name with destination name in the path
-        local dest_file="${file//${source_name}/${dest_name}}"
-        local destdir="${dest_name}/$(dirname "${dest_file}")"
+        local dest_file
+        local destdir
+        dest_file="${file//${source_name}/${dest_name}}"
+        destdir="${dest_name}/$(dirname "${dest_file}")"
         
         mkdir -p "${destdir}"
         cp "${source_path}/${file}" "${dest_name}/${dest_file}"
@@ -187,58 +190,39 @@ function watchfaceClone {
 
 function findWatchface {
     # Locate a watchface by name, searching CWD first, then script directory
-    # Args: $1 - watchface name (without trailing slash)
+    # Args: $1 - watchface name (without trailing '/')
     local watchface_name="$1"
-    local cwd_path="${watchface_name}"
+    local cwd_path="${PWD}/${watchface_name}"
     local script_path="${SCRIPT_DIRPATH}/${watchface_name}"
     
     # Check CWD first
     if [[ -d "${cwd_path}/usr/share/asteroid-launcher/watchfaces/" ]] ; then
-        printVerbose "Found watchface \"${watchface_name}\" in CWD"
         echo "${cwd_path}"
         return 0
     fi
     
     # Then check script directory
     if [[ -d "${script_path}/usr/share/asteroid-launcher/watchfaces/" ]] ; then
-        printVerbose "Found watchface \"${watchface_name}\" in script directory"
         echo "${script_path}"
         return 0
     fi
     
     # Not found
+    echo ""
     return 1
 }
 
-function sanitizeSourceWatchface {
-    # trim trailing / if present
-    local face="${1%/*}"
-    if [[ "x${face}" = "x" ]] ; then
-        echo "Error: no watchface specified" >&2
-        exit 1
-    fi
-    
-    # Try to locate the watchface
-    local found_path
-    if found_path=$(findWatchface "${face}") ; then
-        echo "${found_path}"
-        return 0
-    else
-        echo "Error: \"${face}\" does not appear to be a watchface" >&2
-        exit 1
-    fi
-}
-
 function deployface {
-    local sourcewatchface
+    # get the short name, stripping trailing '/' if any.
+    local sourcewatchfacename="${1%/*}"
     local activate="$2"
-    if ! sourcewatchface=$(sanitizeSourceWatchface "$1") ; then
+    if ! sourcewatchfacedir=$(findWatchface "${sourcewatchfacename}") ; then
         exit 1
     fi
-    echo "Deploying ${sourcewatchface}"
-    pushWatchface "${sourcewatchface}"
+    echo "Deploying ${sourcewatchfacename}"
+    pushWatchface "${sourcewatchfacedir}"
     if [ "${activate}" = "true" ] ; then
-        activateWatchface "${sourcewatchface}"
+        activateWatchface "${sourcewatchfacename}"
         if [ -f "${WALLPAPER}" ] ; then
             pushWallpaper "${WALLPAPER}"
         fi
@@ -252,13 +236,14 @@ function deleteTempFontconfig {
 }
 
 function testface {
-    local sourcewatchface
-    if ! sourcewatchface=$(sanitizeSourceWatchface "$1") ; then
+    # get the short name, stripping trailing '/' if any.
+    local sourcewatchfacename="${1%/*}"
+    if ! sourcewatchfacedir=$(findWatchface "${sourcewatchfacename}") ; then
         exit 1
     fi
-    echo "Testing ${sourcewatchface}"
+    echo "Testing ${sourcewatchfacename}"
 
-    WATCHFACE_FONTS_PATH="${sourcewatchface}/usr/share/fonts/"
+    WATCHFACE_FONTS_PATH="${sourcewatchfacedir}/usr/share/fonts/"
 
     if [ -d "${WATCHFACE_FONTS_PATH}" ]; then
         printVerbose "Watchface has custom fonts in path \"${WATCHFACE_FONTS_PATH}\""
@@ -294,7 +279,7 @@ function testface {
         # last, since fontconfig will list the config files in lexicographic order.
         # Also, the .conf suffix is used, since fontconfig requires that suffix;
         # it ignores files that do not end with ".conf".
-        temp_font_config=$(mktemp -p "$LOCAL_FONTCONFIG_PATH" --suffix=".conf"  -t 9999-temp_font_config.XXXXXX) || { echo "Failed to generate temporary fontconfig config file" >&2; exit 1; }
+        temp_font_config=$(mktemp -p "$CWD/$LOCAL_FONTCONFIG_PATH" --suffix=".conf"  -t 9999-temp_font_config.XXXXXX) || { echo "Failed to generate temporary fontconfig config file" >&2; exit 1; }
 
         printVerbose "Generating temporary fontconfig config file \"${temp_font_config}\""
 
@@ -316,8 +301,8 @@ EOF
     if [ ! -f "${WALLPAPER_ROUND}" ] ; then
         WALLPAPER_ROUND="${SCRIPT_DIRPATH}/${WALLPAPER_ROUND}"
     fi
-    qmlscene "${sourcewatchface}" "${WALLPAPER}" "${WALLPAPER_ROUND}" "${sourcewatchface}/usr/share/asteroid-launcher/watchfaces/" "${SCRIPT_DIRPATH}/loader.qml" -I "${SCRIPT_DIRPATH}/fake-components"
-    convertPreviews "${sourcewatchface}"
+    qmlscene "${sourcewatchfacename}" "${WALLPAPER}" "${WALLPAPER_ROUND}" "${sourcewatchfacedir}/usr/share/asteroid-launcher/watchfaces/" "${SCRIPT_DIRPATH}/loader.qml" -I "${SCRIPT_DIRPATH}/fake-components"
+    convertPreviews "${sourcewatchfacename}" "${sourcewatchfacedir}"
 }
 
 function testraw {
@@ -381,6 +366,7 @@ EOF
 
 function convertPreviews {
     local watchfacename="$1"
+    local watchfacedir="$2"
     local transparent="${watchfacename}-trans.png"
     local webResolution=320
     if [ -f "${transparent}" ] ; then
@@ -391,7 +377,7 @@ function convertPreviews {
         fi
         # generate the transparent thumbnail images for the watch
         for res in 112 128 144 160 182 ; do
-            respath="${watchfacename}/usr/share/asteroid-launcher/watchfaces-preview/${res}"
+            respath="${watchfacedir}/usr/share/asteroid-launcher/watchfaces-preview/${res}"
             mkdir -p "${respath}"
             magick "${transparent}" \
                 -resize "${res}x${res}" -adaptive-sharpen 0x.8 -quality 70 -strip \
@@ -413,17 +399,18 @@ function convertPreviews {
 }
  
 function cloneface {
-    local sourcewatchface
+    # get the short name, stripping trailing '/' if any.
+    local sourcewatchfacename="${1%/*}"
     local destwatchface="$2"
-    if ! sourcewatchface=$(sanitizeSourceWatchface "$1") ; then
+    if ! sourcewatchfacedir=$(findWatchface "${sourcewatchfacename}") ; then
         exit 1
     fi
-    echo "Cloning ${sourcewatchface} into ${destwatchface}"
+    echo "Cloning ${sourcewatchfacename} into ${destwatchface}"
     if [ -e "${destwatchface}" ] ; then
         echo "Error:  ${destwatchface} already exists, exiting program"
         exit
     fi
-    watchfaceClone "${sourcewatchface}" "${destwatchface}"
+    watchfaceClone "${sourcewatchfacedir}" "${destwatchface}"
 }
 
 function guiMenu {
