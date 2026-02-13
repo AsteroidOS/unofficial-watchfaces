@@ -389,14 +389,14 @@ EOF
         printVerbose "Watchface has no custom fonts"
     fi
 
-    if [ ! -f "${WALLPAPER}" ] ; then
+    if [ ! -f "${PWD}/${WALLPAPER}" ] ; then
         WALLPAPER="${SCRIPT_DIRPATH}/${WALLPAPER}"
     fi
-    if [ ! -f "${WALLPAPER_ROUND}" ] ; then
+    if [ ! -f "${PWD}/${WALLPAPER_ROUND}" ] ; then
         WALLPAPER_ROUND="${SCRIPT_DIRPATH}/${WALLPAPER_ROUND}"
     fi
     
-    qmlscene "${sourcewatchfacename}" "${WALLPAPER}" "${WALLPAPER_ROUND}" "${sourcewatchfacedir}/usr/share/asteroid-launcher/watchfaces/" "${SCRIPT_DIRPATH}/loader.qml" -I "${SCRIPT_DIRPATH}/fake-components"
+    qmlscene "${sourcewatchfacename}" "${PWD}/${WALLPAPER}" "${PWD}/${WALLPAPER_ROUND}" "${sourcewatchfacedir}/usr/share/asteroid-launcher/watchfaces/" "${SCRIPT_DIRPATH}/loader.qml" -I "${SCRIPT_DIRPATH}/fake-components"
     
     convertPreviews "${sourcewatchfacename}" "${sourcewatchfacedir}"
 }
@@ -450,14 +450,14 @@ EOF
         printVerbose "No fonts directory found in ${qml_dir}"
     fi
     
-    if [ ! -f "${WALLPAPER}" ] ; then
+    if [ ! -f "${PWD}/${WALLPAPER}" ] ; then
         WALLPAPER="${SCRIPT_DIRPATH}/${WALLPAPER}"
     fi
-    if [ ! -f "${WALLPAPER_ROUND}" ] ; then
+    if [ ! -f "${PWD}/${WALLPAPER_ROUND}" ] ; then
         WALLPAPER_ROUND="${SCRIPT_DIRPATH}/${WALLPAPER_ROUND}"
     fi
     
-    qmlscene "${qml_name}" "${WALLPAPER}" "${WALLPAPER_ROUND}" "${qml_dir}/" "${SCRIPT_DIRPATH}/loader.qml" -I "${SCRIPT_DIRPATH}/fake-components"
+    qmlscene "${qml_name}" "${PWD}/${WALLPAPER}" "${PWD}/${WALLPAPER_ROUND}" "${qml_dir}/" "${SCRIPT_DIRPATH}/loader.qml" -I "${SCRIPT_DIRPATH}/fake-components"
 }
 
 # Convert preview images for a watchface
