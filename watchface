@@ -471,12 +471,14 @@ function convertPreviews {
     local watchfacedir="$2"
     local transparent="${watchfacename}-trans.png"
     local webResolution=320
+    local magickcmd=""
     
     if [ -f "${transparent}" ] ; then
         echo "Converting ${transparent}"
+        magickcmd="$(command -v magick || command -v convert)" 
         
-        if ! command -v magick &> /dev/null ; then
-            echo "Error: cannot find magick (part of ImageMagick) on path"
+        if [ -z "${magickcmd}" ] ; then
+            echo "Error: cannot find either magick or convert (part of ImageMagick) on path"
             exit 1
         fi
         
@@ -485,16 +487,16 @@ function convertPreviews {
         for res in 112 128 144 160 182 ; do
             respath="${watchfacedir}/usr/share/asteroid-launcher/watchfaces-preview/${res}"
             mkdir -p "${respath}"
-            magick "${transparent}" \
+            "${magickcmd}" "${transparent}" \
                 -resize "${res}x${res}" -adaptive-sharpen 0x.8 -quality 70 -strip \
                 "${respath}/${watchfacename}.png"
         done
         
         # Generate the thumbnail images for the web (README display)
         for thumb in "${watchfacename}" "${watchfacename}-round" ; do
-            magick "${thumb}.png" \
+            "${magickcmd}" "${thumb}.png" \
                 -resize "${webResolution}x${webResolution}" -adaptive-sharpen 0x.4 -quality 85 \
-                ".thumbnails/${thumb}.webp"
+                "${PWD}/.thumbnails/${thumb}.webp"
         done
         
         rm "${watchfacename}.png" "${watchfacename}-round.png" "${transparent}"
