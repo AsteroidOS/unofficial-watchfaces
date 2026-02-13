@@ -493,6 +493,7 @@ function convertPreviews {
         done
         
         # Generate the thumbnail images for the web (README display)
+        [ -d "${PWD}/.thumbnails" ] || mkdir "${PWD}/.thumbnails"
         for thumb in "${watchfacename}" "${watchfacename}-round" ; do
             "${magickcmd}" "${thumb}.png" \
                 -resize "${webResolution}x${webResolution}" -adaptive-sharpen 0x.4 -quality 85 \
