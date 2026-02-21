@@ -181,7 +181,7 @@ Item {
         font.pixelSize: parent.width*0.15
         anchors.verticalCenterOffset: parent.width*0.016
         textFormat: Text.RichText
-        text: "0.0000"
+        text: getDecimalHours(new Date()).toPrecision(5)
     }
 
     Timer {
