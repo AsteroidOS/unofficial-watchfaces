@@ -1,0 +1,35 @@
+name: Test Watchface Script
+
+on:
+  push:
+    branches: [ main, master ]
+  pull_request:
+    branches: [ main, master ]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v3
+      
+    - name: Set up test environment
+      run: |
+        chmod +x watchface
+        chmod +x tests/test_watchface.sh
+        
+    - name: Run tests
+      run: |
+        cd tests
+        ./test_watchface.sh
+        
+    - name: Archive test results
+      if: always()
+      uses: actions/upload-artifact@v3
+      with:
+        name: test-results
+        path: tests/temp/
+        retention-days: 7

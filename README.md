@@ -50,10 +50,13 @@ deploy WF       push the named watchface to the watch and activate it
 deployall       deploy all watchfaces
 clone WF NEWWF  clone the named watchface WF to new watchface NEWWF
 test WF         test the named watchface on the computer using qmlscene
+raw QMLFILE     test a raw QML file without the standard directory structure
 ```
 
 ### Cloning a watchface
 Cloning a watchface can be done either via either of the two gui options mentioned above or by the command line argument listed above. 
+
+The script will search for the source watchface in the current working directory first, and then in the script's directory. The cloned watchface will always be created in the current working directory.
 
 Example:
 ```
@@ -66,11 +69,44 @@ See the [Watchface Creation](https://asteroidos.org/wiki/watchfaces-creation/) G
 ### Testing a watchface
 Testing a watchface can be done either via either of the two gui options mentioned above or by the command line argument listed above.
 
+The script will automatically search for watchfaces in the current working directory first, and then in the script's directory. This allows you to work on watchfaces in any location.
+
 Example:
 ```
 ./watchface test decimal-time
 ```
 This will start up a qmlscene tester for the named watch (`decimal-time` in this case) and allow you to see it operating or observe the effects of changes you make.  There are some limitations to the existing test script.  See the Watchface Creation [section on using the test script](https://asteroidos.org/wiki/watchfaces-creation/#scriptfeatures) for details.
+
+### Testing a raw QML file
+You can also test a standalone QML file that doesn't follow the standard watchface directory structure using the `raw` command. This is useful for quick prototyping or testing QML files directly.
+
+Example:
+```
+./watchface raw my-watchface.qml
+```
+This will test the QML file directly without requiring the `usr/share/asteroid-launcher/watchfaces/` directory structure. If you have custom fonts, place them in a `fonts/` subdirectory next to your QML file.
+
+### Testing the `watchface` script
+
+This repository includes an automated test suite for the `watchface` script to ensure reliability and catch regressions.
+
+#### Running Tests
+
+To run the test suite:
+```bash
+./tests/test_watchface.sh
+```
+
+The test suite validates:
+- Command-line argument parsing
+- Watchface cloning functionality
+- Error handling for invalid inputs
+- Help and version commands
+- File operations and validation
+
+Tests run automatically on every push and pull request via GitHub Actions.
+
+For more details about the test suite, see [tests/README.md](tests/README.md).
 
 ### Following great community contributions are available ###
 
