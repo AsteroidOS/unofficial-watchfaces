@@ -72,7 +72,7 @@ Example:
 ```
 This will start up a qmlscene tester for the named watch (`decimal-time` in this case) and allow you to see it operating or observe the effects of changes you make.  There are some limitations to the existing test script.  See the Watchface Creation [section on using the test script](https://asteroidos.org/wiki/watchfaces-creation/#scriptfeatures) for details.
 
-### Following great community contributions are available ###
+### The following great community contributions are available ###
 
 | Round Display | Square Display | Watchface Title | Creator |
 |---|---|---|---|
@@ -90,6 +90,7 @@ This will start up a qmlscene tester for the named watch (`decimal-time` in this
 | ![thumbnail](.thumbnails/analog-nihil-dark-round.webp) | ![thumbnail](.thumbnails/analog-nihil-dark.webp) | [analog-nihil-dark](analog-nihil-dark/usr/share/asteroid-launcher/watchfaces/analog-nihil-dark.qml) | [turretkeeper](https://github.com/turretkeeper) |
 | ![thumbnail](.thumbnails/analog-nihil-light-round.webp) | ![thumbnail](.thumbnails/analog-nihil-light.webp) | [analog-nihil-light](analog-nihil-dark/usr/share/asteroid-launcher/watchfaces/analog-nihil-light.qml) | [turretkeeper](https://github.com/turretkeeper) |
 | ![thumbnail](.thumbnails/analog-precision-round.webp) |![thumbnail](.thumbnails/analog-precision.webp) | [analog-precision](analog-precision/usr/share/asteroid-launcher/watchfaces/analog-precision.qml) | [Mario Kicherer](mailto:dev@kicherer.org) |
+| ![thumbnail](.thumbnails/analog-railway-station-round.webp) |![thumbnail](.thumbnails/analog-railway-station.webp) | [analog-railway-station](analog-railway-station/usr/share/asteroid-launcher/watchfaces/analog-railway-station.qml) | [Luca Barbera](https://github.com/lbarbera) |
 | ![thumbnail](.thumbnails/analog-railway-round.webp) |![thumbnail](.thumbnails/analog-railway.webp) | [analog-railway](analog-railway/usr/share/asteroid-launcher/watchfaces/analog-railway.qml) | [eLtMosen](https://github.com/eLtMosen) |
 | ![thumbnail](.thumbnails/analog-red-handed-round.webp) | ![thumbnail](.thumbnails/analog-red-handed.webp) | [analog-red-handed](analog-red-handed/usr/share/asteroid-launcher/watchfaces/analog-red-handed.qml) | [eLtMosen](https://github.com/eLtMosen) |
 | ![thumbnail](.thumbnails/analog-rings-round.webp) |![thumbnail](.thumbnails/analog-rings.webp) | [analog-rings](analog-rings/usr/share/asteroid-launcher/watchfaces/analog-rings.qml) | [eLtMosen](https://github.com/eLtMosen) |
