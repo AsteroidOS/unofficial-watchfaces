@@ -9,6 +9,7 @@ import Nemo.Mce 1.0
 ApplicationWindow {
     id: appRoot
     property bool displayAmbient: ambientCheckBox.checked
+    property bool nightstand: nightstandCheckBox.checked
     property var nameOfWatchfaceToBeTested: Qt.application.arguments[1]
     property var backgroundImage: Qt.application.arguments[2]
     property var backgroundRoundImage: Qt.application.arguments[3]
@@ -24,7 +25,6 @@ ApplicationWindow {
         property alias round: roundCheckBox.checked
         property alias nonSquare: nonSquare.checked
         property alias displayAmbient: ambientCheckBox.checked
-        property alias nightstand: nightstandCheckBox.checked
         property alias halfSize: halfSize.checked
         property alias twelveHour: twelveHourCheckBox.checked
         property alias staticTime: setStaticTimeCheckBox.checked
