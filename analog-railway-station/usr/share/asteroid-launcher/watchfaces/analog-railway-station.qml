@@ -8,7 +8,7 @@
  * Enhanced from Analog-Railway to include smooth animations, new Ambient mode, and Nightstand power meter
  */
 
-import QtQuick 2.15
+import QtQuick 2.9
 import Nemo.Mce 1.0
 
 Item {
