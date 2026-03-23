@@ -15,12 +15,7 @@ Item {
     id: root
     anchors.fill: parent
 
-    property bool isDark: {
-        var ambient = false; var night = false;
-        try { ambient = displayAmbient; } catch(e) { ambient = false; }
-        try { night = nightstandMode; } catch(e) { night = false; }
-        return ambient || night;
-    }
+    property bool isDark: { return displayAmbient || nightstand; }
 
     MceBatteryLevel { id: batteryChargePercentage }
 
@@ -37,7 +32,7 @@ Item {
     readonly property var batteryColors: [ "red", "yellow", Qt.rgba(.318, 1, .051, .9)]
     
     function getStrokeColor(index, total) {
-        if (!nightstandMode) return root.isDark ? "white" : "black";
+        if (!nightstand) return root.isDark ? "white" : "black";
         var pos = index / total;
         if (pos <= root.animatedSoC && root.animatedSoC > 0) {
             var chargeIndex = Math.floor(batteryChargePercentage.percent / 33.35);
@@ -178,7 +173,7 @@ Item {
 
     Connections {
         target: batteryChargePercentage
-        onPercentChanged: if (nightstandMode) indices.requestPaint();
+        onPercentChanged: if (nightstand) indices.requestPaint();
     }
 
     onIsDarkChanged: { bgCircle.requestPaint(); indices.requestPaint(); hourHand.requestPaint(); minuteHand.requestPaint() }
