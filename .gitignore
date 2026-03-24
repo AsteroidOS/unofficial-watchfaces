@@ -1,3 +1,5 @@
 /*.jpg
 /*.png
 /*.webp
+tests/temp/
+tests/fixtures/test-*

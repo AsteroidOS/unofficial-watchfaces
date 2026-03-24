@@ -50,10 +50,13 @@ deploy WF       push the named watchface to the watch and activate it
 deployall       deploy all watchfaces
 clone WF NEWWF  clone the named watchface WF to new watchface NEWWF
 test WF         test the named watchface on the computer using qmlscene
+raw QMLFILE     test a raw QML file without the standard directory structure
 ```
 
 ### Cloning a watchface
 Cloning a watchface can be done either via either of the two gui options mentioned above or by the command line argument listed above. 
+
+The script will search for the source watchface in the current working directory first, and then in the script's directory. The cloned watchface will always be created in the current working directory.
 
 Example:
 ```
@@ -65,6 +68,8 @@ See the [Watchface Creation](https://asteroidos.org/wiki/watchfaces-creation/) G
 
 ### Testing a watchface
 Testing a watchface can be done either via either of the two gui options mentioned above or by the command line argument listed above.
+
+The script will automatically search for watchfaces in the current working directory first, and then in the script's directory. This allows you to work on watchfaces in any location.
 
 Example:
 ```
