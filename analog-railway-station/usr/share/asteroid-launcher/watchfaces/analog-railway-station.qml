@@ -19,7 +19,7 @@ Item {
 
     MceBatteryLevel { id: batteryChargePercentage }
 
-    property real animatedSoC: nightstandMode ? (batteryChargePercentage.percent / 100.0) : 0.0
+    property real animatedSoC: nightstand ? (batteryChargePercentage.percent / 100.0) : 0.0
     Behavior on animatedSoC {
         NumberAnimation {
             duration: (batteryChargePercentage.percent / 100.0) * 3000
