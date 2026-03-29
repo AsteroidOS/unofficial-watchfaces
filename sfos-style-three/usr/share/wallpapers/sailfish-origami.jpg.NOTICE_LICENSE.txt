@@ -1,0 +1,7 @@
+Origami Bird Wallpaper
+Copyright (C) 2016 Jolla Oy. All rights reserved.
+
+This wallpaper is based on Jolla's intellectual property from https://blog.jolla.com/watch/.
+Used and distributed with explicit permission from Jolla Oy (granted by CEO Sami Pienimäki in 2026).
+Permission is limited to use within AsteroidOS as a wallpaper for Sailfish Watch recreations.
+No further redistribution or modification allowed without Jolla's consent.
