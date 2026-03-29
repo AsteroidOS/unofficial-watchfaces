@@ -1,0 +1,7 @@
+Sailfish OS Logo
+Copyright (C) 2016 Jolla Oy. All rights reserved.
+
+This asset is derived from Jolla's intellectual property at https://blog.jolla.com/watch/.
+Used and distributed with explicit permission from Jolla Oy (granted by CEO Sami Pienimäki in 2026, with witnesses at FOSDEM).
+Permission is for non-commercial, community-driven use within AsteroidOS watchfaces.
+No modifications or standalone redistribution allowed without Jolla's further consent.
