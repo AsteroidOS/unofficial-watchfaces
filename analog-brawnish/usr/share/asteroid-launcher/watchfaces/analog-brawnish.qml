@@ -19,13 +19,15 @@
  
 import QtQuick 2.9
 import org.asteroid.utils 1.0
-import QtGraphicalEffects 1.15
+import org.asteroid.controls 1.0
 
 Item {
+    width: Dims.l(100)
+    height: Dims.l(100)
     
-    property var minutes: wallClock.time.getMinutes()
-    property var hours: wallClock.time.getHours()
-    property var seconds: wallClock.time.getSeconds()
+    property int minutes: wallClock.time.getMinutes()
+    property int hours: wallClock.time.getHours()
+    property int seconds: wallClock.time.getSeconds()
 
     Rectangle {
         id: background
@@ -95,12 +97,12 @@ Item {
         model: 1
         Rectangle {
             property var rotM: (((hours * 5) + (minutes / 12)) - 15) / 60
-            property var centerX: parent.width / 2 - width / 2 + 6
-            property var centerY: parent.height / 2 - height / 2 + 6
+            property var centerX: parent.width / 2 - width / 2 + Dims.l(1.7)
+            property var centerY: parent.height / 2 - height / 2 + Dims.l(1.7)
+            radius: Dims.l(2.8)
 
             visible: !displayAmbient
             antialiasing : true
-            radius: 10.0
             x: centerX + Math.cos(rotM * 2 * Math.PI) * parent.width * 0.15
             y: centerY + Math.sin(rotM * 2 * Math.PI) * parent.width * 0.15
             color: "#55111111"
@@ -115,12 +117,12 @@ Item {
 	model: 1
         Rectangle {
             property var rotM: (minutes - 15) / 60
-            property var centerX: parent.width / 2 - width / 2 + 7
-            property var centerY: parent.height / 2 - height / 2 + 7
+            property var centerX: parent.width / 2 - width / 2 + Dims.l(1.9)
+            property var centerY: parent.height / 2 - height / 2 + Dims.l(1.9)
+            radius: Dims.l(2.8)
 
             visible: !displayAmbient
             antialiasing : true
-            radius: 10.0
             x: centerX + Math.cos(rotM * 2 * Math.PI) * parent.width * 0.20
             y: centerY + Math.sin(rotM * 2 * Math.PI) * parent.width * 0.20
             color: "#55111111"
@@ -135,12 +137,12 @@ Item {
 	model: 1
         Rectangle {
             property var rotM: (seconds - 15) / 60
-            property var centerX: parent.width / 2 - width / 2 + 8
-            property var centerY: parent.height / 2 - height / 2 + 8
+            property var centerX: parent.width / 2 - width / 2 + Dims.l(2.2)
+            property var centerY: parent.height / 2 - height / 2 + Dims.l(2.2)
+            radius: Dims.l(0.6)
 
             visible: !displayAmbient
             antialiasing : true
-            radius: 2.0
             x: centerX + Math.cos(rotM * 2 * Math.PI) * parent.width * 0.17
             y: centerY + Math.sin(rotM * 2 * Math.PI) * parent.width * 0.17
             color: "#55111111"
@@ -154,8 +156,8 @@ Item {
         id: pinShadow
         visible: !displayAmbient
         antialiasing : true
-        x: (parent.width / 2 - width / 2) + 4
-        y: (parent.height / 2 - height / 2) + 4
+        x: (parent.width / 2 - width / 2) + Dims.l(1.1)
+        y: (parent.height / 2 - height / 2) + Dims.l(1.1)
         radius: (parent.width * 0.06) / 2
         width: parent.width * 0.06
         height: parent.width * 0.06
@@ -169,9 +171,9 @@ Item {
             property var rotM: (((hours * 5) + (minutes / 12)) - 15) / 60
             property var centerX: parent.width / 2 - width / 2
             property var centerY: parent.height / 2 - height / 2
-
+            radius: Dims.l(2.8)
+            
             antialiasing : true
-            radius: 10.0
             x: centerX + Math.cos(rotM * 2 * Math.PI) * parent.width * 0.15
             y: centerY + Math.sin(rotM * 2 * Math.PI) * parent.width * 0.15
             color: if ( displayAmbient ) "whitesmoke" 
@@ -189,9 +191,9 @@ Item {
             property var rotM: (minutes - 15) / 60
             property var centerX: parent.width / 2 - width / 2
             property var centerY: parent.height / 2 - height / 2
-
+            radius: Dims.l(2.8)
+            
             antialiasing : true
-	    radius: 10.0
             x: centerX + Math.cos(rotM * 2 * Math.PI) * parent.width * 0.20
             y: centerY + Math.sin(rotM * 2 * Math.PI) * parent.width * 0.20
             color: if ( displayAmbient ) "whitesmoke" 
@@ -209,10 +211,10 @@ Item {
             property var rotM: (seconds - 15) / 60
             property var centerX: parent.width / 2 - width / 2
             property var centerY: parent.height / 2 - height / 2
-
+            radius: Dims.l(0.6)
+            
             visible: !displayAmbient
             antialiasing : true
-            radius: 2.0
             x: centerX + Math.cos(rotM * 2 * Math.PI) * parent.width * 0.17
             y: centerY + Math.sin(rotM * 2 * Math.PI) * parent.width * 0.17
             color: "#EE7F00"
