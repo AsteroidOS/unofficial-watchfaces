@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2021 - Timo Könnecke <github.com/eLtMosen>
+ * Copyright (C) 2026 - Timo Könnecke <github.com/moWerk>
  *
  * All rights reserved.
  *
@@ -22,33 +22,24 @@ import QtGraphicalEffects 1.15
 
 Item {
     id: root
-    property real topbottomMargin: parent.height*0.0086
-    property real leftrightMargin: -parent.height*0.048
-    property size numeralSize: Qt.size(parent.width*0.25, parent.height*0.25)
+    property real topbottomMargin: parent.height * 0.0086
+    property real leftrightMargin: -parent.height * 0.048
+    property size numeralSize: Qt.size(parent.width * 0.25, parent.height * 0.25)
     property real arcEnd: wallClock.time.getSeconds() * 6
-
+    
+    // Fire requestPaint once per second on tick, not on every animation frame.
     onArcEndChanged: canvas.requestPaint()
-
-    Behavior on arcEnd {
-       id: animationArcEnd
-       enabled: true
-       NumberAnimation {
-           duration: 800
-           easing.type: Easing.InOutCubic
-       }
-    }
-
+    
     Image {
         id: ring
         z: 0
         visible: !displayAmbient
         source: "../watchfaces-img/digital-shifted-ring.svg"
-        anchors.horizontalCenter: parent.horizontalCenter
-        anchors.verticalCenter: parent.verticalCenter
+        anchors.centerIn: parent
         width: parent.width
         height: parent.height
     }
-
+    
     Canvas {
         id: canvas
         visible: !displayAmbient
@@ -59,33 +50,32 @@ Item {
             var x = root.width / 2
             var y = root.height / 2
             var start = 0
-            var end = Math.PI * (parent.arcEnd / 180)
+            var end = Math.PI * (root.arcEnd / 180)
             ctx.reset()
             ctx.beginPath()
-            ctx.lineCap="round"
-            ctx.arc(x, y, (root.width / 2) - parent.height*0.124 / 2, start, end, false)
+            ctx.lineCap = "round"
+            ctx.arc(x, y, (root.width / 2) - parent.height * 0.124 / 2, start, end, false)
             ctx.lineWidth = parent.height * 0.03
             ctx.strokeStyle = "#7738FF12"
             ctx.stroke()
         }
+
         layer.enabled: true
         layer.effect: DropShadow {
             transparentBorder: true
             horizontalOffset: 0
             verticalOffset: 0
             radius: 14.0
-            samples: 16
+            samples: 9
             color: "#eeffff00"
         }
     }
-
+    
     Item {
-        anchors {
-            centerIn: parent
-        }
+        anchors.centerIn: parent
         width: parent.width
         height: parent.height
-
+        
         Image {
             id: topLeft
             anchors {
@@ -97,7 +87,7 @@ Item {
             sourceSize: numeralSize
             source: "../watchfaces-img/digital-shifted-" + wallClock.time.toLocaleString(Qt.locale(), "HH").slice(0, 1) + ".png"
         }
-
+        
         Image {
             id: topCenter
             anchors {
@@ -108,7 +98,7 @@ Item {
             sourceSize: numeralSize
             source: "../watchfaces-img/digital-shifted-" + wallClock.time.toLocaleString(Qt.locale(), "HH").slice(1, 2) + ".png"
         }
-
+        
         Image {
             id: bottomCenter
             anchors {
@@ -119,7 +109,7 @@ Item {
             sourceSize: numeralSize
             source: "../watchfaces-img/digital-shifted-" + wallClock.time.toLocaleString(Qt.locale(), "mm").slice(0, 1) + ".png"
         }
-
+        
         Image {
             id: bottomRight
             anchors {
@@ -131,128 +121,90 @@ Item {
             sourceSize: numeralSize
             source: "../watchfaces-img/digital-shifted-" + wallClock.time.toLocaleString(Qt.locale(), "mm").slice(1, 2) + ".png"
         }
-
+        
         Text {
-           z: 2
-           id: dowDisplay
-           visible: !displayAmbient
-           font.pixelSize: parent.height * 0.06
-           font.family: "Open Sans"
-           font.styleName: "Condensed Light"
-           font.letterSpacing: -parent.height * 0.0006
-           color: "#ddffffff"
-           horizontalAlignment: Text.AlignHCenter
-           anchors {
-               left: topCenter.right
-               leftMargin: -parent.height * 0.01
-               bottom: topCenter.bottom
-               bottomMargin: -parent.height * 0.002
-           }
-           text: wallClock.time.toLocaleString(Qt.locale(), "dddd").toUpperCase()
-           layer.enabled: true
-           layer.effect: DropShadow {
-               transparentBorder: true
-               horizontalOffset: 2
-               verticalOffset: 2
-               radius: 10.0
-               samples: 20
-               color: "#aa000000"
-           }
-       }
-
-       Text {
-           z: 2
-           id: apDisplay
-           visible: !displayAmbient
-           font.pixelSize: parent.height * 0.10
-           font.family: "Open Sans"
-           font.styleName: "Light"
-           font.letterSpacing: -parent.height * 0.006
-           color: "#ddffffff"
-           horizontalAlignment: Text.AlignHCenter
-           anchors {
-               left: topCenter.right
-               leftMargin: -parent.height * 0.01
-               bottom: dowDisplay.top
-               bottomMargin: -parent.height * 0.016
-
-           }
-           text: wallClock.time.toLocaleString(Qt.locale(), "<b>ap</b>").toUpperCase()
-           layer.enabled: true
-           layer.effect: DropShadow {
-               transparentBorder: true
-               horizontalOffset: 2
-               verticalOffset: 2
-               radius: 10.0
-               samples: 20
-               color: "#aa000000"
-           }
-       }
-
-       Text {
-           z: 2
-           id: monthDisplay
-           visible: !displayAmbient
-           font.pixelSize: parent.height * 0.06
-           font.family: "Open Sans"
-           font.styleName: "Condensed Light"
-           font.letterSpacing: -parent.height * 0.0006
-           color: "#ddffffff"
-           horizontalAlignment: Text.AlignHCenter
-           anchors {
-               right: bottomCenter.left
-               rightMargin: -parent.height * 0.002
-               top: bottomCenter.top
-               topMargin: -parent.height * 0.006
-
-           }
-           text: wallClock.time.toLocaleString(Qt.locale(), "MMMM").toUpperCase()
-           layer.enabled: true
-           layer.effect: DropShadow {
-               transparentBorder: true
-               horizontalOffset: -2
-               verticalOffset: -2
-               radius: 10.0
-               samples: 20
-               color: "#aa000000"
-           }
-       }
-
-       Text {
-           z: 2
-           id: dayDisplay
-           visible: !displayAmbient
-           font.pixelSize: parent.height * 0.122
-           font.family: "Open Sans"
-           font.styleName: "Light"
-           font.letterSpacing: -parent.height * 0.008
-           color: "#ddffffff"
-           horizontalAlignment: Text.AlignHCenter
-           anchors {
-               right: bottomCenter.left
-               rightMargin: -parent.height * 0.002
-               top: monthDisplay.bottom
-               topMargin: -parent.height * 0.032
-
-           }
-           text: wallClock.time.toLocaleString(Qt.locale(), "dd").toUpperCase()
-           layer.enabled: true
-           layer.effect: DropShadow {
-               transparentBorder: true
-               horizontalOffset: -2
-               verticalOffset: -2
-               radius: 10.0
-               samples: 20
-               color: "#aa000000"
-           }
-       }
+            z: 2
+            id: dowDisplay
+            visible: !displayAmbient
+            font.pixelSize: parent.height * 0.06
+            font.family: "Open Sans"
+            font.styleName: "Condensed Light"
+            font.letterSpacing: -parent.height * 0.0006
+            color: "#ddffffff"
+            horizontalAlignment: Text.AlignHCenter
+            anchors {
+                left: topCenter.right
+                leftMargin: -parent.height * 0.01
+                bottom: topCenter.bottom
+                bottomMargin: -parent.height * 0.002
+            }
+            text: wallClock.time.toLocaleString(Qt.locale(), "dddd").toUpperCase()
+        }
+        
+        Text {
+            z: 2
+            id: apDisplay
+            visible: !displayAmbient
+            font.pixelSize: parent.height * 0.10
+            font.family: "Open Sans"
+            font.styleName: "Light"
+            font.letterSpacing: -parent.height * 0.006
+            color: "#ddffffff"
+            horizontalAlignment: Text.AlignHCenter
+            anchors {
+                left: topCenter.right
+                leftMargin: -parent.height * 0.01
+                bottom: dowDisplay.top
+                bottomMargin: -parent.height * 0.016
+            }
+            text: wallClock.time.toLocaleString(Qt.locale(), "<b>ap</b>").toUpperCase()
+        }
+        
+        Text {
+            z: 2
+            id: monthDisplay
+            visible: !displayAmbient
+            font.pixelSize: parent.height * 0.06
+            font.family: "Open Sans"
+            font.styleName: "Condensed Light"
+            font.letterSpacing: -parent.height * 0.0006
+            color: "#ddffffff"
+            horizontalAlignment: Text.AlignHCenter
+            anchors {
+                right: bottomCenter.left
+                rightMargin: -parent.height * 0.002
+                top: bottomCenter.top
+                topMargin: -parent.height * 0.006
+            }
+            text: wallClock.time.toLocaleString(Qt.locale(), "MMMM").toUpperCase()
+        }
+        
+        Text {
+            z: 2
+            id: dayDisplay
+            visible: !displayAmbient
+            font.pixelSize: parent.height * 0.122
+            font.family: "Open Sans"
+            font.styleName: "Light"
+            font.letterSpacing: -parent.height * 0.008
+            color: "#ddffffff"
+            horizontalAlignment: Text.AlignHCenter
+            anchors {
+                right: bottomCenter.left
+                rightMargin: -parent.height * 0.002
+                top: monthDisplay.bottom
+                topMargin: -parent.height * 0.032
+            }
+            text: wallClock.time.toLocaleString(Qt.locale(), "dd").toUpperCase()
+        }
+        
         layer.enabled: true
         layer.effect: DropShadow {
             transparentBorder: true
             horizontalOffset: 0
             verticalOffset: 0
             radius: 24.0
-            samples: 12
+            samples: 9
             color: "#bbdd00bb"
         }
     }
