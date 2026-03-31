@@ -31,7 +31,7 @@ Item {
         }
         width: parent.width
         height: parent.height
-        source: "../watchface-img/background-digital-pop-space.svg"
+        source: "../watchfaces-img/digital-pop-space-background.svg"
 
         layer.enabled: true
         layer.effect: DropShadow {
@@ -161,6 +161,6 @@ Item {
         anchors.centerIn: parent
         width: parent.width
         height: parent.height
-        source: "../watchface-img/backgroundwave-digital-pop-space.svg"
+        source: "../watchfaces-img/digital-pop-space-backgroundwave.svg"
     }
  }
