@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2018 - Timo Könnecke <el-t-mo@arcor.de>
+ * Copyright (C) 2026 - Timo Könnecke <github/moWerk>
  *               2016 - Sylvia van Os <iamsylvie@openmailbox.org>
  *               2015 - Florent Revest <revestflo@gmail.com>
  *               2012 - Vasiliy Sorokin <sorokin.vasiliy@gmail.com>
@@ -29,19 +29,17 @@ Item {
     Canvas {
         z: 1
         id: secondCanvas
-        property var second: 0
+        property int second: 0
         anchors.fill: parent
-        smooth: true
         renderStrategy: Canvas.Cooperative
         onPaint: {
             var ctx = getContext("2d")
-            var date = wallClock.time.getDate()
-            var rot = (wallClock.time.getSeconds() - 15)*6
+            var rot = (second - 15) * 6
             ctx.reset()
             ctx.beginPath()
-            ctx.lineWidth = parent.width/42
+            ctx.lineWidth = parent.width / 42
             ctx.fillStyle = Qt.rgba(1, 0.549, 0.149, 0.7)
-            ctx.arc(parent.width/2, parent.height/2, width / 2.1, -90*0.01745329252, rot*0.01745329252, false);
+            ctx.arc(parent.width/2, parent.height/2, width / 2.1, -90 * 0.01745329252, rot * 0.01745329252, false)
             ctx.lineTo(parent.width/2, parent.height/2)
             ctx.fill()
         }
@@ -69,10 +67,9 @@ Item {
         horizontalAlignment: Text.AlignHCenter
         anchors.horizontalCenter: parent.horizontalCenter
         anchors.verticalCenter: parent.verticalCenter
-        text: if (use12H.value) {
-                  wallClock.time.toLocaleString(Qt.locale(), "<b>hh</b> ap").slice(0, 9) + wallClock.time.toLocaleString(Qt.locale(), ":mm")}
-              else
-                  wallClock.time.toLocaleString(Qt.locale(), "<b>HH</b>") + wallClock.time.toLocaleString(Qt.locale(), ":mm")
+        text: use12H.value ?
+        wallClock.time.toLocaleString(Qt.locale(), "<b>hh</b> ap").slice(0, 9) + wallClock.time.toLocaleString(Qt.locale(), ":mm") :
+        wallClock.time.toLocaleString(Qt.locale(), "<b>HH</b>") + wallClock.time.toLocaleString(Qt.locale(), ":mm")
     }
 
     Connections {
