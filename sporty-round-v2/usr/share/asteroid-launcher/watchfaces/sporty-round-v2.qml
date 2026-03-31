@@ -1,5 +1,6 @@
 /*
- * Copyright (C) 2018 - Timo Könnecke <el-t-mo@arcor.de>
+ * Copyright (C) 2026 - Timo Könnecke <github.com/moWerk>
+ *               2018 - Timo Könnecke <el-t-mo@arcor.de>
  *               2016 - Sylvia van Os <iamsylvie@openmailbox.org>
  *               2015 - Florent Revest <revestflo@gmail.com>
  *               2012 - Vasiliy Sorokin <sorokin.vasiliy@gmail.com>
@@ -27,14 +28,12 @@ import org.asteroid.controls 1.0
 import org.asteroid.utils 1.0
 
 Item {
-
+    
     Canvas {
         z: 0
         id: hourArc
-        property var hour: 0
         anchors.fill: parent
         renderStrategy: Canvas.Cooperative
-        smooth: true
         onPaint: {
             var ctx = getContext("2d")
             var rot = 0.5 * (60 * (wallClock.time.getHours()-3) + wallClock.time.getMinutes())
@@ -43,148 +42,106 @@ Item {
             ctx.shadowOffsetX = 0
             ctx.shadowOffsetY = 0
             ctx.shadowBlur = 5
-            ctx.lineWidth = parent.height/36
-            ctx.lineCap="round"
+            ctx.lineWidth = parent.height / 36
+            ctx.lineCap = "round"
             ctx.beginPath()
-            var gradient = ctx.createRadialGradient (parent.width/2, parent.height/2, 0, parent.width/2, parent.height/2, parent.width *0.39)
-            gradient.addColorStop(0.4, Qt.rgba(0.996, 0.259, 0.051, 0.0))
+            var gradient = ctx.createRadialGradient(parent.width/2, parent.height/2, 0, parent.width/2, parent.height/2, parent.width * 0.39)
+            gradient.addColorStop(0.4,  Qt.rgba(0.996, 0.259, 0.051, 0.0))
             gradient.addColorStop(0.95, Qt.rgba(0.996, 0.259, 0.051, 0.9))
             ctx.strokeStyle = gradient
-            ctx.arc(parent.width/2, parent.height/2, parent.width *0.39, 268* 0.01745, rot* 0.01745, false);
-            ctx.lineTo(parent.width/2,
-                       parent.height/2)
+            ctx.arc(parent.width/2, parent.height/2, parent.width * 0.39, 268 * 0.01745, rot * 0.01745, false)
+            ctx.lineTo(parent.width/2, parent.height/2)
             ctx.stroke()
             ctx.closePath()
-
         }
     }
-
-    Rectangle {
-        id: layer2mask
-        width: parent.width; height: parent.height
-        color: Qt.rgba(0, 0, 0, 0.7)
-        visible: true
-        opacity: 0.0
-        layer.enabled: true
-        layer.smooth: true
-    }
-
+    
+    // Circular dark overlay replacing the former ShaderEffect mask.
     Rectangle {
         z: 1
-        id: _mask
-        anchors.fill: layer2mask
-        color: Qt.rgba(0, 1, 0, 0)
-        visible: true
-
-        Rectangle {
-            z: 0
-            anchors {
-                verticalCenter: parent.verticalCenter
-                horizontalCenter: parent.horizontalCenter
-            }
-            color: Qt.rgba(0, 0, 0, 0.75)
-            width: parent.width *0.79
-            height: parent.width *0.79
-            radius: width*0.5
-        }
-
-        layer.enabled: true
-        layer.samplerName: "maskSource"
-        layer.effect: ShaderEffect {
-            property variant source: layer2mask
-            fragmentShader: "
-                    varying highp vec2 qt_TexCoord0;
-                    uniform highp float qt_Opacity;
-                    uniform lowp sampler2D source;
-                    uniform lowp sampler2D maskSource;
-                    void main(void) {
-                        gl_FragColor = texture2D(source, qt_TexCoord0.st) * (1.0-texture2D(maskSource, qt_TexCoord0.st).a) * qt_Opacity;
-                    }
-                "
-        }
+        anchors.centerIn: parent
+        width: parent.width * 0.79
+        height: width
+        radius: width * 0.5
+        color: Qt.rgba(0, 0, 0, 0.75)
     }
-
-    // hour strokes
+    
     Canvas {
         z: 2
         anchors.fill: parent
-        smooth: true
         renderStrategy: Canvas.Cooperative
         onPaint: {
             var ctx = getContext("2d")
-
-            ctx.lineWidth = parent.width*0.012
+            ctx.lineWidth = parent.width * 0.012
             ctx.strokeStyle = Qt.rgba(1, 1, 1, 0.55)
             ctx.shadowColor = Qt.rgba(0, 0, 0, 0.8)
             ctx.shadowOffsetX = 0
             ctx.shadowOffsetY = 0
             ctx.shadowBlur = 2
             ctx.translate(parent.width/2, parent.height/2)
-            for (var i=0; i < 12; i++) {
+            for (var i = 0; i < 12; i++) {
                 ctx.beginPath()
-                ctx.moveTo(0, height*0.46)
-                ctx.lineTo(0, height*0.50)
+                ctx.moveTo(0, height * 0.46)
+                ctx.lineTo(0, height * 0.50)
                 ctx.stroke()
-                ctx.rotate(Math.PI/6)
+                ctx.rotate(Math.PI / 6)
             }
         }
     }
-
-    // second stroke
+    
     Canvas {
         z: 2
         anchors.fill: parent
-        smooth: true
         renderStrategy: Canvas.Cooperative
         onPaint: {
             var ctx = getContext("2d")
-            ctx.lineWidth = parent.height*0.008
+            ctx.lineWidth = parent.height * 0.008
             ctx.strokeStyle = Qt.rgba(0.784, 0.784, 0.784, 0.3)
             ctx.translate(parent.width/2, parent.height/2)
-            for (var i=0; i < 60; i++) {
+            for (var i = 0; i < 60; i++) {
                 ctx.beginPath()
-                ctx.moveTo(0, height*0.46)
-                ctx.lineTo(0, height*0.50)
+                ctx.moveTo(0, height * 0.46)
+                ctx.lineTo(0, height * 0.50)
                 ctx.stroke()
-                ctx.rotate(Math.PI/30)
+                ctx.rotate(Math.PI / 30)
             }
         }
     }
-
+    
     Canvas {
         z: 5
         id: secondDisplay
-        property var second: 0
+        property int second: 0
         anchors.fill: parent
-        smooth: true
         renderStrategy: Canvas.Cooperative
         onPaint: {
             var ctx = getContext("2d")
+            var s = second
             ctx.reset()
             ctx.shadowOffsetX = 0
             ctx.shadowOffsetY = 0
             ctx.shadowBlur = 5
-            ctx.lineWidth =  parent.width*0.010
+            ctx.lineWidth = parent.width * 0.010
             ctx.translate(parent.width/2, parent.height/2)
             ctx.rotate(Math.PI)
-            for (var i=0; i <= wallClock.time.getSeconds(); i++) {
-                ctx.strokeStyle = Qt.rgba(0, 0.937, 0.937, i/(wallClock.time.getSeconds()))
-                ctx.shadowColor = Qt.rgba(0, 0.937, 0.937, i/(wallClock.time.getSeconds()))
+            for (var i = 0; i <= s; i++) {
+                var alpha = s > 0 ? i / s : 0
+                ctx.strokeStyle = Qt.rgba(0, 0.937, 0.937, alpha)
+                ctx.shadowColor  = Qt.rgba(0, 0.937, 0.937, alpha)
                 ctx.beginPath()
-                ctx.moveTo(0, height*0.46)
-                ctx.lineTo(0, height*0.50)
+                ctx.moveTo(0, height * 0.46)
+                ctx.lineTo(0, height * 0.50)
                 ctx.stroke()
-                ctx.rotate(Math.PI/30)
+                ctx.rotate(Math.PI / 30)
             }
         }
     }
-
+    
     Canvas {
         z: 5
         id: secondHand
-        property var second: 0
+        property int second: 0
         anchors.fill: parent
-        smooth: true
         renderStrategy: Canvas.Cooperative
         onPaint: {
             var ctx = getContext("2d")
@@ -193,105 +150,99 @@ Item {
             ctx.shadowOffsetX = 0
             ctx.shadowOffsetY = 0
             ctx.shadowBlur = 4
-            ctx.lineWidth = parent.height/200
+            ctx.lineWidth = parent.height / 200
             ctx.beginPath()
-            var gradient = ctx.createRadialGradient (parent.width/2, parent.height/2, 0, parent.width/2, parent.height/2, parent.width *0.46)
+            var gradient = ctx.createRadialGradient(parent.width/2, parent.height/2, 0, parent.width/2, parent.height/2, parent.width * 0.46)
             gradient.addColorStop(0.38, Qt.rgba(0, 0.937, 0.937, 0.0))
             gradient.addColorStop(0.95, Qt.rgba(0, 0.937, 0.937, 1.0))
             ctx.strokeStyle = gradient
-            ctx.moveTo(parent.width/2,
-                       parent.height/2)
-            ctx.lineTo(parent.width/2+Math.cos((second - 15)/60 * 2 * Math.PI)*width*0.46,
-                       parent.height/2+Math.sin((second - 15)/60 * 2 * Math.PI)*width*0.46)
+            ctx.moveTo(parent.width/2, parent.height/2)
+            ctx.lineTo(parent.width/2 + Math.cos((second - 15) / 60 * 2 * Math.PI) * width * 0.46,
+                       parent.height/2 + Math.sin((second - 15) / 60 * 2 * Math.PI) * width * 0.46)
             ctx.stroke()
             ctx.closePath()
         }
     }
-
-    // minute strokes
+    
     Canvas {
         z: 4
         anchors.fill: parent
-        smooth: true
         renderStrategy: Canvas.Cooperative
         onPaint: {
             var ctx = getContext("2d")
-            ctx.lineWidth = parent.height/32
+            ctx.lineWidth = parent.height / 32
             ctx.strokeStyle = Qt.rgba(0.384, 0.384, 0.384, 0.55)
             ctx.translate(parent.width/2, parent.height/2)
-            for (var i=0; i < 60; i++) {
+            for (var i = 0; i < 60; i++) {
                 ctx.beginPath()
-                ctx.moveTo(0, height*0.405)
-                ctx.lineTo(0, height*0.445)
+                ctx.moveTo(0, height * 0.405)
+                ctx.lineTo(0, height * 0.445)
                 ctx.stroke()
-                ctx.rotate(Math.PI/30)
+                ctx.rotate(Math.PI / 30)
             }
         }
     }
-
+    
     Canvas {
         z: 4
         id: minuteDisplay
-        property var minute: 0
+        property int minute: 0
         anchors.fill: parent
-        smooth: true
         renderStrategy: Canvas.Cooperative
         onPaint: {
             var ctx = getContext("2d")
+            var m = minute
             ctx.reset()
             ctx.shadowOffsetX = 0
             ctx.shadowOffsetY = 0
             ctx.shadowBlur = 5
-            ctx.lineWidth = parent.height/34
+            ctx.lineWidth = parent.height / 34
             ctx.translate(parent.width/2, parent.height/2)
             ctx.rotate(Math.PI)
-            for (var i=0; i <= minute; i++) {
-                ctx.strokeStyle = Qt.rgba(0.996, 0.969, 0.051, i/minute)
-                ctx.shadowColor = Qt.rgba(0.996, 0.969, 0.051, i/minute)
+            for (var i = 0; i <= m; i++) {
+                var alpha = m > 0 ? i / m : 0
+                ctx.strokeStyle = Qt.rgba(0.996, 0.969, 0.051, alpha)
+                ctx.shadowColor  = Qt.rgba(0.996, 0.969, 0.051, alpha)
                 ctx.beginPath()
-                ctx.moveTo(0, height*0.41)
-                ctx.lineTo(0, height*0.44)
+                ctx.moveTo(0, height * 0.41)
+                ctx.lineTo(0, height * 0.44)
                 ctx.stroke()
-                ctx.rotate(Math.PI/30)
+                ctx.rotate(Math.PI / 30)
             }
         }
     }
-
+    
     Canvas {
         z: 4
         id: minuteHand
-        property var minute: 0
+        property int minute: 0
         anchors.fill: parent
-        smooth: true
         renderStrategy: Canvas.Cooperative
         onPaint: {
             var ctx = getContext("2d")
             ctx.reset()
-            ctx.lineWidth = parent.height/80
+            ctx.lineWidth = parent.height / 80
             ctx.shadowColor = Qt.rgba(0.996, 0.969, 0.051, 1)
             ctx.shadowOffsetX = 0
             ctx.shadowOffsetY = 0
             ctx.shadowBlur = 4
             ctx.beginPath()
-            var gradient = ctx.createRadialGradient (parent.width/2, parent.height/2, 0, parent.width/2, parent.height/2, parent.width *0.41)
+            var gradient = ctx.createRadialGradient(parent.width/2, parent.height/2, 0, parent.width/2, parent.height/2, parent.width * 0.41)
             gradient.addColorStop(0.39, Qt.rgba(0.996, 0.969, 0.051, 0.0))
             gradient.addColorStop(0.95, Qt.rgba(0.996, 0.969, 0.051, 1.0))
             ctx.strokeStyle = gradient
-            ctx.moveTo(parent.width/2,
-                       parent.height/2)
-            ctx.lineTo(parent.width/2+Math.cos((minute - 15)/60 * 2 * Math.PI)*width*0.41,
-                       parent.height/2+Math.sin((minute - 15)/60 * 2 * Math.PI)*width*0.41)
+            ctx.moveTo(parent.width/2, parent.height/2)
+            ctx.lineTo(parent.width/2 + Math.cos((minute - 15) / 60 * 2 * Math.PI) * width * 0.41,
+                       parent.height/2 + Math.sin((minute - 15) / 60 * 2 * Math.PI) * width * 0.41)
             ctx.stroke()
             ctx.closePath()
         }
     }
-
+    
     Canvas {
         z: 2
         id: batteryArc
-        property var hour: 0
         anchors.fill: parent
-        smooth: true
         renderStrategy: Canvas.Cooperative
         onPaint: {
             var ctx = getContext("2d")
@@ -300,139 +251,139 @@ Item {
             ctx.shadowOffsetX = 0
             ctx.shadowOffsetY = 0
             ctx.shadowBlur = 2
-            var gradient = ctx.createRadialGradient (parent.width/2, parent.height/2, 0, parent.width/2, parent.height/2, parent.width *0.46)
-            gradient.addColorStop(0.39, batteryChargePercentage.percent < 30 ? 'red': Qt.rgba(0.318, 1, 0.051, 0.0))
-            gradient.addColorStop(0.95, batteryChargePercentage.percent < 30 ? 'red': Qt.rgba(0.318, 1, 0.051, 0.9))
-            ctx.lineWidth = parent.height*0.007
-            ctx.lineCap="round"
+            var low = batteryChargePercentage.percent < 30
+            var gradient = ctx.createRadialGradient(parent.width/2, parent.height/2, 0, parent.width/2, parent.height/2, parent.width * 0.46)
+            gradient.addColorStop(0.39, low ? Qt.rgba(1, 0, 0, 0.0) : Qt.rgba(0.318, 1, 0.051, 0.0))
+            gradient.addColorStop(0.95, low ? Qt.rgba(1, 0, 0, 0.9) : Qt.rgba(0.318, 1, 0.051, 0.9))
+            ctx.lineWidth = parent.height * 0.007
+            ctx.lineCap = "round"
             ctx.strokeStyle = gradient
             ctx.beginPath()
-            ctx.arc(parent.width/2, parent.height/2, parent.width *0.46, 270* 0.01745, ((batteryChargePercentage.percent/100*360)+270)* 0.01745, false);
-            ctx.lineTo(parent.width/2,
-                       parent.height/2)
+            ctx.arc(parent.width/2, parent.height/2, parent.width * 0.46, 270 * 0.01745, ((batteryChargePercentage.percent / 100 * 360) + 270) * 0.01745, false)
+            ctx.lineTo(parent.width/2, parent.height/2)
             ctx.stroke()
             ctx.closePath()
         }
     }
-
+    
     Text {
         z: 9
         id: batteryDisplay
         renderType: Text.NativeRendering
-        property var rotB: (batteryChargePercentage.percent-25)/100
-        property var centerX: parent.width/2-width/2
-        property var centerY: parent.height/2-height/2
-        font.pixelSize: parent.height/16
+        font.pixelSize: parent.height / 16
         font.family: "SlimSans"
-        font.styleName:"Bold"
+        font.styleName: "Bold"
         color: "white"
-        opacity: 1.00
         style: Text.Outline; styleColor: "#80000000"
-        x: centerX+Math.cos(rotB * 2 * Math.PI)*height*4.5
-        y: centerY+Math.sin(rotB * 2 * Math.PI)*height*4.5
         text: "<b>" + batteryChargePercentage.percent + "</b>"
     }
-
+    
     Text {
         z: 9
         id: hourDisplay
         renderType: Text.NativeRendering
-        font.pixelSize: parent.height*0.25
+        font.pixelSize: parent.height * 0.25
         font.family: "SlimSans"
-        font.styleName:"Regular"
+        font.styleName: "Regular"
         color: "white"
         style: Text.Outline; styleColor: "#80000000"
         opacity: 0.95
         horizontalAlignment: Text.AlignHCenter
         anchors.horizontalCenter: parent.horizontalCenter
         anchors.verticalCenter: parent.verticalCenter
-        text: if (use12H.value) {
-                  wallClock.time.toLocaleString(Qt.locale(), "<b>hh</b> ap").slice(0, 9) + wallClock.time.toLocaleString(Qt.locale(), ":mm")}
-              else
-                  wallClock.time.toLocaleString(Qt.locale(), "<b>HH</b>") + wallClock.time.toLocaleString(Qt.locale(), ":mm")
+        text: use12H.value ?
+        wallClock.time.toLocaleString(Qt.locale(), "<b>hh</b> ap").slice(0, 9) + wallClock.time.toLocaleString(Qt.locale(), ":mm") :
+        wallClock.time.toLocaleString(Qt.locale(), "<b>HH</b>") + wallClock.time.toLocaleString(Qt.locale(), ":mm")
     }
-
+    
     Text {
         z: 9
         id: dayofweekDisplay
         renderType: Text.NativeRendering
-        font.pixelSize: parent.height*0.085
+        font.pixelSize: parent.height * 0.085
         font.family: "SlimSans"
-        font.styleName:"light"
+        font.styleName: "light"
         color: "white"
         style: Text.Outline; styleColor: "#80000000"
         opacity: 0.9
         horizontalAlignment: Text.AlignHCenter
         anchors.horizontalCenter: parent.horizontalCenter
         anchors.bottom: hourDisplay.top
-        anchors.bottomMargin: -parent.height*0.03
+        anchors.bottomMargin: -parent.height * 0.03
         text: wallClock.time.toLocaleString(Qt.locale(), "dddd")
     }
-
+    
     Text {
         z: 9
         id: dateDisplay
         renderType: Text.NativeRendering
-        font.pixelSize: parent.height*0.085
+        font.pixelSize: parent.height * 0.085
         font.family: "SlimSans"
-        font.styleName:"Regular"
-        lineHeight: parent.height*0.0025
+        font.styleName: "Regular"
+        lineHeight: parent.height * 0.0025
         color: "white"
         style: Text.Outline; styleColor: "#80000000"
         opacity: 0.9
         horizontalAlignment: Text.AlignHCenter
         anchors.horizontalCenter: parent.horizontalCenter
         anchors.top: hourDisplay.bottom
-        anchors.topMargin: -parent.height*0.036
-
+        anchors.topMargin: -parent.height * 0.036
         text: wallClock.time.toLocaleString(Qt.locale(), "dd MMMM")
     }
-
+    
     MceBatteryLevel {
         id: batteryChargePercentage
+        onPercentChanged: batteryArc.requestPaint()
     }
-
+    
     Connections {
         target: wallClock
         onTimeChanged: {
-            var hour = wallClock.time.getHours()
+            var hour   = wallClock.time.getHours()
             var minute = wallClock.time.getMinutes()
             var second = wallClock.time.getSeconds()
-            var date = wallClock.time.getDate()
-            batteryArc.requestPaint()
-            if(secondHand.second !== second) {
+            // Update orbiting battery label position imperatively to avoid
+            // per-frame trig binding evaluation.
+            var rotB = (batteryChargePercentage.percent - 25) / 100
+            var cx = parent.width  / 2 - batteryDisplay.width  / 2
+            var cy = parent.height / 2 - batteryDisplay.height / 2
+            batteryDisplay.x = cx + Math.cos(rotB * 2 * Math.PI) * batteryDisplay.height * 4.5
+            batteryDisplay.y = cy + Math.sin(rotB * 2 * Math.PI) * batteryDisplay.height * 4.5
+            
+            if (secondHand.second !== second) {
                 secondHand.second = second
                 secondHand.requestPaint()
                 secondDisplay.second = second
                 secondDisplay.requestPaint()
-                secondArc.requestPaint()
-            }if(minuteHand.minute !== minute) {
+            }
+            if (minuteHand.minute !== minute) {
                 minuteHand.minute = minute
                 minuteHand.requestPaint()
                 minuteDisplay.minute = minute
                 minuteDisplay.requestPaint()
-                hourArc.hour = hour
                 hourArc.requestPaint()
             }
         }
     }
-
+    
     Component.onCompleted: {
-        var hour = wallClock.time.getHours()
+        var hour   = wallClock.time.getHours()
         var minute = wallClock.time.getMinutes()
         var second = wallClock.time.getSeconds()
-        var date = wallClock.time.getDate()
+        var rotB = (batteryChargePercentage.percent - 25) / 100
+        var cx = parent.width  / 2 - batteryDisplay.width  / 2
+        var cy = parent.height / 2 - batteryDisplay.height / 2
+        batteryDisplay.x = cx + Math.cos(rotB * 2 * Math.PI) * batteryDisplay.height * 4.5
+        batteryDisplay.y = cy + Math.sin(rotB * 2 * Math.PI) * batteryDisplay.height * 4.5
         batteryArc.requestPaint()
         secondHand.second = second
         secondHand.requestPaint()
         secondDisplay.second = second
         secondDisplay.requestPaint()
-        secondArc.requestPaint()
         minuteHand.minute = minute
         minuteHand.requestPaint()
         minuteDisplay.minute = minute
         minuteDisplay.requestPaint()
-        hourArc.hour = hour
         hourArc.requestPaint()
     }
 }
