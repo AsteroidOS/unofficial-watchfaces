@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2018 - Timo Könnecke <el-t-mo@arcor.de>
+ * Copyright (C) 2026 - Timo Könnecke <github.com/moWerk>
  *               2016 - Sylvia van Os <iamsylvie@openmailbox.org>
  *               2015 - Florent Revest <revestflo@gmail.com>
  *               2012 - Vasiliy Sorokin <sorokin.vasiliy@gmail.com>
@@ -21,169 +21,181 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-import QtQuick 2.1
+import QtQuick 2.15
+import QtQuick.Shapes 1.15
 
 Item {
-    property var radian: 0.01745
-
+    id: root
+    
     Image {
         id: logoAsteroid
         source: "../watchfaces-img/asteroid-logo.svg"
-        anchors.horizontalCenter: parent.horizontalCenter
-        anchors.verticalCenter: parent.verticalCenter
-        width: parent.width/5.7
-        height: parent.height/5.7
+        anchors.centerIn: parent
+        width: parent.width / 5.7
+        height: parent.height / 5.7
     }
-
-    Canvas {
-        id: minuteArc
+    
+    // Minute ring background track
+    Shape {
         anchors.fill: parent
-        smooth: true
-        renderStrategy: Canvas.Cooperative
-        onPaint: {
-            var ctx = getContext("2d")
-            var rot = (wallClock.time.getMinutes() -15 )*6
-            ctx.reset()
-            ctx.lineCap="round"
-            ctx.beginPath()
-            ctx.arc(parent.width/2, parent.height/2, width / 2.75, -90* radian, 450* radian, false);
-            ctx.lineWidth = parent.width/80
-            ctx.strokeStyle = Qt.rgba(0, 0, 0, 0.5)
-            ctx.stroke()
-            ctx.beginPath()
-            ctx.arc(parent.width/2, parent.height/2, width / 2.75, -90* radian, rot* radian, false);
-            ctx.lineWidth = parent.width/20
-            ctx.strokeStyle = Qt.rgba(1, 1, 1, 0.7)
-            ctx.stroke()
+        ShapePath {
+            strokeColor: Qt.rgba(0, 0, 0, 0.5)
+            strokeWidth: parent.width / 80
+            fillColor: "transparent"
+            capStyle: ShapePath.RoundCap
+            PathAngleArc {
+                centerX: parent.width / 2
+                centerY: parent.height / 2
+                radiusX: parent.width / 2.75
+                radiusY: parent.height / 2.75
+                startAngle: -90
+                sweepAngle: 360
+            }
         }
     }
-
-    Canvas {
-        id: minuteCircle
-        property var rotM: (wallClock.time.getMinutes() - 15)/60
-        property var centerX: parent.width/2
-        property var centerY: parent.height/2
-        property var minuteX: centerX+Math.cos(rotM * 2 * Math.PI)*width*0.36
-        property var minuteY: centerY+Math.sin(rotM * 2 * Math.PI)*width*0.36
+    
+    // Minute progress arc — sweepAngle binding drives redraw automatically
+    Shape {
         anchors.fill: parent
-        smooth: true
-        renderStrategy: Canvas.Cooperative
-        onPaint: {
-            var ctx = getContext("2d")
-            var rot1 = (0 -15 )*6 * radian
-            var rot2 = (60 -15 )*6 * radian
-            ctx.reset()
-            ctx.lineWidth = 3
-            ctx.fillStyle = Qt.rgba(0.184, 0.184, 0.184, 0.9)
-            ctx.beginPath()
-            ctx.moveTo(minuteX, minuteY)
-            ctx.arc(minuteX, minuteY, width / 11.5, rot1, rot2, false);
-            ctx.lineTo(minuteX, minuteY);
-            ctx.fill();
+        ShapePath {
+            strokeColor: Qt.rgba(1, 1, 1, 0.7)
+            strokeWidth: parent.width / 20
+            fillColor: "transparent"
+            capStyle: ShapePath.RoundCap
+            PathAngleArc {
+                centerX: parent.width / 2
+                centerY: parent.height / 2
+                radiusX: parent.width / 2.75
+                radiusY: parent.height / 2.75
+                startAngle: -90
+                sweepAngle: (wallClock.time.getMinutes() / 60) * 360
+            }
         }
     }
-
-    Canvas {
-        id: hourArc
+    
+    // Dot at minute hand tip — positioned imperatively from Connections
+    Rectangle {
+        id: minuteDot
+        width: root.width / 5.75
+        height: width
+        radius: width / 2
+        color: Qt.rgba(0.184, 0.184, 0.184, 0.9)
+    }
+    
+    // Hour ring background track
+    Shape {
         anchors.fill: parent
-        smooth: true
-        renderStrategy: Canvas.Cooperative
-        onPaint: {
-            var ctx = getContext("2d")
-            var rot = 0.5 * (60 * (wallClock.time.getHours()-3) + wallClock.time.getMinutes())
-            ctx.reset()
-            ctx.lineCap="round"
-            ctx.beginPath()
-            ctx.arc(parent.width/2, parent.height/2, width / 5.3, 270* radian, 630* radian, false);
-            ctx.lineWidth = parent.width/80
-            ctx.strokeStyle = Qt.rgba(0, 0, 0, 0.5)
-            ctx.stroke()
-            ctx.beginPath()
-            ctx.arc(parent.width/2, parent.height/2, width / 5.3, 270* radian, rot* radian, false);
-            ctx.lineWidth = parent.width/20
-            ctx.strokeStyle = Qt.rgba(1, 1, 1, 0.7)
-            ctx.stroke()
+        ShapePath {
+            strokeColor: Qt.rgba(0, 0, 0, 0.5)
+            strokeWidth: parent.width / 80
+            fillColor: "transparent"
+            capStyle: ShapePath.RoundCap
+            PathAngleArc {
+                centerX: parent.width / 2
+                centerY: parent.height / 2
+                radiusX: parent.width / 5.3
+                radiusY: parent.height / 5.3
+                startAngle: -90
+                sweepAngle: 360
+            }
         }
     }
-
-    Canvas {
-        id: hourCircle
-        property var rotH: (wallClock.time.getHours()-3 + wallClock.time.getMinutes()/60) / 12
-        property var centerX: parent.width/2
-        property var centerY: parent.height/2
-        property var hourX: (centerX+Math.cos(rotH * 2 * Math.PI)*width*0.185)
-        property var hourY: (centerY+Math.sin(rotH * 2 * Math.PI)*width*0.185)
+    
+    // Hour progress arc — 0° at 12:00, full 360° at 12:00 again
+    Shape {
         anchors.fill: parent
-        smooth: true
-        renderStrategy: Canvas.Cooperative
-        onPaint: {
-            var ctx = getContext("2d")
-            var rot1 = (0 -15 )*6 * radian
-            var rot2 = (60 -15 )*6 * radian
-            ctx.reset()
-            ctx.lineWidth = 3
-            ctx.fillStyle = Qt.rgba(0.184, 0.184, 0.184, 0.9)
-            ctx.beginPath()
-            ctx.moveTo(hourX, hourY)
-            ctx.arc(hourX, hourY, width / 11.5, rot1, rot2, false);
-            ctx.lineTo(hourX, hourY);
-            ctx.fill();
+        ShapePath {
+            strokeColor: Qt.rgba(1, 1, 1, 0.7)
+            strokeWidth: parent.width / 20
+            fillColor: "transparent"
+            capStyle: ShapePath.RoundCap
+            PathAngleArc {
+                centerX: parent.width / 2
+                centerY: parent.height / 2
+                radiusX: parent.width / 5.3
+                radiusY: parent.height / 5.3
+                startAngle: -90
+                sweepAngle: ((wallClock.time.getHours() % 12) * 60 + wallClock.time.getMinutes()) / 720 * 360
+            }
         }
     }
-
+    
+    // Dot at hour hand tip — positioned imperatively from Connections
+    Rectangle {
+        id: hourDot
+        width: root.width / 5.75
+        height: width
+        radius: width / 2
+        color: Qt.rgba(0.184, 0.184, 0.184, 0.9)
+    }
+    
     Text {
         id: hourDisplay
-        property var rotH: (wallClock.time.getHours()-3 + wallClock.time.getMinutes()/60) / 12
-        property var hoffset: parent.height*0.0015
-        property var voffset: parent.height*0.005
-        property var centerX: parent.width/2-width/2-hoffset
-        property var centerY: parent.height/2-height/2+voffset
-        font.pixelSize: parent.height/8
-        font.family: "SlimSans"
-        font.styleName: "Bold"
+        font {
+            pixelSize: parent.height / 8
+            family: "SlimSans"
+            styleName: "Bold"
+        }
         color: "white"
-        opacity: 1.0
-        style: Text.Outline; styleColor: "#80000000"
-        horizontalAlignment: Text.AlignHCenter
-        x: centerX+Math.cos(rotH * 2 * Math.PI)*height*1.32
-        y: centerY+Math.sin(rotH * 2 * Math.PI)*height*1.32
-        text: if (use12H.value) {
-                  wallClock.time.toLocaleString(Qt.locale(), "<b>hh</b> ap").slice(0, 9) }
-              else
-                  wallClock.time.toLocaleString(Qt.locale(), "<b>HH</b>")
+        text: use12H.value ? wallClock.time.toLocaleString(Qt.locale(), "<b>hh</b> ap").slice(0, 9) :
+        wallClock.time.toLocaleString(Qt.locale(), "<b>HH</b>")
     }
-
+    
     Text {
         id: minuteDisplay
-        property var rotM: (wallClock.time.getMinutes() - 15)/60
-        property var hoffset: parent.height*0.0015
-        property var voffset: parent.height*0.0015
-        property var centerX: parent.width/2-width/2-hoffset
-        property var centerY: parent.height/2-height/2+voffset
-        font.pixelSize: parent.height/8
+        font.pixelSize: parent.height / 8
         font.family: "SlimSans"
         color: "white"
-        opacity: 1.00
-        style: Text.Outline; styleColor: "#80000000"
-        x: centerX+Math.cos(rotM * 2 * Math.PI)*height*2.535
-        y: centerY+Math.sin(rotM * 2 * Math.PI)*height*2.535
+        style: Text.Outline
+        styleColor: "#80000000"
         text: wallClock.time.toLocaleString(Qt.locale(), "mm")
     }
-
+    
     Connections {
         target: wallClock
         function onTimeChanged() {
-            minuteCircle.requestPaint()
-            minuteArc.requestPaint()
-            hourCircle.requestPaint()
-            hourArc.requestPaint()
+            if (!visible) return
+                var h = wallClock.time.getHours()
+                var min = wallClock.time.getMinutes()
+                var rotH = (h - 3 + min / 60) / 12
+                var rotM = (min - 15) / 60
+                var cx = root.width / 2
+                var cy = root.height / 2
+                var dotR = root.width / 5.75 / 2
+                
+                minuteDot.x = cx + Math.cos(rotM * 2 * Math.PI) * root.width * 0.36 - dotR
+                minuteDot.y = cy + Math.sin(rotM * 2 * Math.PI) * root.width * 0.36 - dotR
+                
+                hourDot.x = cx + Math.cos(rotH * 2 * Math.PI) * root.width * 0.185 - dotR
+                hourDot.y = cy + Math.sin(rotH * 2 * Math.PI) * root.width * 0.185 - dotR
+                
+                hourDisplay.x = cx - hourDisplay.width / 2 - root.height * 0.0015 + Math.cos(rotH * 2 * Math.PI) * (hourDisplay.height * 1.32 - root.height * 0.007)
+                hourDisplay.y = cy - hourDisplay.height / 2 + Math.sin(rotH * 2 * Math.PI) * (hourDisplay.height * 1.32 - root.height * 0.007) - root.height * 0.006
+                
+                minuteDisplay.x = cx - minuteDisplay.width / 2 - root.height * 0.0015 + Math.cos(rotM * 2 * Math.PI) * (minuteDisplay.height * 2.535 - root.height * 0.007)
+                minuteDisplay.y = cy - minuteDisplay.height / 2 + Math.sin(rotM * 2 * Math.PI) * (minuteDisplay.height * 2.535 - root.height * 0.007) - root.height * 0.006
         }
     }
-
+    
     Component.onCompleted: {
-        minuteCircle.requestPaint()
-        minuteArc.requestPaint()
-        hourCircle.requestPaint()
-        hourArc.requestPaint()
+        var h = wallClock.time.getHours()
+        var min = wallClock.time.getMinutes()
+        var rotH = (h - 3 + min / 60) / 12
+        var rotM = (min - 15) / 60
+        var cx = root.width / 2
+        var cy = root.height / 2
+        var dotR = root.width / 5.75 / 2
+        
+        minuteDot.x = cx + Math.cos(rotM * 2 * Math.PI) * root.width * 0.36 - dotR
+        minuteDot.y = cy + Math.sin(rotM * 2 * Math.PI) * root.width * 0.36 - dotR
+        
+        hourDot.x = cx + Math.cos(rotH * 2 * Math.PI) * root.width * 0.185 - dotR
+        hourDot.y = cy + Math.sin(rotH * 2 * Math.PI) * root.width * 0.185 - dotR
+        
+        hourDisplay.x = cx - hourDisplay.width / 2 - root.height * 0.0015 + Math.cos(rotH * 2 * Math.PI) * (hourDisplay.height * 1.32 - root.height * 0.007)
+        hourDisplay.y = cy - hourDisplay.height / 2 + Math.sin(rotH * 2 * Math.PI) * (hourDisplay.height * 1.32 - root.height * 0.007) - root.height * 0.006
+        
+        minuteDisplay.x = cx - minuteDisplay.width / 2 - root.height * 0.0015 + Math.cos(rotM * 2 * Math.PI) * (minuteDisplay.height * 2.535 - root.height * 0.007)
+        minuteDisplay.y = cy - minuteDisplay.height / 2 + Math.sin(rotM * 2 * Math.PI) * (minuteDisplay.height * 2.535 - root.height * 0.007) - root.height * 0.006
     }
 }
