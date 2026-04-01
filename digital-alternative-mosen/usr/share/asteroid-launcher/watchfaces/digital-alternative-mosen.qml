@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2018 - Timo Könnecke <el-t-mo@arcor.de>
+ * Copyright (C) 2019 - Timo Könnecke <github.com/moWerk>
  *               2015 - Florent Revest <revestflo@gmail.com>
  *               2014 - Aleksi Suomalainen <suomalainen.aleksi@gmail.com>
  * All rights reserved.
@@ -35,7 +35,7 @@
 * Calculated ctx.shadows with variable px size for better display in watchface-settings
 */
 
-import QtQuick 2.1
+import QtQuick 2.9
 
 Item {
 
@@ -43,7 +43,7 @@ Item {
         ctx.reset()
         ctx.fillStyle = "white"
         ctx.textAlign = "center"
-        ctx.textBaseline = 'middle';
+        ctx.textBaseline = 'middle'
         ctx.shadowColor = Qt.rgba(0, 0, 0, 0.80)
         ctx.shadowOffsetX = parent.height*0.00625
         ctx.shadowOffsetY = parent.height*0.00625 //2 px on 320x320
@@ -54,7 +54,6 @@ Item {
         id: hourMinuteCanvas
         anchors.fill: parent
         antialiasing: true
-        smooth: true
         renderStrategy: Canvas.Cooperative
 
         onPaint: {
@@ -104,7 +103,6 @@ Item {
         id: dateCanvas
         anchors.fill: parent
         antialiasing: true
-        smooth: true
         renderStrategy: Canvas.Cooperative
 
         onPaint: {
@@ -121,9 +119,10 @@ Item {
     Connections {
         target: wallClock
         function onTimeChanged() {
-            hourMinuteCanvas.requestPaint()
-            dateCanvas.requestPaint()
-            amPmCanvas.requestPaint()
+            if (!visible) return
+                hourMinuteCanvas.requestPaint()
+                dateCanvas.requestPaint()
+                amPmCanvas.requestPaint()
         }
     }
 
