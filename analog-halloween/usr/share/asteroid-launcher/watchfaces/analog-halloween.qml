@@ -35,9 +35,9 @@ Item {
             z: 1
             id: hourTicks
             antialiasing : true
-            property var rotM: ((index) - 3)/12
-            property var centerX: parent.width/2-width/2
-            property var centerY: parent.height/2-height/2
+            property real rotM: (index - 3) / 12
+            property real centerX: parent.width / 2 - width / 2
+            property real centerY: parent.height / 2 - height / 2
             x: centerX+Math.cos(rotM * 2 * Math.PI)*parent.width*0.46
             y: centerY+Math.sin(rotM * 2 * Math.PI)*parent.width*0.46
             color: "orange"
@@ -52,32 +52,30 @@ Item {
         id: hourSVG
         z: 2
         source: imgPath + "hour.svg"
-        anchors.horizontalCenter: parent.horizontalCenter
-        anchors.verticalCenter: parent.verticalCenter
+        anchors.centerIn: parent
         width: parent.width
         height: parent.height
         transform: Rotation {
-            origin.x: parent.width/2;
-            origin.y: parent.height/2;
-            angle: (wallClock.time.getHours()*30) + (wallClock.time.getMinutes()*0.5)
+            id: hourRot
+            origin.x: parent.width / 2
+            origin.y: parent.height / 2
         }
     }
-
+    
     Image {
         id: minuteSVG
         z: 3
         source: imgPath + "minute.svg"
-        anchors.horizontalCenter: parent.horizontalCenter
-        anchors.verticalCenter: parent.verticalCenter
+        anchors.centerIn: parent
         width: parent.width
         height: parent.height
         transform: Rotation {
-            origin.x: parent.width/2;
-            origin.y: parent.height/2;
-            angle: (wallClock.time.getMinutes()*6)
+            id: minuteRot
+            origin.x: parent.width / 2
+            origin.y: parent.height / 2
         }
     }
-
+    
     Image {
         id: secondSVG
         z: 4
@@ -87,10 +85,38 @@ Item {
         width: parent.width
         height: parent.height
         transform: Rotation {
-            origin.x: parent.width/2;
-            origin.y: parent.height/2;
-            angle: (wallClock.time.getSeconds()*6)+6
-            Behavior on angle { RotationAnimation { duration: 1000; direction: RotationAnimation.Clockwise } }
+            id: secondRot
+            origin.x: parent.width / 2
+            origin.y: parent.height / 2
         }
+    }
+    
+    // +6 offset preserved from original to align SVG artwork
+    Timer {
+        interval: 16
+        repeat: true
+        running: !displayAmbient && visible
+        onTriggered: {
+            var now = new Date()
+            secondRot.angle = (now.getSeconds() * 1000 + now.getMilliseconds()) * 6 / 1000 + 6
+        }
+    }
+    
+    Connections {
+        target: wallClock
+        onTimeChanged: {
+            if (!visible) return
+                var h = wallClock.time.getHours()
+                var min = wallClock.time.getMinutes()
+                hourRot.angle = h * 30 + min * 0.5
+                minuteRot.angle = min * 6
+        }
+    }
+    
+    Component.onCompleted: {
+        var h = wallClock.time.getHours()
+        var min = wallClock.time.getMinutes()
+        hourRot.angle = h * 30 + min * 0.5
+        minuteRot.angle = min * 6
     }
 }
