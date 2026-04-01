@@ -17,7 +17,6 @@
  */
 
 import QtQuick 2.12
-import QtGraphicalEffects 1.12
 
 Item {
 
@@ -60,9 +59,7 @@ Item {
         }
         MouseArea {
             anchors.fill: parent
-            onPressAndHold: asteroidLogo.visible ?
-                                asteroidLogo.visible = false :
-                                asteroidLogo.visible = true
+            onPressAndHold: asteroidLogo.visible = !asteroidLogo.visible
         }
     }
 
@@ -78,7 +75,7 @@ Item {
             pixelSize: parent.height * 0.06
         }
         color: "white"
-        text: wallClock.time.toLocaleString(Qt.locale(), "ddd dd");
+        text: wallClock.time.toLocaleString(Qt.locale(), "ddd dd")
     }
 
     Text {
@@ -90,7 +87,7 @@ Item {
             pixelSize: parent.height * 0.30
         }
         color: "white"
-        text: wallClock.time.toLocaleString(Qt.locale(), (use12H.value ? "hhmm ap" : "HHmm")).slice(0,4);
+        text: wallClock.time.toLocaleString(Qt.locale(), (use12H.value ? "hhmm ap" : "HHmm")).slice(0,4)
     }
 
     Text {
@@ -106,7 +103,7 @@ Item {
             pixelSize: parent.height * 0.05
         }
         color: "white"
-        text: wallClock.time.toLocaleString(Qt.locale(), "ap");
+        text: wallClock.time.toLocaleString(Qt.locale(), "ap")
     }
 
     Repeater{
@@ -131,7 +128,6 @@ Item {
                 }
             ]
             Rectangle {
-                anchors.centerIn: parent
                 anchors.fill: parent
                 opacity: wallClock.time.getSeconds() == index ? 1 : 0
                 layer.enabled: wallClock.time.getSeconds() == index
