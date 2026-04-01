@@ -66,7 +66,7 @@ Item {
                     verticalCenterOffset: root.width * -0.05
             }
 
-            text: wallClock.time.toLocaleString(Qt.locale(), ":")
+            text: ":"
     }
 
     Text {
@@ -136,7 +136,7 @@ Item {
             horizontalOffset: 4
             verticalOffset: 4
             radius: 7.0
-            samples: 15
+            samples: 9
             color: "#99000000"
     }
 }
