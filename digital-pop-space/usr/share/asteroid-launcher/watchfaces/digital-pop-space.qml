@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2022 - Timo Könnecke <github.com/eLtMosen>
+ * Copyright (C) 2026 - Timo Könnecke <github.com/moWerk>
  * All rights reserved.
  *
  * This program is free software: you can redistribute it and/or modify
@@ -18,30 +18,17 @@
 
 import QtQuick 2.9
 import QtGraphicalEffects 1.15
+import org.asteroid.utils 1.0
 
 Item {
     id: rootitem
 
     Image {
         id: background
-
-        anchors {
-            centerIn: parent
-            verticalCenter: parent.verticalCenter
-        }
+        anchors.centerIn: parent
         width: parent.width
         height: parent.height
         source: "../watchfaces-img/digital-pop-space-background.svg"
-
-        layer.enabled: true
-        layer.effect: DropShadow {
-            transparentBorder: true
-            horizontalOffset: 0
-            verticalOffset: 0
-            radius: 30.0
-            samples: 15
-            color: "#ffCD0074"
-        }
     }
 
     Text {
@@ -58,22 +45,20 @@ Item {
             letterSpacing: -parent.height * .004
         }
         renderType: Text.NativeRendering
-        antialiasing: true
         color: "#F50097"
         style: Text.Sunken
         styleColor: "#000"
-        text: if (use12H.value) {
-                  wallClock.time.toLocaleString(Qt.locale(), "hh ap").slice(0, 2) +
-                  wallClock.time.toLocaleString(Qt.locale(), " mm")}
-              else
-                  wallClock.time.toLocaleString(Qt.locale(), "HH mm")
+        text: use12H.value ?
+        wallClock.time.toLocaleString(Qt.locale(), "hh ap").slice(0, 2) +
+        wallClock.time.toLocaleString(Qt.locale(), " mm") :
+        wallClock.time.toLocaleString(Qt.locale(), "HH mm")
         layer.enabled: true
         layer.effect: DropShadow {
             transparentBorder: true
             horizontalOffset: 0
             verticalOffset: 0
             radius: 24.0
-            samples: 16
+            samples: 9
             color: "#FFFF5C"
         }
     }
@@ -92,7 +77,6 @@ Item {
             letterSpacing: -parent.height * .0034
         }
         renderType: Text.NativeRendering
-        antialiasing: true
         color: "white"
         style: Text.Sunken
         styleColor: "#000"
@@ -115,7 +99,6 @@ Item {
             letterSpacing: -parent.height * .0034
         }
         renderType: Text.NativeRendering
-        antialiasing: true
         color: "white"
         style: Text.Sunken
         styleColor: "#000"
@@ -125,6 +108,7 @@ Item {
 
     Text {
         id: apDisplay
+        visible: use12H.value
 
         anchors {
             centerIn: parent
@@ -137,7 +121,6 @@ Item {
             letterSpacing: -parent.height * .002
         }
         renderType: Text.NativeRendering
-        antialiasing: true
         color: "#ddffff00"
         style: Text.Sunken
         styleColor: "#000"
@@ -150,17 +133,32 @@ Item {
             horizontalOffset: 0
             verticalOffset: 0
             radius: 30.0
-            samples: 15
+            samples: 9
             color: "#ffff19a6"
         }
     }
 
-    Image {
-        id: backgroundWave
-
+    Item {
+        id: backgroundWaveWrapper
         anchors.centerIn: parent
         width: parent.width
         height: parent.height
-        source: "../watchfaces-img/digital-pop-space-backgroundwave.svg"
+        layer.enabled: DeviceSpecs.hasRoundScreen
+        layer.effect: OpacityMask {
+            maskSource: Rectangle {
+                width: backgroundWaveWrapper.width
+                height: backgroundWaveWrapper.height
+                radius: width / 2
+                visible: false
+            }
+        }
+        
+        Image {
+            id: backgroundWave
+            anchors.centerIn: parent
+            width: parent.width
+            height: parent.height
+            source: "../watchfaces-img/digital-pop-space-backgroundwave.svg"
+        }
     }
  }
