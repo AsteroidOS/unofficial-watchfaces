@@ -21,7 +21,7 @@ import QtGraphicalEffects 1.12
 
 Item {
     function getTimeDigit(t, index) {
-        var timestring = t.toLocaleString(Qt.locale(), (use12H.value ? "hhmmss ap" : "HHmmss"));
+        var timestring = t.toLocaleString(Qt.locale(), (use12H.value ? "hhmmss ap" : "HHmmss"))
         return timestring[index]
     }
 
@@ -30,7 +30,7 @@ Item {
         model: 4
         Item {
             id: digitHolder
-            property var sizefactor: parent.width / 2 / 289
+            property real sizefactor: parent.width / 2 / 289
             width: parent.width / 6
             height: parent.width / 3
             x: parent.width / 5 * index + parent.width / 8
@@ -51,9 +51,11 @@ Item {
             Text {
                 id: digit
                 anchors.centerIn: parent
-                font.pixelSize: nixieBackground.height*0.35 * sizefactor
-                font.family: "Montserrat"
-                font.weight: Font.Light
+                font {
+                    pixelSize: nixieBackground.height * 0.35 * sizefactor
+                    family: "Montserrat"
+                    weight: Font.Light
+                }
                 color: "orange"
                 visible: !displayAmbient
                 horizontalAlignment: Text.AlignHCenter
@@ -62,7 +64,7 @@ Item {
             Glow {
                 anchors.fill: digit
                 radius: displayAmbient ? 10 : 20
-                samples: 19
+                samples: 9
                 color: "darkorange"
                 source: digit
             }
@@ -116,7 +118,7 @@ Item {
                 layer.enabled: wallClock.time.getSeconds() == index
                 layer.effect: Glow {
                     radius: 7
-                    samples: 15
+                    samples: 9
                     color: "darkorange"
                 }
             }
