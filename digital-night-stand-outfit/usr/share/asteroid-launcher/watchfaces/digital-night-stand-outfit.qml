@@ -41,9 +41,7 @@ Item {
         id: batteryBox
         property int value: batteryChargePercentage.percent
         onValueChanged: batteryArc.requestPaint()
-        anchors {
-            centerIn: parent
-        }
+        anchors.centerIn: parent
         width: parent.width * .85
         height: parent.height * .88
 
@@ -51,7 +49,6 @@ Item {
             z: 1
             id: batteryArc
             anchors.fill: parent
-            smooth: true
             onPaint: {
                 var ctx = getContext("2d")
                 ctx.reset()
@@ -154,7 +151,7 @@ Item {
         horizontalOffset: 4
         verticalOffset: 4
         radius: 10.0
-        samples: 21
+        samples: 9
         color: "#99000000"
     }
 }
