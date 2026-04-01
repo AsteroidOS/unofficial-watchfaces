@@ -1,5 +1,6 @@
 /*
- * Copyright (C) 2022 - Timo Könnecke <github.com/eLtMosen>
+ * Copyright (C) 2026 - Timo Könnecke <github.com/moWerk>
+ *               2022 - Timo Könnecke <github.com/eLtMosen>
  *               2021 - Darrel Griët <dgriet@gmail.com>
  *               2016 - Sylvia van Os <iamsylvie@openmailbox.org>
  *               2015 - Florent Revest <revestflo@gmail.com>
@@ -29,7 +30,7 @@ import Nemo.Mce 1.0
 
 Item {
     id: root
-
+    
     property string imgPath: "../watchfaces-img/digital-namazu-no-henka-"
     property var largeNumeralSize: Qt.size(parent.width * .25, parent.height * .25)
     property var smallNumeralSize: Qt.size(parent.width * .076, parent.height * .076)
@@ -39,232 +40,200 @@ Item {
     property string minute: wallClock.time.toLocaleString(Qt.locale(), "mm")
     property string month: wallClock.time.toLocaleString(Qt.locale(), "MM")
     property string day: wallClock.time.toLocaleString(Qt.locale(), "dd")
-
+    
     function pad(num, size) {
-        num = num.toString();
-        while (num.length < size) num = "0" + num;
-        return num;
+        num = num.toString()
+        while (num.length < size) num = "0" + num
+            return num
     }
-
+    
     MceBatteryLevel {
         id: batteryChargePercentage
     }
-
+    
     Item {
         id: digitalTime
-
         anchors.fill: parent
-
+        
         Image {
             id: hour1
-
             anchors {
                 right: parent.horizontalCenter
                 rightMargin: -parent.height * 0.01
                 bottom: parent.verticalCenter
                 bottomMargin: largeNumeralOffset
             }
-            smooth: true
             sourceSize: largeNumeralSize
             source: imgPath + hour.slice(1, 2) + ".svg"
         }
-
+        
         Image {
             id: hour2
-
             anchors {
                 right: parent.horizontalCenter
                 rightMargin: (-parent.height * 0.01) + (parent.height * 0.165)
                 bottom: parent.verticalCenter
                 bottomMargin: largeNumeralOffset
             }
-            smooth: true
             sourceSize: largeNumeralSize
             source: imgPath + hour.slice(0, 1) + ".svg"
         }
-
+        
         Image {
             id: colon
-
             anchors {
                 horizontalCenter: parent.horizontalCenter
                 bottom: parent.verticalCenter
                 bottomMargin: largeNumeralOffset
             }
-            smooth: true
             sourceSize: largeNumeralSize
             source: imgPath + "colon.svg"
         }
-
+        
         Image {
             id: minute1
-
             anchors {
                 left: parent.horizontalCenter
                 leftMargin: (parent.height * 0.155) + (-parent.height * 0.165)
                 bottom: parent.verticalCenter
                 bottomMargin: largeNumeralOffset
             }
-            smooth: true
             sourceSize: largeNumeralSize
             source: imgPath + minute.slice(0, 1) + ".svg"
         }
-
+        
         Image {
             id: minute2
-
             anchors {
                 left: parent.horizontalCenter
                 leftMargin: parent.height * 0.157
                 bottom: parent.verticalCenter
                 bottomMargin: largeNumeralOffset
             }
-            smooth: true
             sourceSize: largeNumeralSize
             source: imgPath + minute.slice(1, 2) + ".svg"
         }
     }
-
+    
     Item {
         id: digitalDate
-
         anchors.fill: parent
-
+        
         Image {
             id: day1
-
             anchors {
                 right: parent.horizontalCenter
                 rightMargin: parent.height * 0.288
                 top: parent.verticalCenter
                 topMargin: smallNumeralOffset
             }
-            smooth: true
             sourceSize: smallNumeralSize
             source: imgPath + month.slice(0, 1) + "-small.svg"
         }
-
+        
         Image {
             id: day2
-
             anchors {
                 right: parent.horizontalCenter
                 rightMargin: parent.height * 0.229
                 top: parent.verticalCenter
                 topMargin: smallNumeralOffset
             }
-            smooth: true
             sourceSize: smallNumeralSize
             source: imgPath + month.slice(1, 2) + "-small.svg"
         }
-
+        
         Image {
             id: hyphen
-
             anchors {
                 right: parent.horizontalCenter
                 rightMargin: parent.height * 0.17
                 top: parent.verticalCenter
                 topMargin: smallNumeralOffset
             }
-            smooth: true
             sourceSize: smallNumeralSize
             source: imgPath + "hyphen-small.svg"
         }
-
+        
         Image {
             id: month1
-
             anchors {
                 left: parent.horizontalCenter
                 leftMargin: -parent.height * 0.187
                 top: parent.verticalCenter
                 topMargin: smallNumeralOffset
             }
-            smooth: true
             sourceSize: smallNumeralSize
             source: imgPath + day.slice(0, 1) + "-small.svg"
         }
-
+        
         Image {
             id: month2
-
             anchors {
                 left: parent.horizontalCenter
                 leftMargin: -parent.height * 0.127
                 top: parent.verticalCenter
                 topMargin: smallNumeralOffset
             }
-            smooth: true
             sourceSize: smallNumeralSize
             source: imgPath + day.slice(1, 2) + "-small.svg"
         }
     }
-
+    
     Item {
         id: batteryDigits
-
         property string batteryChargeString: pad((batteryChargePercentage.percent), 3)
-
         anchors.fill: parent
-
+        
         Image {
             id: batDigit1
-
             anchors {
                 right: parent.horizontalCenter
                 rightMargin: parent.height * 0.021
                 top: parent.verticalCenter
                 topMargin: parent.height * 0.3
             }
-            smooth: true
             sourceSize: smallNumeralSize
             source: imgPath + batteryDigits.batteryChargeString.slice(0, 1) + "-small.svg"
         }
-
+        
         Image {
             id: batDigit2
-
             anchors {
                 horizontalCenter: parent.horizontalCenter
                 top: parent.verticalCenter
                 topMargin: parent.height * 0.3
             }
-            smooth: true
             sourceSize: smallNumeralSize
             source: imgPath + batteryDigits.batteryChargeString.slice(1, 2) + "-small.svg"
         }
-
+        
         Image {
             id: batDigit3
-
             anchors {
                 left: parent.horizontalCenter
                 leftMargin: parent.height * 0.021
                 top: parent.verticalCenter
                 topMargin: parent.height * 0.3
             }
-            smooth: true
             sourceSize: smallNumeralSize
             source: imgPath + batteryDigits.batteryChargeString.slice(2, 3) + "-small.svg"
         }
     }
-
+    
     Item {
         id: batterySegments
-
         anchors.fill: parent
-
+        
         layer {
             enabled: true
             samples: 4
-            smooth: true
             textureSize: Qt.size(root.width * 2, root.height * 2)
         }
-
+        
         Repeater {
             id: segmentedArc
-
+            
             property real inputValue: batteryChargePercentage.percent / 100
             property int segmentAmount: 5
             property int start: -159
@@ -273,14 +242,13 @@ Item {
             property bool clockwise: false
             property real arcStrokeWidth: 0.026
             property real scalefactor: 0.456 - (arcStrokeWidth / 2)
-
+            
             model: segmentAmount
-
+            
             Shape {
                 id: segment
-
                 visible: index === 0 ? true : (index / segmentedArc.segmentAmount) <= (segmentedArc.inputValue - 0.1)
-
+                
                 ShapePath {
                     fillColor: "transparent"
                     strokeColor: "green"
@@ -288,8 +256,8 @@ Item {
                     capStyle: ShapePath.FlatCap
                     joinStyle: ShapePath.MiterJoin
                     startX: parent.width / 2
-                    startY: parent.height * ( 0.5 - segmentedArc.scalefactor)
-
+                    startY: parent.height * (0.5 - segmentedArc.scalefactor)
+                    
                     PathAngleArc {
                         centerX: parent.width / 2
                         centerY: parent.height / 2
@@ -297,21 +265,21 @@ Item {
                         radiusY: segmentedArc.scalefactor * parent.height
                         startAngle: -90 + index * (sweepAngle + (segmentedArc.clockwise ? +segmentedArc.gap : -segmentedArc.gap)) + segmentedArc.start
                         sweepAngle: segmentedArc.clockwise ? (segmentedArc.endFromStart / segmentedArc.segmentAmount) - segmentedArc.gap :
-                                                             -(segmentedArc.endFromStart / segmentedArc.segmentAmount) + segmentedArc.gap
+                        -(segmentedArc.endFromStart / segmentedArc.segmentAmount) + segmentedArc.gap
                         moveToStart: true
                     }
                 }
             }
         }
     }
-
+    
     layer.enabled: true
     layer.effect: DropShadow {
         transparentBorder: true
         horizontalOffset: 0
         verticalOffset: 0
         radius: 10.0
-        samples: 21
+        samples: 9
         color: Qt.rgba(0, 0, 0, .75)
     }
 }
