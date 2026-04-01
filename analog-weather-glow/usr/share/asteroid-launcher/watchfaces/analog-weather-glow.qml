@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright (C) 2022 - Timo Könnecke <github.com/eLtMosen>
+ * Copyright (C) 2026 - Timo Könnecke <github.com/moWerk>
  *               2022 - Darrel Griët <dgriet@gmail.com>
  *               2022 - Ed Beroset <github.com/beroset>
  *               2016 - Sylvia van Os <iamsylvie@openmailbox.org>
@@ -89,10 +89,6 @@ Item {
     }*/
 
     // Request the heart rate related arcs to be repainted when hrm sensor is toggled.
-    onHrmSensorActiveChanged: {
-        hrmArc.requestPaint()
-        hrmSwitchArc.requestPaint()
-    }
 
     MceBatteryState {
         id: batteryChargeState
@@ -290,10 +286,9 @@ Item {
                 letterSpacing: -parent.width * .001
             }
             color: "#ccffffff"
-            text: if (use12H.value) {
-                      wallClock.time.toLocaleString(Qt.locale(), "hh ap").slice(0, 2)}
-                  else
-                      wallClock.time.toLocaleString(Qt.locale(), "HH")
+            text: use12H.value ?
+            wallClock.time.toLocaleString(Qt.locale(), "hh ap").slice(0, 2) :
+            wallClock.time.toLocaleString(Qt.locale(), "HH")
         }
 
         Text {
@@ -346,36 +341,25 @@ Item {
         height: width
         visible: (!displayAmbient || hrmSensorActive) && !dockMode.active
 
-        Canvas {
+        Rectangle {
             id: hrmSwitchArc
-
             anchors.fill: parent
+            color: "transparent"
             opacity: hrmSensorActive ? activeArcOpacity : inactiveArcOpacity
-            smooth: true
-            renderStrategy: Canvas.Cooperative
-            onPaint: {
-                var ctx = getContext("2d")  // Returns a drawing context on the canvas
-                ctx.reset()                 // Initialize and clear canvas
-                ctx.beginPath()
-                ctx.arc(parent.width / 2,   // x-coordinate of the center of the arc
-                        parent.height / 2,  // y-coordinate of the center of the arc
-                        parent.width * .44, // Radius of the arc
-                        270 * rad,          // Start angle in radians (0 is at the 3 o'clock position of the arc's circle)
-                        360,                // End angle in radians
-                        false);             // Counter clockwise?
-                ctx.lineWidth = innerArcLineWidth
-                ctx.strokeStyle = hrmSensorActive ? customRed : switchColor
-                ctx.fillStyle = "#22ffffff"
-                ctx.stroke()                // Draw a stroke along the arc with strokeStyle properties
-                ctx.fill()                  // Fill the arc area
-                ctx.closePath()
+            
+            Rectangle {
+                anchors.centerIn: parent
+                width: parent.width * .88
+                height: width
+                radius: width / 2
+                color: "#22ffffff"
+                border.width: innerArcLineWidth
+                border.color: hrmSensorActive ? customRed : switchColor
             }
-
+            
             MouseArea {
                 anchors.fill: parent
-                onClicked: {
-                   hrmSensorActive = !hrmSensorActive
-                }
+                onClicked: hrmSensorActive = !hrmSensorActive
             }
         }
 
@@ -444,42 +428,34 @@ Item {
 
         property bool weatherSynced: maxTemp.value != 0
 
-        Canvas {
+        Rectangle {
             id: weatherArc
-
-            anchors.fill: parent
+            anchors.centerIn: parent
+            width: parent.width * .86
+            height: width
+            radius: width / 2
+            color: "#22ffffff"
             opacity: inactiveArcOpacity
-            smooth: true
             visible: !dockMode.active
-            renderStrategy: Canvas.Cooperative
-            onPaint: {
-                var ctx = getContext("2d")
-                ctx.reset()
-                ctx.lineWidth = outerArcLineWidth
-                ctx.lineCap="round"
-                ctx.strokeStyle = "#33ffffff"
-                ctx.beginPath()
-                ctx.arc(parent.width / 2,
-                        parent.height / 2,
-                        parent.width * .43,
-                        270 * rad,
-                        360,
-                        false);
-                ctx.stroke()
-                ctx.closePath()
-                ctx.beginPath()
-                ctx.fillStyle = "#22ffffff"
-                ctx.arc(parent.width / 2,
-                        parent.height / 2,
-                        parent.width * .43,
-                        270 * rad,
-                        360,
-                        false);
-                ctx.strokeStyle = boxColor
-                ctx.lineWidth = innerArcLineWidth
-                ctx.stroke()
-                ctx.fill()
-                ctx.closePath()
+            
+            Rectangle {
+                anchors.centerIn: parent
+                width: parent.width
+                height: width
+                radius: width / 2
+                color: "transparent"
+                border.width: outerArcLineWidth
+                border.color: "#33ffffff"
+            }
+            
+            Rectangle {
+                anchors.centerIn: parent
+                width: parent.width
+                height: width
+                radius: width / 2
+                color: "transparent"
+                border.width: innerArcLineWidth
+                border.color: boxColor
             }
         }
 
@@ -541,42 +517,34 @@ Item {
         height: width
         visible: !hrmSensorActive
 
-        Canvas {
+        Rectangle {
             id: dayArc
-
-            anchors.fill: parent
+            anchors.centerIn: parent
+            width: parent.width * .86
+            height: width
+            radius: width / 2
+            color: "#22ffffff"
             opacity: inactiveArcOpacity
-            smooth: true
             visible: !dockMode.active
-            renderStrategy: Canvas.Cooperative
-            onPaint: {
-                var ctx = getContext("2d")
-                ctx.reset()
-                ctx.beginPath()
-                ctx.fillStyle = "#22ffffff"
-                ctx.arc(parent.width / 2,
-                        parent.height / 2,
-                        parent.width * .43,
-                        270 * rad,
-                        360,
-                        false);
-                ctx.strokeStyle = boxColor
-                ctx.lineWidth = innerArcLineWidth
-                ctx.stroke()
-                ctx.fill()
-                ctx.closePath()
-                ctx.lineWidth = outerArcLineWidth
-                ctx.lineCap="round"
-                ctx.strokeStyle = "#33ffffff"
-                ctx.beginPath()
-                ctx.arc(parent.width / 2,
-                        parent.height / 2,
-                        parent.width * .43,
-                        270 * rad,
-                        360,
-                        false);
-                ctx.stroke()
-                ctx.closePath()
+            
+            Rectangle {
+                anchors.centerIn: parent
+                width: parent.width
+                height: width
+                radius: width / 2
+                color: "transparent"
+                border.width: outerArcLineWidth
+                border.color: "#33ffffff"
+            }
+            
+            Rectangle {
+                anchors.centerIn: parent
+                width: parent.width
+                height: width
+                radius: width / 2
+                color: "transparent"
+                border.width: innerArcLineWidth
+                border.color: boxColor
             }
         }
 
@@ -641,7 +609,6 @@ Item {
             onReadingChanged: {
                 root.hrmBpm = reading.bpm;
                 root.hrmBpmTime = wallClock.time
-                hrmArc.requestPaint()
             }
         }
 
@@ -653,41 +620,33 @@ Item {
         height: width
         visible: hrmSensorActive
 
-        Canvas {
+        Rectangle {
             id: hrmArc
-
-            anchors.fill: parent
+            anchors.centerIn: parent
+            width: parent.width * .86
+            height: width
+            radius: width / 2
+            color: "#22ffffff"
             opacity: hrmSensorActive ? activeArcOpacity : inactiveArcOpacity
-            smooth: true
-            renderStrategy: Canvas.Cooperative
-            onPaint: {
-                var ctx = getContext("2d")
-                ctx.reset()
-                ctx.beginPath()
-                ctx.fillStyle = "#22ffffff"
-                ctx.arc(parent.width / 2,
-                        parent.height / 2,
-                        parent.width * .43,
-                        270 * rad,
-                        360,
-                        false);
-                ctx.strokeStyle = "#33ffffff"
-                ctx.lineWidth = innerArcLineWidth
-                ctx.stroke()
-                ctx.fill()
-                ctx.closePath()
-                ctx.lineWidth = outerArcLineWidth
-                ctx.lineCap="round"
-                ctx.strokeStyle = customRed
-                ctx.beginPath()
-                ctx.arc(parent.width / 2,
-                        parent.height / 2,
-                        parent.width * .43,
-                        270 * rad,
-                        360,
-                        false);
-                ctx.stroke()
-                ctx.closePath()
+            
+            Rectangle {
+                anchors.centerIn: parent
+                width: parent.width
+                height: width
+                radius: width / 2
+                color: "transparent"
+                border.width: outerArcLineWidth
+                border.color: customRed
+            }
+            
+            Rectangle {
+                anchors.centerIn: parent
+                width: parent.width
+                height: width
+                radius: width / 2
+                color: "transparent"
+                border.width: innerArcLineWidth
+                border.color: "#33ffffff"
             }
         }
 
@@ -758,9 +717,6 @@ Item {
         property bool btStatusOn: btStatus.powered
         property bool btStatusConnect: btStatus.connected
 
-        onBtStatusOnChanged: btSwitchArc.requestPaint()
-        onBtStatusConnectChanged: btSwitchArc.requestPaint()
-
         anchors {
             centerIn: root
             horizontalCenterOffset: -switchPosition
@@ -770,36 +726,25 @@ Item {
         height: width
         visible: (!displayAmbient || btStatusOn) && !dockMode.active
 
-        Canvas {
+        Rectangle {
             id: btSwitchArc
-
             anchors.fill: parent
-            smooth: true
+            color: "transparent"
             opacity: btStatus.powered ? activeArcOpacity : inactiveArcOpacity
-            renderStrategy: Canvas.Cooperative
-            onPaint: {
-                var ctx = getContext("2d")
-                ctx.reset()
-                ctx.beginPath()
-                ctx.fillStyle = "#22ffffff"
-                ctx.arc(parent.width / 2,
-                        parent.height / 2,
-                        parent.width * .44,
-                        270 * rad,
-                        360,
-                        false);
-                ctx.strokeStyle = btStatus.connected ? customBlue : switchColor
-                ctx.lineWidth = innerArcLineWidth
-                ctx.stroke()
-                ctx.fill()
-                ctx.closePath()
+            
+            Rectangle {
+                anchors.centerIn: parent
+                width: parent.width * .88
+                height: width
+                radius: width / 2
+                color: "#22ffffff"
+                border.width: innerArcLineWidth
+                border.color: btStatus.connected ? customBlue : switchColor
             }
-
+            
             MouseArea {
                 anchors.fill: parent
-                onClicked: {
-                   btStatus.powered = !btStatus.powered
-                }
+                onClicked: btStatus.powered = !btStatus.powered
             }
         }
 
@@ -831,8 +776,6 @@ Item {
 
         property bool wifiStatusOn: wifiStatus.powered
 
-        onWifiStatusOnChanged: wifiSwitchArc.requestPaint()
-
         anchors {
             centerIn: root
             horizontalCenterOffset: switchPosition
@@ -842,36 +785,25 @@ Item {
         height: width
         visible: (!displayAmbient || wifiStatusOn) && !dockMode.active
 
-        Canvas {
+        Rectangle {
             id: wifiSwitchArc
-
             anchors.fill: parent
+            color: "transparent"
             opacity: wifiStatus.powered ? activeArcOpacity : inactiveArcOpacity
-            smooth: true
-            renderStrategy: Canvas.Cooperative
-            onPaint: {
-                var ctx = getContext("2d")
-                ctx.reset()
-                ctx.beginPath()
-                ctx.fillStyle = "#22ffffff"
-                ctx.arc(parent.width / 2,
-                        parent.height / 2,
-                        parent.width * .44,
-                        270 * rad,
-                        360,
-                        false);
-                ctx.strokeStyle = switchColor
-                ctx.lineWidth = innerArcLineWidth
-                ctx.stroke()
-                ctx.fill()
-                ctx.closePath()
+            
+            Rectangle {
+                anchors.centerIn: parent
+                width: parent.width * .88
+                height: width
+                radius: width / 2
+                color: "#22ffffff"
+                border.width: innerArcLineWidth
+                border.color: switchColor
             }
-
+            
             MouseArea {
                 anchors.fill: parent
-                onClicked: {
-                   wifiStatus.powered = !wifiStatus.powered
-                }
+                onClicked: wifiStatus.powered = !wifiStatus.powered
             }
         }
 
@@ -911,7 +843,6 @@ Item {
 
             anchors.fill: parent
             opacity: activeArcOpacity
-            smooth: true
             renderStrategy: Canvas.Cooperative
             onPaint: {
                 var ctx = getContext("2d")
@@ -1068,10 +999,17 @@ Item {
         horizontalOffset: 1
         verticalOffset: 1
         radius: 6.0
-        samples: 13
+        samples: 9
         color: Qt.rgba(0, 0, 0, .7)
     }
-
+    
+    Connections {
+        target: wallClock
+        function onTimeChanged() {
+            if (!visible) return
+        }
+    }
+    
     Connections {
         target: compositor
         function onDisplayAmbientEntered() {
