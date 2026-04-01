@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2018 - Timo Könnecke <el-t-mo@arcor.de>
+ * Copyright (C) 2026 - Timo Könnecke <github.com/moWerk>
  *               2016 - Sylvia van Os <iamsylvie@openmailbox.org>
  *               2015 - Florent Revest <revestflo@gmail.com>
  *               2012 - Vasiliy Sorokin <sorokin.vasiliy@gmail.com>
@@ -26,7 +26,7 @@
  * emulated image/png shadow by redrawing path in canvas.
  */
 
-import QtQuick 2.1
+import QtQuick 2.9
 
 Item {
 
@@ -45,8 +45,7 @@ Item {
         z: 10
         id: logo
         source: "..//watchfaces-img/asteroid-logo.svg"
-        anchors.horizontalCenter: parent.horizontalCenter
-        anchors.verticalCenter: parent.verticalCenter
+        anchors.centerIn: parent
         width: parent.width/2.5
         height: parent.height/2.5
     }
@@ -143,47 +142,44 @@ Item {
         z: 3
         id: hourCanvas
         property var hour: 0
+        property var minute: 0
         anchors.fill: parent
-        smooth: true
         renderStrategy: Canvas.Cooperative
         onPaint: {
             var ctx = getContext("2d")
             prepareContext(ctx)
+            var rot = (hour - 3 + minute / 60) / 12
             ctx.beginPath()
             ctx.strokeStyle = Qt.rgba(1, 1, 1, 1)
             ctx.fillStyle = Qt.rgba(1, 1, 1, 1)
-
-            ctx.lineWidth = parent.width*0.048
-            ctx.moveTo(parent.width/2+Math.cos(((hour-3 + wallClock.time.getMinutes()/60) / 12) * 2 * Math.PI)*width*0.13,
-                       parent.height/2+Math.sin(((hour-3 + wallClock.time.getMinutes()/60) / 12) * 2 * Math.PI)*width*0.13)
-            ctx.lineTo(parent.width/2+Math.cos(((hour-3 + wallClock.time.getMinutes()/60) / 12) * 2 * Math.PI)*width*0.255,
-                       parent.height/2+Math.sin(((hour-3 + wallClock.time.getMinutes()/60) / 12) * 2 * Math.PI)*width*0.255)
+            ctx.lineWidth = parent.width * 0.048
+            ctx.moveTo(parent.width / 2 + Math.cos(rot * 2 * Math.PI) * width * 0.13,
+                       parent.height / 2 + Math.sin(rot * 2 * Math.PI) * width * 0.13)
+            ctx.lineTo(parent.width / 2 + Math.cos(rot * 2 * Math.PI) * width * 0.255,
+                       parent.height / 2 + Math.sin(rot * 2 * Math.PI) * width * 0.255)
             ctx.stroke()
             ctx.closePath()
             ctx.beginPath()
-
-
-            ctx.lineWidth = parent.width*0.024
-            ctx.moveTo(parent.width/2+Math.cos(((hour-3.35 + wallClock.time.getMinutes()/60) / 12) * 2 * Math.PI)*width*0.336,
-                       parent.height/2+Math.sin(((hour-3.35 + wallClock.time.getMinutes()/60) / 12) * 2 * Math.PI)*width*0.336)
-            ctx.lineTo(parent.width/2+Math.cos(((hour-3 + wallClock.time.getMinutes()/60) / 12) * 2 * Math.PI)*width*0.388,
-                       parent.height/2+Math.sin(((hour-3 + wallClock.time.getMinutes()/60) / 12) * 2 * Math.PI)*width*0.388)
-            ctx.lineTo(parent.width/2+Math.cos(((hour-2.65 + wallClock.time.getMinutes()/60) / 12) * 2 * Math.PI)*width*0.336,
-                       parent.height/2+Math.sin(((hour-2.65 + wallClock.time.getMinutes()/60) / 12) * 2 * Math.PI)*width*0.336)
-            ctx.lineTo(parent.width/2+Math.cos(((hour-3 + wallClock.time.getMinutes()/60) / 12) * 2 * Math.PI)*width*0.27,
-                       parent.height/2+Math.sin(((hour-3 + wallClock.time.getMinutes()/60) / 12) * 2 * Math.PI)*width*0.27)
-            ctx.lineTo(parent.width/2+Math.cos(((hour-3.35 + wallClock.time.getMinutes()/60) / 12) * 2 * Math.PI)*width*0.336,
-                       parent.height/2+Math.sin(((hour-3.35 + wallClock.time.getMinutes()/60) / 12) * 2 * Math.PI)*width*0.336)
+            ctx.lineWidth = parent.width * 0.024
+            ctx.moveTo(parent.width / 2 + Math.cos(((hour - 3.35 + minute / 60) / 12) * 2 * Math.PI) * width * 0.336,
+                       parent.height / 2 + Math.sin(((hour - 3.35 + minute / 60) / 12) * 2 * Math.PI) * width * 0.336)
+            ctx.lineTo(parent.width / 2 + Math.cos(rot * 2 * Math.PI) * width * 0.393,
+                       parent.height / 2 + Math.sin(rot * 2 * Math.PI) * width * 0.393)
+            ctx.lineTo(parent.width / 2 + Math.cos(((hour - 2.65 + minute / 60) / 12) * 2 * Math.PI) * width * 0.336,
+                       parent.height / 2 + Math.sin(((hour - 2.65 + minute / 60) / 12) * 2 * Math.PI) * width * 0.336)
+            ctx.lineTo(parent.width / 2 + Math.cos(rot * 2 * Math.PI) * width * 0.27,
+                       parent.height / 2 + Math.sin(rot * 2 * Math.PI) * width * 0.27)
+            ctx.lineTo(parent.width / 2 + Math.cos(((hour - 3.35 + minute / 60) / 12) * 2 * Math.PI) * width * 0.336,
+                       parent.height / 2 + Math.sin(((hour - 3.35 + minute / 60) / 12) * 2 * Math.PI) * width * 0.336)
             ctx.stroke()
             ctx.closePath()
             ctx.beginPath()
-
-            ctx.lineWidth = parent.width*0.05
+            ctx.lineWidth = parent.width * 0.05
             ctx.shadowColor = Qt.rgba(0, 0, 0, 0.0)
-            ctx.moveTo(parent.width/2+Math.cos(((hour-3 + wallClock.time.getMinutes()/60) / 12) * 2 * Math.PI)*width*0.13,
-                       parent.height/2+Math.sin(((hour-3 + wallClock.time.getMinutes()/60) / 12) * 2 * Math.PI)*width*0.13)
-            ctx.lineTo(parent.width/2+Math.cos(((hour-3 + wallClock.time.getMinutes()/60) / 12) * 2 * Math.PI)*width*0.28,
-                       parent.height/2+Math.sin(((hour-3 + wallClock.time.getMinutes()/60) / 12) * 2 * Math.PI)*width*0.28)
+            ctx.moveTo(parent.width / 2 + Math.cos(rot * 2 * Math.PI) * width * 0.13,
+                       parent.height / 2 + Math.sin(rot * 2 * Math.PI) * width * 0.13)
+            ctx.lineTo(parent.width / 2 + Math.cos(rot * 2 * Math.PI) * width * 0.28,
+                       parent.height / 2 + Math.sin(rot * 2 * Math.PI) * width * 0.28)
             ctx.stroke()
             ctx.closePath()
         }
@@ -264,19 +260,21 @@ Item {
     Connections {
         target: wallClock
         function onTimeChanged() {
-            var hour = wallClock.time.getHours()
-            var minute = wallClock.time.getMinutes()
-            var second = wallClock.time.getSeconds()
-
-            if(minuteCanvas.minute != minute) {
-                minuteCanvas.minute = minute
-                minuteCanvas.requestPaint()
-                hourCanvas.hour = hour
-                hourCanvas.requestPaint()
-            } if(secondCanvas.second != second) {
-                secondCanvas.second = second
-                secondCanvas.requestPaint()
-            }
+            if (!visible) return
+                var hour = wallClock.time.getHours()
+                var minute = wallClock.time.getMinutes()
+                var second = wallClock.time.getSeconds()
+                if (minuteCanvas.minute !== minute) {
+                    minuteCanvas.minute = minute
+                    minuteCanvas.requestPaint()
+                    hourCanvas.hour = hour
+                    hourCanvas.minute = minute
+                    hourCanvas.requestPaint()
+                }
+                if (secondCanvas.second !== second) {
+                    secondCanvas.second = second
+                    secondCanvas.requestPaint()
+                }
         }
     }
 
@@ -285,6 +283,7 @@ Item {
         var minute = wallClock.time.getMinutes()
         var second = wallClock.time.getSeconds()
         hourCanvas.hour = hour
+        hourCanvas.minute = minute
         hourCanvas.requestPaint()
         minuteCanvas.minute = minute
         minuteCanvas.requestPaint()
