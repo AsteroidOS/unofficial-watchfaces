@@ -28,87 +28,102 @@
  * Permission is for non-commercial, community-driven distribution within the AsteroidOS unofficial-watchfaces repository.
  */
 
-import QtQuick 2.1
+import QtQuick 2.9
 
 Item {
-
+    id: root
+    
+    // invisible dark layer used as alpha mask source for the shader knockout effect
     Rectangle {
         id: layer2mask
-        width: parent.width; height: parent.height
+        anchors.fill: parent
         color: Qt.rgba(0, 0, 0, 0.7)
-        visible: true
         opacity: 0.0
         layer.enabled: true
-        layer.smooth: true
     }
-
+    
     Rectangle {
         id: _mask
         anchors.fill: layer2mask
-        color: Qt.rgba(0, 0, 0, 0)
-        visible: true
-
+        
         Text {
             renderType: Text.NativeRendering
-            font.pixelSize: parent.height*0.66
-            font.family: "Lexend"
-            font.styleName: "Black"
+            font {
+                pixelSize: parent.height * 0.66
+                family: "Lexend"
+                styleName: "Black"
+            }
             color: Qt.rgba(1, 1, 1, 1)
-            anchors.top: parent.top
-            anchors.topMargin: -parent.height*0.16
-            anchors.horizontalCenter: parent.horizontalCenter
+            anchors {
+                top: parent.top
+                topMargin: -parent.height * 0.16
+                horizontalCenter: parent.horizontalCenter
+            }
             text: wallClock.time.toLocaleString(Qt.locale(), "HH")
         }
-
+        
         Text {
             renderType: Text.NativeRendering
-            font.pixelSize: parent.height*0.66
-            font.family: "Lexend"
-            font.styleName: "Black"
+            font {
+                pixelSize: parent.height * 0.66
+                family: "Lexend"
+                styleName: "Black"
+            }
             color: Qt.rgba(1, 1, 1, 1)
-            anchors.bottom: parent.bottom
-            anchors.bottomMargin: -parent.height*0.16
-            anchors.horizontalCenter: parent.horizontalCenter
+            anchors {
+                bottom: parent.bottom
+                bottomMargin: -parent.height * 0.16
+                horizontalCenter: parent.horizontalCenter
+            }
             text: wallClock.time.toLocaleString(Qt.locale(), "mm")
         }
-
+        
         layer.enabled: true
         layer.samplerName: "maskSource"
         layer.effect: ShaderEffect {
             property variant source: layer2mask
             fragmentShader: "
-                    varying highp vec2 qt_TexCoord0;
-                    uniform highp float qt_Opacity;
-                    uniform lowp sampler2D source;
-                    uniform lowp sampler2D maskSource;
-                    void main(void) {
-                        gl_FragColor = texture2D(source, qt_TexCoord0.st) * (1.0-texture2D(maskSource, qt_TexCoord0.st).a) * qt_Opacity;
-                    }
-                "
+            varying highp vec2 qt_TexCoord0;
+            uniform highp float qt_Opacity;
+            uniform lowp sampler2D source;
+            uniform lowp sampler2D maskSource;
+            void main(void) {
+            gl_FragColor = texture2D(source, qt_TexCoord0.st) * (1.0-texture2D(maskSource, qt_TexCoord0.st).a) * qt_Opacity;
+        }
+        "
         }
     }
-
+    
+    // cyan ghost text visible through the knockout — gives the SFOS glow effect
     Text {
         renderType: Text.NativeRendering
-        font.pixelSize: parent.height*0.66
-        font.family: "Lexend"
-        font.styleName: "Black"
+        font {
+            pixelSize: parent.height * 0.66
+            family: "Lexend"
+            styleName: "Black"
+        }
         color: Qt.rgba(0, 0.937, 0.937, 0.4)
-        anchors.top: parent.top
-        anchors.topMargin: -parent.height*0.16
-        anchors.horizontalCenter: parent.horizontalCenter
+        anchors {
+            top: parent.top
+            topMargin: -parent.height * 0.16
+            horizontalCenter: parent.horizontalCenter
+        }
         text: wallClock.time.toLocaleString(Qt.locale(), "HH")
     }
-
+    
     Text {
         renderType: Text.NativeRendering
-        font.pixelSize: parent.height*0.66
-        font.family: "Lexend"
-        font.styleName: "Black"
+        font {
+            pixelSize: parent.height * 0.66
+            family: "Lexend"
+            styleName: "Black"
+        }
         color: Qt.rgba(0, 0.937, 0.937, 0.4)
-        anchors.bottom: parent.bottom
-        anchors.bottomMargin: -parent.height*0.16
-        anchors.horizontalCenter: parent.horizontalCenter
+        anchors {
+            bottom: parent.bottom
+            bottomMargin: -parent.height * 0.16
+            horizontalCenter: parent.horizontalCenter
+        }
         text: wallClock.time.toLocaleString(Qt.locale(), "mm")
     }
 }
