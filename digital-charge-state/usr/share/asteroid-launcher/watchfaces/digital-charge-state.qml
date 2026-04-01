@@ -49,19 +49,22 @@ Item {
             pixelSize: parent.height * 0.06
         }
         color: "white"
-        text: wallClock.time.toLocaleString(Qt.locale(), "ddd dd");
+        text: wallClock.time.toLocaleString(Qt.locale(), "ddd dd")
     }
 
     Text {
         id: time
-        anchors.centerIn: parent
+        anchors {
+            centerIn: parent
+            verticalCenterOffset: parent.height * 0.02
+        }
         font {
             family: "Titillium"
             weight: Font.Thin
             pixelSize: parent.height * 0.30
         }
         color: "white"
-        text: wallClock.time.toLocaleString(Qt.locale(), (use12H.value ? "hhmm ap" : "HHmm")).slice(0,4);
+        text: wallClock.time.toLocaleString(Qt.locale(), (use12H.value ? "hhmm ap" : "HHmm")).slice(0,4)
     }
 
     Text {
@@ -77,7 +80,7 @@ Item {
             pixelSize: parent.height * 0.05
         }
         color: "white"
-        text: wallClock.time.toLocaleString(Qt.locale(), "ap");
+        text: wallClock.time.toLocaleString(Qt.locale(), "ap")
     }
 
 
@@ -86,11 +89,10 @@ Item {
         property real angle: batteryChargePercentage.percent * 360 / 100
         // radius of arc is scalefactor * height or width
         property real scalefactor: 0.46
-        property var chargecolor: Math.floor(batteryChargePercentage.percent / 33.35)
+        property int chargecolor: Math.floor(batteryChargePercentage.percent / 33.35)
         visible: true // batteryChargeState.value == MceBatteryState.Charging
         opacity: displayAmbient ? 0.5 : 1.0
         anchors.fill: parent
-        smooth: true
         readonly property var colorArray: [ "red", "yellow", Qt.rgba(0.318, 1, 0.051, 0.9)]
         ShapePath {
             fillColor: "transparent"
@@ -118,5 +120,21 @@ Item {
 
     MceBatteryState {
         id: batteryChargeState
-    } 
+    }
+    
+    Connections {
+        target: wallClock
+        onTimeChanged: {
+            if (!visible) return
+                datetext.text = wallClock.time.toLocaleString(Qt.locale(), "ddd dd")
+                time.text = wallClock.time.toLocaleString(Qt.locale(), use12H.value ? "hhmm ap" : "HHmm").slice(0, 4)
+                ampm.text = wallClock.time.toLocaleString(Qt.locale(), "ap")
+        }
+    }
+    
+    Component.onCompleted: {
+        datetext.text = wallClock.time.toLocaleString(Qt.locale(), "ddd dd")
+        time.text = wallClock.time.toLocaleString(Qt.locale(), use12H.value ? "hhmm ap" : "HHmm").slice(0, 4)
+        ampm.text = wallClock.time.toLocaleString(Qt.locale(), "ap")
+    }
 }
