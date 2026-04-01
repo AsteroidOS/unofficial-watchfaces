@@ -34,7 +34,7 @@
  * Calculated ctx.shadows with variable px size for better display in watchface-settings
  */
 
-import QtQuick 2.1
+import QtQuick 2.9
 
 Item {
     function twoDigits(x) {
@@ -44,14 +44,13 @@ Item {
 
     function prepareContext(ctx) {
         ctx.reset()
-        ctx.reset()
         ctx.fillStyle = "white"
         ctx.textAlign = "center"
-        ctx.textBaseline = 'middle';
+        ctx.textBaseline = "middle"
         ctx.shadowColor = Qt.rgba(0, 0, 0, 0.80)
-        ctx.shadowOffsetX = parent.height*0.00625
-        ctx.shadowOffsetY = parent.height*0.00625 //2 px on 320x320
-        ctx.shadowBlur = parent.height*0.0156  //5 px on 320x320
+        ctx.shadowOffsetX = parent.height * 0.00625
+        ctx.shadowOffsetY = parent.height * 0.00625
+        ctx.shadowBlur = parent.height * 0.0156
     }
 
     Canvas {
@@ -61,7 +60,7 @@ Item {
         smooth: true
         renderStrategy: Canvas.Cooperative
 
-        property var hour: 0
+        property real hour: 0
 
         onPaint: {
             var ctx = getContext("2d")
@@ -79,7 +78,7 @@ Item {
         smooth: true
         renderStrategy: Canvas.Cooperative
 
-        property var minute: 0
+        property real minute: 0
 
         onPaint: {
             var ctx = getContext("2d")
@@ -99,7 +98,7 @@ Item {
         smooth: true
         renderStrategy: Canvas.Cooperative
 
-        property var second: 0
+        property real second: 0
 
         onPaint: {
             var ctx = getContext("2d")
@@ -123,7 +122,7 @@ Item {
         renderStrategy: Canvas.Cooperative
         visible: use12H.value
 
-        property var am: false
+        property bool am: false
 
         onPaint: {
             var ctx = getContext("2d")
@@ -146,7 +145,7 @@ Item {
         smooth: true
         renderStrategy: Canvas.Cooperative
 
-        property var date: 0
+        property real date: 0
 
         onPaint: {
             var ctx = getContext("2d")
@@ -170,7 +169,7 @@ Item {
         smooth: true
         renderStrategy: Canvas.Cooperative
 
-        property var date: 0
+        property real date: 0
 
         onPaint: {
             var ctx = getContext("2d")
@@ -190,33 +189,38 @@ Item {
     Connections {
         target: wallClock
         function onTimeChanged() {
-            var hour = wallClock.time.getHours()
-            var minute = wallClock.time.getMinutes()
-            var second = wallClock.time.getSeconds()
-            var date = wallClock.time.getDate()
-            var am = hour < 12
-            if(use12H.value) {
-                hour = hour % 12
-                if (hour == 0) hour = 12;
-            }
-            if(minuteCanvas.minute != minute) {
-                minuteCanvas.minute = minute
-                minuteCanvas.requestPaint()
-                hourCanvas.hour = hour
-                hourCanvas.requestPaint()
-            } if(secondCanvas.second != second) {
-                secondCanvas.second = second
-                secondCanvas.requestPaint()
-            } if(dateCanvas.date != date) {
-                dateCanvas.date = date
-                dateCanvas.requestPaint()
-            } if(monthCanvas.date != date) {
-                monthCanvas.date = date
-                monthCanvas.requestPaint()
-            } if(amPmCanvas.am != am) {
-                amPmCanvas.am = am
-                amPmCanvas.requestPaint()
-            }
+            if (!visible) return
+                var hour = wallClock.time.getHours()
+                var minute = wallClock.time.getMinutes()
+                var second = wallClock.time.getSeconds()
+                var date = wallClock.time.getDate()
+                var am = hour < 12
+                if (use12H.value) {
+                    hour = hour % 12
+                    if (hour === 0) hour = 12
+                }
+                if (minuteCanvas.minute !== minute) {
+                    minuteCanvas.minute = minute
+                    minuteCanvas.requestPaint()
+                    hourCanvas.hour = hour
+                    hourCanvas.requestPaint()
+                }
+                if (secondCanvas.second !== second) {
+                    secondCanvas.second = second
+                    secondCanvas.requestPaint()
+                }
+                if (dateCanvas.date !== date) {
+                    dateCanvas.date = date
+                    dateCanvas.requestPaint()
+                }
+                if (monthCanvas.date !== date) {
+                    monthCanvas.date = date
+                    monthCanvas.requestPaint()
+                }
+                if (amPmCanvas.am !== am) {
+                    amPmCanvas.am = am
+                    amPmCanvas.requestPaint()
+                }
         }
     }
 
