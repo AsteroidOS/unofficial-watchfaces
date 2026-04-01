@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2022 - Timo Könnecke <github.com/eLtMosen>
+ * Copyright (C) 2026 - Timo Könnecke <github.com/moWerk>
  *               2016 - Sylvia van Os <iamsylvie@openmailbox.org>
  *               2015 - Florent Revest <revestflo@gmail.com>
  *               2012 - Vasiliy Sorokin <sorokin.vasiliy@gmail.com>
@@ -21,7 +21,7 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-import QtQuick 2.15
+import QtQuick 2.9
 import QtGraphicalEffects 1.15
 
 Item {
@@ -31,68 +31,87 @@ Item {
 
     Image {
         id: hourSVG
-
         anchors.centerIn: root
         source: imgPath + "hour.svg"
         width: root.width
         height: root.height
-
         transform: Rotation {
+            id: hourRot
             origin.x: root.width / 2
             origin.y: root.height / 2
-            angle: (wallClock.time.getHours() * 30) + (wallClock.time.getMinutes() * .5)
+        }
+        layer.enabled: true
+        layer.effect: DropShadow {
+            transparentBorder: true
+            horizontalOffset: 0
+            verticalOffset: 0
+            radius: 8.0
+            samples: 9
+            color: "#66fbfb"
         }
     }
-
+    
     Image {
         id: minuteSVG
-
         anchors.centerIn: root
         source: imgPath + "minute.svg"
         width: root.width
         height: root.height
-
         transform: Rotation {
+            id: minuteRot
             origin.x: root.width / 2
             origin.y: root.height / 2
-            angle: (wallClock.time.getMinutes() * 6)+(wallClock.time.getSeconds() * 6 / 60)
+        }
+        layer.enabled: true
+        layer.effect: DropShadow {
+            transparentBorder: true
+            horizontalOffset: 0
+            verticalOffset: 0
+            radius: 8.0
+            samples: 9
+            color: "#66fbfb"
         }
     }
-
+    
     Image {
         id: secondSVG
-
         anchors.centerIn: root
         source: imgPath + "second.svg"
         width: root.width
         height: root.height
         visible: !displayAmbient
-
         transform: Rotation {
+            id: secondRot
             origin.x: root.width / 2
             origin.y: root.height / 2
-            angle: (wallClock.time.getSeconds() * 6)
-
-            Behavior on angle {
-                enabled: !displayAmbient
-
-                RotationAnimation {
-                    duration: 1000
-                    direction: RotationAnimation.Clockwise
-                }
-            }
         }
     }
-
-    layer {
-        enabled: true
-        effect: DropShadow {
-            transparentBorder: true
-            horizontalOffset: 0
-            verticalOffset: 0
-            radius: 8.0
-            samples: 12
-            color: "#66fbfb"
+    
+    Timer {
+        interval: 16
+        repeat: true
+        running: !displayAmbient && visible
+        onTriggered: {
+            var now = new Date()
+            secondRot.angle = (now.getSeconds() * 1000 + now.getMilliseconds()) * 6 / 1000
         }
+    }
+    
+    Connections {
+        target: wallClock
+        onTimeChanged: {
+            if (!visible) return
+                var h = wallClock.time.getHours()
+                var min = wallClock.time.getMinutes()
+                hourRot.angle = h * 30 + min * .5
+                minuteRot.angle = min * 6 + (wallClock.time.getSeconds() * 6 / 60)
+        }
+    }
+    
+    Component.onCompleted: {
+        var h = wallClock.time.getHours()
+        var min = wallClock.time.getMinutes()
+        hourRot.angle = h * 30 + min * .5
+        minuteRot.angle = min * 6 + (wallClock.time.getSeconds() * 6 / 60)
     }
 }
