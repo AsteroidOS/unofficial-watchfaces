@@ -1,5 +1,6 @@
 /*
- * Copyright (C) 2022 - Ivo Hulsman <github.com/ivohulsman>
+ * Copyright (C) 2026 - Timo Könnecke <github.com/moWerk>
+ *               2022 - Ivo Hulsman <github.com/ivohulsman>
  *               2021 - Timo Könnecke <github.com/eLtMosen>
  *               2016 - Sylvia van Os <iamsylvie@openmailbox.org>
  *               2015 - Florent Revest <revestflo@gmail.com>
@@ -22,7 +23,7 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-import QtQuick 2.1
+import QtQuick 2.9
 import QtGraphicalEffects 1.15
 import Nemo.Mce 1.0
 
@@ -30,9 +31,12 @@ Item {
     id: root
     property string imgPath: "../watchfaces-img/analog-commander-"
     property real rad: 0.01745
+    property int currentMonth: 0
+    
     MceBatteryLevel {
         id: batteryChargePercentage
     }
+    
     Repeater {
         model: 60
         id: minuteStrokes
@@ -46,7 +50,7 @@ Item {
                            centerX+Math.cos(rotM * 2 * Math.PI) * parent.width * 0.388
             y: index % 5 ? centerY+Math.sin(rotM * 2 * Math.PI) * parent.height * 0.430 :
                            centerY+Math.sin(rotM * 2 * Math.PI) * parent.height * 0.388
-            color: index % 5 ? "#ff949494" : "#ff949494"
+            color: "#ff949494"
             radius: 60
             opacity: (index%5)==0 && displayAmbient ? 0.2
                    : (index%5)==0 ? 0.6
@@ -177,7 +181,7 @@ Repeater {
                 centerIn: parent
                 verticalCenterOffset: -parent.height * -1.000
             }
-            text: "<b>AsteroidOS</b><br>Hack Your Wrist"
+            text: "<b>AsteroidOS</b><br>Free Your Wrist"
         }
 
         MouseArea {
@@ -188,7 +192,7 @@ Repeater {
 
     Item {
         id: monthBox
-        property var month: wallClock.time.toLocaleString(Qt.locale(), "mm")
+        property var month: wallClock.time.toLocaleString(Qt.locale(), "MM")
         onMonthChanged: monthArc.requestPaint()
         anchors {
             centerIn: parent
@@ -202,7 +206,6 @@ Repeater {
             id: monthArc
             opacity: !displayAmbient ? 1 : 0.3
             anchors.fill: parent
-            smooth: true
             onPaint: {
                 var ctx = getContext("2d")
                 ctx.reset()
@@ -239,8 +242,7 @@ Repeater {
             Text {
                 z: 2
                 id: monthStrokes
-                property bool currentMonthHighlight: Number(wallClock.time.toLocaleString(Qt.locale(), "MM")) === index ||
-                                                     Number(wallClock.time.toLocaleString(Qt.locale(), "MM")) === index + 12
+                property bool currentMonthHighlight: root.currentMonth === index || root.currentMonth === index + 12
                 antialiasing: true
                 font {
                     pixelSize: currentMonthHighlight ?
@@ -309,7 +311,6 @@ Repeater {
             opacity: !displayAmbient ? 0.8 : 0.3
             property var hour: 0
             anchors.fill: parent
-            smooth: true
             onPaint: {
                 var ctx = getContext("2d")
                 ctx.reset()
@@ -424,75 +425,90 @@ Repeater {
 
         Image {
             id: hourSVG
-
             z: 3
             source: imgPath + "hour.svg"
             anchors.fill: parent
-
             transform: Rotation {
+                id: hourRot
                 origin.x: parent.width / 2
                 origin.y: parent.height / 2
-                angle: (wallClock.time.getHours()*30) + (wallClock.time.getMinutes() * 0.5)
             }
-
             layer.enabled: true
             layer.effect: DropShadow {
                 transparentBorder: true
                 horizontalOffset: 2
                 verticalOffset: 2
                 radius: 5.0
-                samples: 11
+                samples: 9
                 color: Qt.rgba(0, 0, 0, .2)
             }
         }
-
+        
         Image {
             id: minuteSVG
-
             z: 4
             source: imgPath + "minute.svg"
             anchors.fill: parent
-
             transform: Rotation {
+                id: minuteRot
                 origin.x: parent.width / 2
                 origin.y: parent.height / 2
-                angle: (wallClock.time.getMinutes()*6)+(wallClock.time.getSeconds() * 6 / 60)
             }
-
             layer.enabled: true
             layer.effect: DropShadow {
                 transparentBorder: true
                 horizontalOffset: 3
                 verticalOffset: 3
                 radius: 6.0
-                samples: 13
+                samples: 9
                 color: Qt.rgba(0, 0, 0, .3)
             }
         }
-
+        
         Image {
             id: secondSVG
-
             z: 5
             visible: !displayAmbient
             source: imgPath + "second.svg"
             anchors.fill: parent
-
             transform: Rotation {
+                id: secondRot
                 origin.x: parent.width / 2
                 origin.y: parent.height / 2
-                angle: (wallClock.time.getSeconds() * 6)
             }
-
             layer.enabled: true
             layer.effect: DropShadow {
                 transparentBorder: true
                 horizontalOffset: 4
                 verticalOffset: 4
                 radius: 8.0
-                samples: 17
+                samples: 9
                 color: Qt.rgba(0, 0, 0, .3)
             }
         }
+    }
+    
+    Connections {
+        target: wallClock
+        onTimeChanged: {
+            if (!visible) return
+                var h = wallClock.time.getHours()
+                var min = wallClock.time.getMinutes()
+                var sec = wallClock.time.getSeconds()
+                hourRot.angle = h * 30 + min * .5
+                minuteRot.angle = min * 6 + sec * 6 / 60
+                secondRot.angle = sec * 6
+                root.currentMonth = Number(wallClock.time.toLocaleString(Qt.locale(), "MM"))
+        }
+    }
+    
+    Component.onCompleted: {
+        var h = wallClock.time.getHours()
+        var min = wallClock.time.getMinutes()
+        var sec = wallClock.time.getSeconds()
+        hourRot.angle = h * 30 + min * .5
+        minuteRot.angle = min * 6 + sec * 6 / 60
+        secondRot.angle = sec * 6
+        root.currentMonth = Number(wallClock.time.toLocaleString(Qt.locale(), "MM"))
     }
 }
