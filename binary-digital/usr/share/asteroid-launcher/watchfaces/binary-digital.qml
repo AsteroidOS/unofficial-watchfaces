@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2018 - Timo Könnecke <el-t-mo@arcor.de>
+ * Copyright (C) 2026 - Timo Könnecke <github.com/moWerk>
  *               2016 - Sylvia van Os <iamsylvie@openmailbox.org>
  *               2015 - Florent Revest <revestflo@gmail.com>
  *               2012 - Vasiliy Sorokin <sorokin.vasiliy@gmail.com>
@@ -27,9 +27,8 @@
 
 import QtQuick 2.1
 
-Rectangle {
+Item {
     id: root
-    color:"transparent"
     width: parent.width
     height: width
     property int radius: Math.min(root.width / 24, root.height / 16)
@@ -109,10 +108,9 @@ Rectangle {
                 verticalCenterOffset: parent.height * .038
                 horizontalCenterOffset: -parent.height * .235 + hoffset
             }
-            text: if (use12H.value) {
-                      wallClock.time.toLocaleString(Qt.locale(), "hh ap").slice(0, 2)}
-                  else
-                      wallClock.time.toLocaleString(Qt.locale(), "HH")
+            text: use12H.value ?
+            wallClock.time.toLocaleString(Qt.locale(), "hh ap").slice(0, 2) :
+            wallClock.time.toLocaleString(Qt.locale(), "HH")
         }
 
         Text {
@@ -128,6 +126,13 @@ Rectangle {
                 horizontalCenterOffset: parent.height * .235 + hoffset
             }
             text: wallClock.time.toLocaleString(Qt.locale(), "mm")
+        }
+    }
+    
+    Connections {
+        target: wallClock
+        function onTimeChanged() {
+            if (!visible) return
         }
     }
 }
