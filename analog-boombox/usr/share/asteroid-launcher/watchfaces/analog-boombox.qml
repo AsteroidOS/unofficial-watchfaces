@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2022 - Timo Könnecke <github.com/eLtMosen>
+ * Copyright (C) 2026 - Timo Könnecke <github.com/moWerk>
  *               2016 - Sylvia van Os <iamsylvie@openmailbox.org>
  *               2015 - Florent Revest <revestflo@gmail.com>
  *               2012 - Vasiliy Sorokin <sorokin.vasiliy@gmail.com>
@@ -45,41 +45,35 @@ Item {
 
         Image {
             id: secondSVG
-
             visible: !displayAmbient
             source: imgPath + "second.svg"
             anchors.fill: parent
-
             transform: Rotation {
+                id: secondRot
                 origin.x: parent.width / 2
                 origin.y: parent.height / 2
-                angle: (wallClock.time.getSeconds() * 6)
             }
         }
-
+        
         Image {
             id: minuteSVG
-
             source: imgPath + "minute.svg"
             anchors.fill: parent
-
             transform: Rotation {
+                id: minuteRot
                 origin.x: parent.width / 2
                 origin.y: parent.height / 2
-                angle: (wallClock.time.getMinutes() * 6) + (wallClock.time.getSeconds() * 6 / 60)
             }
         }
-
+        
         Image {
             id: hourSVG
-
-            source:imgPath + "hour.svg"
+            source: imgPath + "hour.svg"
             anchors.fill: parent
-
             transform: Rotation {
+                id: hourRot
                 origin.x: parent.width / 2
                 origin.y: parent.height / 2
-                angle: (wallClock.time.getHours() * 30) + (wallClock.time.getMinutes() * .5)
             }
         }
 
@@ -93,7 +87,7 @@ Item {
                 horizontalOffset: 0
                 verticalOffset: 0
                 radius: 10.0
-                samples: 21
+                samples: 9
                 color: Qt.rgba(0, 0, 0, .4)
             }
         }
@@ -101,40 +95,26 @@ Item {
 
     Text {
         id: hourDisplay
-
-        property real rotH: (wallClock.time.getHours() - 3 + wallClock.time.getMinutes() / 60) / 12
-        property real centerX: parent.width / 2 - width / 2
-        property real centerY: parent.height / 2 - height / 2.04
-
+        
         font {
             pixelSize: parent.height * .114
             family: "Dangrek"
             letterSpacing: -parent.height * .003
         }
         color: "black"
-        x: centerX + Math.cos(rotH * 2 * Math.PI) * parent.height * .204
-        y: centerY + Math.sin(rotH * 2 * Math.PI) * parent.width * .204
-        text: if (use12H.value) {
-                  wallClock.time.toLocaleString(Qt.locale(), "hh ap").slice(0, 2) }
-              else
-                  wallClock.time.toLocaleString(Qt.locale(), "HH")
+        text: use12H.value ? wallClock.time.toLocaleString(Qt.locale(), "hh ap").slice(0, 2) :
+        wallClock.time.toLocaleString(Qt.locale(), "HH")
     }
-
+    
     Text {
         id: minuteDisplay
-
-        property real rotM: ((wallClock.time.getMinutes() - 15 + (wallClock.time.getSeconds() / 60)) / 60)
-        property real centerX: parent.width / 2 - width / 2
-        property real centerY: parent.height / 2 - height / 2.04
-
-        font{
+        
+        font {
             pixelSize: parent.height * .114
             family: "Dangrek"
             letterSpacing: -parent.height * .003
         }
         color: "black"
-        x: centerX + Math.cos(rotM * 2 * Math.PI) * parent.height * .369
-        y: centerY + Math.sin(rotM * 2 * Math.PI) * parent.width * .369
         text: wallClock.time.toLocaleString(Qt.locale(), "mm")
     }
 
@@ -191,5 +171,39 @@ Item {
                 }
             }
         }
+    }
+    
+    Connections {
+        target: wallClock
+        onTimeChanged: {
+            if (!visible) return
+                var h = wallClock.time.getHours()
+                var min = wallClock.time.getMinutes()
+                var sec = wallClock.time.getSeconds()
+                hourRot.angle = h * 30 + min * .5
+                minuteRot.angle = min * 6 + sec * 6 / 60
+                secondRot.angle = sec * 6
+                var rotH = (h - 3 + min / 60) / 12
+                var rotM = (min - 15 + sec / 60) / 60
+                hourDisplay.x = root.width / 2 - hourDisplay.width / 2 + Math.cos(rotH * 2 * Math.PI) * root.height * .204
+                hourDisplay.y = root.height / 2 - hourDisplay.height / 2.04 + Math.sin(rotH * 2 * Math.PI) * root.width * .204
+                minuteDisplay.x = root.width / 2 - minuteDisplay.width / 2 + Math.cos(rotM * 2 * Math.PI) * root.height * .369
+                minuteDisplay.y = root.height / 2 - minuteDisplay.height / 2.04 + Math.sin(rotM * 2 * Math.PI) * root.width * .369
+        }
+    }
+    
+    Component.onCompleted: {
+        var h = wallClock.time.getHours()
+        var min = wallClock.time.getMinutes()
+        var sec = wallClock.time.getSeconds()
+        hourRot.angle = h * 30 + min * .5
+        minuteRot.angle = min * 6 + sec * 6 / 60
+        secondRot.angle = sec * 6
+        var rotH = (h - 3 + min / 60) / 12
+        var rotM = (min - 15 + sec / 60) / 60
+        hourDisplay.x = root.width / 2 - hourDisplay.width / 2 + Math.cos(rotH * 2 * Math.PI) * root.height * .204
+        hourDisplay.y = root.height / 2 - hourDisplay.height / 2.04 + Math.sin(rotH * 2 * Math.PI) * root.width * .204
+        minuteDisplay.x = root.width / 2 - minuteDisplay.width / 2 + Math.cos(rotM * 2 * Math.PI) * root.height * .369
+        minuteDisplay.y = root.height / 2 - minuteDisplay.height / 2.04 + Math.sin(rotM * 2 * Math.PI) * root.width * .369
     }
 }
