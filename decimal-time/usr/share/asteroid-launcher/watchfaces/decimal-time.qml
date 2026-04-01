@@ -16,7 +16,7 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-import QtQuick 2.1
+import QtQuick 2.9
 
 Item {
     // these three constants describe decimal time
@@ -85,7 +85,7 @@ Item {
             opacity: 0.6
             visible: !displayAmbient
             width: parent.width*0.005
-            height: parent.width*(index % majorMinuteTicksEvery == 0 ? 0.030 : 0.015)
+            height: parent.width*(index % majorMinuteTicksEvery === 0 ? 0.030 : 0.015)
         }
     }
 
@@ -134,17 +134,17 @@ Item {
         antialiasing: true
         opacity: displayAmbient ? 0.6 : 1.0
         source: "../watchfaces-img/asteroid-logo.svg"
-        width: parent.width/12
+        width: parent.width / 12
         height: width
-        transform : [
+        transform: [
             Rotation {
-                origin.x : logoAsteroid.width/2
-                origin.y : logoAsteroid.height + parent.width * 0.275
-                angle: getDecimalHours(wallClock.time) * 360 * revolutionsPerDay / decimalHoursPerStandardDay
+                id: logoRot
+                origin.x: logoAsteroid.width / 2
+                origin.y: logoAsteroid.height + parent.width * 0.275
             },
             Translate {
-                x: (parent.width - logoAsteroid.width)/2
-                y: parent.height/2 - logoAsteroid.height - parent.width * 0.275
+                x: (parent.width - logoAsteroid.width) / 2
+                y: parent.height / 2 - logoAsteroid.height - parent.width * 0.275
             }
         ]
     }
@@ -164,10 +164,8 @@ Item {
     PlainText {
         id: conventionalTime
         anchors.verticalCenterOffset: +parent.width*0.18
-        text: if (use12H.value)
-                  wallClock.time.toLocaleString(Qt.locale(), "hh:mm:ss ap")
-              else
-                  wallClock.time.toLocaleString(Qt.locale(), "HH:mm:ss")
+        text: use12H.value ? wallClock.time.toLocaleString(Qt.locale(), "hh:mm:ss ap") :
+        wallClock.time.toLocaleString(Qt.locale(), "HH:mm:ss")
     }
 
     PlainText {
@@ -186,7 +184,7 @@ Item {
 
     Timer {
         id: decimalSecondsTimer
-        running: true
+        running: !displayAmbient && visible
         repeat: true
         interval: getStandardMillisecondsToNextDecimalSecond()
         onTriggered: function() {
@@ -194,5 +192,17 @@ Item {
             // Math.max to prevent rapid double firing in case it fires just before the boundary
             interval = Math.max(100, getStandardMillisecondsToNextDecimalSecond())
         }
+    }
+    
+    Connections {
+        target: wallClock
+        function onTimeChanged() {
+            if (!visible) return
+                logoRot.angle = getDecimalHours(wallClock.time) * 360 * revolutionsPerDay / decimalHoursPerStandardDay
+        }
+    }
+    
+    Component.onCompleted: {
+        logoRot.angle = getDecimalHours(wallClock.time) * 360 * revolutionsPerDay / decimalHoursPerStandardDay
     }
 }
