@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2021 - Timo Könnecke <github.com/eLtMosen>
+ * Copyright (C) 2026 - Timo Könnecke <github.com/moWerk>
  *
  * All rights reserved.
  *
@@ -80,13 +80,7 @@ Item {
         color: "#22ffffff"
         anchors {
             left: topRight.right
-            leftMargin: hourLeadingOne ?
-                            hourEndingOne ?
-                                -parent.width * 0.096 :
-                                parent.width * 0.02 :
-                            hourEndingOne ?
-                                -parent.width * 0.096 :
-                                parent.width * 0.02
+            leftMargin: hourEndingOne ? -parent.width * 0.096 : parent.width * 0.02
             bottom: topRight.bottom
             bottomMargin: parent.width * 0.038
         }
@@ -106,7 +100,6 @@ Item {
         id: topLeft
         z: 1
         visible: false
-        smooth: true
         fillMode: Image.PreserveAspectFit
         anchors {
             right: parent.horizontalCenter
@@ -128,7 +121,6 @@ Item {
         id: topRight
         z: 2
         visible: false
-        smooth: true
         fillMode: Image.PreserveAspectFit
         anchors {
             left: topLeft.right
@@ -154,7 +146,6 @@ Item {
         id: bottomLeft
         z: 3
         visible: false
-        smooth: true
         fillMode: Image.PreserveAspectFit
         anchors {
             right: parent.horizontalCenter
@@ -173,7 +164,6 @@ Item {
         id: bottomRight
         z: 4
         visible: false
-        smooth: true
         fillMode: Image.PreserveAspectFit
         anchors {
             left: bottomLeft.right
@@ -254,7 +244,6 @@ Item {
     LinearGradient {
         id: blueColor
         anchors.fill: parent
-        smooth: true
         visible: false
         start: Qt.point(800, 0)
         end: Qt.point(0, 0)
@@ -267,7 +256,6 @@ Item {
     LinearGradient {
         id: pinkColor
         anchors.fill: parent
-        smooth: true
         visible: false
         start: Qt.point(800, 0)
         end: Qt.point(0, 0)
