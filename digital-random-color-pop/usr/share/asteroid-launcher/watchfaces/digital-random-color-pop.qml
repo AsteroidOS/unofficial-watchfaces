@@ -65,7 +65,7 @@ Item {
         ["#2C2C54", "#846C5B", "#F15BB5", "#00B8F5"], ["#0D1B2A", "#1B263B", "#415A77", "#778DA9"],
         ["#CC444B", "#DA5552", "#DF7373", "#E39695"], ["#504136", "#A49E8D", "#689689", "#65CDA9"]
     ]
-    property int randomScheme: Math.random() * colorSchemes.length
+    property int randomScheme: Math.floor(Math.random() * colorSchemes.length)
     property int previousScheme: 0
 
     Image {
@@ -373,7 +373,7 @@ Item {
             }
         }
 
-        onSourceChanged: root.randomScheme = Math.random() * colorSchemes.length
+    onSourceChanged: root.randomScheme = Math.floor(Math.random() * colorSchemes.length)
     }
 
     Image {
@@ -562,7 +562,6 @@ Item {
         id: topLeftGradient
 
         anchors.fill: parent
-        smooth: true
         visible: false
         start: Qt.point(parent.width * .24, parent.height * .24)
         end: Qt.point(parent.width * .7, parent.height * .7)
@@ -576,7 +575,6 @@ Item {
         id: topRightGradient
 
         anchors.fill: parent
-        smooth: true
         visible: false
         start: Qt.point(parent.width * .24, parent.height * .24)
         end: Qt.point(parent.width * .8, parent.height * .8)
@@ -590,7 +588,6 @@ Item {
         id: bottomLeftGradient
 
         anchors.fill: parent
-        smooth: true
         visible: false
         start: Qt.point(parent.width * .24, parent.height * .24)
         end: Qt.point(parent.width * .6, parent.height * .6)
@@ -604,7 +601,6 @@ Item {
         id: bottomRightGradient
 
         anchors.fill: parent
-        smooth: true
         visible: false
         start: Qt.point(parent.width * .24, parent.height * .24)
         end: Qt.point(parent.width * .6, parent.height * .6)
@@ -618,7 +614,6 @@ Item {
         id: topLeftGradientDate
 
         anchors.fill: parent
-        smooth: true
         visible: false
         start: Qt.point(parent.width * .24, parent.height * .24)
         end: Qt.point(parent.width, parent.height)
@@ -632,7 +627,6 @@ Item {
         id: topRightGradientDate
 
         anchors.fill: parent
-        smooth: true
         visible: false
         start: Qt.point(parent.width * .24, parent.height * .24)
         end: Qt.point(parent.width, parent.height)
@@ -646,7 +640,6 @@ Item {
         id: bottomLeftGradientDate
 
         anchors.fill: parent
-        smooth: true
         visible: false
         start: Qt.point(parent.width * .24, parent.height * .24)
         end: Qt.point(parent.width, parent.height)
@@ -660,7 +653,6 @@ Item {
         id: bottomRightGradientDate
 
         anchors.fill: parent
-        smooth: true
         visible: false
         start: Qt.point(parent.width * .24, parent.height * .24)
         end: Qt.point(parent.width, parent.height)
@@ -728,7 +720,7 @@ Item {
         horizontalOffset: 0
         verticalOffset: 0
         radius: 15.0
-        samples: 31
+        samples: 17
         color: Qt.rgba(0, 0, 0, .3)
     }
 }
