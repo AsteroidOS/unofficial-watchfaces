@@ -171,39 +171,35 @@ Item {
 
             onDayChanged: dayArc.requestPaint()
 
+            // Static circle base
+            Rectangle {
+                anchors.centerIn: parent
+                width: parent.width * .9
+                height: width
+                radius: width / 2
+                color: "#22ffffff"
+                border.width: root.height * .002
+                border.color: lowColor
+                opacity: !displayAmbient ? 1 : .3
+            }
+            
             Canvas {
                 id: dayArc
-
-                opacity: !displayAmbient ? 1 : .3
                 anchors.fill: parent
-                smooth: true
+                opacity: !displayAmbient ? 1 : .3
                 renderStrategy: Canvas.Cooperative
                 onPaint: {
                     var ctx = getContext("2d")
+                    var day = wallClock.time.getDay()
                     ctx.reset()
-                    ctx.beginPath()
-                    ctx.fillStyle = "#22ffffff"
-                    ctx.arc(parent.width / 2,
-                            parent.height / 2,
-                            parent.width * .45,
-                            270 * rad,
-                            360,
-                            false);
-                    ctx.strokeStyle = lowColor
-                    ctx.lineWidth = root.height * .002
-                    ctx.stroke()
-                    ctx.fill()
-                    ctx.closePath()
                     ctx.lineWidth = root.height * .005
-                    ctx.lineCap="round"
+                    ctx.lineCap = "round"
                     ctx.strokeStyle = accColor
                     ctx.beginPath()
-                    ctx.arc(parent.width / 2,
-                            parent.height / 2,
+                    ctx.arc(parent.width / 2, parent.height / 2,
                             parent.width * .456,
                             169 * rad,
-                            ((wallClock.time.getDay() / 7 * 360) + 169) * rad,
-                            false);
+                            ((day / 7 * 360) + 169) * rad, false)
                     ctx.stroke()
                     ctx.closePath()
                 }
@@ -265,8 +261,8 @@ Item {
         Item {
             id: monthBox
 
-            property var month: wallClock.time.toLocaleString(Qt.locale(), "mm")
-
+            property var month: wallClock.time.toLocaleString(Qt.locale(), "MM")
+            
             onMonthChanged: monthArc.requestPaint()
 
             anchors {
@@ -278,39 +274,35 @@ Item {
             height: width
             visible: !nightstandMode.active
 
+            // Static circle base
+            Rectangle {
+                anchors.centerIn: parent
+                width: parent.width * .9
+                height: width
+                radius: width / 2
+                color: "#22ffffff"
+                border.width: root.height * .002
+                border.color: lowColor
+                opacity: !displayAmbient ? 1 : .3
+            }
+            
             Canvas {
                 id: monthArc
-
                 anchors.fill: parent
                 opacity: !displayAmbient ? 1 : .3
-                smooth: true
                 renderStrategy: Canvas.Cooperative
                 onPaint: {
                     var ctx = getContext("2d")
+                    var m = Number(wallClock.time.toLocaleString(Qt.locale(), "MM"))
                     ctx.reset()
-                    ctx.beginPath()
-                    ctx.fillStyle = "#22ffffff"
-                    ctx.arc(parent.width / 2,
-                            parent.height / 2,
-                            parent.width * .45,
-                            270 * rad,
-                            360,
-                            false);
-                    ctx.strokeStyle = lowColor
-                    ctx.lineWidth = root.height * .002
-                    ctx.stroke()
-                    ctx.fill()
-                    ctx.closePath()
                     ctx.lineWidth = root.height * .005
-                    ctx.lineCap="round"
+                    ctx.lineCap = "round"
                     ctx.strokeStyle = accColor
                     ctx.beginPath()
-                    ctx.arc(parent.width / 2,
-                            parent.height / 2,
+                    ctx.arc(parent.width / 2, parent.height / 2,
                             parent.width * .456,
                             270 * rad,
-                            ((wallClock.time.toLocaleString(Qt.locale(),"MM") / 12 * 360) + 270) * rad,
-                            false);
+                            ((m / 12 * 360) + 270) * rad, false)
                     ctx.stroke()
                     ctx.closePath()
                 }
@@ -467,7 +459,7 @@ Item {
             horizontalOffset: 2
             verticalOffset: 2
             radius: 10.0
-            samples: 21
+            samples: 13
             color: Qt.rgba(0, 0, 0, .8)
         }
     }
@@ -542,7 +534,7 @@ Item {
                 horizontalOffset: 6
                 verticalOffset: 6
                 radius: 8.0
-                samples: 17
+                samples: 9
                 color: Qt.rgba(0, 0, 0, .3)
             }
         }
@@ -557,5 +549,12 @@ Item {
         radius: 8.0
         samples: 17
         color: Qt.rgba(0, 0, 0, .3)
+    }
+    
+    Connections {
+        target: wallClock
+        function onTimeChanged() {
+            if (!visible) return
+        }
     }
 }
