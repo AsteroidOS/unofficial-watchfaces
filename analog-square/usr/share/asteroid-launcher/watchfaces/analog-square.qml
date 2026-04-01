@@ -17,7 +17,7 @@
 * along with this program. If not, see <http://www.gnu.org/licenses/>.
 */
 
-import QtQuick 2.1
+import QtQuick 2.15
 
 Item {
     property string imgPath: "../watchfaces-img/analog-square-"
@@ -41,7 +41,7 @@ Item {
     Component {
         id: minute_pip
         Rectangle {
-            property bool major: index % 5 == 2
+            property bool major: index % 5 === 2
             property int quadrant: index / 15
             property int rotangle: 48 + 6 * index
             property real degrees: rotangle + (quadrant & 1 ? 90 : 0)
@@ -86,10 +86,9 @@ Item {
         id: digitalDisplay
         font.pixelSize: parent.height/14
         anchors.top: dayDisplay.bottom
-        text: if (use12H.value) {
-                  wallClock.time.toLocaleString(Qt.locale(), "hh ap").slice(0, 2) + wallClock.time.toLocaleString(Qt.locale(), ":mm") }
-              else
-                  wallClock.time.toLocaleString(Qt.locale(), "HH:mm")
+        text: use12H.value ? wallClock.time.toLocaleString(Qt.locale(), "hh ap").slice(0, 2) + wallClock.time.toLocaleString(Qt.locale(), ":mm") :
+        wallClock.time.toLocaleString(Qt.locale(), "HH:mm")
+        
     }
 
     WatchText {
