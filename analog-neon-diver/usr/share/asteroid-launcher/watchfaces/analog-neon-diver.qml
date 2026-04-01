@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2021 - Timo Könnecke <github.com/eLtMosen>
+ * Copyright (C) 2026 - Timo Könnecke <github.com/moWerk>
  *               2016 - Sylvia van Os <iamsylvie@openmailbox.org>
  *               2015 - Florent Revest <revestflo@gmail.com>
  *               2012 - Vasiliy Sorokin <sorokin.vasiliy@gmail.com>
@@ -43,7 +43,7 @@ Item {
             horizontalOffset: 0
             verticalOffset: 0
             radius: 12.0
-            samples: 14
+            samples: 9
             color: Qt.rgba(0, 1, 1, 0.3)
         }
         Image {
@@ -62,7 +62,7 @@ Item {
                 horizontalOffset: 0
                 verticalOffset: 0
                 radius: 12.0
-                samples: 14
+                samples: 9
                 color: hourSVG.toggle24h ? Qt.rgba(0.01, 0.91, 0.14, 0.3) : Qt.rgba(0, 1, 1, 0.3)
             }
         }
@@ -207,7 +207,7 @@ Item {
             horizontalOffset: 4
             verticalOffset: 4
             radius: 10.0
-            samples: 12
+            samples: 9
             color: Qt.rgba(0, 0, 0, 0.4)
         }
         MouseArea {
@@ -231,12 +231,6 @@ Item {
             origin.x: parent.width / 2
             origin.y: parent.height / 2
             angle: (wallClock.time.getMinutes() * 6) + (wallClock.time.getSeconds() * 6 / 60)
-            Behavior on angle {
-                RotationAnimation {
-                    duration: 1000
-                    direction: RotationAnimation.Clockwise
-                }
-            }
         }
         layer.enabled: true
         layer.effect: DropShadow {
@@ -244,7 +238,7 @@ Item {
             horizontalOffset: 5
             verticalOffset: 5
             radius: 11.0
-            samples: 13
+            samples: 9
             color: Qt.rgba(0, 0, 0, 0.4)
         }
     }
@@ -269,8 +263,13 @@ Item {
             horizontalOffset: 8
             verticalOffset: 8
             radius: 10.0
-            samples: 12
+            samples: 9
             color: Qt.rgba(0, 0, 0, 0.4)
         }
+    }
+    
+    Connections {
+        target: wallClock
+        function onTimeChanged() { if (!visible) return }
     }
 }
