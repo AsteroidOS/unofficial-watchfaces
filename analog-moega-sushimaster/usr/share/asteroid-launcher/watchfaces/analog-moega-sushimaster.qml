@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2022 - Timo Könnecke <github.com/eLtMosen>
+ * Copyright (C) 2026 - Timo Könnecke <github.com/moWerk>
  *               2016 - Sylvia van Os <iamsylvie@openmailbox.org>
  *               2015 - Florent Revest <revestflo@gmail.com>
  *               2012 - Vasiliy Sorokin <sorokin.vasiliy@gmail.com>
@@ -29,7 +29,8 @@ Item {
     id: root
 
     property string imgPath: "../watchfaces-img/analog-moega-sushimaster-"
-
+    property string lowColor: "#55ffffff"
+    
     anchors.fill: parent
 
     Item {
@@ -157,19 +158,14 @@ Item {
                 horizontalOffset: 4
                 verticalOffset: 4
                 radius: 8.0
-                samples: 17
+                samples: 9
                 color: Qt.rgba(0, 0, 0, .3)
             }
         }
-
-        layer.enabled: true
-        layer.effect: DropShadow {
-            transparentBorder: true
-            horizontalOffset: 4
-            verticalOffset: 4
-            radius: 10.0
-            samples: 21
-            color: Qt.rgba(0, 0, 0, .6)
-        }
+    }
+    
+    Connections {
+        target: wallClock
+        function onTimeChanged() { if (!visible) return }
     }
 }
