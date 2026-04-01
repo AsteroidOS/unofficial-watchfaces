@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2021 - Timo Könnecke <github.com/eLtMosen>
+ * Copyright (C) 2026 - Timo Könnecke <github.com/moWerk>
  *               2016 - Sylvia van Os <iamsylvie@openmailbox.org>
  *               2015 - Florent Revest <revestflo@gmail.com>
  *               2012 - Vasiliy Sorokin <sorokin.vasiliy@gmail.com>
@@ -43,10 +43,9 @@ Item {
             horizontalCenter: parent.horizontalCenter
             verticalCenterOffset: -parent.width/4.9
         }
-        text: if (use12H.value) {
-                  wallClock.time.toLocaleString(Qt.locale(), "hh ap").slice(0, 2) + wallClock.time.toLocaleString(Qt.locale(), ":mm") }
-              else
-                  wallClock.time.toLocaleString(Qt.locale(), "HH:mm")
+        text: use12H.value ?
+        wallClock.time.toLocaleString(Qt.locale(), "hh ap").slice(0, 2) + wallClock.time.toLocaleString(Qt.locale(), ":mm") :
+        wallClock.time.toLocaleString(Qt.locale(), "HH:mm")
         state: currentColor
         states: State { name: "black";
             PropertyChanges { target: digitalDisplay; color: "black" }
@@ -85,9 +84,8 @@ Item {
     Text {
         z: 0
         id: apDisplay
-        property int day: wallClock.time.toLocaleString(Qt.locale(), "d")
-        property int month: wallClock.time.toLocaleString(Qt.locale(), "M")
-        font.pixelSize: parent.height*0.07
+        visible: use12H.value
+        font.pixelSize: parent.height * 0.07
         font.family: "PTSans"
         font.styleName: "Bold"
         color: "white"
@@ -149,9 +147,9 @@ Item {
             z: 1
             id: hourDots
             antialiasing : true
-            property var rotM: ((index * 5 ) - 15)/60
-            property var centerX: parent.width/2-width/2
-            property var centerY: parent.height/2-height/2
+            property real rotM: ((index * 5 ) - 15)/60
+            property real centerX: parent.width/2-width/2
+            property real centerY: parent.height/2-height/2
             x: centerX+Math.cos(rotM * 2 * Math.PI)*parent.width*0.29
             y: centerY+Math.sin(rotM * 2 * Math.PI)*parent.width*0.29
             color: "white"
@@ -175,9 +173,9 @@ Item {
             z: 1
             id: minuteStrokes
             antialiasing : true
-            property var rotM: ((index) - 15)/60
-            property var centerX: parent.width/2-width/2
-            property var centerY: parent.height/2-height/2
+            property real rotM: ((index) - 15)/60
+            property real centerX: parent.width/2-width/2
+            property real centerY: parent.height/2-height/2
             x: centerX+Math.cos(rotM * 2 * Math.PI)*parent.width*0.29
             y: centerY+Math.sin(rotM * 2 * Math.PI)*parent.width*0.29
             color: "white"
@@ -202,16 +200,13 @@ Item {
             id: hourNumbers
             font.pixelSize: parent.height*0.14
             font.family: "RussoOne"
-            property var rotM: ((index * 15 ) - 15)/60
-            property var centerX: parent.width/2-width/2
-            property var centerY: parent.height/2-height/2
+            property real rotM: ((index * 15 ) - 15)/60
+            property real centerX: parent.width/2-width/2
+            property real centerY: parent.height/2-height/2
             x: centerX+Math.cos(rotM * 2 * Math.PI)*parent.width*0.4
             y: centerY+Math.sin(rotM * 2 * Math.PI)*parent.width*0.4
             color: "white"
-            text: if (index === 0)
-                      12
-                  else
-                      index*3
+            text: index === 0 ? 12 : index * 3
             state: currentColor
             states: State { name: "black";
                 PropertyChanges { target: hourNumbers; color: "black" }
@@ -229,16 +224,13 @@ Item {
             z: 1
             id: hourStrokes
             antialiasing : true
-            property var rotM: ((index * 5 ) - 15)/60
-            property var centerX: parent.width/2-width/2
-            property var centerY: parent.height/2-height/2
+            property real rotM: ((index * 5 ) - 15)/60
+            property real centerX: parent.width/2-width/2
+            property real centerY: parent.height/2-height/2
             x: centerX+Math.cos(rotM * 2 * Math.PI)*parent.width*0.4
             y: centerY+Math.sin(rotM * 2 * Math.PI)*parent.width*0.4
             color: "white"
-            opacity: if ([0, 3, 6, 9].includes(index))
-                         0
-                     else
-                         1
+            opacity: [0, 3, 6, 9].includes(index) ? 0 : 1
             width: parent.width*0.014
             height: parent.height*0.1
             radius: width*0.5
@@ -311,6 +303,11 @@ Item {
                 }
             }
         }
+    }
+    
+    Connections {
+        target: wallClock
+        function onTimeChanged() { if (!visible) return }
     }
 
     Connections {
