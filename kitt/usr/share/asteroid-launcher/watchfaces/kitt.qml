@@ -1,4 +1,6 @@
 /*
+ * Copyright (C) 2016 - Velox <github.com/velox>
+ * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as
  * published by the Free Software Foundation, either version 2.1 of the
@@ -13,7 +15,7 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-import QtQuick 2.1
+import QtQuick 2.9
 import Nemo.Mce 1.0
 import org.asteroid.controls 1.0
 import org.asteroid.utils 1.0
@@ -21,7 +23,6 @@ import QtSensors 5.11
 
 Item {
     id: watchFace
-    property var time: wallClock.time //new Date() //
     property string imgPath: "../watchfaces-img/"
 
     FontLoader { id: localFont
@@ -38,55 +39,73 @@ Item {
 
     Item {
         id: lcdArea
-        anchors.horizontalCenter: parent.horizontalCenter
-        anchors.top: parent.top
-        anchors.topMargin: parent.height * 0.22
+        anchors{
+            horizontalCenter: parent.horizontalCenter
+            top: parent.top
+            topMargin: parent.height * 0.22
+        }
         height: parent.height * 0.26
         width: parent.width * 0.68
 
         Text {
             id: dateDisplay
-            font { family: localFont.name; pixelSize:parent.width*0.1;capitalization: Font.Capitalize }
+            font {
+                family: localFont.name
+                pixelSize: parent.width * 0.1
+                capitalization: Font.Capitalize
+            }
             color: "black"
             style: Text.Outline; styleColor: Qt.rgba(255,255,255,0.5)
             opacity: 0.9
             horizontalAlignment: Text.AlignHCenter
-            anchors.horizontalCenter: parent.horizontalCenter
-            anchors.bottom: parent.bottom
-            anchors.bottomMargin: parent.height*0.05
-            text: watchFace.time.toLocaleString(Qt.locale(), "<b>ddd</b> d MMM")
+            anchors{ 
+                horizontalCenter: parent.horizontalCenter
+                bottom: parent.bottom
+                bottomMargin: parent.height*0.05
+            }
+            text: wallClock.time.toLocaleString(Qt.locale(), "<b>ddd</b> d MMM")
         }
 
         Item {
             id: timeRow
             width: parent.width * 0.9
             height: parent.width * 0.8
-            anchors.topMargin: parent.width * 0.02
-            anchors.top: parent.top
-            anchors.horizontalCenter: parent.horizontalCenter
+            anchors{
+                topMargin: parent.width * 0.02
+                top: parent.top
+                horizontalCenter: parent.horizontalCenter
+            }
             Text {
                 id: timeDisplay
                 anchors.left: parent.left
                 anchors.top: parent.top
-                font { family: localFont.name; pixelSize:parent.width*0.35;capitalization: Font.Capitalize }
+                font {
+                    family: localFont.name
+                    pixelSize: parent.width * 0.35
+                    capitalization: Font.Capitalize
+                }
                 color: "black"
-                style: Text.Outline; styleColor: Qt.rgba(255,255,255,0.5)
+                style: Text.Outline
+                styleColor: Qt.rgba(255, 255, 255, 0.5)
                 opacity: 0.9
                 horizontalAlignment: Text.AlignHCenter
-                text: if (use12H.value)
-                          wallClock.time.toLocaleString(Qt.locale(), "hh:mm ap").slice(0, 5)
-                      else
-                          wallClock.time.toLocaleString(Qt.locale(), "HH:mm")
-
+                text: use12H.value ? wallClock.time.toLocaleString(Qt.locale(), "hh:mm ap").slice(0, 5) :
+                wallClock.time.toLocaleString(Qt.locale(), "HH:mm")
             }
 
             Text {
                 id: secondsDisplay
-                anchors.topMargin: parent.width * 0.01
-                anchors.right: parent.right
-                anchors.top: parent.top
+                anchors {
+                    topMargin: parent.width * 0.01
+                    right: parent.right
+                    top: parent.top
+                }
                 text: wallClock.time.toLocaleString(Qt.locale(), "ss")
-                font { family: localFont.name; pixelSize:timeDisplay.font.pixelSize * 0.5; capitalization: Font.Capitalize }
+                font {
+                    family: localFont.name
+                    pixelSize: timeDisplay.font.pixelSize * 0.5
+                    capitalization: Font.Capitalize
+                }
                 color: timeDisplay.color
                 style: timeDisplay.style
                 styleColor: timeDisplay.styleColor
@@ -103,9 +122,11 @@ Item {
         height: parent.width  * 0.115
         Rectangle {
             color: batteryChargePercentage.percent < 50 ? 'red': 'green'
-            anchors.top: parent.top
-            anchors.left: parent.left
-            anchors.bottom: parent.bottom
+            anchors{
+                top: parent.top
+                left: parent.left
+                bottom: parent.bottom
+            }
             width: batteryChargePercentage.percent * parent.width/100
             opacity: 0.5
         }
@@ -118,7 +139,7 @@ Item {
             anchors.verticalCenter: parent.verticalCenter
             opacity: 0.4
             rotation: 270
-            visible: batteryChargeState.value == MceBatteryState.Charging
+            visible: batteryChargeState.value === MceBatteryState.Charging
         }
     }
 
@@ -183,7 +204,7 @@ Item {
     } 
 
     Compass {
-        active: true
+        active: visible
         onReadingChanged: {
             compassRotateImage.rotation = -reading.azimuth
         }
