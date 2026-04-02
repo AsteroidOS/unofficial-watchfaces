@@ -16,18 +16,17 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-import QtQuick 2.2
+import QtQuick 2.9
 
 Rectangle {
     id: root
-    property int hours: (h=>use12H.value?h%12:h)(wallClock.time.getHours())
+    property int hours: use12H.value ? wallClock.time.getHours() % 12 : wallClock.time.getHours()
     property int mins: wallClock.time.getMinutes()
     property int secs: wallClock.time.getSeconds()
-    property real dotSize: width*0.01
-    property real dotSpacing: dotSize*0.8
+    property real dotSize: width * 0.01
+    property real dotSpacing: dotSize * 0.8
     color: "transparent"
-    width: parent.width
-    height: parent.height
+    anchors.fill: parent
     Component {
         id: dot
         Rectangle {
