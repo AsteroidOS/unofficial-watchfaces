@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2021 - Timo Könnecke <github.com/eLtMosen>
+ * Copyright (C) 2026 - Timo Könnecke <github.com/moWerk>
  *
  * All rights reserved.
  *
@@ -22,8 +22,8 @@ import QtGraphicalEffects 1.15
 
 Item {
     id: root
-    property var topbottomMargin: root.height*0.022
-    property var leftrightMargin: -root.height*0.018
+    property real topbottomMargin: root.height * 0.022
+    property real leftrightMargin: -root.height * 0.018
     property var numeralSize: Qt.size(root.width*0.32, root.height*0.32)
     property string imagePath: "../watchfaces-img/digital-numeral-unity-"
 
@@ -80,8 +80,8 @@ Item {
         transparentBorder: true
         horizontalOffset: 0
         verticalOffset: 0
-        radius: 40.0
-        samples: 20
+        radius: 30.0
+        samples: 9
         color: Qt.rgba(0, 255, 255, 0.5)
     }
 }
