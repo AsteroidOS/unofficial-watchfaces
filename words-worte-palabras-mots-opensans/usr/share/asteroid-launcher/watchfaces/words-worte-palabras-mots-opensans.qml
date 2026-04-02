@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2022 - Timo Könnecke <github.com/eLtMosen>
+ * Copyright (C) 2026 - Timo Könnecke <github.com/moWerk>
  *               2022 - Darrel Griët <dgriet@gmail.com>
  *               2022 - Ed Beroset <github.com/beroset>
  *               2016 - Sylvia van Os <iamsylvie@openmailbox.org>
@@ -283,8 +283,6 @@ Item {
         }
     }
 
-
-
     Item {
         id: nightstandMode
 
@@ -295,8 +293,6 @@ Item {
         layer {
             enabled: true
             samples: 4
-            smooth: true
-            textureSize: Qt.size(nightstandMode.width * 2, nightstandMode.height * 2)
         }
         visible: nightstandMode.active
 
@@ -311,7 +307,7 @@ Item {
             property bool clockwise: true
             property real arcStrokeWidth: .024
             property real scalefactor: .45 - (arcStrokeWidth / 2)
-            property real chargecolor: Math.floor(batteryChargePercentage.percent / 33.35)
+            property int chargecolor: Math.floor(batteryChargePercentage.percent / 33.35)
             readonly property var colorArray: [ "red", "yellow", Qt.rgba(.318, 1, .051, .9)]
 
             model: segmentAmount
