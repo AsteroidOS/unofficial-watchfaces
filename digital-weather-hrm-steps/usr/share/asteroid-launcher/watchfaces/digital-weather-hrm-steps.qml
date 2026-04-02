@@ -55,6 +55,7 @@ Item {
     property int steps: 0
     property string customRed: "#DB5461" // Indian Red
     property string customBlue: "#1E96FC" // Dodger Blue
+    property bool stepsAvailable: false
 
     function twoDigits(x) {
         if (x < 10)
@@ -89,32 +90,28 @@ Item {
         height: parent.width > parent.height ? parent.height : parent.width
         width: height
         Component.onCompleted: {
-            var hour = wallClock.time.getHours();
-            var minute = wallClock.time.getMinutes();
-            var month = wallClock.time.getMonth();
-            var date = wallClock.time.getDate();
-            var am = hour < 12;
+            var hour = wallClock.time.getHours()
+            var minute = wallClock.time.getMinutes()
+            var date = wallClock.time.getDate()
+            var am = hour < 12
             if (use12H.value) {
-                hour = hour % 12;
-                if (hour === 0)
-                    hour = 12;
-
+                hour = hour % 12
+                if (hour === 0) hour = 12
             }
-            hourCanvas.hour = hour;
-            hourCanvas.requestPaint();
-            minuteCanvas.minute = minute;
-            minuteCanvas.requestPaint();
-            dateCanvas.date = date;
-            dateCanvas.requestPaint();
-            dayOfWeekCanvas.requestPaint();
-            amPmCanvas.am = am;
-            amPmCanvas.requestPaint();
-            burnInProtectionManager.widthOffset = Qt.binding(function() {
-                return width * (nightstandMode.active ? 0.1 : 0.32);
-            });
-            burnInProtectionManager.heightOffset = Qt.binding(function() {
-                return height * (nightstandMode.active ? 0.1 : 0.7);
-            });
+            hourCanvas.hour = hour
+            hourCanvas.requestPaint()
+            minuteCanvas.minute = minute
+            minuteCanvas.requestPaint()
+            dateCanvas.date = date
+            dateCanvas.dateText = wallClock.time.toLocaleString(Qt.locale(), "d MMMM")
+            dateCanvas.requestPaint()
+            dayOfWeekCanvas.dow = wallClock.time.toLocaleString(Qt.locale(), "dddd")
+            dayOfWeekCanvas.requestPaint()
+            amPmCanvas.am = am
+            amPmCanvas.ap = wallClock.time.toLocaleString(Qt.locale("en_EN"), "AP")
+            amPmCanvas.requestPaint()
+            burnInProtectionManager.widthOffset = Qt.binding(function() { return width * (nightstandMode.active ? 0.1 : 0.32) })
+            burnInProtectionManager.heightOffset = Qt.binding(function() { return height * (nightstandMode.active ? 0.1 : 0.7) })
         }
 
         Item {
@@ -162,53 +159,51 @@ Item {
 
             Canvas {
                 id: amPmCanvas
-
+                
                 property bool am: false
-
+                property string ap: ""
+                
                 anchors.fill: parent
-                antialiasing: true
-                smooth: true
                 renderStrategy: Canvas.Cooperative
                 visible: use12H.value
                 onPaint: {
-                    var ctx = getContext("2d");
-                    prepareContext(ctx);
-                    ctx.font = "35 " + height / 15 + "px Cantarell";
-                    ctx.fillText(wallClock.time.toLocaleString(Qt.locale("en_EN"), "AP"), width * 0.894, height * 0.371);
+                    var ctx = getContext("2d")
+                    prepareContext(ctx)
+                    ctx.font = "35 " + height / 15 + "px Cantarell"
+                    ctx.fillText(ap, width * 0.894, height * 0.371)
                 }
             }
 
             Canvas {
                 id: dayOfWeekCanvas
-
+                
+                property string dow: ""
+                
                 visible: !nightstandMode.active
                 anchors.fill: parent
-                antialiasing: true
-                smooth: true
                 renderStrategy: Canvas.Cooperative
                 onPaint: {
-                    var ctx = getContext("2d");
-                    prepareContext(ctx);
-                    ctx.font = "35 " + height / 10 + "px Cantarell";
-                    ctx.fillText(wallClock.time.toLocaleString(Qt.locale(), "dddd"), width / 2, height * 60 / 480);
+                    var ctx = getContext("2d")
+                    prepareContext(ctx)
+                    ctx.font = "35 " + height / 10 + "px Cantarell"
+                    ctx.fillText(dow, width / 2, height * 60 / 480)
                 }
             }
 
             Canvas {
                 id: dateCanvas
-
-                property variant date: wallClock.time.getDate()
-
+                
+                property int date: 0
+                property string dateText: ""
+                
                 visible: !nightstandMode.active
                 anchors.fill: parent
-                antialiasing: true
-                smooth: true
                 renderStrategy: Canvas.Cooperative
                 onPaint: {
-                    var ctx = getContext("2d");
-                    prepareContext(ctx);
-                    ctx.font = "35 " + height / 10 + "px Cantarell";
-                    ctx.fillText(wallClock.time.toLocaleString(Qt.locale(), "d MMMM"), width / 2, height * 130 / 480);
+                    var ctx = getContext("2d")
+                    prepareContext(ctx)
+                    ctx.font = "35 " + height / 10 + "px Cantarell"
+                    ctx.fillText(dateText, width / 2, height * 130 / 480)
                 }
             }
 
@@ -348,16 +343,17 @@ Item {
 
                 StepsDataLoader {
                     id: stepsDataLoader
-
+                    
                     Component.onCompleted: {
-                        stepsDataLoader.getTodayTotal();
-                        root.steps = stepsDataLoader.todayTotal;
-                        stepsCanvas.requestPaint();
+                        stepsDataLoader.getTodayTotal()
+                        root.steps = stepsDataLoader.todayTotal
+                        stepsCanvas.requestPaint()
                     }
                     onDataChanged: {
-                        stepsDataLoader.getTodayTotal();
-                        root.steps = stepsDataLoader.todayTotal;
-                        stepsCanvas.requestPaint();
+                        stepsDataLoader.getTodayTotal()
+                        root.steps = stepsDataLoader.todayTotal
+                        root.stepsAvailable = true
+                        stepsCanvas.requestPaint()
                     }
                 }
 
@@ -368,6 +364,7 @@ Item {
                     antialiasing: true
                     smooth: true
                     renderStrategy: Canvas.Cooperative
+                    opacity: root.stepsAvailable ? 1.0 : 0.5
                     onPaint: {
                         var ctx = getContext("2d");
                         prepareContext(ctx);
@@ -387,6 +384,7 @@ Item {
                     height: width
                     x: 0.3 * parent.width
                     y: (parent.height * 430 / 480) - height * 0.5
+                    opacity: root.stepsAvailable ? 1.0 : 0.5
                     name: "ios-paw"
 
                     MouseArea {
@@ -412,8 +410,6 @@ Item {
             layer {
                 enabled: true
                 samples: 4
-                smooth: true
-                textureSize: Qt.size(nightstandMode.width * 2, nightstandMode.height * 2)
             }
             visible: nightstandMode.active
 
@@ -428,7 +424,7 @@ Item {
                 property bool clockwise: true
                 property real arcStrokeWidth: .055
                 property real scalefactor: .45 - (arcStrokeWidth / 2)
-                property real chargecolor: Math.floor(batteryChargePercentage.percent / 33.35)
+                property int chargecolor: Math.floor(batteryChargePercentage.percent / 33.35)
                 readonly property var colorArray: [ "red", "yellow", Qt.rgba(.318, 1, .051, .9)]
 
                 model: segmentAmount
@@ -467,40 +463,37 @@ Item {
         }
 
         Connections {
+            target: wallClock
             function onTimeChanged() {
-                var hour = wallClock.time.getHours();
-                var minute = wallClock.time.getMinutes();
-                var month = wallClock.time.getMonth();
-                var date = wallClock.time.getDate();
-                var am = hour < 12;
+                var hour = wallClock.time.getHours()
+                var minute = wallClock.time.getMinutes()
+                var date = wallClock.time.getDate()
+                var am = hour < 12
                 if (use12H.value) {
-                    hour = hour % 12;
-                    if (hour === 0)
-                        hour = 12;
-
+                    hour = hour % 12
+                    if (hour === 0) hour = 12
                 }
                 if (hourCanvas.hour !== hour) {
-                    hourCanvas.hour = hour;
-                    hourCanvas.requestPaint();
+                    hourCanvas.hour = hour
+                    hourCanvas.requestPaint()
                 }
                 if (minuteCanvas.minute !== minute) {
-                    minuteCanvas.minute = minute;
-                    minuteCanvas.requestPaint();
+                    minuteCanvas.minute = minute
+                    minuteCanvas.requestPaint()
                 }
-                if (amPmCanvas.am != am) {
-                    amPmCanvas.am = am;
-                    amPmCanvas.requestPaint();
+                if (amPmCanvas.am !== am) {
+                    amPmCanvas.am = am
+                    amPmCanvas.ap = wallClock.time.toLocaleString(Qt.locale("en_EN"), "AP")
+                    amPmCanvas.requestPaint()
                 }
-                if (dateCanvas.date != date) {
-                    dateCanvas.date = date;
-                    dateCanvas.requestPaint();
-                    dayOfWeekCanvas.requestPaint();
+                if (dateCanvas.date !== date) {
+                    dateCanvas.date = date
+                    dateCanvas.dateText = wallClock.time.toLocaleString(Qt.locale(), "d MMMM")
+                    dayOfWeekCanvas.dow = wallClock.time.toLocaleString(Qt.locale(), "dddd")
+                    dateCanvas.requestPaint()
+                    dayOfWeekCanvas.requestPaint()
                 }
             }
-
-            target: wallClock
         }
-
     }
-
 }
