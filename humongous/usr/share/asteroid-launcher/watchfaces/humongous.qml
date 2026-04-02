@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2018 - Timo Könnecke <el-t-mo@arcor.de>
+ * Copyright (C) 2026 - Timo Könnecke <github.com/moWerk>
  *               2016 - Sylvia van Os <iamsylvie@openmailbox.org>
  *               2015 - Florent Revest <revestflo@gmail.com>
  *               2012 - Vasiliy Sorokin <sorokin.vasiliy@gmail.com>
@@ -26,47 +26,46 @@
  * a well known pebble watchface design. Utillizing the great Item Font.
  */
 
-import QtQuick 2.1
+import QtQuick 2.9
 
 Item {
 
     Rectangle {
         id: layer2mask
-        width: parent.width; height: parent.height
+        anchors.fill: parent
         color: Qt.rgba(0, 0, 0, 1)
-        visible: true
         opacity: 0.0
         layer.enabled: true
-        layer.smooth: true
     }
 
     Rectangle {
         id: _mask
         anchors.fill: layer2mask
         color: Qt.rgba(0, 1, 0, 0)
-        visible: true
 
         Text {
             renderType: Text.NativeRendering
-            font.pixelSize: parent.height*0.585
-            font.letterSpacing: -parent.width*0.06
-            font.family: "Item"
-            font.styleName:"Black"
+            font {
+                pixelSize: parent.height * 0.585
+                letterSpacing: -parent.width * 0.06
+                family: "Item"
+                styleName: "Black"
+            }
             color: Qt.rgba(1, 1, 1, 1)
             x: parent.width / 2 - width / 2.075
             y: parent.height / 2 - (height * 0.885)
-            text: if (use12H.value) {
-                      wallClock.time.toLocaleString(Qt.locale(), "hh ap").slice(0, 2)}
-                  else
-                      wallClock.time.toLocaleString(Qt.locale(), "HH")
+            text: use12H.value ? wallClock.time.toLocaleString(Qt.locale(), "hh ap").slice(0, 2) :
+            wallClock.time.toLocaleString(Qt.locale(), "HH")
         }
-
+        
         Text {
             renderType: Text.NativeRendering
-            font.pixelSize: parent.height*0.585
-            font.letterSpacing: -parent.width*0.06
-            font.family: "Item"
-            font.styleName:"Black"
+            font {
+                pixelSize: parent.height * 0.585
+                letterSpacing: -parent.width * 0.06
+                family: "Item"
+                styleName: "Black"
+            }
             color: Qt.rgba(1, 1, 1, 1)
             x: parent.width / 2 - width / 2.075
             y: parent.height / 2.65
