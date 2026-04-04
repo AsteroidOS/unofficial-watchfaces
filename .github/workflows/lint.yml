@@ -1,0 +1,18 @@
+name: Lint
+
+on:
+  pull_request:
+    branches: [ master ]
+    types: [ opened, synchronize ]
+  release:
+    types: [ published ]
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Check QML files
+        uses: MagneFire/qml-format-lint-action@v2
