@@ -19,21 +19,22 @@
 import QtQuick 2.12
 
 Item {
-
     Rectangle {
         id: logoArea
+
         color: "transparent"
+        width: parent.width * 0.12
+        height: parent.height * 0.12
+
         anchors {
             centerIn: parent
             verticalCenterOffset: -parent.height * 0.272
         }
-        width: parent.width * 0.12
-        height: parent.height * 0.12
-
 
         Image {
-            z: 1
             id: asteroidLogo
+
+            z: 1
             visible: !displayAmbient
             source: "../watchfaces-img/asteroid-logo.svg"
             antialiasing: true
@@ -41,102 +42,137 @@ Item {
             opacity: 0.7
 
             Text {
-                z: 2
                 id: asteroidSlogan
+
+                z: 2
                 visible: !displayAmbient
+                color: "white"
+                horizontalAlignment: Text.AlignHCenter
+                text: "<b>AsteroidOS</b><br>Free Your Wrist"
+
                 font {
                     family: "Raleway"
                     pixelSize: parent.height * 0.31
                 }
-                color: "white"
-                horizontalAlignment: Text.AlignHCenter
+
                 anchors {
                     centerIn: parent
                     verticalCenterOffset: -parent.height * 0.005
                 }
-                text: "<b>AsteroidOS</b><br>Free Your Wrist"
+
             }
+
         }
+
         MouseArea {
             anchors.fill: parent
             onPressAndHold: asteroidLogo.visible = !asteroidLogo.visible
         }
+
     }
 
     Text {
         id: datetext
+
+        color: "white"
+        text: wallClock.time.toLocaleString(Qt.locale(), "ddd dd")
+
         anchors {
             centerIn: parent
-            verticalCenterOffset: parent.height * 0.25 
+            verticalCenterOffset: parent.height * 0.25
         }
+
         font {
             family: "Titillium"
             weight: Font.Thin
             pixelSize: parent.height * 0.06
         }
-        color: "white"
-        text: wallClock.time.toLocaleString(Qt.locale(), "ddd dd")
+
     }
 
     Text {
         id: time
+
         anchors.centerIn: parent
+        color: "white"
+        text: wallClock.time.toLocaleString(Qt.locale(), (use12H.value ? "hhmm ap" : "HHmm")).slice(0, 4)
+
         font {
             family: "Titillium"
             weight: Font.Thin
-            pixelSize: parent.height * 0.30
+            pixelSize: parent.height * 0.3
         }
-        color: "white"
-        text: wallClock.time.toLocaleString(Qt.locale(), (use12H.value ? "hhmm ap" : "HHmm")).slice(0,4)
+
     }
 
     Text {
         id: ampm
+
         visible: use12H.value
+        color: "white"
+        text: wallClock.time.toLocaleString(Qt.locale(), "ap")
+
         anchors {
             centerIn: parent
             verticalCenterOffset: parent.height * 0.143
         }
+
         font {
             family: "Titillium"
             weight: Font.Bold
             pixelSize: parent.height * 0.05
         }
-        color: "white"
-        text: wallClock.time.toLocaleString(Qt.locale(), "ap")
+
     }
 
-    Repeater{
+    Repeater {
         id: secondMarks
+
         model: 60
+
         Rectangle {
             id: second
+
             visible: !displayAmbient
-            antialiasing : true
+            antialiasing: true
             color: "transparent"
             width: parent.width * 0.01
             height: parent.height * 0.125
             transform: [
-                Rotation { 
+                Rotation {
                     origin.x: second.width / 2
                     origin.y: parent.height * 0.48
-                    angle: (index) * 360 / secondMarks.count 
+                    angle: (index) * 360 / secondMarks.count
                 },
-                Translate { 
+                Translate {
                     x: (parent.width - second.width) / 2
                     y: parent.height / 2 - parent.height * 0.48
                 }
             ]
+
             Rectangle {
                 anchors.fill: parent
                 opacity: wallClock.time.getSeconds() == index ? 1 : 0
                 layer.enabled: wallClock.time.getSeconds() == index
-                antialiasing : true
-                gradient : Gradient {
-                    GradientStop { position: 0.0; color: "yellow" }
-                    GradientStop { position: 1.0; color: "darkorange" }
+                antialiasing: true
+
+                gradient: Gradient {
+                    GradientStop {
+                        position: 0
+                        color: "yellow"
+                    }
+
+                    GradientStop {
+                        position: 1
+                        color: "darkorange"
+                    }
+
                 }
+
             }
+
         }
+
     }
+
 }

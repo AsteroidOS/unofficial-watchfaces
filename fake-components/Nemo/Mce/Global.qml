@@ -1,5 +1,5 @@
-pragma Singleton
 import QtQuick 2.9
+pragma Singleton
 
 Item {
     // simulated battery things
@@ -10,7 +10,7 @@ Item {
     property int heartrate: 62
     property bool hrmSensorActive: false
     // simulated compass
-    property real compassAzimuth: 48.0
+    property real compassAzimuth: 48
     property bool compassActive: true
     // simultated wifi connection
     property bool wifiPowered: true

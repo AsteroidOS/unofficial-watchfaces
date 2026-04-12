@@ -26,13 +26,13 @@ import QtQuick 2.1
 
 Item {
     id: root
-    
+
     // ── Shared geometry ───────────────────────────────────────────────────────
-    readonly property real barY:     parent.height / 2
-    readonly property real barH:     parent.height * 0.2
-    readonly property real barWidth: parent.width  * (0.7 / 3)
-    readonly property real lineH:    parent.width  * 0.008
-    
+    readonly property real barY: parent.height / 2
+    readonly property real barH: parent.height * 0.2
+    readonly property real barWidth: parent.width * (0.7 / 3)
+    readonly property real lineH: parent.width * 0.008
+
     // ── Static dark background band ───────────────────────────────────────────
     Rectangle {
         x: 0
@@ -41,16 +41,18 @@ Item {
         height: root.barH
         color: Qt.rgba(0, 0, 0, 0.5)
     }
-    
+
     // ── Hour bar ──────────────────────────────────────────────────────────────
     Rectangle {
         id: hourFill
+
         x: parent.width * (1.3 / 12)
         y: root.barY
         width: root.barWidth
         height: wallClock.time.getHours() / 24 * root.barH
         color: Qt.rgba(1, 0, 0, 0.6)
     }
+
     Rectangle {
         x: hourFill.x
         y: root.barY + hourFill.height - root.lineH
@@ -58,16 +60,18 @@ Item {
         height: root.lineH
         color: Qt.rgba(1, 0, 0, 1)
     }
-    
+
     // ── Minute bar ────────────────────────────────────────────────────────────
     Rectangle {
         id: minuteFill
+
         x: parent.width * (2.3 / 6)
         y: root.barY
         width: root.barWidth
         height: wallClock.time.getMinutes() / 60 * root.barH
         color: Qt.rgba(1, 1, 0, 0.6)
     }
+
     Rectangle {
         x: minuteFill.x
         y: root.barY + minuteFill.height - root.lineH
@@ -75,16 +79,18 @@ Item {
         height: root.lineH
         color: Qt.rgba(1, 1, 0, 1)
     }
-    
+
     // ── Second bar ────────────────────────────────────────────────────────────
     Rectangle {
         id: secondFill
+
         x: parent.width * (4 / 6.5) * 1.07
         y: root.barY
         width: root.barWidth
         height: wallClock.time.getSeconds() / 60 * root.barH
         color: Qt.rgba(0, 1, 1, 0.6)
     }
+
     Rectangle {
         x: secondFill.x
         y: root.barY + secondFill.height - root.lineH
@@ -92,11 +98,12 @@ Item {
         height: root.lineH
         color: Qt.rgba(0, 1, 1, 1)
     }
-    
+
     // ── Text ──────────────────────────────────────────────────────────────────
     Text {
-        z: 6
         id: hourDisplay
+
+        z: 6
         renderType: Text.NativeRendering
         font.pixelSize: parent.height * 0.2
         font.family: "CPMono_v07"
@@ -106,31 +113,33 @@ Item {
         anchors.bottom: parent.verticalCenter
         anchors.bottomMargin: -parent.height * 0.029
         x: parent.width / 4.5 - width / 2
-        text: use12H.value ?
-        wallClock.time.toLocaleString(Qt.locale(), "hh ap").slice(0, 2) :
-        wallClock.time.toLocaleString(Qt.locale(), "HH")
+        text: use12H.value ? wallClock.time.toLocaleString(Qt.locale(), "hh ap").slice(0, 2) : wallClock.time.toLocaleString(Qt.locale(), "HH")
     }
-    
+
     Text {
-        z: 6
         id: minuteDisplay
+
+        z: 6
         renderType: Text.NativeRendering
         font.pixelSize: parent.height * 0.2
         font.family: "CPMono_v07"
         font.styleName: "Plain"
         color: Qt.rgba(1, 1, 1, 1)
         horizontalAlignment: Text.AlignHCenter
+        text: wallClock.time.toLocaleString(Qt.locale(), "mm")
+
         anchors {
             bottom: parent.verticalCenter
             bottomMargin: -parent.height * 0.029
             horizontalCenter: parent.horizontalCenter
         }
-        text: wallClock.time.toLocaleString(Qt.locale(), "mm")
+
     }
-    
+
     Text {
-        z: 6
         id: secondDisplay
+
+        z: 6
         renderType: Text.NativeRendering
         font.pixelSize: parent.height * 0.2
         font.family: "CPMono_v07"
@@ -142,4 +151,5 @@ Item {
         x: parent.width / 6.5 * 5 - width / 2
         text: wallClock.time.toLocaleString(Qt.locale(), "ss")
     }
+
 }

@@ -20,7 +20,6 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-
 /*
  * Based on a qml fragmentshader example from http://doc.qt.io and
  * a well known pebble watchface design. Utillizing the great Item Font.
@@ -29,53 +28,58 @@
 import QtQuick 2.9
 
 Item {
-
     Rectangle {
         id: layer2mask
+
         anchors.fill: parent
         color: Qt.rgba(0, 0, 0, 1)
-        opacity: 0.0
+        opacity: 0
         layer.enabled: true
     }
 
     Rectangle {
         id: _mask
+
         anchors.fill: layer2mask
         color: Qt.rgba(0, 1, 0, 0)
+        layer.enabled: true
+        layer.samplerName: "maskSource"
 
         Text {
             renderType: Text.NativeRendering
-            font {
-                pixelSize: parent.height * 0.585
-                letterSpacing: -parent.width * 0.06
-                family: "Item"
-                styleName: "Black"
-            }
             color: Qt.rgba(1, 1, 1, 1)
             x: parent.width / 2 - width / 2.075
             y: parent.height / 2 - (height * 0.885)
-            text: use12H.value ? wallClock.time.toLocaleString(Qt.locale(), "hh ap").slice(0, 2) :
-            wallClock.time.toLocaleString(Qt.locale(), "HH")
-        }
-        
-        Text {
-            renderType: Text.NativeRendering
+            text: use12H.value ? wallClock.time.toLocaleString(Qt.locale(), "hh ap").slice(0, 2) : wallClock.time.toLocaleString(Qt.locale(), "HH")
+
             font {
                 pixelSize: parent.height * 0.585
                 letterSpacing: -parent.width * 0.06
                 family: "Item"
                 styleName: "Black"
             }
+
+        }
+
+        Text {
+            renderType: Text.NativeRendering
             color: Qt.rgba(1, 1, 1, 1)
             x: parent.width / 2 - width / 2.075
             y: parent.height / 2.65
             text: wallClock.time.toLocaleString(Qt.locale(), "mm")
+
+            font {
+                pixelSize: parent.height * 0.585
+                letterSpacing: -parent.width * 0.06
+                family: "Item"
+                styleName: "Black"
+            }
+
         }
 
-        layer.enabled: true
-        layer.samplerName: "maskSource"
         layer.effect: ShaderEffect {
             property variant source: layer2mask
+
             fragmentShader: "
                     varying highp vec2 qt_TexCoord0;
                     uniform highp float qt_Opacity;
@@ -86,5 +90,7 @@ Item {
                     }
                 "
         }
+
     }
+
 }

@@ -20,7 +20,6 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-
 /*
  * This watchface is a fan recreation of Jolla Oy's Sailfish Watch concept designs from 2016.
  * Visual design elements (e.g., hand styles, strokes, shadows, and layout) are derived from Jolla's intellectual property as shown at https://blog.jolla.com/watch/.
@@ -32,56 +31,65 @@ import QtQuick 2.9
 
 Item {
     id: root
-    
+
     // invisible dark layer used as alpha mask source for the shader knockout effect
     Rectangle {
         id: layer2mask
+
         anchors.fill: parent
         color: Qt.rgba(0, 0, 0, 0.7)
-        opacity: 0.0
+        opacity: 0
         layer.enabled: true
     }
-    
+
     Rectangle {
         id: _mask
+
         anchors.fill: layer2mask
-        
+        layer.enabled: true
+        layer.samplerName: "maskSource"
+
         Text {
             renderType: Text.NativeRendering
+            color: Qt.rgba(1, 1, 1, 1)
+            text: wallClock.time.toLocaleString(Qt.locale(), "HH")
+
             font {
                 pixelSize: parent.height * 0.66
                 family: "Lexend"
                 styleName: "Black"
             }
-            color: Qt.rgba(1, 1, 1, 1)
+
             anchors {
                 top: parent.top
                 topMargin: -parent.height * 0.16
                 horizontalCenter: parent.horizontalCenter
             }
-            text: wallClock.time.toLocaleString(Qt.locale(), "HH")
+
         }
-        
+
         Text {
             renderType: Text.NativeRendering
+            color: Qt.rgba(1, 1, 1, 1)
+            text: wallClock.time.toLocaleString(Qt.locale(), "mm")
+
             font {
                 pixelSize: parent.height * 0.66
                 family: "Lexend"
                 styleName: "Black"
             }
-            color: Qt.rgba(1, 1, 1, 1)
+
             anchors {
                 bottom: parent.bottom
                 bottomMargin: -parent.height * 0.16
                 horizontalCenter: parent.horizontalCenter
             }
-            text: wallClock.time.toLocaleString(Qt.locale(), "mm")
+
         }
-        
-        layer.enabled: true
-        layer.samplerName: "maskSource"
+
         layer.effect: ShaderEffect {
             property variant source: layer2mask
+
             fragmentShader: "
             varying highp vec2 qt_TexCoord0;
             uniform highp float qt_Opacity;
@@ -92,38 +100,46 @@ Item {
         }
         "
         }
+
     }
-    
+
     // cyan ghost text visible through the knockout — gives the SFOS glow effect
     Text {
         renderType: Text.NativeRendering
+        color: Qt.rgba(0, 0.937, 0.937, 0.4)
+        text: wallClock.time.toLocaleString(Qt.locale(), "HH")
+
         font {
             pixelSize: parent.height * 0.66
             family: "Lexend"
             styleName: "Black"
         }
-        color: Qt.rgba(0, 0.937, 0.937, 0.4)
+
         anchors {
             top: parent.top
             topMargin: -parent.height * 0.16
             horizontalCenter: parent.horizontalCenter
         }
-        text: wallClock.time.toLocaleString(Qt.locale(), "HH")
+
     }
-    
+
     Text {
         renderType: Text.NativeRendering
+        color: Qt.rgba(0, 0.937, 0.937, 0.4)
+        text: wallClock.time.toLocaleString(Qt.locale(), "mm")
+
         font {
             pixelSize: parent.height * 0.66
             family: "Lexend"
             styleName: "Black"
         }
-        color: Qt.rgba(0, 0.937, 0.937, 0.4)
+
         anchors {
             bottom: parent.bottom
             bottomMargin: -parent.height * 0.16
             horizontalCenter: parent.horizontalCenter
         }
-        text: wallClock.time.toLocaleString(Qt.locale(), "mm")
+
     }
+
 }

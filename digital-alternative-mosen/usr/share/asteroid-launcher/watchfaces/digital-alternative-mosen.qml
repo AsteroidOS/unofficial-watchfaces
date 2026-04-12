@@ -28,7 +28,6 @@
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-
 /*
 * Based on Florents 002-alternative-digital stock watchface.
 * Bigger monotype font (GeneraleMono) and fixed am/pm display by slicing to two chars.
@@ -38,106 +37,100 @@
 import QtQuick 2.9
 
 Item {
-
     function prepareContext(ctx) {
-        ctx.reset()
-        ctx.fillStyle = "white"
-        ctx.textAlign = "center"
-        ctx.textBaseline = 'middle'
-        ctx.shadowColor = Qt.rgba(0, 0, 0, 0.80)
-        ctx.shadowOffsetX = parent.height*0.00625
-        ctx.shadowOffsetY = parent.height*0.00625 //2 px on 320x320
-        ctx.shadowBlur = parent.height*0.0156  //5 px on 320x320
+        ctx.reset();
+        ctx.fillStyle = "white";
+        ctx.textAlign = "center";
+        ctx.textBaseline = 'middle';
+        ctx.shadowColor = Qt.rgba(0, 0, 0, 0.8);
+        ctx.shadowOffsetX = parent.height * 0.00625;
+        ctx.shadowOffsetY = parent.height * 0.00625; //2 px on 320x320
+        ctx.shadowBlur = parent.height * 0.0156; //5 px on 320x320
+    }
+
+    Component.onCompleted: {
+        hourMinuteCanvas.requestPaint();
+        dateCanvas.requestPaint();
+        amPmCanvas.requestPaint();
     }
 
     Canvas {
         id: hourMinuteCanvas
+
         anchors.fill: parent
         antialiasing: true
         renderStrategy: Canvas.Cooperative
-
         onPaint: {
-            var ctx = getContext("2d")
-            prepareContext(ctx)
-
+            var ctx = getContext("2d");
+            prepareContext(ctx);
             var text;
             if (use12H.value)
-                text = wallClock.time.toLocaleString(Qt.locale(), "hh:mm ap").substring(0, 5)
+                text = wallClock.time.toLocaleString(Qt.locale(), "hh:mm ap").substring(0, 5);
             else
-                text = wallClock.time.toLocaleString(Qt.locale(), "HH:mm")
-
-            ctx.font = "50 " +parent.height*0.25 + "px " + "GeneraleMono";
-            ctx.fillText(text,
-                        parent.width*0.5,
-                        parent.height*0.546);
+                text = wallClock.time.toLocaleString(Qt.locale(), "HH:mm");
+            ctx.font = "50 " + parent.height * 0.25 + "px " + "GeneraleMono";
+            ctx.fillText(text, parent.width * 0.5, parent.height * 0.546);
         }
     }
 
     Canvas {
         id: amPmCanvas
+
         anchors.fill: parent
         renderStrategy: Canvas.Cooperative
-
         onPaint: {
-            var ctx = getContext("2d")
-            prepareContext(ctx)
-
-            var px = "px "
-            var centerX =parent.width/2
-            var centerY =parent.height*0.382
-            var verticalOffset = -parent.height*0.003
-
+            var ctx = getContext("2d");
+            prepareContext(ctx);
+            var px = "px ";
+            var centerX = parent.width / 2;
+            var centerY = parent.height * 0.382;
+            var verticalOffset = -parent.height * 0.003;
             var text;
-            text = wallClock.time.toLocaleString(Qt.locale(), "AP")
-
-            var fontSize =parent.height*0.072
-            var fontFamily = "GeneraleMono"
-
+            text = wallClock.time.toLocaleString(Qt.locale(), "AP");
+            var fontSize = parent.height * 0.072;
+            var fontFamily = "GeneraleMono";
             ctx.font = "0 " + fontSize + px + fontFamily;
-            if(use12H.value) ctx.fillText(text,
-                                          centerX,
-                                          centerY+verticalOffset);
+            if (use12H.value)
+                ctx.fillText(text, centerX, centerY + verticalOffset);
+
         }
     }
+
     Canvas {
         id: dateCanvas
+
         anchors.fill: parent
         antialiasing: true
         renderStrategy: Canvas.Cooperative
-
         onPaint: {
-            var ctx = getContext("2d")
-            prepareContext(ctx)
-
-            ctx.font = "0 " +parent.height*0.0725 + "px " + "GeneraleMono";
-            ctx.fillText(wallClock.time.toLocaleString(Qt.locale(), "ddd dd MMM"),
-                        parent.width*0.5,
-                        parent.height*0.692);
+            var ctx = getContext("2d");
+            prepareContext(ctx);
+            ctx.font = "0 " + parent.height * 0.0725 + "px " + "GeneraleMono";
+            ctx.fillText(wallClock.time.toLocaleString(Qt.locale(), "ddd dd MMM"), parent.width * 0.5, parent.height * 0.692);
         }
     }
 
     Connections {
-        target: wallClock
         function onTimeChanged() {
-            if (!visible) return
-                hourMinuteCanvas.requestPaint()
-                dateCanvas.requestPaint()
-                amPmCanvas.requestPaint()
-        }
-    }
+            if (!visible)
+                return ;
 
-    Component.onCompleted: {
-        hourMinuteCanvas.requestPaint()
-        dateCanvas.requestPaint()
-        amPmCanvas.requestPaint()
+            hourMinuteCanvas.requestPaint();
+            dateCanvas.requestPaint();
+            amPmCanvas.requestPaint();
+        }
+
+        target: wallClock
     }
 
     Connections {
-        target: localeManager
         function onChangesObserverChanged() {
-            hourMinuteCanvas.requestPaint()
-            dateCanvas.requestPaint()
-            amPmCanvas.requestPaint()
+            hourMinuteCanvas.requestPaint();
+            dateCanvas.requestPaint();
+            amPmCanvas.requestPaint();
         }
+
+        target: localeManager
     }
+
 }

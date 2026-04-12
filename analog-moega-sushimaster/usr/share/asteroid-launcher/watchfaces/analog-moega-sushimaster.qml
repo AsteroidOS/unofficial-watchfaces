@@ -22,21 +22,22 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-import QtQuick 2.15
 import QtGraphicalEffects 1.15
+import QtQuick 2.15
 
 Item {
     id: root
 
     property string imgPath: "../watchfaces-img/analog-moega-sushimaster-"
     property string lowColor: "#55ffffff"
-    
+
     anchors.fill: parent
 
     Item {
         id: faceBox
 
         anchors.fill: parent
+        layer.enabled: true
 
         Image {
             id: hourMarks
@@ -58,11 +59,11 @@ Item {
 
                 z: 1
                 visible: index % 5
-                antialiasing : true
-                width: parent.width * .004
-                height: parent.height * .016
-                x: centerX + Math.cos(rotM * 2 * Math.PI) * parent.width * .47
-                y: centerY + Math.sin(rotM * 2 * Math.PI) * parent.width * .47
+                antialiasing: true
+                width: parent.width * 0.004
+                height: parent.height * 0.016
+                x: centerX + Math.cos(rotM * 2 * Math.PI) * parent.width * 0.47
+                y: centerY + Math.sin(rotM * 2 * Math.PI) * parent.width * 0.47
                 color: lowColor
 
                 transform: Rotation {
@@ -70,18 +71,20 @@ Item {
                     origin.y: height / 2
                     angle: (index) * 6
                 }
+
             }
+
         }
 
-        layer.enabled: true
         layer.effect: DropShadow {
             transparentBorder: true
             horizontalOffset: 2
             verticalOffset: 2
-            radius: 6.0
+            radius: 6
             samples: 13
-            color: Qt.rgba(0, 0, 0, .6)
+            color: Qt.rgba(0, 0, 0, 0.6)
         }
+
     }
 
     Item {
@@ -94,24 +97,25 @@ Item {
             id: hourSVG
 
             z: 3
-            source:imgPath + "hour.svg"
+            source: imgPath + "hour.svg"
             anchors.fill: parent
+            layer.enabled: true
 
             transform: Rotation {
                 origin.x: parent.width / 2
                 origin.y: parent.height / 2
-                angle: (wallClock.time.getHours() * 30) + (wallClock.time.getMinutes() * .5)
+                angle: (wallClock.time.getHours() * 30) + (wallClock.time.getMinutes() * 0.5)
             }
 
-            layer.enabled: true
             layer.effect: DropShadow {
                 transparentBorder: true
                 horizontalOffset: 2
                 verticalOffset: 2
-                radius: 6.0
+                radius: 6
                 samples: 11
-                color: Qt.rgba(0, 0, 0, .2)
+                color: Qt.rgba(0, 0, 0, 0.2)
             }
+
         }
 
         Image {
@@ -120,22 +124,23 @@ Item {
             z: 4
             source: imgPath + "minute.svg"
             anchors.fill: parent
+            layer.enabled: true
 
             transform: Rotation {
                 origin.x: parent.width / 2
                 origin.y: parent.height / 2
-                angle: (wallClock.time.getMinutes()*6)+(wallClock.time.getSeconds() * 6 / 60)
+                angle: (wallClock.time.getMinutes() * 6) + (wallClock.time.getSeconds() * 6 / 60)
             }
 
-            layer.enabled: true
             layer.effect: DropShadow {
                 transparentBorder: true
                 horizontalOffset: 3
                 verticalOffset: 3
-                radius: 7.0
+                radius: 7
                 samples: 13
-                color: Qt.rgba(0, 0, 0, .3)
+                color: Qt.rgba(0, 0, 0, 0.3)
             }
+
         }
 
         Image {
@@ -145,6 +150,7 @@ Item {
             visible: !displayAmbient
             source: imgPath + "second.svg"
             anchors.fill: parent
+            layer.enabled: true
 
             transform: Rotation {
                 origin.x: parent.width / 2
@@ -152,20 +158,27 @@ Item {
                 angle: (wallClock.time.getSeconds() * 6)
             }
 
-            layer.enabled: true
             layer.effect: DropShadow {
                 transparentBorder: true
                 horizontalOffset: 4
                 verticalOffset: 4
-                radius: 8.0
+                radius: 8
                 samples: 9
-                color: Qt.rgba(0, 0, 0, .3)
+                color: Qt.rgba(0, 0, 0, 0.3)
             }
+
         }
+
     }
-    
+
     Connections {
+        function onTimeChanged() {
+            if (!visible)
+                return ;
+
+        }
+
         target: wallClock
-        function onTimeChanged() { if (!visible) return }
     }
+
 }
