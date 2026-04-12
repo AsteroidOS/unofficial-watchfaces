@@ -27,259 +27,113 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import QtQuick 2.15
-import QtGraphicalEffects 1.15
 import Nemo.Mce 1.0
+import QtGraphicalEffects 1.15
+import QtQuick 2.15
 
 Item {
+    // this blob is used to decode the state of the various displays
+
     id: root
+
     property string imgPath: "../watchfaces-img/digital-koiyu/"
     property int hours: use12H.value ? wallClock.time.getHours() % 12 : wallClock.time.getHours()
     property string minutes: wallClock.time.getMinutes() < 10 ? "0" + wallClock.time.getMinutes() : wallClock.time.getMinutes()
-    property string mainDisplayValue: (hours < 10 ? " " : "") + hours + minutes + " "//this if statement gets rid of the leading 0 on the hours
+    property string mainDisplayValue: (hours < 10 ? " " : "") + hours + minutes + " " //this if statement gets rid of the leading 0 on the hours
     property string bottomDisplayValue: "  " + wallClock.time.toLocaleString(Qt.locale(), "ss")
     property bool separatorsVisible: false
     property bool dotMatrixTextMode: true
     property string dom: (wallClock.time.getDate() < 10) ? " " + wallClock.time.getDate() : wallClock.time.getDate()
     property string dotMatrixText: dows[wallClock.time.getDay()] + dom
-    property var dows: ["SU","MO","TU","WE","TH","FR","SA"]
-    property var decode: { // this blob is used to decode the state of the various displays
+    property var dows: ["SU", "MO", "TU", "WE", "TH", "FR", "SA"]
+    property var decode: {
         "dotMatrixVisible": {
-            "A": [
-            [0,1,1,1,0,0],
-            [1,0,0,0,1,0],
-            [1,0,0,0,1,0],
-            [1,1,1,1,1,0],
-            [1,0,0,0,1,0],
-            [1,0,0,0,1,0],
-            [1,0,0,0,1,0]],
-            "B": [
-            [1,1,1,1,0,0],
-            [1,0,0,0,1,0],
-            [1,0,0,0,1,0],
-            [1,1,1,1,0,0],
-            [1,0,0,0,1,0],
-            [1,0,0,0,1,0],
-            [1,1,1,1,0,0]],
-            "C": [
-            [0,1,1,1,0,0],
-            [1,0,0,0,1,0],
-            [1,0,0,0,0,0],
-            [1,0,0,0,0,0],
-            [1,0,0,0,0,0],
-            [1,0,0,0,1,0],
-            [0,1,1,1,0,0]],
-            "D": [
-            [1,1,1,1,0,0],
-            [1,0,0,0,1,0],
-            [1,0,0,0,1,0],
-            [1,0,0,0,1,0],
-            [1,0,0,0,1,0],
-            [1,0,0,0,1,0],
-            [1,1,1,1,0,0]],
-            "E": [
-            [1,1,1,1,1,0],
-            [1,0,0,0,0,0],
-            [1,0,0,0,0,0],
-            [1,1,1,1,0,0],
-            [1,0,0,0,0,0],
-            [1,0,0,0,0,0],
-            [1,1,1,1,1,0]],
-            "F": [
-            [1,1,1,1,1,0],
-            [1,0,0,0,0,0],
-            [1,0,0,0,0,0],
-            [1,1,1,1,0,0],
-            [1,0,0,0,0,0],
-            [1,0,0,0,0,0],
-            [1,0,0,0,0,0]],
-            "H": [
-            [1,0,0,0,1,0],
-            [1,0,0,0,1,0],
-            [1,0,0,0,1,0],
-            [1,1,1,1,1,0],
-            [1,0,0,0,1,0],
-            [1,0,0,0,1,0],
-            [1,0,0,0,1,0]],
-            "M": [
-            [1,0,0,0,1,0],
-            [1,1,0,1,1,0],
-            [1,0,1,0,1,0],
-            [1,0,0,0,1,0],
-            [1,0,0,0,1,0],
-            [1,0,0,0,1,0],
-            [1,0,0,0,1,0]],
-            "O": [
-            [0,1,1,1,0,0],
-            [1,0,0,0,1,0],
-            [1,0,0,0,1,0],
-            [1,0,0,0,1,0],
-            [1,0,0,0,1,0],
-            [1,0,0,0,1,0],
-            [0,1,1,1,0,0]],
-            "R": [
-            [1,1,1,1,0,0],
-            [1,0,0,0,1,0],
-            [1,0,0,0,1,0],
-            [1,1,1,1,0,0],
-            [1,0,1,0,0,0],
-            [1,0,0,1,0,0],
-            [1,0,0,0,1,0]],
-            "S": [
-            [0,1,1,1,0,0],
-            [1,0,0,0,1,0],
-            [1,0,0,0,0,0],
-            [0,1,1,1,0,0],
-            [0,0,0,0,1,0],
-            [1,0,0,0,1,0],
-            [0,1,1,1,0,0]],
-            "T": [
-            [1,1,1,1,1,0],
-            [0,0,1,0,0,0],
-            [0,0,1,0,0,0],
-            [0,0,1,0,0,0],
-            [0,0,1,0,0,0],
-            [0,0,1,0,0,0],
-            [0,0,1,0,0,0]],
-            "U": [
-            [1,0,0,0,1,0],
-            [1,0,0,0,1,0],
-            [1,0,0,0,1,0],
-            [1,0,0,0,1,0],
-            [1,0,0,0,1,0],
-            [1,0,0,0,1,0],
-            [0,1,1,1,0,0]],
-            "W": [
-            [1,0,0,0,1,0],
-            [1,0,0,0,1,0],
-            [1,0,0,0,1,0],
-            [1,0,0,0,1,0],
-            [1,0,1,0,1,0],
-            [1,0,1,0,1,0],
-            [0,1,0,1,0,0]],
-            "0": [
-            [0,1,1,1,0,0],
-            [1,0,0,0,1,0],
-            [1,0,0,1,1,0],
-            [1,0,1,0,1,0],
-            [1,1,0,0,1,0],
-            [1,0,0,0,1,0],
-            [0,1,1,1,0,0]],
-            "1": [
-            [0,0,1,0,0,0],
-            [0,1,1,0,0,0],
-            [0,0,1,0,0,0],
-            [0,0,1,0,0,0],
-            [0,0,1,0,0,0],
-            [0,0,1,0,0,0],
-            [0,0,1,0,0,0]],
-            "2": [
-            [0,1,1,1,0,0],
-            [1,0,0,0,1,0],
-            [0,0,0,0,1,0],
-            [0,0,1,1,0,0],
-            [0,1,0,0,0,0],
-            [1,0,0,0,0,0],
-            [1,1,1,1,1,0]],
-            "3": [
-            [0,1,1,1,0,0],
-            [1,0,0,0,1,0],
-            [0,0,0,0,1,0],
-            [0,0,1,1,0,0],
-            [0,0,0,0,1,0],
-            [1,0,0,0,1,0],
-            [0,1,1,1,0,0]],
-            "4": [
-            [0,0,0,1,0,0],
-            [0,0,1,1,0,0],
-            [0,1,0,1,0,0],
-            [1,0,0,1,0,0],
-            [1,1,1,1,1,0],
-            [0,0,0,1,0,0],
-            [0,0,0,1,0,0]],
-            "5": [
-            [1,1,1,1,1,0],
-            [1,0,0,0,0,0],
-            [1,1,1,1,0,0],
-            [0,0,0,0,1,0],
-            [0,0,0,0,1,0],
-            [1,0,0,0,1,0],
-            [0,1,1,1,0,0]],
-            "6": [
-            [0,1,1,1,0,0],
-            [1,0,0,0,1,0],
-            [1,0,0,0,0,0],
-            [1,1,1,1,0,0],
-            [1,0,0,0,1,0],
-            [1,0,0,0,1,0],
-            [0,1,1,1,0,0]],
-            "7": [
-            [1,1,1,1,1,0],
-            [0,0,0,0,1,0],
-            [0,0,0,0,1,0],
-            [0,0,0,1,0,0],
-            [0,0,1,0,0,0],
-            [0,0,1,0,0,0],
-            [0,0,1,0,0,0]],
-            "8": [
-            [0,1,1,1,0,0],
-            [1,0,0,0,1,0],
-            [1,0,0,0,1,0],
-            [0,1,1,1,0,0],
-            [1,0,0,0,1,0],
-            [1,0,0,0,1,0],
-            [0,1,1,1,0,0]],
-            "9": [
-            [0,1,1,1,0,0],
-            [1,0,0,0,1,0],
-            [1,0,0,0,1,0],
-            [0,1,1,1,1,0],
-            [0,0,0,0,1,0],
-            [1,0,0,0,1,0],
-            [0,1,1,1,0,0]],
-            " ": [
-            [0,0,0,0,0,0],
-            [0,0,0,0,0,0],
-            [0,0,0,0,0,0],
-            [0,0,0,0,0,0],
-            [0,0,0,0,0,0],
-            [0,0,0,0,0,0],
-            [0,0,0,0,0,0]]
+            "A": [[0, 1, 1, 1, 0, 0], [1, 0, 0, 0, 1, 0], [1, 0, 0, 0, 1, 0], [1, 1, 1, 1, 1, 0], [1, 0, 0, 0, 1, 0], [1, 0, 0, 0, 1, 0], [1, 0, 0, 0, 1, 0]],
+            "B": [[1, 1, 1, 1, 0, 0], [1, 0, 0, 0, 1, 0], [1, 0, 0, 0, 1, 0], [1, 1, 1, 1, 0, 0], [1, 0, 0, 0, 1, 0], [1, 0, 0, 0, 1, 0], [1, 1, 1, 1, 0, 0]],
+            "C": [[0, 1, 1, 1, 0, 0], [1, 0, 0, 0, 1, 0], [1, 0, 0, 0, 0, 0], [1, 0, 0, 0, 0, 0], [1, 0, 0, 0, 0, 0], [1, 0, 0, 0, 1, 0], [0, 1, 1, 1, 0, 0]],
+            "D": [[1, 1, 1, 1, 0, 0], [1, 0, 0, 0, 1, 0], [1, 0, 0, 0, 1, 0], [1, 0, 0, 0, 1, 0], [1, 0, 0, 0, 1, 0], [1, 0, 0, 0, 1, 0], [1, 1, 1, 1, 0, 0]],
+            "E": [[1, 1, 1, 1, 1, 0], [1, 0, 0, 0, 0, 0], [1, 0, 0, 0, 0, 0], [1, 1, 1, 1, 0, 0], [1, 0, 0, 0, 0, 0], [1, 0, 0, 0, 0, 0], [1, 1, 1, 1, 1, 0]],
+            "F": [[1, 1, 1, 1, 1, 0], [1, 0, 0, 0, 0, 0], [1, 0, 0, 0, 0, 0], [1, 1, 1, 1, 0, 0], [1, 0, 0, 0, 0, 0], [1, 0, 0, 0, 0, 0], [1, 0, 0, 0, 0, 0]],
+            "H": [[1, 0, 0, 0, 1, 0], [1, 0, 0, 0, 1, 0], [1, 0, 0, 0, 1, 0], [1, 1, 1, 1, 1, 0], [1, 0, 0, 0, 1, 0], [1, 0, 0, 0, 1, 0], [1, 0, 0, 0, 1, 0]],
+            "M": [[1, 0, 0, 0, 1, 0], [1, 1, 0, 1, 1, 0], [1, 0, 1, 0, 1, 0], [1, 0, 0, 0, 1, 0], [1, 0, 0, 0, 1, 0], [1, 0, 0, 0, 1, 0], [1, 0, 0, 0, 1, 0]],
+            "O": [[0, 1, 1, 1, 0, 0], [1, 0, 0, 0, 1, 0], [1, 0, 0, 0, 1, 0], [1, 0, 0, 0, 1, 0], [1, 0, 0, 0, 1, 0], [1, 0, 0, 0, 1, 0], [0, 1, 1, 1, 0, 0]],
+            "R": [[1, 1, 1, 1, 0, 0], [1, 0, 0, 0, 1, 0], [1, 0, 0, 0, 1, 0], [1, 1, 1, 1, 0, 0], [1, 0, 1, 0, 0, 0], [1, 0, 0, 1, 0, 0], [1, 0, 0, 0, 1, 0]],
+            "S": [[0, 1, 1, 1, 0, 0], [1, 0, 0, 0, 1, 0], [1, 0, 0, 0, 0, 0], [0, 1, 1, 1, 0, 0], [0, 0, 0, 0, 1, 0], [1, 0, 0, 0, 1, 0], [0, 1, 1, 1, 0, 0]],
+            "T": [[1, 1, 1, 1, 1, 0], [0, 0, 1, 0, 0, 0], [0, 0, 1, 0, 0, 0], [0, 0, 1, 0, 0, 0], [0, 0, 1, 0, 0, 0], [0, 0, 1, 0, 0, 0], [0, 0, 1, 0, 0, 0]],
+            "U": [[1, 0, 0, 0, 1, 0], [1, 0, 0, 0, 1, 0], [1, 0, 0, 0, 1, 0], [1, 0, 0, 0, 1, 0], [1, 0, 0, 0, 1, 0], [1, 0, 0, 0, 1, 0], [0, 1, 1, 1, 0, 0]],
+            "W": [[1, 0, 0, 0, 1, 0], [1, 0, 0, 0, 1, 0], [1, 0, 0, 0, 1, 0], [1, 0, 0, 0, 1, 0], [1, 0, 1, 0, 1, 0], [1, 0, 1, 0, 1, 0], [0, 1, 0, 1, 0, 0]],
+            "0": [[0, 1, 1, 1, 0, 0], [1, 0, 0, 0, 1, 0], [1, 0, 0, 1, 1, 0], [1, 0, 1, 0, 1, 0], [1, 1, 0, 0, 1, 0], [1, 0, 0, 0, 1, 0], [0, 1, 1, 1, 0, 0]],
+            "1": [[0, 0, 1, 0, 0, 0], [0, 1, 1, 0, 0, 0], [0, 0, 1, 0, 0, 0], [0, 0, 1, 0, 0, 0], [0, 0, 1, 0, 0, 0], [0, 0, 1, 0, 0, 0], [0, 0, 1, 0, 0, 0]],
+            "2": [[0, 1, 1, 1, 0, 0], [1, 0, 0, 0, 1, 0], [0, 0, 0, 0, 1, 0], [0, 0, 1, 1, 0, 0], [0, 1, 0, 0, 0, 0], [1, 0, 0, 0, 0, 0], [1, 1, 1, 1, 1, 0]],
+            "3": [[0, 1, 1, 1, 0, 0], [1, 0, 0, 0, 1, 0], [0, 0, 0, 0, 1, 0], [0, 0, 1, 1, 0, 0], [0, 0, 0, 0, 1, 0], [1, 0, 0, 0, 1, 0], [0, 1, 1, 1, 0, 0]],
+            "4": [[0, 0, 0, 1, 0, 0], [0, 0, 1, 1, 0, 0], [0, 1, 0, 1, 0, 0], [1, 0, 0, 1, 0, 0], [1, 1, 1, 1, 1, 0], [0, 0, 0, 1, 0, 0], [0, 0, 0, 1, 0, 0]],
+            "5": [[1, 1, 1, 1, 1, 0], [1, 0, 0, 0, 0, 0], [1, 1, 1, 1, 0, 0], [0, 0, 0, 0, 1, 0], [0, 0, 0, 0, 1, 0], [1, 0, 0, 0, 1, 0], [0, 1, 1, 1, 0, 0]],
+            "6": [[0, 1, 1, 1, 0, 0], [1, 0, 0, 0, 1, 0], [1, 0, 0, 0, 0, 0], [1, 1, 1, 1, 0, 0], [1, 0, 0, 0, 1, 0], [1, 0, 0, 0, 1, 0], [0, 1, 1, 1, 0, 0]],
+            "7": [[1, 1, 1, 1, 1, 0], [0, 0, 0, 0, 1, 0], [0, 0, 0, 0, 1, 0], [0, 0, 0, 1, 0, 0], [0, 0, 1, 0, 0, 0], [0, 0, 1, 0, 0, 0], [0, 0, 1, 0, 0, 0]],
+            "8": [[0, 1, 1, 1, 0, 0], [1, 0, 0, 0, 1, 0], [1, 0, 0, 0, 1, 0], [0, 1, 1, 1, 0, 0], [1, 0, 0, 0, 1, 0], [1, 0, 0, 0, 1, 0], [0, 1, 1, 1, 0, 0]],
+            "9": [[0, 1, 1, 1, 0, 0], [1, 0, 0, 0, 1, 0], [1, 0, 0, 0, 1, 0], [0, 1, 1, 1, 1, 0], [0, 0, 0, 0, 1, 0], [1, 0, 0, 0, 1, 0], [0, 1, 1, 1, 0, 0]],
+            " ": [[0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0]]
         }
     }
 
     Item {
         id: segmentParent
+
         width: parent.width
-        height: parent.width*15/16
+        height: parent.width * 15 / 16
         anchors.horizontalCenter: parent.horizontalCenter
         anchors.verticalCenter: parent.verticalCenter
-        anchors.verticalCenterOffset: -parent.width/32
-        Image { // these two lines are shown if the watch is a) prepared for 'timepiece mode' (meaning that the LCD will continue working if the display turns off) or b) if the LCD is showing some data other than time
+        anchors.verticalCenterOffset: -parent.width / 32
+
+        // these two lines are shown if the watch is a) prepared for 'timepiece mode' (meaning that the LCD will continue working if the display turns off) or b) if the LCD is showing some data other than time
+        Image {
             anchors.fill: parent
             source: imgPath + "separators.svg"
             visible: separatorsVisible
         }
-        Image { // this watchface ships a pile of other punctuation, but this isn't used for normal timekeeping
+
+        // this watchface ships a pile of other punctuation, but this isn't used for normal timekeeping
+        Image {
             anchors.fill: parent
             source: imgPath + "main-colon.svg"
         }
+
         Image {
             anchors.fill: parent
             source: imgPath + "pm-indicator.svg"
             visible: use12H.value ? wallClock.time.getHours() > 12 : false
         }
-        Image { // this is shown when the watch is charging. We don't use nightstand in order to emulate the behaviour of the original display.
+        // this is shown when the watch is charging. We don't use nightstand in order to emulate the behaviour of the original display.
+
+        Image {
             anchors.fill: parent
             source: imgPath + "battery-icon.svg"
             visible: mceChargerType.type != MceChargerType.None
+
             MceChargerType {
                 id: mceChargerType
             }
+
         }
+
         Repeater {
             id: mainDigitRepeater
+
             anchors.fill: parent
+
+            Image {
+                id: digit
+
+                property string value: mainDisplayValue[index]
+
+                width: parent.width
+                height: parent.height
+                x: model.x * parent.width / 320
+                y: model.y * parent.height / 300
+                source: value == " " ? "" : imgPath + "main-" + (value) + ".svg"
+                smooth: true
+            }
+
             model: ListModel {
                 ListElement {
                     x: 35.261
@@ -287,103 +141,121 @@ Item {
                     width: 1
                     height: 1
                 }
+
                 ListElement {
                     x: 90.254
                     y: 118.693
                     width: 1
                     height: 1
                 }
+
                 ListElement {
                     x: 161.797
                     y: 118.693
                     width: 1
                     height: 1
                 }
+
                 ListElement {
                     x: 216.789
                     y: 118.693
                     width: 1
                     height: 1
                 }
+
                 ListElement {
-                    x: 271.750
+                    x: 271.75
                     y: 134.394
                     width: 0.7907
                     height: 0.8307
                 }
+
             }
-            Image {
-                id: digit
-                width: parent.width
-                height: parent.height
-                x: model.x*parent.width/320
-                y: model.y*parent.height/300
-                property string value: mainDisplayValue[index]
-                source: value == " " ? "" : imgPath + "main-" + (value) + ".svg"
-                smooth: true
-            }
+
         }
+
         Item {
             id: dotMatrixRoot
-            width: 172.1*parent.width/320
-            height: 52.2*parent.height/300
-            y: 41.800*parent.width/320
-            x: 76.525*parent.height/300
+
             property int columns: 23
             property int rows: 7
+
+            width: 172.1 * parent.width / 320
+            height: 52.2 * parent.height / 300
+            y: 41.8 * parent.width / 320
+            x: 76.525 * parent.height / 300
+
             Repeater {
-                model: dotMatrixRoot.rows*dotMatrixRoot.columns
+                model: dotMatrixRoot.rows * dotMatrixRoot.columns
+
                 Rectangle {
-                    height: parent.height*0.95/dotMatrixRoot.rows //these 0.95 add a tiny spacing between pixels
-                    width: parent.width*0.95/dotMatrixRoot.columns
+                    property int row: Math.floor(index / dotMatrixRoot.columns)
+                    property int column: index % dotMatrixRoot.columns
+
+                    height: parent.height * 0.95 / dotMatrixRoot.rows //these 0.95 add a tiny spacing between pixels
+                    width: parent.width * 0.95 / dotMatrixRoot.columns
                     antialiasing: true
-                    property int row: Math.floor(index/dotMatrixRoot.columns)
-                    property int column: index%dotMatrixRoot.columns
-                    x: dotMatrixRoot.width*column/dotMatrixRoot.columns
-                    y: dotMatrixRoot.height*row/dotMatrixRoot.rows
+                    x: dotMatrixRoot.width * column / dotMatrixRoot.columns
+                    y: dotMatrixRoot.height * row / dotMatrixRoot.rows
                     color: "#141414"
-                    visible: dotMatrixTextMode ? decode.dotMatrixVisible[dotMatrixText[Math.floor(column/6)]][row][column%6] : false
+                    visible: dotMatrixTextMode ? decode.dotMatrixVisible[dotMatrixText[Math.floor(column / 6)]][row][column % 6] : false
                 }
+
             }
+
         }
+
         Repeater {
             id: bottomDigitRepeater
+
             anchors.fill: parent
-            model: ListModel {
-                ListElement {
-                    x: 93.209
-                    y: 229.860
-                }
-                ListElement {
-                    x: 127.690
-                    y: 229.860
-                }
-                ListElement {
-                    x: 173.840
-                    y: 229.860
-                }
-                ListElement {
-                    x: 208.322
-                    y: 229.860
-                }
-            }
+
             Image {
                 id: digit
+
+                property string value: bottomDisplayValue[index]
+
                 width: parent.width
                 height: parent.height
-                x: model.x*parent.width/320
-                y: model.y*parent.height/300
-                property string value: bottomDisplayValue[index]
+                x: model.x * parent.width / 320
+                y: model.y * parent.height / 300
                 source: value == " " ? "" : imgPath + "bottom-" + (value) + ".svg"
                 smooth: true
             }
+
+            model: ListModel {
+                ListElement {
+                    x: 93.209
+                    y: 229.86
+                }
+
+                ListElement {
+                    x: 127.69
+                    y: 229.86
+                }
+
+                ListElement {
+                    x: 173.84
+                    y: 229.86
+                }
+
+                ListElement {
+                    x: 208.322
+                    y: 229.86
+                }
+
+            }
+
         }
-        ColorOverlay{
+
+        ColorOverlay {
             anchors.fill: segmentParent
             source: segmentParent
             color: "#B3B3B3"
             visible: displayAmbient
             antialiasing: true
         }
+
     }
+
 }

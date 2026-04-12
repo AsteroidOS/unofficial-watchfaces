@@ -24,305 +24,477 @@
 import QtQuick 2.9
 
 Item {
-
     property string currentColor: ""
     property string userColor: ""
     property string imgPath: "../watchfaces-img/analog-red-handed-"
 
     Text {
-        z: 0
         id: digitalDisplay
+
+        z: 0
         visible: !displayAmbient
-        font.pixelSize: parent.height*0.05
+        font.pixelSize: parent.height * 0.05
         font.family: "PTSans"
         font.styleName: "Bold"
         color: "white"
         horizontalAlignment: Text.AlignHCenter
+        text: use12H.value ? wallClock.time.toLocaleString(Qt.locale(), "hh ap").slice(0, 2) + wallClock.time.toLocaleString(Qt.locale(), ":mm") : wallClock.time.toLocaleString(Qt.locale(), "HH:mm")
+        state: currentColor
+
         anchors {
             verticalCenter: parent.verticalCenter
             horizontalCenter: parent.horizontalCenter
-            verticalCenterOffset: -parent.width/4.9
+            verticalCenterOffset: -parent.width / 4.9
         }
-        text: use12H.value ?
-        wallClock.time.toLocaleString(Qt.locale(), "hh ap").slice(0, 2) + wallClock.time.toLocaleString(Qt.locale(), ":mm") :
-        wallClock.time.toLocaleString(Qt.locale(), "HH:mm")
-        state: currentColor
-        states: State { name: "black";
-            PropertyChanges { target: digitalDisplay; color: "black" }
+
+        states: State {
+            name: "black"
+
+            PropertyChanges {
+                target: digitalDisplay
+                color: "black"
+            }
+
         }
+
         transitions: Transition {
-            from: ""; to: "black"; reversible: true
-                ColorAnimation { duration: 300 }
+            from: ""
+            to: "black"
+            reversible: true
+
+            ColorAnimation {
+                duration: 300
+            }
+
         }
+
     }
 
     Text {
-        z: 0
         id: dateDisplay
+
+        z: 0
         visible: !displayAmbient
-        font.pixelSize: parent.height*0.05
+        font.pixelSize: parent.height * 0.05
         font.family: "PTSans"
         font.styleName: "Bold"
         color: "white"
         horizontalAlignment: Text.AlignHCenter
-        anchors {
-            verticalCenter: parent.verticalCenter
-            horizontalCenter: parent.horizontalCenter
-            verticalCenterOffset: -parent.width/7
-        }
         text: wallClock.time.toLocaleString(Qt.locale(), "dd MMM").toUpperCase()
         state: currentColor
-        states: State { name: "black";
-            PropertyChanges { target: dateDisplay; color: "black" }
+
+        anchors {
+            verticalCenter: parent.verticalCenter
+            horizontalCenter: parent.horizontalCenter
+            verticalCenterOffset: -parent.width / 7
         }
+
+        states: State {
+            name: "black"
+
+            PropertyChanges {
+                target: dateDisplay
+                color: "black"
+            }
+
+        }
+
         transitions: Transition {
-            from: ""; to: "black"; reversible: true
-                ColorAnimation { duration: 300 }
+            from: ""
+            to: "black"
+            reversible: true
+
+            ColorAnimation {
+                duration: 300
+            }
+
         }
+
     }
 
     Text {
-        z: 0
         id: apDisplay
+
+        z: 0
         visible: use12H.value
         font.pixelSize: parent.height * 0.07
         font.family: "PTSans"
         font.styleName: "Bold"
         color: "white"
         horizontalAlignment: Text.AlignHCenter
+        text: wallClock.time.toLocaleString(Qt.locale(), "ap").toUpperCase()
+        state: currentColor
+
         anchors {
             verticalCenter: parent.verticalCenter
             horizontalCenter: parent.horizontalCenter
-            horizontalCenterOffset: parent.width/5.5
+            horizontalCenterOffset: parent.width / 5.5
         }
-        text: wallClock.time.toLocaleString(Qt.locale(), "ap").toUpperCase()
-        state: currentColor
-        states: State { name: "black";
-            PropertyChanges { target: apDisplay; color: "black" }
+
+        states: State {
+            name: "black"
+
+            PropertyChanges {
+                target: apDisplay
+                color: "black"
+            }
+
         }
+
         transitions: Transition {
-            from: ""; to: "black"; reversible: true
-                ColorAnimation { duration: 300 }
+            from: ""
+            to: "black"
+            reversible: true
+
+            ColorAnimation {
+                duration: 300
+            }
+
         }
+
     }
 
     Text {
-        z: 0
         id: dowDisplay
-        font.pixelSize: parent.height*0.07
+
+        z: 0
+        font.pixelSize: parent.height * 0.07
         font.family: "PTSans"
         font.styleName: "Bold"
         color: "white"
         horizontalAlignment: Text.AlignHCenter
+        text: wallClock.time.toLocaleString(Qt.locale(), "ddd").slice(0, 2).toUpperCase()
+        state: currentColor
+
         anchors {
             verticalCenter: parent.verticalCenter
             horizontalCenter: parent.horizontalCenter
-            horizontalCenterOffset: -parent.width/5.5
+            horizontalCenterOffset: -parent.width / 5.5
         }
-        text: wallClock.time.toLocaleString(Qt.locale(), "ddd").slice(0, 2).toUpperCase()
-        state: currentColor
-        states: State { name: "black";
-            PropertyChanges { target: dowDisplay; color: "black" }
+
+        states: State {
+            name: "black"
+
+            PropertyChanges {
+                target: dowDisplay
+                color: "black"
+            }
+
         }
+
         transitions: Transition {
-            from: ""; to: "black"; reversible: true
-                ColorAnimation { duration: 300 }
+            from: ""
+            to: "black"
+            reversible: true
+
+            ColorAnimation {
+                duration: 300
+            }
+
         }
+
     }
 
     Image {
-        z: 0
         id: logoAsteroid
+
+        z: 0
         source: "../watchfaces-img/asteroid-logo.svg"
         anchors.horizontalCenter: parent.horizontalCenter
         anchors.verticalCenter: parent.verticalCenter
-        anchors.verticalCenterOffset: parent.height*0.18
-        width: parent.width/9
-        height: parent.height/9
+        anchors.verticalCenterOffset: parent.height * 0.18
+        width: parent.width / 9
+        height: parent.height / 9
     }
 
     Repeater {
         model: 12
+
         Rectangle {
-            z: 1
             id: hourDots
-            antialiasing : true
-            property real rotM: ((index * 5 ) - 15)/60
-            property real centerX: parent.width/2-width/2
-            property real centerY: parent.height/2-height/2
-            x: centerX+Math.cos(rotM * 2 * Math.PI)*parent.width*0.29
-            y: centerY+Math.sin(rotM * 2 * Math.PI)*parent.width*0.29
+
+            property real rotM: ((index * 5) - 15) / 60
+            property real centerX: parent.width / 2 - width / 2
+            property real centerY: parent.height / 2 - height / 2
+
+            z: 1
+            antialiasing: true
+            x: centerX + Math.cos(rotM * 2 * Math.PI) * parent.width * 0.29
+            y: centerY + Math.sin(rotM * 2 * Math.PI) * parent.width * 0.29
             color: "white"
-            width: parent.width*0.032
-            height: parent.height*0.032
-            radius: width*0.5
+            width: parent.width * 0.032
+            height: parent.height * 0.032
+            radius: width * 0.5
             state: currentColor
-            states: State { name: "black";
-                PropertyChanges { target: hourDots; color: "black" }
+
+            states: State {
+                name: "black"
+
+                PropertyChanges {
+                    target: hourDots
+                    color: "black"
+                }
+
             }
+
             transitions: Transition {
-                from: ""; to: "black"; reversible: true
-                    ColorAnimation { duration: 300 }
+                from: ""
+                to: "black"
+                reversible: true
+
+                ColorAnimation {
+                    duration: 300
+                }
+
             }
+
         }
+
     }
 
     Repeater {
         model: 60
+
         Rectangle {
-            z: 1
             id: minuteStrokes
-            antialiasing : true
-            property real rotM: ((index) - 15)/60
-            property real centerX: parent.width/2-width/2
-            property real centerY: parent.height/2-height/2
-            x: centerX+Math.cos(rotM * 2 * Math.PI)*parent.width*0.29
-            y: centerY+Math.sin(rotM * 2 * Math.PI)*parent.width*0.29
+
+            property real rotM: ((index) - 15) / 60
+            property real centerX: parent.width / 2 - width / 2
+            property real centerY: parent.height / 2 - height / 2
+
+            z: 1
+            antialiasing: true
+            x: centerX + Math.cos(rotM * 2 * Math.PI) * parent.width * 0.29
+            y: centerY + Math.sin(rotM * 2 * Math.PI) * parent.width * 0.29
             color: "white"
-            width: parent.width*0.004
-            height: parent.height*0.02
-            transform: Rotation { origin.x: width/2; origin.y: height/2; angle: (index)*6}
+            width: parent.width * 0.004
+            height: parent.height * 0.02
             state: currentColor
-            states: State { name: "black";
-                PropertyChanges { target: minuteStrokes; color: "black" }
+
+            transform: Rotation {
+                origin.x: width / 2
+                origin.y: height / 2
+                angle: (index) * 6
             }
+
+            states: State {
+                name: "black"
+
+                PropertyChanges {
+                    target: minuteStrokes
+                    color: "black"
+                }
+
+            }
+
             transitions: Transition {
-                from: ""; to: "black"; reversible: true
-                    ColorAnimation { duration: 300 }
+                from: ""
+                to: "black"
+                reversible: true
+
+                ColorAnimation {
+                    duration: 300
+                }
+
             }
+
         }
+
     }
 
     Repeater {
         model: 4
+
         Text {
-            z: 1
             id: hourNumbers
-            font.pixelSize: parent.height*0.14
+
+            property real rotM: ((index * 15) - 15) / 60
+            property real centerX: parent.width / 2 - width / 2
+            property real centerY: parent.height / 2 - height / 2
+
+            z: 1
+            font.pixelSize: parent.height * 0.14
             font.family: "RussoOne"
-            property real rotM: ((index * 15 ) - 15)/60
-            property real centerX: parent.width/2-width/2
-            property real centerY: parent.height/2-height/2
-            x: centerX+Math.cos(rotM * 2 * Math.PI)*parent.width*0.4
-            y: centerY+Math.sin(rotM * 2 * Math.PI)*parent.width*0.4
+            x: centerX + Math.cos(rotM * 2 * Math.PI) * parent.width * 0.4
+            y: centerY + Math.sin(rotM * 2 * Math.PI) * parent.width * 0.4
             color: "white"
             text: index === 0 ? 12 : index * 3
             state: currentColor
-            states: State { name: "black";
-                PropertyChanges { target: hourNumbers; color: "black" }
+
+            states: State {
+                name: "black"
+
+                PropertyChanges {
+                    target: hourNumbers
+                    color: "black"
+                }
+
             }
+
             transitions: Transition {
-                from: ""; to: "black"; reversible: true
-                    ColorAnimation { duration: 300 }
+                from: ""
+                to: "black"
+                reversible: true
+
+                ColorAnimation {
+                    duration: 300
+                }
+
             }
+
         }
+
     }
 
     Repeater {
         model: 12
+
         Rectangle {
-            z: 1
             id: hourStrokes
-            antialiasing : true
-            property real rotM: ((index * 5 ) - 15)/60
-            property real centerX: parent.width/2-width/2
-            property real centerY: parent.height/2-height/2
-            x: centerX+Math.cos(rotM * 2 * Math.PI)*parent.width*0.4
-            y: centerY+Math.sin(rotM * 2 * Math.PI)*parent.width*0.4
+
+            property real rotM: ((index * 5) - 15) / 60
+            property real centerX: parent.width / 2 - width / 2
+            property real centerY: parent.height / 2 - height / 2
+
+            z: 1
+            antialiasing: true
+            x: centerX + Math.cos(rotM * 2 * Math.PI) * parent.width * 0.4
+            y: centerY + Math.sin(rotM * 2 * Math.PI) * parent.width * 0.4
             color: "white"
             opacity: [0, 3, 6, 9].includes(index) ? 0 : 1
-            width: parent.width*0.014
-            height: parent.height*0.1
-            radius: width*0.5
-            transform: Rotation { origin.x: width/2; origin.y: height/2; angle: (index*5)*6}
+            width: parent.width * 0.014
+            height: parent.height * 0.1
+            radius: width * 0.5
             state: currentColor
-            states: State { name: "black";
-                PropertyChanges { target: hourStrokes; color: "black" }
+
+            transform: Rotation {
+                origin.x: width / 2
+                origin.y: height / 2
+                angle: (index * 5) * 6
             }
+
+            states: State {
+                name: "black"
+
+                PropertyChanges {
+                    target: hourStrokes
+                    color: "black"
+                }
+
+            }
+
             transitions: Transition {
-                from: ""; to: "black"; reversible: true
-                    ColorAnimation { duration: 300 }
+                from: ""
+                to: "black"
+                reversible: true
+
+                ColorAnimation {
+                    duration: 300
+                }
+
             }
+
         }
+
     }
 
     Image {
         id: hourSVG
+
         z: 2
         source: !displayAmbient ? imgPath + "hour.svg" : imgPath + "hour-ambient.svg"
         anchors.horizontalCenter: parent.horizontalCenter
         anchors.verticalCenter: parent.verticalCenter
         width: parent.width
         height: parent.height
+
         transform: Rotation {
-            origin.x: parent.width/2;
-            origin.y: parent.height/2;
-            angle: (wallClock.time.getHours()*30) + (wallClock.time.getMinutes()*0.5)
+            origin.x: parent.width / 2
+            origin.y: parent.height / 2
+            angle: (wallClock.time.getHours() * 30) + (wallClock.time.getMinutes() * 0.5)
         }
+
     }
 
     Image {
         id: minuteSVG
+
         z: 3
         source: !displayAmbient ? imgPath + "minute.svg" : imgPath + "minute-ambient.svg"
         anchors.horizontalCenter: parent.horizontalCenter
         anchors.verticalCenter: parent.verticalCenter
         width: parent.width
         height: parent.height
+
         transform: Rotation {
-            origin.x: parent.width/2;
-            origin.y: parent.height/2;
-            angle: (wallClock.time.getMinutes()*6)+(wallClock.time.getSeconds()*6/60)
+            origin.x: parent.width / 2
+            origin.y: parent.height / 2
+            angle: (wallClock.time.getMinutes() * 6) + (wallClock.time.getSeconds() * 6 / 60)
         }
+
     }
 
     Image {
         id: secondSVG
-        z: 4
+
         property var toggle: 1
+
+        z: 4
         visible: !displayAmbient
         source: imgPath + "second.svg"
         anchors.horizontalCenter: parent.horizontalCenter
         anchors.verticalCenter: parent.verticalCenter
         width: parent.width
         height: parent.height
-        transform: Rotation {
-            origin.x: parent.width/2;
-            origin.y: parent.height/2;
-            angle: (wallClock.time.getSeconds()*6)
-        }
+
         MouseArea {
             anchors.fill: parent
             onDoubleClicked: {
-               if (secondSVG.toggle === 1) {
-                    currentColor = "black"
-                    secondSVG.toggle = 0
-               } else {
-                    currentColor = ""
-                    secondSVG.toggle = 1
+                if (secondSVG.toggle === 1) {
+                    currentColor = "black";
+                    secondSVG.toggle = 0;
+                } else {
+                    currentColor = "";
+                    secondSVG.toggle = 1;
                 }
             }
         }
+
+        transform: Rotation {
+            origin.x: parent.width / 2
+            origin.y: parent.height / 2
+            angle: (wallClock.time.getSeconds() * 6)
+        }
+
     }
-    
+
     Connections {
+        function onTimeChanged() {
+            if (!visible)
+                return ;
+
+        }
+
         target: wallClock
-        function onTimeChanged() { if (!visible) return }
     }
 
     Connections {
-        target: compositor
-        function onDisplayAmbientEntered() { if (currentColor == "black") {
-                                     currentColor = ""
-                                     userColor = "black"
-                                 }
-                                 else
-                                     userColor = ""
+        function onDisplayAmbientEntered() {
+            if (currentColor == "black") {
+                currentColor = "";
+                userColor = "black";
+            } else {
+                userColor = "";
+            }
         }
 
-        function onDisplayAmbientLeft() { if (userColor == "black") {
-                                     currentColor = "black"
-                                 }
+        function onDisplayAmbientLeft() {
+            if (userColor == "black")
+                currentColor = "black";
+
         }
+
+        target: compositor
     }
+
 }

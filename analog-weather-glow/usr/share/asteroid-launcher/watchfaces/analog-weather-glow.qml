@@ -1,4 +1,4 @@
-﻿/*
+/*
  * Copyright (C) 2026 - Timo Könnecke <github.com/moWerk>
  *               2022 - Darrel Griët <dgriet@gmail.com>
  *               2022 - Ed Beroset <github.com/beroset>
@@ -23,63 +23,19 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
+import Connman 0.2
+import Nemo.Configuration 1.0
+import Nemo.Mce 1.0
+import QtGraphicalEffects 1.15
 import QtQuick 2.15
 import QtQuick.Shapes 1.15
 import QtSensors 5.11
-import QtGraphicalEffects 1.15
 import org.asteroid.controls 1.0
 import org.asteroid.utils 1.0
-import Nemo.Configuration 1.0
-import Nemo.Mce 1.0
-import Connman 0.2
-import 'weathericons.js' as WeatherIcons
+import "weathericons.js" as WeatherIcons
 
 Item {
-    id: root
-
-    anchors.fill: parent
-
-    property string imgPath: "../watchfaces-img/analog-weather-glow-"
-
-    // Radian per degree used by all canvas arcs
-    property real rad: .01745
-
-    // Element sizes, positioning, linewidth and opacity
-    property real switchSize: root.width * .1375
-    property real boxSize: root.width * .35
-    property real switchPosition: root.width * .26
-    property real boxPosition: root.width * .25
-    property real innerArcLineWidth: root.height * .008
-    property real outerArcLineWidth: root.height * .016
-    property real activeArcOpacity: !displayAmbient ? .7 : .4
-    property real inactiveArcOpacity: !displayAmbient ? .5 : .3
-    property real activeContentOpacity: !displayAmbient ? .95 : .6
-    property real inactiveContentOpacity: !displayAmbient ? .5 : .3
-
-    // Color definition
-    property string customRed: "#DB5461" // Indian Red
-    property string customBlue: "#1E96FC" // Dodger Blue
-    property string customGreen: "#26C485" // Ocean Green
-    property string customOrange: "#FFC600" // Mikado Yellow
-    property string boxColor: "#E8DCB9" // Dutch White
-    property string switchColor: "#A2D6F9" // Uranian Blue
-
-    // HRM initialisation. Needs to be declared global since hrmBox and hrmSwitch both need it.
-    property int hrmBpm: 0
-    property bool hrmSensorActive: false
-    property var hrmBpmTime: wallClock.time
-
-    // Set day to use in the weatherBox to today.
-    property int dayNb: 0
-
-    function kelvinToTemperatureString(kelvin) {
-        var celsius = (kelvin - 273);
-        if(!useFahrenheit.value)
-            return celsius + "°";
-        else
-            return Math.round(((celsius) * 9 / 5) + 32) + "°";
-    }
-
+    // Uranian Blue
     // Prepare for feature where the secondary hardware button activates HRM mode.
     // Keycode 134 = Sawfish lower button.
     /*Keys.onPressed: {
@@ -87,8 +43,54 @@ Item {
             hrmSensorActive = !hrmSensorActive
         }
     }*/
-
     // Request the heart rate related arcs to be repainted when hrm sensor is toggled.
+
+    id: root
+
+    property string imgPath: "../watchfaces-img/analog-weather-glow-"
+    // Radian per degree used by all canvas arcs
+    property real rad: 0.01745
+    // Element sizes, positioning, linewidth and opacity
+    property real switchSize: root.width * 0.1375
+    property real boxSize: root.width * 0.35
+    property real switchPosition: root.width * 0.26
+    property real boxPosition: root.width * 0.25
+    property real innerArcLineWidth: root.height * 0.008
+    property real outerArcLineWidth: root.height * 0.016
+    property real activeArcOpacity: !displayAmbient ? 0.7 : 0.4
+    property real inactiveArcOpacity: !displayAmbient ? 0.5 : 0.3
+    property real activeContentOpacity: !displayAmbient ? 0.95 : 0.6
+    property real inactiveContentOpacity: !displayAmbient ? 0.5 : 0.3
+    // Color definition
+    property string customRed: "#DB5461"
+    // Indian Red
+    property string customBlue: "#1E96FC"
+    // Dodger Blue
+    property string customGreen: "#26C485"
+    // Ocean Green
+    property string customOrange: "#FFC600"
+    // Mikado Yellow
+    property string boxColor: "#E8DCB9"
+    // Dutch White
+    property string switchColor: "#A2D6F9"
+    // HRM initialisation. Needs to be declared global since hrmBox and hrmSwitch both need it.
+    property int hrmBpm: 0
+    property bool hrmSensorActive: false
+    property var hrmBpmTime: wallClock.time
+    // Set day to use in the weatherBox to today.
+    property int dayNb: 0
+
+    function kelvinToTemperatureString(kelvin) {
+        var celsius = (kelvin - 273);
+        if (!useFahrenheit.value)
+            return celsius + "°";
+        else
+            return Math.round(((celsius) * 9 / 5) + 32) + "°";
+    }
+
+    anchors.fill: parent
+    // Slight dropshadow under all Items.
+    layer.enabled: true
 
     MceBatteryState {
         id: batteryChargeState
@@ -106,6 +108,7 @@ Item {
 
         anchors.fill: parent
         visible: dockMode.active
+
         layer {
             enabled: true
             samples: 4
@@ -121,7 +124,7 @@ Item {
             property real arcStrokeWidth: 0.016
             property real scalefactor: 0.39 - (arcStrokeWidth / 2)
             property var chargecolor: Math.floor(batteryChargePercentage.percent / 33.35)
-            readonly property var colorArray: [ "red", "yellow", Qt.rgba(0.318, 1, 0.051, 0.9)]
+            readonly property var colorArray: ["red", "yellow", Qt.rgba(0.318, 1, 0.051, 0.9)]
 
             anchors.fill: parent
 
@@ -132,7 +135,7 @@ Item {
                 capStyle: ShapePath.RoundCap
                 joinStyle: ShapePath.MiterJoin
                 startX: width / 2
-                startY: height * ( 0.5 - chargeArc.scalefactor)
+                startY: height * (0.5 - chargeArc.scalefactor)
 
                 PathAngleArc {
                     centerX: parent.width / 2
@@ -143,52 +146,62 @@ Item {
                     sweepAngle: chargeArc.angle
                     moveToStart: false
                 }
+
             }
+
         }
 
         Text {
             id: batteryDockPercent
 
+            visible: dockMode.active
+            color: chargeArc.colorArray[chargeArc.chargecolor]
+            style: Text.Outline
+            styleColor: "#80000000"
+            text: batteryChargePercentage.percent
+
             anchors {
                 centerIn: parent
                 verticalCenterOffset: parent.width * 0.22
             }
+
             font {
-                pixelSize: parent.width * .15
+                pixelSize: parent.width * 0.15
                 family: "Noto Sans"
                 styleName: "Condensed Light"
             }
-            visible: dockMode.active
-            color: chargeArc.colorArray[chargeArc.chargecolor]
-            style: Text.Outline; styleColor: "#80000000"
-            text: batteryChargePercentage.percent
+
         }
+
     }
 
     Repeater {
-            model: 60
+        model: 60
 
-            Rectangle {
-                id: minuteStrokes
+        Rectangle {
+            id: minuteStrokes
 
-                property real rotM: (index - 15) / 60
-                property real centerX: root.width / 2 - width / 2
-                property real centerY: root.height / 2 - height / 2
+            property real rotM: (index - 15) / 60
+            property real centerX: root.width / 2 - width / 2
+            property real centerY: root.height / 2 - height / 2
 
-                x: centerX + Math.cos(rotM * 2 * Math.PI) * parent.width * .46
-                y: centerY + Math.sin(rotM * 2 * Math.PI) * parent.width * .46
-                visible: index % 5
-                antialiasing: true
-                color: "#55ffffff"
-                width: parent.width * .005
-                height: parent.height * .018
-                transform: Rotation {
-                    origin.x: width / 2
-                    origin.y: height / 2
-                    angle: (index) * 6
-                }
+            x: centerX + Math.cos(rotM * 2 * Math.PI) * parent.width * 0.46
+            y: centerY + Math.sin(rotM * 2 * Math.PI) * parent.width * 0.46
+            visible: index % 5
+            antialiasing: true
+            color: "#55ffffff"
+            width: parent.width * 0.005
+            height: parent.height * 0.018
+
+            transform: Rotation {
+                origin.x: width / 2
+                origin.y: height / 2
+                angle: (index) * 6
             }
+
         }
+
+    }
 
     Repeater {
         // Hour numerals. hourModeSwitch toggles the 12/24hour display.
@@ -201,181 +214,199 @@ Item {
             property real centerX: root.width / 2 - width / 2
             property real centerY: root.height / 2 - height / 2
 
-            antialiasing : true
-            font {
-                pixelSize: root.height * .06
-                family: "Noto Sans"
-                styleName: "Bold"
-            }
-            x: centerX + Math.cos(rotM * 2 * Math.PI) * root.width * .46
-            y: centerY + Math.sin(rotM * 2 * Math.PI) * root.width * .46
+            antialiasing: true
+            x: centerX + Math.cos(rotM * 2 * Math.PI) * root.width * 0.46
+            y: centerY + Math.sin(rotM * 2 * Math.PI) * root.width * 0.46
             color: hourSVG.toggle24h && index === 0 ? customGreen : "white"
             opacity: inactiveContentOpacity
             text: (index === 0 ? 12 : index) * (hourSVG.toggle24h ? 2 : 1)
 
+            font {
+                pixelSize: root.height * 0.06
+                family: "Noto Sans"
+                styleName: "Bold"
+            }
+
             transform: Rotation {
                 origin.x: width / 2
                 origin.y: height / 2
-                angle: index === 6 ?
-                           0 :
-                           ([4, 5, 7, 8].includes(index)) ?
-                               (index * 30) + 180 :
-                               index * 30
+                angle: index === 6 ? 0 : ([4, 5, 7, 8].includes(index)) ? (index * 30) + 180 : index * 30
             }
+
         }
+
     }
 
     Item {
         // Toggle switch for the 12/24 hour mode. Affecting hourNumbers and hourHand appearance.
         id: hourModeSwitch
 
-        anchors {
-            centerIn: root
-            verticalCenterOffset: -root.width * .4
-        }
         width: boxSize
         height: width
         visible: !dockMode.active && !displayAmbient
 
+        anchors {
+            centerIn: root
+            verticalCenterOffset: -root.width * 0.4
+        }
+
         Text {
             id: hourModeSwitchText
+
+            color: hourSVG.toggle24h ? customGreen : "#ffffff"
+            opacity: inactiveContentOpacity
+            text: "HOUR MODE"
 
             anchors {
                 centerIn: parent
             }
+
             font {
-                pixelSize: parent.width * .12
+                pixelSize: parent.width * 0.12
                 family: "Barlow"
                 styleName: "Bold"
             }
-            color: hourSVG.toggle24h ? customGreen : "#ffffff"
-            opacity: inactiveContentOpacity
-            text: "HOUR MODE"
+
         }
 
         MouseArea {
             anchors.fill: hourModeSwitch
             onClicked: hourSVG.toggle24h = !hourSVG.toggle24h
         }
+
     }
 
     Item {
         // Wrapper for digital time related objects. Hour, minute and AP following units setting.
         id: digitalBox
 
-        anchors {
-            centerIn: root
-            verticalCenterOffset: dockMode.active ? -root.width * .21 : -root.width * .29
-        }
-        width: !dockMode.active ? boxSize : boxSize * .84
+        width: !dockMode.active ? boxSize : boxSize * 0.84
         height: width
         opacity: activeContentOpacity
+
+        anchors {
+            centerIn: root
+            verticalCenterOffset: dockMode.active ? -root.width * 0.21 : -root.width * 0.29
+        }
 
         Text {
             id: digitalHour
 
+            color: "#ccffffff"
+            text: use12H.value ? wallClock.time.toLocaleString(Qt.locale(), "hh ap").slice(0, 2) : wallClock.time.toLocaleString(Qt.locale(), "HH")
+
             anchors {
                 right: parent.horizontalCenter
-                rightMargin: parent.width * .01
+                rightMargin: parent.width * 0.01
                 verticalCenter: parent.verticalCenter
             }
+
             font {
-                pixelSize: parent.width * .46
+                pixelSize: parent.width * 0.46
                 family: "Noto Sans"
                 styleName: "Regular"
-                letterSpacing: -parent.width * .001
+                letterSpacing: -parent.width * 0.001
             }
-            color: "#ccffffff"
-            text: use12H.value ?
-            wallClock.time.toLocaleString(Qt.locale(), "hh ap").slice(0, 2) :
-            wallClock.time.toLocaleString(Qt.locale(), "HH")
+
         }
 
         Text {
             id: digitalMinutes
 
+            color: "#ddffffff"
+            text: wallClock.time.toLocaleString(Qt.locale(), "mm")
+
             anchors {
                 left: digitalHour.right
                 bottom: digitalHour.bottom
-                leftMargin: parent.width * .01
+                leftMargin: parent.width * 0.01
             }
+
             font {
-                pixelSize: parent.width * .46
+                pixelSize: parent.width * 0.46
                 family: "Noto Sans"
                 styleName: "Light"
-                letterSpacing: -parent.width * .001
+                letterSpacing: -parent.width * 0.001
             }
-            color: "#ddffffff"
-            text: wallClock.time.toLocaleString(Qt.locale(), "mm")
+
         }
 
         Text {
             id: apDisplay
 
+            visible: use12H.value
+            color: "#ddffffff"
+            text: wallClock.time.toLocaleString(Qt.locale(), "ap").toUpperCase()
+
             anchors {
                 left: digitalMinutes.right
-                leftMargin: parent.width * .09
+                leftMargin: parent.width * 0.09
                 bottom: digitalMinutes.verticalCenter
-                bottomMargin: -parent.width * .22
+                bottomMargin: -parent.width * 0.22
             }
+
             font {
                 pixelSize: parent.width * 0.14
                 family: "Noto Sans"
                 styleName: "Condensed"
             }
-            visible: use12H.value
-            color: "#ddffffff"
-            text: wallClock.time.toLocaleString(Qt.locale(), "ap").toUpperCase()
+
         }
+
     }
 
     Item {
         // Toggle switch that hides the dateBox and shows the hrmBox
         id: hrmSwitch
 
-        anchors {
-            centerIn: root
-            verticalCenterOffset: -root.height * .13
-        }
         width: switchSize
         height: width
         visible: (!displayAmbient || hrmSensorActive) && !dockMode.active
 
+        anchors {
+            centerIn: root
+            verticalCenterOffset: -root.height * 0.13
+        }
+
         Rectangle {
             id: hrmSwitchArc
+
             anchors.fill: parent
             color: "transparent"
             opacity: hrmSensorActive ? activeArcOpacity : inactiveArcOpacity
-            
+
             Rectangle {
                 anchors.centerIn: parent
-                width: parent.width * .88
+                width: parent.width * 0.88
                 height: width
                 radius: width / 2
                 color: "#22ffffff"
                 border.width: innerArcLineWidth
                 border.color: hrmSensorActive ? customRed : switchColor
             }
-            
+
             MouseArea {
                 anchors.fill: parent
                 onClicked: hrmSensorActive = !hrmSensorActive
             }
+
         }
 
         Icon {
             // Icon class depends on import org.asteroid.controls 1.0
             id: heartPicture
 
-            anchors{
-                centerIn: hrmSwitch
-                verticalCenterOffset: hrmSwitch.width * .02
-                horizontalCenterOffset: hrmSwitch.width * .02
-            }
-            width: parent.width * .55
+            width: parent.width * 0.55
             height: width
             name: "ios-heart"
             opacity: hrmSensorActive ? activeContentOpacity : inactiveContentOpacity
+
+            anchors {
+                centerIn: hrmSwitch
+                verticalCenterOffset: hrmSwitch.width * 0.02
+                horizontalCenterOffset: hrmSwitch.width * 0.02
+            }
+
         }
 
         // ColorOverlay depends on import QtGraphicalEffects 1.15
@@ -385,20 +416,33 @@ Item {
             visible: hrmSensorActive
             color: customRed
         }
+
     }
 
     Item {
+        // Preparation for a feature to open the weather app when the weatherBox is pressed.
+        // Needs a delegate to hold the application names afaiu
+        /*MouseArea {
+            anchors.fill: weatherBox
+            onClicked: {
+               weather.launchApplication()
+            }
+        }*/
+
         // Wrapper for weather related elements. Contains a weatherIcon and maxTemp display.
         // "No weather data" text is shown when no data is available.
         // ConfigurationValue depends on Nemo.Configuration 1.0
         id: weatherBox
 
-        anchors {
-            centerIn: root
-            horizontalCenterOffset: !dockMode.active ? -boxPosition : -boxPosition * .78
-        }
+        property bool weatherSynced: maxTemp.value != 0
+
         width: boxSize
         height: width
+
+        anchors {
+            centerIn: root
+            horizontalCenterOffset: !dockMode.active ? -boxPosition : -boxPosition * 0.78
+        }
 
         ConfigurationValue {
             id: timestampDay0
@@ -416,28 +460,29 @@ Item {
 
         ConfigurationValue {
             id: owmId
+
             key: "/org/asteroidos/weather/day" + dayNb + "/id"
             defaultValue: 0
         }
 
         ConfigurationValue {
             id: maxTemp
+
             key: "/org/asteroidos/weather/day" + dayNb + "/max-temp"
             defaultValue: 0
         }
 
-        property bool weatherSynced: maxTemp.value != 0
-
         Rectangle {
             id: weatherArc
+
             anchors.centerIn: parent
-            width: parent.width * .86
+            width: parent.width * 0.86
             height: width
             radius: width / 2
             color: "#22ffffff"
             opacity: inactiveArcOpacity
             visible: !dockMode.active
-            
+
             Rectangle {
                 anchors.centerIn: parent
                 width: parent.width
@@ -447,7 +492,7 @@ Item {
                 border.width: outerArcLineWidth
                 border.color: "#33ffffff"
             }
-            
+
             Rectangle {
                 anchors.centerIn: parent
                 width: parent.width
@@ -457,76 +502,76 @@ Item {
                 border.width: innerArcLineWidth
                 border.color: boxColor
             }
+
         }
 
         Icon {
             // WeatherIcons depends on import 'weathericons.js' as WeatherIcons
             id: iconDisplay
 
-            anchors {
-                centerIn: parent
-                verticalCenterOffset: -parent.height * .155
-            }
-            width: parent.width * .42
+            width: parent.width * 0.42
             height: width
             opacity: activeContentOpacity
             visible: weatherBox.weatherSynced
             name: WeatherIcons.getIconName(owmId.value)
+
+            anchors {
+                centerIn: parent
+                verticalCenterOffset: -parent.height * 0.155
+            }
+
         }
 
         Label {
             id: maxDisplay
 
-            anchors {
-                centerIn: parent
-                verticalCenterOffset: parent.height * (weatherBox.weatherSynced ? .155 : 0)
-                horizontalCenterOffset: parent.height * (weatherBox.weatherSynced ? .05 : 0)
-            }
             width: parent.width
             height: width
             horizontalAlignment: Text.AlignHCenter
             verticalAlignment: Text.AlignVCenter
             opacity: activeContentOpacity
+            text: weatherBox.weatherSynced ? kelvinToTemperatureString(maxTemp.value) : "NO<br>WEATHER<br>DATA"
+
+            anchors {
+                centerIn: parent
+                verticalCenterOffset: parent.height * (weatherBox.weatherSynced ? 0.155 : 0)
+                horizontalCenterOffset: parent.height * (weatherBox.weatherSynced ? 0.05 : 0)
+            }
+
             font {
                 family: "Barlow"
                 styleName: weatherBox.weatherSynced ? "Medium" : "Bold"
-                pixelSize: parent.width * (weatherBox.weatherSynced ? .30 : .14)
+                pixelSize: parent.width * (weatherBox.weatherSynced ? 0.3 : 0.14)
             }
-            text: weatherBox.weatherSynced ? kelvinToTemperatureString(maxTemp.value) : "NO<br>WEATHER<br>DATA"
+
         }
 
-        // Preparation for a feature to open the weather app when the weatherBox is pressed.
-        // Needs a delegate to hold the application names afaiu
-        /*MouseArea {
-            anchors.fill: weatherBox
-            onClicked: {
-               weather.launchApplication()
-            }
-        }*/
     }
 
     Item {
         // Wrapper for date related objects, day name, day number and month short code.
         id: dayBox
 
-        anchors {
-            centerIn: root
-            horizontalCenterOffset: !dockMode.active ? boxPosition : boxPosition * .78
-        }
         width: boxSize
         height: width
         visible: !hrmSensorActive
 
+        anchors {
+            centerIn: root
+            horizontalCenterOffset: !dockMode.active ? boxPosition : boxPosition * 0.78
+        }
+
         Rectangle {
             id: dayArc
+
             anchors.centerIn: parent
-            width: parent.width * .86
+            width: parent.width * 0.86
             height: width
             radius: width / 2
             color: "#22ffffff"
             opacity: inactiveArcOpacity
             visible: !dockMode.active
-            
+
             Rectangle {
                 anchors.centerIn: parent
                 width: parent.width
@@ -536,7 +581,7 @@ Item {
                 border.width: outerArcLineWidth
                 border.color: "#33ffffff"
             }
-            
+
             Rectangle {
                 anchors.centerIn: parent
                 width: parent.width
@@ -546,57 +591,68 @@ Item {
                 border.width: innerArcLineWidth
                 border.color: boxColor
             }
+
         }
 
         Text {
             id: dayName
 
-            anchors {
-                centerIn: parent
-                verticalCenterOffset: -parent.width * .25
-            }
-            font {
-                pixelSize: parent.width * .14
-                family: "Barlow"
-                styleName: "Bold"
-            }
             color: "#ffffffff"
             opacity: displayAmbient ? inactiveArcOpacity : activeContentOpacity
             text: wallClock.time.toLocaleString(Qt.locale(), "ddd").slice(0, 3).toUpperCase()
+
+            anchors {
+                centerIn: parent
+                verticalCenterOffset: -parent.width * 0.25
+            }
+
+            font {
+                pixelSize: parent.width * 0.14
+                family: "Barlow"
+                styleName: "Bold"
+            }
+
         }
 
         Text {
             id: dayNumber
 
-            anchors {
-                centerIn: parent
-            }
-            font {
-                pixelSize: parent.width * .38
-                family: "Noto Sans"
-                styleName: "Condensed"
-            }
             color: "#ffffffff"
             opacity: activeContentOpacity
             text: wallClock.time.toLocaleString(Qt.locale(), "dd").slice(0, 2).toUpperCase()
+
+            anchors {
+                centerIn: parent
+            }
+
+            font {
+                pixelSize: parent.width * 0.38
+                family: "Noto Sans"
+                styleName: "Condensed"
+            }
+
         }
 
         Text {
             id: monthName
 
-            anchors {
-                centerIn: parent
-                verticalCenterOffset: parent.width * .25
-            }
-            font {
-                pixelSize: parent.width * .14
-                family: "Barlow"
-                styleName: "Bold"
-            }
             color: "#ffffffff"
             opacity: displayAmbient ? inactiveArcOpacity : activeContentOpacity
             text: wallClock.time.toLocaleString(Qt.locale(), "MMM").slice(0, 3).toUpperCase()
+
+            anchors {
+                centerIn: parent
+                verticalCenterOffset: parent.width * 0.25
+            }
+
+            font {
+                pixelSize: parent.width * 0.14
+                family: "Barlow"
+                styleName: "Bold"
+            }
+
         }
+
     }
 
     Item {
@@ -604,11 +660,15 @@ Item {
         // HrmSensor depends on import QtSensors 5.11
         id: hrmBox
 
+        width: boxSize
+        height: width
+        visible: hrmSensorActive
+
         HrmSensor {
             active: !displayAmbient && hrmSensorActive
             onReadingChanged: {
                 root.hrmBpm = reading.bpm;
-                root.hrmBpmTime = wallClock.time
+                root.hrmBpmTime = wallClock.time;
             }
         }
 
@@ -616,19 +676,17 @@ Item {
             centerIn: root
             horizontalCenterOffset: boxPosition
         }
-        width: boxSize
-        height: width
-        visible: hrmSensorActive
 
         Rectangle {
             id: hrmArc
+
             anchors.centerIn: parent
-            width: parent.width * .86
+            width: parent.width * 0.86
             height: width
             radius: width / 2
             color: "#22ffffff"
             opacity: hrmSensorActive ? activeArcOpacity : inactiveArcOpacity
-            
+
             Rectangle {
                 anchors.centerIn: parent
                 width: parent.width
@@ -638,7 +696,7 @@ Item {
                 border.width: outerArcLineWidth
                 border.color: customRed
             }
-            
+
             Rectangle {
                 anchors.centerIn: parent
                 width: parent.width
@@ -648,61 +706,70 @@ Item {
                 border.width: innerArcLineWidth
                 border.color: "#33ffffff"
             }
+
         }
 
         Text {
             id: bpmText
 
-            anchors {
-                centerIn: parent
-                verticalCenterOffset: -parent.width * .25
-            }
-            font {
-                pixelSize: parent.width * .14
-                family: "Barlow"
-                styleName: "Bold"
-            }
             color: "#ffffff"
             opacity: inactiveContentOpacity
             text: "BPM"
+
+            anchors {
+                centerIn: parent
+                verticalCenterOffset: -parent.width * 0.25
+            }
+
+            font {
+                pixelSize: parent.width * 0.14
+                family: "Barlow"
+                styleName: "Bold"
+            }
+
         }
 
         Text {
             id: bpmDisplay
 
-            anchors {
-                centerIn: parent
-            }
-            font {
-                pixelSize: parent.width * .38
-                family: "Noto Sans"
-                styleName: "Condensed"
-            }
             color: "#ffffff"
             opacity: activeContentOpacity
             text: (hrmBpm ? hrmBpm : "---")
-         }
+
+            anchors {
+                centerIn: parent
+            }
+
+            font {
+                pixelSize: parent.width * 0.38
+                family: "Noto Sans"
+                styleName: "Condensed"
+            }
+
+        }
 
         Text {
             id: updateDisplay
 
             property bool bpmIsRecent: parseInt((wallClock.time - hrmBpmTime) / 60000) === 0
 
+            color: "#ffffff"
+            opacity: inactiveContentOpacity
+            text: bpmIsRecent ? "NOW" : parseInt((wallClock.time - hrmBpmTime) / 60000) + "m ago"
+
             anchors {
                 centerIn: parent
-                verticalCenterOffset: parent.width * .25
+                verticalCenterOffset: parent.width * 0.25
             }
+
             font {
-                pixelSize: parent.width * .12
+                pixelSize: parent.width * 0.12
                 family: "Barlow"
                 styleName: "Bold"
             }
-            color: "#ffffff"
-            opacity: inactiveContentOpacity
-            text: bpmIsRecent ?
-                      "NOW" :
-                      parseInt((wallClock.time - hrmBpmTime) / 60000) + "m ago"
+
         }
+
     }
 
     Item {
@@ -710,56 +777,62 @@ Item {
         // BluetoothStatus depends on import org.asteroid.utils 1.0
         id: btSwitch
 
+        property bool btStatusOn: btStatus.powered
+        property bool btStatusConnect: btStatus.connected
+
+        width: switchSize
+        height: width
+        visible: (!displayAmbient || btStatusOn) && !dockMode.active
+
         BluetoothStatus {
             id: btStatus
         }
-
-        property bool btStatusOn: btStatus.powered
-        property bool btStatusConnect: btStatus.connected
 
         anchors {
             centerIn: root
             horizontalCenterOffset: -switchPosition
             verticalCenterOffset: switchPosition
         }
-        width: switchSize
-        height: width
-        visible: (!displayAmbient || btStatusOn) && !dockMode.active
 
         Rectangle {
             id: btSwitchArc
+
             anchors.fill: parent
             color: "transparent"
             opacity: btStatus.powered ? activeArcOpacity : inactiveArcOpacity
-            
+
             Rectangle {
                 anchors.centerIn: parent
-                width: parent.width * .88
+                width: parent.width * 0.88
                 height: width
                 radius: width / 2
                 color: "#22ffffff"
                 border.width: innerArcLineWidth
                 border.color: btStatus.connected ? customBlue : switchColor
             }
-            
+
             MouseArea {
                 anchors.fill: parent
                 onClicked: btStatus.powered = !btStatus.powered
             }
+
         }
 
         Icon {
             id: btIcon
 
-            anchors {
-                centerIn: parent
-                verticalCenterOffset: parent.width * .01
-            }
-            width: parent.width * .6
+            width: parent.width * 0.6
             height: width
             name: btStatus.powered && btStatus.connected ? "ios-bluetooth-connected" : "ios-bluetooth"
             opacity: btStatus.powered ? activeContentOpacity : inactiveContentOpacity
+
+            anchors {
+                centerIn: parent
+                verticalCenterOffset: parent.width * 0.01
+            }
+
         }
+
     }
 
     Item {
@@ -768,57 +841,63 @@ Item {
         // NetworkTechnology depends on import Connman 0.2
         id: wifiSwitch
 
+        property bool wifiStatusOn: wifiStatus.powered
+
+        width: switchSize
+        height: width
+        visible: (!displayAmbient || wifiStatusOn) && !dockMode.active
+
         NetworkTechnology {
             id: wifiStatus
 
             path: "/net/connman/technology/wifi"
         }
 
-        property bool wifiStatusOn: wifiStatus.powered
-
         anchors {
             centerIn: root
             horizontalCenterOffset: switchPosition
             verticalCenterOffset: switchPosition
         }
-        width: switchSize
-        height: width
-        visible: (!displayAmbient || wifiStatusOn) && !dockMode.active
 
         Rectangle {
             id: wifiSwitchArc
+
             anchors.fill: parent
             color: "transparent"
             opacity: wifiStatus.powered ? activeArcOpacity : inactiveArcOpacity
-            
+
             Rectangle {
                 anchors.centerIn: parent
-                width: parent.width * .88
+                width: parent.width * 0.88
                 height: width
                 radius: width / 2
                 color: "#22ffffff"
                 border.width: innerArcLineWidth
                 border.color: switchColor
             }
-            
+
             MouseArea {
                 anchors.fill: parent
                 onClicked: wifiStatus.powered = !wifiStatus.powered
             }
+
         }
 
         Icon {
             id: wifiIcon
 
-            anchors {
-                centerIn: parent
-                verticalCenterOffset: parent.width * .03
-            }
-            width: parent.width * .6
+            width: parent.width * 0.6
             height: width
             name: "ios-wifi"
             opacity: wifiStatus.powered ? activeContentOpacity : inactiveContentOpacity
+
+            anchors {
+                centerIn: parent
+                verticalCenterOffset: parent.width * 0.03
+            }
+
         }
+
     }
 
     Item {
@@ -829,14 +908,14 @@ Item {
         property int value: batteryChargePercentage.percent
 
         onValueChanged: batteryArc.requestPaint()
+        width: boxSize
+        height: width
+        visible: !dockMode.active
 
         anchors {
             centerIn: root
             verticalCenterOffset: boxPosition
         }
-        width: boxSize
-        height: width
-        visible: !dockMode.active
 
         Canvas {
             id: batteryArc
@@ -845,38 +924,23 @@ Item {
             opacity: activeArcOpacity
             renderStrategy: Canvas.Cooperative
             onPaint: {
-                var ctx = getContext("2d")
-                ctx.reset()
-                ctx.beginPath()
-                ctx.fillStyle = "#22ffffff"
-                ctx.arc(parent.width / 2,
-                        parent.height / 2,
-                        parent.width * .43,
-                        270 * rad,
-                        360,
-                        false);
-                ctx.strokeStyle = "#77ffffff"
-                ctx.lineWidth = innerArcLineWidth
-                ctx.stroke()
-                ctx.fill()
-                ctx.closePath()
-                ctx.lineWidth = outerArcLineWidth
-                ctx.lineCap="round"
-                ctx.strokeStyle = batteryBox.value < 30 ?
-                            customRed :
-                            batteryBox.value < 60 ?
-                                customOrange :
-                                customGreen
-                ctx.beginPath()
-                ctx.arc(parent.width / 2,
-                        parent.height / 2,
-                        parent.width * .43,
-                        270 * rad,
-                        ((batteryBox.value/100*360)+270) * rad,
-                        false
-                        );
-                ctx.stroke()
-                ctx.closePath()
+                var ctx = getContext("2d");
+                ctx.reset();
+                ctx.beginPath();
+                ctx.fillStyle = "#22ffffff";
+                ctx.arc(parent.width / 2, parent.height / 2, parent.width * 0.43, 270 * rad, 360, false);
+                ctx.strokeStyle = "#77ffffff";
+                ctx.lineWidth = innerArcLineWidth;
+                ctx.stroke();
+                ctx.fill();
+                ctx.closePath();
+                ctx.lineWidth = outerArcLineWidth;
+                ctx.lineCap = "round";
+                ctx.strokeStyle = batteryBox.value < 30 ? customRed : batteryBox.value < 60 ? customOrange : customGreen;
+                ctx.beginPath();
+                ctx.arc(parent.width / 2, parent.height / 2, parent.width * 0.43, 270 * rad, ((batteryBox.value / 100 * 360) + 270) * rad, false);
+                ctx.stroke();
+                ctx.closePath();
             }
         }
 
@@ -885,47 +949,56 @@ Item {
 
             name: "ios-flash"
             visible: batteryChargeState.value === MceBatteryState.Charging
-            anchors {
-                centerIn: parent
-                verticalCenterOffset: -parent.height * .26
-            }
-            width: parent.width * .25
+            width: parent.width * 0.25
             height: width
             opacity: inactiveContentOpacity
+
+            anchors {
+                centerIn: parent
+                verticalCenterOffset: -parent.height * 0.26
+            }
+
         }
 
         Text {
             id: batteryDisplay
 
-            anchors {
-                centerIn: parent
-            }
-            font {
-                pixelSize: parent.width * .38
-                family: "Noto Sans"
-                styleName: "Condensed"
-            }
             color: "#ffffffff"
             opacity: activeContentOpacity
             text: batteryBox.value
+
+            anchors {
+                centerIn: parent
+            }
+
+            font {
+                pixelSize: parent.width * 0.38
+                family: "Noto Sans"
+                styleName: "Condensed"
+            }
+
         }
 
         Text {
             id: chargeText
 
-            anchors {
-                centerIn: parent
-                verticalCenterOffset: parent.width * .25
-            }
-            font {
-                pixelSize: parent.width * .14
-                family: "Barlow"
-                styleName: "Bold"
-            }
             color: "#ffffffff"
             opacity: inactiveContentOpacity
             text: "%"
+
+            anchors {
+                centerIn: parent
+                verticalCenterOffset: parent.width * 0.25
+            }
+
+            font {
+                pixelSize: parent.width * 0.14
+                family: "Barlow"
+                styleName: "Bold"
+            }
+
         }
+
     }
 
     Item {
@@ -950,10 +1023,9 @@ Item {
             transform: Rotation {
                 origin.x: parent.width / 2
                 origin.y: parent.height / 2
-                angle: hourSVG.toggle24h ?
-                           (wallClock.time.getHours() * 15) + (wallClock.time.getMinutes() * .25) :
-                           (wallClock.time.getHours() * 30) + (wallClock.time.getMinutes() * .5)
+                angle: hourSVG.toggle24h ? (wallClock.time.getHours() * 15) + (wallClock.time.getMinutes() * 0.25) : (wallClock.time.getHours() * 30) + (wallClock.time.getMinutes() * 0.5)
             }
+
         }
 
         Image {
@@ -971,6 +1043,7 @@ Item {
                 origin.y: parent.height / 2
                 angle: (wallClock.time.getMinutes() * 6) + (wallClock.time.getSeconds() * 6 / 60)
             }
+
         }
 
         Image {
@@ -989,31 +1062,36 @@ Item {
                 origin.y: parent.height / 2
                 angle: wallClock.time.getSeconds() * 6
             }
+
         }
+
     }
 
-    // Slight dropshadow under all Items.
-    layer.enabled: true
+    Connections {
+        function onTimeChanged() {
+            if (!visible)
+                return ;
+
+        }
+
+        target: wallClock
+    }
+
+    Connections {
+        function onDisplayAmbientEntered() {
+            hrmSensorActive = false;
+        }
+
+        target: compositor
+    }
+
     layer.effect: DropShadow {
         transparentBorder: true
         horizontalOffset: 1
         verticalOffset: 1
-        radius: 6.0
+        radius: 6
         samples: 9
-        color: Qt.rgba(0, 0, 0, .7)
+        color: Qt.rgba(0, 0, 0, 0.7)
     }
-    
-    Connections {
-        target: wallClock
-        function onTimeChanged() {
-            if (!visible) return
-        }
-    }
-    
-    Connections {
-        target: compositor
-        function onDisplayAmbientEntered() {
-            hrmSensorActive = false
-        }
-    }
+
 }

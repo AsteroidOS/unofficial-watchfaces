@@ -1,13 +1,14 @@
+import Nemo.Mce 1.0
+import Qt.labs.settings 1.0
 import QtGraphicalEffects 1.12
 import QtQuick 2.15
 import QtQuick.Controls 2.15
 import QtQuick.Dialogs 1.1
 import QtQuick.Layouts 1.2
-import Qt.labs.settings 1.0
-import Nemo.Mce 1.0
 
 ApplicationWindow {
     id: appRoot
+
     property bool displayAmbient: ambientCheckBox.checked
     property bool nightstand: nightstandCheckBox.checked
     property var nameOfWatchfaceToBeTested: Qt.application.arguments[1]
@@ -16,8 +17,8 @@ ApplicationWindow {
     property var relativeRootDir: Qt.application.arguments[4]
     readonly property var initialStaticTime: new Date('2021-12-02T13:37:42')
     readonly property real mouseWheelScale: 1 / 15
-    title: nameOfWatchfaceToBeTested
 
+    title: nameOfWatchfaceToBeTested
     minimumWidth: 640 + controls.width
     minimumHeight: 640
 
@@ -29,16 +30,19 @@ ApplicationWindow {
         property alias twelveHour: twelveHourCheckBox.checked
         property alias staticTime: setStaticTimeCheckBox.checked
     }
+
     Binding {
         target: Global
         property: "heartrate"
         value: heartRate.value
     }
+
     Binding {
         target: Global
         property: "battery"
         value: batteryCharge.value
     }
+
     Binding {
         target: Global
         property: "compassAzimuth"
@@ -47,13 +51,13 @@ ApplicationWindow {
 
     RowLayout {
         spacing: 0
+
         ToolBar {
             id: controls
+
             Layout.fillHeight: true
             padding: 5
-            background: Rectangle {
-                color: "lightblue"
-            }
+
             ColumnLayout {
                 RowLayout {
                     Layout.alignment: Qt.AlignCenter
@@ -67,9 +71,7 @@ ApplicationWindow {
                         ToolTip.delay: 600
                         ToolTip.text: qsTr("Reload qml code")
                         onClicked: {
-                            watchfaceLoader.source = appRoot.relativeRootDir
-                                    + appRoot.nameOfWatchfaceToBeTested + ".qml?"
-                                    + Math.random();
+                            watchfaceLoader.source = appRoot.relativeRootDir + appRoot.nameOfWatchfaceToBeTested + ".qml?" + Math.random();
                         }
                     }
 
@@ -96,33 +98,21 @@ ApplicationWindow {
                                 frame.color = "transparent";
                                 watchfaceDisplayFrame.snapshot("-trans.png");
                             }
-
                             if (sequencer === 2) {
                                 background.source = appRoot.backgroundImage;
                                 roundCheckBox.checked = false;
                                 watchfaceDisplayFrame.snapshot(".png");
                             }
-
                             if (sequencer === 3) {
                                 background.source = appRoot.backgroundRoundImage;
                                 roundCheckBox.checked = true;
                                 watchfaceDisplayFrame.snapshot("-round.png");
                             }
-
                             if (sequencer === 4) {
                                 background.source = appRoot.backgroundImage;
                                 frame.color = "black";
                                 sequencer = 0;
                                 snapshotsTimer.running = false;
-                            }
-                        }
-
-                        Timer {
-                            id: snapshotsTimer
-                            interval: 500; running: false; repeat: true
-                            onTriggered: {
-                                previewButton.sequencer++
-                                previewButton.transSnapshots()
                             }
                         }
 
@@ -132,7 +122,21 @@ ApplicationWindow {
                         ToolTip.delay: 600
                         ToolTip.text: qsTr("Generate preview images for the .thumbnails and watchfacepreview folders")
                         onClicked: snapshotsTimer.running = true
+
+                        Timer {
+                            id: snapshotsTimer
+
+                            interval: 500
+                            running: false
+                            repeat: true
+                            onTriggered: {
+                                previewButton.sequencer++;
+                                previewButton.transSnapshots();
+                            }
+                        }
+
                     }
+
                 }
 
                 ColumnLayout {
@@ -180,6 +184,7 @@ ApplicationWindow {
                             ToolTip.delay: 600
                             ToolTip.text: qsTr("Scale down view to 320x320px from 640px")
                         }
+
                     }
 
                     RowLayout {
@@ -212,10 +217,12 @@ ApplicationWindow {
                             ToolTip.text: qsTr("Set a custom time by draging the tumblers or use the mouse wheel above them")
                             checked: false
                         }
+
                     }
 
                     RowLayout {
                         Layout.alignment: Qt.AlignHCenter
+
                         Frame {
                             padding: 0
 
@@ -237,6 +244,7 @@ ApplicationWindow {
                                         horizontalAlignment: Text.AlignHCenter
                                         verticalAlignment: Text.AlignVCenter
                                     }
+
                                 }
 
                                 Tumbler {
@@ -256,8 +264,11 @@ ApplicationWindow {
                                         horizontalAlignment: Text.AlignHCenter
                                         verticalAlignment: Text.AlignVCenter
                                     }
+
                                 }
+
                             }
+
                         }
 
                         Frame {
@@ -275,6 +286,7 @@ ApplicationWindow {
                                         property: "currentIndex"
                                         rotationScale: appRoot.mouseWheelScale
                                     }
+
                                 }
 
                                 Tumbler {
@@ -288,6 +300,7 @@ ApplicationWindow {
                                         property: "currentIndex"
                                         rotationScale: appRoot.mouseWheelScale
                                     }
+
                                 }
 
                                 Tumbler {
@@ -301,9 +314,13 @@ ApplicationWindow {
                                         property: "currentIndex"
                                         rotationScale: appRoot.mouseWheelScale
                                     }
+
                                 }
+
                             }
+
                         }
+
                     }
 
                 }
@@ -311,6 +328,7 @@ ApplicationWindow {
                 Frame {
                     RowLayout {
                         Layout.alignment: Qt.AlignHCenter
+
                         Text {
                             text: qsTr("batteryCharge")
                         }
@@ -336,6 +354,7 @@ ApplicationWindow {
                                     implicitHeight: 8
                                     color: "brown"
                                 }
+
                             }
 
                             Text {
@@ -347,17 +366,21 @@ ApplicationWindow {
                                 text: "100"
                                 anchors.right: parent.right
                             }
+
                         }
 
                         Text {
                             text: batteryCharge.value.toFixed(0)
                         }
+
                     }
+
                 }
 
                 Frame {
                     RowLayout {
                         Layout.alignment: Qt.AlignHCenter
+
                         Text {
                             text: qsTr("HeartRate")
                         }
@@ -383,6 +406,7 @@ ApplicationWindow {
                                     implicitHeight: 8
                                     color: "brown"
                                 }
+
                             }
 
                             Text {
@@ -394,17 +418,21 @@ ApplicationWindow {
                                 text: heartRate.to
                                 anchors.right: parent.right
                             }
+
                         }
 
                         Text {
                             text: heartRate.value.toFixed(0)
                         }
+
                     }
+
                 }
 
                 Frame {
                     RowLayout {
                         Layout.alignment: Qt.AlignHCenter
+
                         Text {
                             text: qsTr("Heading")
                         }
@@ -430,6 +458,7 @@ ApplicationWindow {
                                     implicitHeight: 8
                                     color: "brown"
                                 }
+
                             }
 
                             Text {
@@ -441,17 +470,21 @@ ApplicationWindow {
                                 text: compassAzimuth.to
                                 anchors.right: parent.right
                             }
+
                         }
 
                         Text {
                             text: compassAzimuth.value.toFixed(0)
                         }
+
                     }
+
                 }
 
                 Frame {
                     RowLayout {
                         Layout.alignment: Qt.AlignHCenter
+
                         Text {
                             text: qsTr("featureSlider")
                         }
@@ -477,6 +510,7 @@ ApplicationWindow {
                                     implicitHeight: 8
                                     color: "brown"
                                 }
+
                             }
 
                             Text {
@@ -488,14 +522,23 @@ ApplicationWindow {
                                 text: "1.0"
                                 anchors.right: parent.right
                             }
+
                         }
 
                         Text {
                             text: featureSlider.value.toFixed(3)
                         }
+
                     }
+
                 }
+
             }
+
+            background: Rectangle {
+                color: "lightblue"
+            }
+
         }
 
         Rectangle {
@@ -531,8 +574,7 @@ ApplicationWindow {
                     id: watchfaceLoader
 
                     anchors.fill: parent
-                    source: appRoot.relativeRootDir
-                            + appRoot.nameOfWatchfaceToBeTested + ".qml"
+                    source: appRoot.relativeRootDir + appRoot.nameOfWatchfaceToBeTested + ".qml"
                 }
 
                 layer.effect: OpacityMask {
@@ -544,7 +586,9 @@ ApplicationWindow {
                         height: frame.height
                         radius: frame.width / 2
                     }
+
                 }
+
             }
 
             Item {
@@ -573,7 +617,11 @@ ApplicationWindow {
                     repeat: true
                     onTriggered: wallClock.time = wallClock.getDisplayTime()
                 }
+
             }
+
         }
+
     }
+
 }

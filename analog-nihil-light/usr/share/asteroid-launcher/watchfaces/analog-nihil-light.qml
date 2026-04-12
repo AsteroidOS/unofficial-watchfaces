@@ -40,8 +40,9 @@ Item {
         transform: Rotation {
             origin.x: root.width / 2
             origin.y: root.height / 2
-            angle: (wallClock.time.getHours() * 30) + (wallClock.time.getMinutes() * .5)
+            angle: (wallClock.time.getHours() * 30) + (wallClock.time.getMinutes() * 0.5)
         }
+
     }
 
     Image {
@@ -55,8 +56,9 @@ Item {
         transform: Rotation {
             origin.x: root.width / 2
             origin.y: root.height / 2
-            angle: (wallClock.time.getMinutes() * 6)+(wallClock.time.getSeconds() * 6 / 60)
+            angle: (wallClock.time.getMinutes() * 6) + (wallClock.time.getSeconds() * 6 / 60)
         }
+
     }
 
     Image {
@@ -73,5 +75,7 @@ Item {
             origin.y: root.height / 2
             angle: (wallClock.time.getSeconds() * 6)
         }
+
     }
+
 }

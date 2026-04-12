@@ -17,19 +17,26 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-import QtQuick 2.9
 import QtGraphicalEffects 1.15
+import QtQuick 2.9
 
 Item {
     id: root
+
     property string currentHour: ''
     property string hourColor: ''
     property var neonColor: ["#99FF00E3", "#993500FF", "#9901FE01", "#99FFFE37", "#99FF8600", "#99ED0003", "#9900ffff", "#9938FF12", "#99007FFF", "#99FAAB00"]
     property string imgPath: "../watchfaces-img/analog-words-80s-"
 
+    Component.onCompleted: {
+        root.currentHour = wallClock.time.toLocaleString(Qt.locale(), "hh ap").slice(0, 2);
+        root.hourColor = Math.floor(Math.random() * neonColor.length);
+    }
+
     Image {
-        z: 0
         id: backplate
+
+        z: 0
         source: imgPath + "backplate.svg"
         opacity: displayAmbient ? 0.3 : 0.5
         anchors.centerIn: root
@@ -38,111 +45,127 @@ Item {
     }
 
     Image {
-        z: 1
         id: hourOverlay
+
+        z: 1
         source: imgPath + wallClock.time.toLocaleString(Qt.locale(), "hh ap").slice(0, 2) + ".svg"
         anchors.centerIn: root
         width: root.width
         height: root.height
         layer.enabled: true
+
         layer.effect: DropShadow {
             transparentBorder: true
             horizontalOffset: 0
             verticalOffset: 0
-            radius: 14.0
+            radius: 14
             samples: 9
             color: neonColor[hourColor]
         }
+
     }
 
     Image {
         id: hourSVG
+
         z: 0
         source: imgPath + "hour.svg"
         anchors.centerIn: root
         width: root.width
         height: root.height
-        transform: Rotation {
-            origin.x: root.width/2;
-            origin.y: root.height/2;
-            angle: (wallClock.time.getHours()*30) + (wallClock.time.getMinutes()*0.5)
-        }
         layer.enabled: true
+
+        transform: Rotation {
+            origin.x: root.width / 2
+            origin.y: root.height / 2
+            angle: (wallClock.time.getHours() * 30) + (wallClock.time.getMinutes() * 0.5)
+        }
+
         layer.effect: DropShadow {
             transparentBorder: true
             horizontalOffset: 1
             verticalOffset: 1
-            radius: 8.0
+            radius: 8
             samples: 9
             color: neonColor[hourColor]
         }
+
     }
 
     Image {
         id: minuteSVG
+
         z: 3
         source: imgPath + "minute.svg"
+        width: root.width
+        height: root.height
+        layer.enabled: true
+
         anchors {
             centerIn: root
         }
-        width: root.width
-        height: root.height
+
         transform: Rotation {
-            origin.x: root.width/2;
-            origin.y: root.height/2;
-            angle: (wallClock.time.getMinutes()*6)+(wallClock.time.getSeconds()*6/60)
+            origin.x: root.width / 2
+            origin.y: root.height / 2
+            angle: (wallClock.time.getMinutes() * 6) + (wallClock.time.getSeconds() * 6 / 60)
         }
-        layer.enabled: true
+
         layer.effect: DropShadow {
             transparentBorder: true
             horizontalOffset: 2
             verticalOffset: 2
-            radius: 8.0
+            radius: 8
             samples: 10
             color: neonColor[hourColor]
         }
+
     }
 
     Image {
         id: secondSVG
+
         z: 4
         visible: !displayAmbient
         source: imgPath + "second.svg"
+        width: root.width
+        height: root.height
+        layer.enabled: true
+
         anchors {
             centerIn: root
         }
-        width: root.width
-        height: root.height
+
         transform: Rotation {
-            origin.x: root.width/2;
-            origin.y: root.height/2;
-            angle: (wallClock.time.getSeconds()*6)
+            origin.x: root.width / 2
+            origin.y: root.height / 2
+            angle: (wallClock.time.getSeconds() * 6)
         }
-        layer.enabled: true
+
         layer.effect: DropShadow {
             transparentBorder: true
             horizontalOffset: 6
             verticalOffset: 6
-            radius: 5.0
+            radius: 5
             samples: 8
             color: "#66000000"
         }
+
     }
-    
+
     Connections {
-        target: wallClock
         function onTimeChanged() {
-            if (!visible) return
-                var h = wallClock.time.toLocaleString(Qt.locale(), "hh ap").slice(0, 2)
-                if (root.currentHour !== h) {
-                    root.currentHour = h
-                    root.hourColor = Math.floor(Math.random() * neonColor.length)
-                }
+            if (!visible)
+                return ;
+
+            var h = wallClock.time.toLocaleString(Qt.locale(), "hh ap").slice(0, 2);
+            if (root.currentHour !== h) {
+                root.currentHour = h;
+                root.hourColor = Math.floor(Math.random() * neonColor.length);
+            }
         }
+
+        target: wallClock
     }
-    
-    Component.onCompleted: {
-        root.currentHour = wallClock.time.toLocaleString(Qt.locale(), "hh ap").slice(0, 2)
-        root.hourColor = Math.floor(Math.random() * neonColor.length)
-    }
+
 }

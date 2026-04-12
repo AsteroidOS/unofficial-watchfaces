@@ -16,21 +16,25 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-import QtQuick 2.12
 import QtGraphicalEffects 1.12
+import QtQuick 2.12
 
 Item {
     function getTimeDigit(t, index) {
-        var timestring = t.toLocaleString(Qt.locale(), (use12H.value ? "hhmmss ap" : "HHmmss"))
-        return timestring[index]
+        var timestring = t.toLocaleString(Qt.locale(), (use12H.value ? "hhmmss ap" : "HHmmss"));
+        return timestring[index];
     }
 
-    Repeater{
+    Repeater {
         id: digits
+
         model: 4
+
         Item {
             id: digitHolder
+
             property real sizefactor: parent.width / 2 / 289
+
             width: parent.width / 6
             height: parent.width / 3
             x: parent.width / 5 * index + parent.width / 8
@@ -38,29 +42,36 @@ Item {
 
             Image {
                 id: nixieBackground
+
                 visible: !displayAmbient
                 scale: sizefactor
+                opacity: displayAmbient ? 0.6 : 1
+                source: "../watchfaces-img/nixie-delight-nixie.png"
+
                 anchors {
                     centerIn: parent
                     verticalCenterOffset: parent.height * 0.15
                 }
-                opacity: displayAmbient ? 0.6 : 1.0
-                source: "../watchfaces-img/nixie-delight-nixie.png"
+
             }
 
             Text {
                 id: digit
+
                 anchors.centerIn: parent
+                color: "orange"
+                visible: !displayAmbient
+                horizontalAlignment: Text.AlignHCenter
+                text: getTimeDigit(wallClock.time, index)
+
                 font {
                     pixelSize: nixieBackground.height * 0.35 * sizefactor
                     family: "Montserrat"
                     weight: Font.Light
                 }
-                color: "orange"
-                visible: !displayAmbient
-                horizontalAlignment: Text.AlignHCenter
-                text: getTimeDigit(wallClock.time, index)
+
             }
+
             Glow {
                 anchors.fill: digit
                 radius: displayAmbient ? 10 : 20
@@ -68,61 +79,73 @@ Item {
                 color: "darkorange"
                 source: digit
             }
+
         }
+
     }
 
     Text {
         visible: !displayAmbient
-        font.pixelSize: parent.height*0.10
+        font.pixelSize: parent.height * 0.1
         font.family: "Feronia"
         color: "brown"
         style: Text.Outline
         styleColor: "darkorange"
         horizontalAlignment: Text.AlignHCenter
+        text: "Asteroid OS"
+
         anchors {
             centerIn: parent
-            verticalCenterOffset: parent.width*0.30
+            verticalCenterOffset: parent.width * 0.3
         }
-        text: "Asteroid OS"
+
     }
 
-    Repeater{
+    Repeater {
         id: secondMarks
+
         model: 60
+
         Rectangle {
             id: second
+
             visible: !displayAmbient
-            antialiasing : true
+            antialiasing: true
             color: "black"
             width: parent.width * 0.04
             height: parent.height * 0.04
             radius: parent.height * 0.02
             transform: [
-                Rotation { 
-                    origin.x: second.width/2
-                    origin.y: second.height + parent.height*0.45
-                    angle: (index)*360/secondMarks.count 
+                Rotation {
+                    origin.x: second.width / 2
+                    origin.y: second.height + parent.height * 0.45
+                    angle: (index) * 360 / secondMarks.count
                 },
-                Translate { 
-                    x: (parent.width - second.width)/2
-                    y: parent.height/2 - (second.height + parent.height * 0.45)
+                Translate {
+                    x: (parent.width - second.width) / 2
+                    y: parent.height / 2 - (second.height + parent.height * 0.45)
                 }
             ]
+
             Rectangle {
                 anchors.centerIn: parent
-                height: parent.height * 0.8 
+                height: parent.height * 0.8
                 width: parent.width * 0.8
                 radius: parent.width * 0.4
                 color: "orange"
                 opacity: wallClock.time.getSeconds() == index ? 1 : 0
                 layer.enabled: wallClock.time.getSeconds() == index
+
                 layer.effect: Glow {
                     radius: 7
                     samples: 9
                     color: "darkorange"
                 }
+
             }
+
         }
+
     }
 
 }

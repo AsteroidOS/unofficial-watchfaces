@@ -20,7 +20,6 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-
 /*
  * This watchface is a fan recreation of Jolla Oy's Sailfish Watch concept designs from 2016.
  * Visual design elements (e.g., hand styles, strokes, shadows, and layout) are derived from Jolla's intellectual property as shown at https://blog.jolla.com/watch/.
@@ -31,78 +30,94 @@
 import QtQuick 2.9
 
 Item {
-    
     Rectangle {
         z: 0
         anchors.fill: parent
         color: Qt.rgba(0, 0, 0, 0.7)
     }
-    
+
     Text {
-        z: 1
         id: hourDisplay
+
+        z: 1
+        color: Qt.rgba(0.592, 0.937, 0.937, 1)
+        text: wallClock.time.toLocaleString(Qt.locale(), "HH:mm")
+
         font {
             pixelSize: parent.height * 0.33
             family: "Source Sans Pro"
             styleName: "ExtraLight"
         }
-        color: Qt.rgba(0.592, 0.937, 0.937, 1.0)
+
         anchors {
             topMargin: parent.height * 0.11
             top: parent.top
             horizontalCenter: parent.horizontalCenter
         }
-        text: wallClock.time.toLocaleString(Qt.locale(), "HH:mm")
+
     }
-    
+
     Text {
         id: dowDisplay
+
+        color: Qt.rgba(0.592, 0.937, 0.937, 0.9)
+        horizontalAlignment: Text.AlignHCenter
+        text: Qt.formatDate(wallClock.time, "dddd")
+
         font {
             pixelSize: parent.height * 0.11
             family: "Sail Sans Pro"
             styleName: "ExtraLight"
         }
-        color: Qt.rgba(0.592, 0.937, 0.937, 0.9)
-        horizontalAlignment: Text.AlignHCenter
+
         anchors {
             topMargin: -parent.height * 0.015
             top: hourDisplay.bottom
             left: hourDisplay.left
         }
-        text: Qt.formatDate(wallClock.time, "dddd")
+
     }
-    
+
     Text {
         id: dayDisplay
+
+        color: Qt.rgba(1, 1, 1, 1)
+        horizontalAlignment: Text.AlignHCenter
+        text: Qt.formatDate(wallClock.time, "dd")
+
         font {
             pixelSize: parent.height * 0.28
             family: "Source Sans Pro"
             styleName: "ExtraLight"
         }
-        color: Qt.rgba(1, 1, 1, 1.0)
-        horizontalAlignment: Text.AlignHCenter
+
         anchors {
             topMargin: -parent.height * 0.075
             top: hourDisplay.bottom
             right: hourDisplay.right
         }
-        text: Qt.formatDate(wallClock.time, "dd")
+
     }
-    
+
     Text {
         id: monthDisplay
+
+        color: Qt.rgba(0.592, 0.937, 0.937, 0.6)
+        horizontalAlignment: Text.AlignHCenter
+        text: Qt.formatDate(wallClock.time, "MMMM")
+
         font {
-            pixelSize: parent.height * 0.10
+            pixelSize: parent.height * 0.1
             family: "Sail Sans Pro"
             styleName: "ExtraLight"
         }
-        color: Qt.rgba(0.592, 0.937, 0.937, 0.6)
-        horizontalAlignment: Text.AlignHCenter
+
         anchors {
             topMargin: -parent.height * 0.03
             top: dowDisplay.bottom
             left: dowDisplay.left
         }
-        text: Qt.formatDate(wallClock.time, "MMMM")
+
     }
+
 }
