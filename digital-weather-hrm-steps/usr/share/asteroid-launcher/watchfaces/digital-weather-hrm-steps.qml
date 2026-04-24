@@ -502,6 +502,11 @@ Item {
                     dayOfWeekCanvas.dow = wallClock.time.toLocaleString(Qt.locale(), "dddd");
                     dateCanvas.requestPaint();
                     dayOfWeekCanvas.requestPaint();
+                    // Refresh steps after midnight — the counter resets but onDataChanged
+                    // won't fire until new steps are recorded, leaving a stale value displayed.
+                    stepsDataLoader.getTodayTotal();
+                    root.steps = stepsDataLoader.todayTotal;
+                    stepsCanvas.requestPaint();
                 }
             }
 
