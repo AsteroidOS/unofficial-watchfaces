@@ -15,23 +15,14 @@ Item {
     id: root
 
     property string imgPath: "../watchfaces-img/analog-boombox-"
-    property real squareEdge: Math.min(width, height)
+    property real maxSize: Math.min(width, height)
+    property real hourHandAngle: (wallClock.time.getHours() * 30 + wallClock.time.getMinutes() * 0.5)
+    property real minuteHandAngle: wallClock.time.getMinutes() * 6 + wallClock.time.getSeconds() * 0.1
+    property real secondHandAngle: wallClock.time.getSeconds() * 6
+    property real hourOrbitRad: (wallClock.time.getHours() - 3 + wallClock.time.getMinutes() / 60) / 12 * 2 * Math.PI
+    property real minuteOrbitRad: (wallClock.time.getMinutes() - 15 + wallClock.time.getSeconds() / 60) / 60 * 2 * Math.PI
 
     anchors.fill: parent
-    Component.onCompleted: {
-        var h = wallClock.time.getHours();
-        var min = wallClock.time.getMinutes();
-        var sec = wallClock.time.getSeconds();
-        hourRot.angle = h * 30 + min * 0.5;
-        minuteRot.angle = min * 6 + sec * 6 / 60;
-        secondRot.angle = sec * 6;
-        var rotH = (h - 3 + min / 60) / 12;
-        var rotM = (min - 15 + sec / 60) / 60;
-        hourDisplay.x = root.width / 2 - hourDisplay.width / 2 + Math.cos(rotH * 2 * Math.PI) * root.squareEdge * 0.204;
-        hourDisplay.y = root.height / 2 - hourDisplay.height / 2.04 + Math.sin(rotH * 2 * Math.PI) * root.squareEdge * 0.204;
-        minuteDisplay.x = root.width / 2 - minuteDisplay.width / 2 + Math.cos(rotM * 2 * Math.PI) * root.squareEdge * 0.369;
-        minuteDisplay.y = root.height / 2 - minuteDisplay.height / 2.04 + Math.sin(rotM * 2 * Math.PI) * root.squareEdge * 0.369;
-    }
 
     MceBatteryLevel {
         id: batteryChargePercentage
@@ -40,8 +31,8 @@ Item {
     Item {
         id: handBox
 
-        width: root.squareEdge
-        height: root.squareEdge
+        width: root.maxSize
+        height: root.maxSize
         anchors.centerIn: parent
 
         Image {
@@ -52,10 +43,9 @@ Item {
             anchors.fill: parent
 
             transform: Rotation {
-                id: secondRot
-
-                origin.x: parent.width / 2
-                origin.y: parent.height / 2
+                angle: root.secondHandAngle
+                origin.x: secondSVG.width / 2
+                origin.y: secondSVG.height / 2
             }
 
         }
@@ -67,10 +57,9 @@ Item {
             anchors.fill: parent
 
             transform: Rotation {
-                id: minuteRot
-
-                origin.x: parent.width / 2
-                origin.y: parent.height / 2
+                angle: root.minuteHandAngle
+                origin.x: minuteSVG.width / 2
+                origin.y: minuteSVG.height / 2
             }
 
         }
@@ -82,10 +71,9 @@ Item {
             anchors.fill: parent
 
             transform: Rotation {
-                id: hourRot
-
-                origin.x: parent.width / 2
-                origin.y: parent.height / 2
+                angle: root.hourHandAngle
+                origin.x: hourSVG.width / 2
+                origin.y: hourSVG.height / 2
             }
 
         }
@@ -93,15 +81,13 @@ Item {
         layer {
             enabled: true
             samples: 4
-            smooth: true
-            textureSize: Qt.size(root.squareEdge * 2, root.squareEdge * 2)
 
             effect: DropShadow {
                 transparentBorder: true
                 horizontalOffset: 0
                 verticalOffset: 0
-                radius: 10
-                samples: 9
+                radius: 6
+                samples: 13
                 color: Qt.rgba(0, 0, 0, 0.4)
             }
 
@@ -112,13 +98,15 @@ Item {
     Text {
         id: hourDisplay
 
+        x: root.width / 2 - width / 2 + Math.cos(root.hourOrbitRad) * root.maxSize * 0.204
+        y: root.height / 2 - height / 2.04 + Math.sin(root.hourOrbitRad) * root.maxSize * 0.204
         color: "black"
         text: use12H.value ? wallClock.time.toLocaleString(Qt.locale(), "hh ap").slice(0, 2) : wallClock.time.toLocaleString(Qt.locale(), "HH")
 
         font {
-            pixelSize: root.squareEdge * 0.114
+            pixelSize: root.maxSize * 0.114
             family: "Dangrek"
-            letterSpacing: -root.squareEdge * 0.003
+            letterSpacing: -root.maxSize * 0.003
         }
 
     }
@@ -126,13 +114,15 @@ Item {
     Text {
         id: minuteDisplay
 
+        x: root.width / 2 - width / 2 + Math.cos(root.minuteOrbitRad) * root.maxSize * 0.369
+        y: root.height / 2 - height / 2.04 + Math.sin(root.minuteOrbitRad) * root.maxSize * 0.369
         color: "black"
         text: wallClock.time.toLocaleString(Qt.locale(), "mm")
 
         font {
-            pixelSize: root.squareEdge * 0.114
+            pixelSize: root.maxSize * 0.114
             family: "Dangrek"
-            letterSpacing: -root.squareEdge * 0.003
+            letterSpacing: -root.maxSize * 0.003
         }
 
     }
@@ -140,15 +130,13 @@ Item {
     Item {
         id: batterySegments
 
-        width: root.squareEdge
-        height: root.squareEdge
+        width: root.maxSize
+        height: root.maxSize
         anchors.centerIn: parent
 
         layer {
             enabled: true
             samples: 4
-            smooth: true
-            textureSize: Qt.size(root.squareEdge * 2, root.squareEdge * 2)
         }
 
         Repeater {
@@ -173,17 +161,17 @@ Item {
                 ShapePath {
                     fillColor: "transparent"
                     strokeColor: "#26C485"
-                    strokeWidth: root.squareEdge * segmentedArc.arcStrokeWidth
+                    strokeWidth: batterySegments.width * segmentedArc.arcStrokeWidth
                     capStyle: ShapePath.RoundCap
                     joinStyle: ShapePath.MiterJoin
-                    startX: root.squareEdge / 2
-                    startY: root.squareEdge * (0.5 - segmentedArc.scalefactor)
+                    startX: batterySegments.width / 2
+                    startY: batterySegments.height * (0.5 - segmentedArc.scalefactor)
 
                     PathAngleArc {
-                        centerX: root.squareEdge / 2
-                        centerY: root.squareEdge / 2
-                        radiusX: segmentedArc.scalefactor * root.squareEdge
-                        radiusY: segmentedArc.scalefactor * root.squareEdge
+                        centerX: batterySegments.width / 2
+                        centerY: batterySegments.height / 2
+                        radiusX: segmentedArc.scalefactor * batterySegments.width
+                        radiusY: segmentedArc.scalefactor * batterySegments.height
                         startAngle: -90 + index * (sweepAngle + (segmentedArc.clockwise ? +segmentedArc.gap : -segmentedArc.gap)) + segmentedArc.start
                         sweepAngle: segmentedArc.clockwise ? (segmentedArc.endFromStart / segmentedArc.segmentAmount) - segmentedArc.gap : -(segmentedArc.endFromStart / segmentedArc.segmentAmount) + segmentedArc.gap
                         moveToStart: true
@@ -195,24 +183,6 @@ Item {
 
         }
 
-    }
-
-    Connections {
-        target: wallClock
-        onTimeChanged: {
-            var h = wallClock.time.getHours();
-            var min = wallClock.time.getMinutes();
-            var sec = wallClock.time.getSeconds();
-            hourRot.angle = h * 30 + min * 0.5;
-            minuteRot.angle = min * 6 + sec * 6 / 60;
-            secondRot.angle = sec * 6;
-            var rotH = (h - 3 + min / 60) / 12;
-            var rotM = (min - 15 + sec / 60) / 60;
-            hourDisplay.x = root.width / 2 - hourDisplay.width / 2 + Math.cos(rotH * 2 * Math.PI) * root.squareEdge * 0.204;
-            hourDisplay.y = root.height / 2 - hourDisplay.height / 2.04 + Math.sin(rotH * 2 * Math.PI) * root.squareEdge * 0.204;
-            minuteDisplay.x = root.width / 2 - minuteDisplay.width / 2 + Math.cos(rotM * 2 * Math.PI) * root.squareEdge * 0.369;
-            minuteDisplay.y = root.height / 2 - minuteDisplay.height / 2.04 + Math.sin(rotM * 2 * Math.PI) * root.squareEdge * 0.369;
-        }
     }
 
 }
