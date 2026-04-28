@@ -1,26 +1,10 @@
-/*
- * Copyright (C) 2026 - Timo Könnecke <github.com/moWerk>
- *               2016 - Sylvia van Os <iamsylvie@openmailbox.org>
- *               2015 - Florent Revest <revestflo@gmail.com>
- *               2012 - Vasiliy Sorokin <sorokin.vasiliy@gmail.com>
- *                      Aleksey Mikhailichenko <a.v.mich@gmail.com>
- *                      Arto Jalkanen <ajalkane@gmail.com>
- *
- * All rights reserved.
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Lesser General Public License as
- * published by the Free Software Foundation, either version 2.1 of the
- * License, or (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program. If not, see <http://www.gnu.org/licenses/>.
- */
+// SPDX-FileCopyrightText: 2023 Timo Könnecke <github.com/moWerk>
+// SPDX-FileCopyrightText: 2016 Sylvia van Os <iamsylvie@openmailbox.org>
+// SPDX-FileCopyrightText: 2015 Florent Revest <revestflo@gmail.com>
+// SPDX-FileCopyrightText: 2012 Vasiliy Sorokin <sorokin.vasiliy@gmail.com>
+// SPDX-FileCopyrightText: 2012 Aleksey Mikhailichenko <a.v.mich@gmail.com>
+// SPDX-FileCopyrightText: 2012 Arto Jalkanen <ajalkane@gmail.com>
+// SPDX-License-Identifier: LGPL-2.1-or-later
 
 import Nemo.Mce 1.0
 import QtGraphicalEffects 1.15
@@ -31,6 +15,7 @@ Item {
     id: root
 
     property string imgPath: "../watchfaces-img/analog-boombox-"
+    property real squareEdge: Math.min(width, height)
 
     anchors.fill: parent
     Component.onCompleted: {
@@ -42,10 +27,10 @@ Item {
         secondRot.angle = sec * 6;
         var rotH = (h - 3 + min / 60) / 12;
         var rotM = (min - 15 + sec / 60) / 60;
-        hourDisplay.x = root.width / 2 - hourDisplay.width / 2 + Math.cos(rotH * 2 * Math.PI) * root.height * 0.204;
-        hourDisplay.y = root.height / 2 - hourDisplay.height / 2.04 + Math.sin(rotH * 2 * Math.PI) * root.width * 0.204;
-        minuteDisplay.x = root.width / 2 - minuteDisplay.width / 2 + Math.cos(rotM * 2 * Math.PI) * root.height * 0.369;
-        minuteDisplay.y = root.height / 2 - minuteDisplay.height / 2.04 + Math.sin(rotM * 2 * Math.PI) * root.width * 0.369;
+        hourDisplay.x = root.width / 2 - hourDisplay.width / 2 + Math.cos(rotH * 2 * Math.PI) * root.squareEdge * 0.204;
+        hourDisplay.y = root.height / 2 - hourDisplay.height / 2.04 + Math.sin(rotH * 2 * Math.PI) * root.squareEdge * 0.204;
+        minuteDisplay.x = root.width / 2 - minuteDisplay.width / 2 + Math.cos(rotM * 2 * Math.PI) * root.squareEdge * 0.369;
+        minuteDisplay.y = root.height / 2 - minuteDisplay.height / 2.04 + Math.sin(rotM * 2 * Math.PI) * root.squareEdge * 0.369;
     }
 
     MceBatteryLevel {
@@ -55,7 +40,9 @@ Item {
     Item {
         id: handBox
 
-        anchors.fill: parent
+        width: root.squareEdge
+        height: root.squareEdge
+        anchors.centerIn: parent
 
         Image {
             id: secondSVG
@@ -107,7 +94,7 @@ Item {
             enabled: true
             samples: 4
             smooth: true
-            textureSize: Qt.size(root.width * 2, root.height * 2)
+            textureSize: Qt.size(root.squareEdge * 2, root.squareEdge * 2)
 
             effect: DropShadow {
                 transparentBorder: true
@@ -129,9 +116,9 @@ Item {
         text: use12H.value ? wallClock.time.toLocaleString(Qt.locale(), "hh ap").slice(0, 2) : wallClock.time.toLocaleString(Qt.locale(), "HH")
 
         font {
-            pixelSize: parent.height * 0.114
+            pixelSize: root.squareEdge * 0.114
             family: "Dangrek"
-            letterSpacing: -parent.height * 0.003
+            letterSpacing: -root.squareEdge * 0.003
         }
 
     }
@@ -143,9 +130,9 @@ Item {
         text: wallClock.time.toLocaleString(Qt.locale(), "mm")
 
         font {
-            pixelSize: parent.height * 0.114
+            pixelSize: root.squareEdge * 0.114
             family: "Dangrek"
-            letterSpacing: -parent.height * 0.003
+            letterSpacing: -root.squareEdge * 0.003
         }
 
     }
@@ -153,13 +140,15 @@ Item {
     Item {
         id: batterySegments
 
-        anchors.fill: parent
+        width: root.squareEdge
+        height: root.squareEdge
+        anchors.centerIn: parent
 
         layer {
             enabled: true
             samples: 4
             smooth: true
-            textureSize: Qt.size(root.width * 2, root.height * 2)
+            textureSize: Qt.size(root.squareEdge * 2, root.squareEdge * 2)
         }
 
         Repeater {
@@ -184,17 +173,17 @@ Item {
                 ShapePath {
                     fillColor: "transparent"
                     strokeColor: "#26C485"
-                    strokeWidth: parent.height * segmentedArc.arcStrokeWidth
+                    strokeWidth: root.squareEdge * segmentedArc.arcStrokeWidth
                     capStyle: ShapePath.RoundCap
                     joinStyle: ShapePath.MiterJoin
-                    startX: parent.width / 2
-                    startY: parent.height * (0.5 - segmentedArc.scalefactor)
+                    startX: root.squareEdge / 2
+                    startY: root.squareEdge * (0.5 - segmentedArc.scalefactor)
 
                     PathAngleArc {
-                        centerX: parent.width / 2
-                        centerY: parent.height / 2
-                        radiusX: segmentedArc.scalefactor * parent.width
-                        radiusY: segmentedArc.scalefactor * parent.height
+                        centerX: root.squareEdge / 2
+                        centerY: root.squareEdge / 2
+                        radiusX: segmentedArc.scalefactor * root.squareEdge
+                        radiusY: segmentedArc.scalefactor * root.squareEdge
                         startAngle: -90 + index * (sweepAngle + (segmentedArc.clockwise ? +segmentedArc.gap : -segmentedArc.gap)) + segmentedArc.start
                         sweepAngle: segmentedArc.clockwise ? (segmentedArc.endFromStart / segmentedArc.segmentAmount) - segmentedArc.gap : -(segmentedArc.endFromStart / segmentedArc.segmentAmount) + segmentedArc.gap
                         moveToStart: true
@@ -211,9 +200,6 @@ Item {
     Connections {
         target: wallClock
         onTimeChanged: {
-            if (!visible)
-                return ;
-
             var h = wallClock.time.getHours();
             var min = wallClock.time.getMinutes();
             var sec = wallClock.time.getSeconds();
@@ -222,10 +208,10 @@ Item {
             secondRot.angle = sec * 6;
             var rotH = (h - 3 + min / 60) / 12;
             var rotM = (min - 15 + sec / 60) / 60;
-            hourDisplay.x = root.width / 2 - hourDisplay.width / 2 + Math.cos(rotH * 2 * Math.PI) * root.height * 0.204;
-            hourDisplay.y = root.height / 2 - hourDisplay.height / 2.04 + Math.sin(rotH * 2 * Math.PI) * root.width * 0.204;
-            minuteDisplay.x = root.width / 2 - minuteDisplay.width / 2 + Math.cos(rotM * 2 * Math.PI) * root.height * 0.369;
-            minuteDisplay.y = root.height / 2 - minuteDisplay.height / 2.04 + Math.sin(rotM * 2 * Math.PI) * root.width * 0.369;
+            hourDisplay.x = root.width / 2 - hourDisplay.width / 2 + Math.cos(rotH * 2 * Math.PI) * root.squareEdge * 0.204;
+            hourDisplay.y = root.height / 2 - hourDisplay.height / 2.04 + Math.sin(rotH * 2 * Math.PI) * root.squareEdge * 0.204;
+            minuteDisplay.x = root.width / 2 - minuteDisplay.width / 2 + Math.cos(rotM * 2 * Math.PI) * root.squareEdge * 0.369;
+            minuteDisplay.y = root.height / 2 - minuteDisplay.height / 2.04 + Math.sin(rotM * 2 * Math.PI) * root.squareEdge * 0.369;
         }
     }
 
