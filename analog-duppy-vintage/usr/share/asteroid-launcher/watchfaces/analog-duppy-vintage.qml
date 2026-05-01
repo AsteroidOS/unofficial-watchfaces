@@ -1,33 +1,14 @@
-/*
- * Copyright (C) 2026 - Timo Könnecke <github.com/moWerk>
- *               2022 - Timo Könnecke <github.com/eLtMosen>
- *               2016 - Sylvia van Os <iamsylvie@openmailbox.org>
- *               2015 - Florent Revest <revestflo@gmail.com>
- *               2012 - Vasiliy Sorokin <sorokin.vasiliy@gmail.com>
- *                      Aleksey Mikhailichenko <a.v.mich@gmail.com>
- *                      Arto Jalkanen <ajalkane@gmail.com>
- *
- * All rights reserved.
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Lesser General Public License as
- * published by the Free Software Foundation, either version 2.1 of the
- * License, or (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program. If not, see <http://www.gnu.org/licenses/>.
- */
+// SPDX-FileCopyrightText: 2022 Timo Könnecke <github.com/eLtMosen>
+// SPDX-FileCopyrightText: 2016 Sylvia van Os <iamsylvie@openmailbox.org>
+// SPDX-FileCopyrightText: 2015 Florent Revest <revestflo@gmail.com>
+// SPDX-FileCopyrightText: 2012 Vasiliy Sorokin <sorokin.vasiliy@gmail.com>
+// SPDX-FileCopyrightText: 2012 Aleksey Mikhailichenko <a.v.mich@gmail.com>
+// SPDX-FileCopyrightText: 2012 Arto Jalkanen <ajalkane@gmail.com>
+// SPDX-License-Identifier: LGPL-2.1-or-later
 
 import Nemo.Mce 1.0
 import QtGraphicalEffects 1.15
 import QtQuick 2.15
-import org.asteroid.controls 1.0
-import org.asteroid.utils 1.0
 
 Item {
     id: root
@@ -35,9 +16,10 @@ Item {
     property string lowColor: !displayAmbient ? "#aab8bcc8" : "#44b8bcc8"
     property string highColor: !displayAmbient ? "#E5E5E5" : "#aaE5E5E5"
     property string accColor2: !displayAmbient ? "#DB5461" : "#88DB5461"
-    property real verticalFontOffset: root.height * 0.018
+    property real verticalFontOffset: root.maxSize * 0.018
     property string imgPath: "../watchfaces-img/analog-duppy-vintage-"
     property real rad: 0.01745
+    property real maxSize: Math.min(width, height)
 
     anchors.fill: parent
     layer.enabled: true
@@ -46,10 +28,14 @@ Item {
         id: batteryChargePercentage
     }
 
+    // faceBox is constrained to a maxSize square so all children using
+    // parent.width/height automatically reference a square dimension.
     Item {
         id: faceBox
 
-        anchors.fill: root
+        width: root.maxSize
+        height: root.maxSize
+        anchors.centerIn: parent
         layer.enabled: true
 
         Repeater {
@@ -57,15 +43,14 @@ Item {
 
             Rectangle {
                 property real rotM: (index - 15) / 60
-                property real centerX: root.width / 2 - width / 2
-                property real centerY: root.height / 2 - height / 2
+                property real centerX: parent.width / 2 - width / 2
+                property real centerY: parent.height / 2 - height / 2
 
-                z: 1
                 antialiasing: true
-                width: index % 5 ? parent.width * 0.003 : root.width * 0.0064
+                width: index % 5 ? parent.width * 0.003 : parent.width * 0.0064
                 height: parent.height * 0.028
-                x: centerX + Math.cos(rotM * 2 * Math.PI) * root.width * 0.484
-                y: centerY + Math.sin(rotM * 2 * Math.PI) * root.width * 0.484
+                x: centerX + Math.cos(rotM * 2 * Math.PI) * parent.width * 0.484
+                y: centerY + Math.sin(rotM * 2 * Math.PI) * parent.width * 0.484
                 color: highColor
 
                 transform: Rotation {
@@ -86,7 +71,6 @@ Item {
                 property real centerX: parent.width / 2 - width / 2
                 property real centerY: parent.height / 2 - height / 2
 
-                z: 1
                 // Both branches were identical — simplified to single expression
                 x: centerX + Math.cos(rotM * 2 * Math.PI) * parent.width * 0.395
                 y: verticalFontOffset + centerY + Math.sin(rotM * 2 * Math.PI) * parent.width * 0.395
@@ -97,7 +81,7 @@ Item {
                     pixelSize: index % 3 ? parent.height * 0.074 : parent.height * 0.126
                     family: index % 3 ? "Kumar One" : "Kumar One Outline"
                     styleName: index % 3 ? "Condensed" : "SemiCondensed Medium"
-                    letterSpacing: index % 3 ? -root.width * 0.004 : -root.width * 0.008
+                    letterSpacing: index % 3 ? -root.maxSize * 0.004 : -root.maxSize * 0.008
                 }
 
                 LinearGradient {
@@ -136,8 +120,6 @@ Item {
         Item {
             id: dayBox
 
-            property var day: wallClock.time.toLocaleString(Qt.locale(), "dd")
-
             width: parent.width * 0.6
             height: parent.height * 0.6
             anchors.centerIn: parent
@@ -152,7 +134,6 @@ Item {
                     property real centerY: parent.height / 2 - height / 2
                     property bool currentDayHighlight: new Date(2017, 1, index).toLocaleString(Qt.locale(), "ddd") === wallClock.time.toLocaleString(Qt.locale(), "ddd")
 
-                    z: 2
                     x: centerX + Math.cos(rotM * 2 * Math.PI) * parent.width * 0.35
                     y: centerY + Math.sin(rotM * 2 * Math.PI) * parent.width * 0.35
                     antialiasing: true
@@ -160,7 +141,7 @@ Item {
                     text: new Date(2017, 1, index).toLocaleString(Qt.locale(), "ddd").slice(0, 2).toUpperCase()
 
                     font {
-                        pixelSize: currentDayHighlight ? root.height * 0.07 : root.height * 0.06
+                        pixelSize: currentDayHighlight ? root.maxSize * 0.07 : root.maxSize * 0.06
                         letterSpacing: parent.width * 0.004
                         family: "Varieté"
                         styleName: currentDayHighlight ? "Black" : "SemiCondensed Bold"
@@ -183,11 +164,10 @@ Item {
 
             property int value: batteryChargePercentage.percent
 
-            anchors.centerIn: parent
             width: parent.width * 0.5
             height: parent.height * 0.5
+            anchors.centerIn: parent
 
-            // Static background arc rings — one Rectangle per Repeater index
             Repeater {
                 model: 3
 
@@ -197,13 +177,17 @@ Item {
                     height: width
                     radius: width / 2
                     color: "transparent"
-                    border.width: root.height * 0.004
+                    border.width: root.maxSize * 0.004
                     border.color: lowColor
                     opacity: !displayAmbient ? 1 - (index / 5) : 0.3
                 }
 
             }
 
+            // Canvas retained intentionally: the arc angle formula produces a
+            // carefully tuned visual layout that has no direct QtShapes equivalent
+            // without risking subtle rendering differences. Not an example to follow
+            // — prefer PathAngleArc for new battery arc implementations.
             Repeater {
                 model: 3
 
@@ -213,14 +197,13 @@ Item {
                     property int arcEnd: 250
 
                     onValueChanged: requestPaint()
-                    z: 1
                     anchors.fill: parent
                     opacity: !displayAmbient ? 1 - (index / 5) : 0.3
                     renderStrategy: Canvas.Cooperative
                     onPaint: {
                         var ctx = getContext("2d");
                         ctx.reset();
-                        ctx.lineWidth = root.height * 0.005;
+                        ctx.lineWidth = root.maxSize * 0.005;
                         ctx.lineCap = "round";
                         ctx.strokeStyle = batteryBox.value < 30 ? accColor2 : "#2E933C";
                         ctx.beginPath();
@@ -235,7 +218,6 @@ Item {
             Text {
                 id: batteryDisplay
 
-                z: 2
                 renderType: Text.NativeRendering
                 color: highColor
                 opacity: 0.9
@@ -278,13 +260,18 @@ Item {
 
         }
 
-        layer.effect: DropShadow {
-            transparentBorder: true
-            horizontalOffset: 2
-            verticalOffset: 2
-            radius: 6
-            samples: 13
-            color: Qt.rgba(0, 0, 0, 0.7)
+        layer {
+            enabled: true
+
+            effect: DropShadow {
+                transparentBorder: true
+                horizontalOffset: 2
+                verticalOffset: 2
+                radius: 6
+                samples: 13
+                color: Qt.rgba(0, 0, 0, 0.7)
+            }
+
         }
 
     }
@@ -292,20 +279,20 @@ Item {
     Item {
         id: handBox
 
-        z: 3
-        anchors.fill: parent
+        width: root.maxSize
+        height: root.maxSize
+        anchors.centerIn: parent
 
         Image {
             id: hourSVG
 
-            z: 3
             source: imgPath + "hour.svg"
             anchors.fill: parent
             layer.enabled: true
 
             transform: Rotation {
-                origin.x: parent.width / 2
-                origin.y: parent.height / 2
+                origin.x: hourSVG.width / 2
+                origin.y: hourSVG.height / 2
                 angle: (wallClock.time.getHours() * 30) + (wallClock.time.getMinutes() * 0.5)
             }
 
@@ -323,14 +310,13 @@ Item {
         Image {
             id: minuteSVG
 
-            z: 4
             source: imgPath + "minute.svg"
             anchors.fill: parent
             layer.enabled: true
 
             transform: Rotation {
-                origin.x: parent.width / 2
-                origin.y: parent.height / 2
+                origin.x: minuteSVG.width / 2
+                origin.y: minuteSVG.height / 2
                 angle: wallClock.time.getMinutes() * 6
             }
 
@@ -345,16 +331,6 @@ Item {
 
         }
 
-    }
-
-    Connections {
-        function onTimeChanged() {
-            if (!visible)
-                return ;
-
-        }
-
-        target: wallClock
     }
 
     layer.effect: DropShadow {
