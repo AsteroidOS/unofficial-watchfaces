@@ -1,31 +1,15 @@
-/*
- * Copyright (C) 2026 - Timo Könnecke <github.com/moWerk>
- *               2022 - Ivo Hulsman <github.com/ivohulsman>
- *               2021 - Timo Könnecke <github.com/eLtMosen>
- *               2016 - Sylvia van Os <iamsylvie@openmailbox.org>
- *               2015 - Florent Revest <revestflo@gmail.com>
- *               2012 - Vasiliy Sorokin <sorokin.vasiliy@gmail.com>
- *                      Aleksey Mikhailichenko <a.v.mich@gmail.com>
- *                      Arto Jalkanen <ajalkane@gmail.com>
- * All rights reserved.
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Lesser General Public License as
- * published by the Free Software Foundation, either version 2.1 of the
- * License, or (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program. If not, see <http://www.gnu.org/licenses/>.
- */
+// SPDX-FileCopyrightText: 2022 Ivo Hulsman <github.com/ivohulsman>
+// SPDX-FileCopyrightText: 2021 Timo Könnecke <github.com/eLtMosen>
+// SPDX-FileCopyrightText: 2016 Sylvia van Os <iamsylvie@openmailbox.org>
+// SPDX-FileCopyrightText: 2015 Florent Revest <revestflo@gmail.com>
+// SPDX-FileCopyrightText: 2012 Vasiliy Sorokin <sorokin.vasiliy@gmail.com>
+// SPDX-FileCopyrightText: 2012 Aleksey Mikhailichenko <a.v.mich@gmail.com>
+// SPDX-FileCopyrightText: 2012 Arto Jalkanen <ajalkane@gmail.com>
+// SPDX-License-Identifier: LGPL-2.1-or-later
 
 import Nemo.Mce 1.0
 import QtGraphicalEffects 1.15
-import QtQuick 2.9
+import QtQuick 2.15
 
 Item {
     id: root
@@ -33,7 +17,9 @@ Item {
     property string imgPath: "../watchfaces-img/analog-commander-"
     property real rad: 0.01745
     property int currentMonth: 0
+    property real maxSize: Math.min(width, height)
 
+    anchors.fill: parent
     layer.enabled: true
     Component.onCompleted: {
         var h = wallClock.time.getHours();
@@ -61,14 +47,14 @@ Item {
 
             z: 0
             antialiasing: true
-            x: index % 5 ? centerX + Math.cos(rotM * 2 * Math.PI) * parent.width * 0.43 : centerX + Math.cos(rotM * 2 * Math.PI) * parent.width * 0.388
-            y: index % 5 ? centerY + Math.sin(rotM * 2 * Math.PI) * parent.height * 0.43 : centerY + Math.sin(rotM * 2 * Math.PI) * parent.height * 0.388
+            x: index % 5 ? centerX + Math.cos(rotM * 2 * Math.PI) * root.maxSize * 0.43 : centerX + Math.cos(rotM * 2 * Math.PI) * root.maxSize * 0.388
+            y: index % 5 ? centerY + Math.sin(rotM * 2 * Math.PI) * root.maxSize * 0.43 : centerY + Math.sin(rotM * 2 * Math.PI) * root.maxSize * 0.388
             color: "#ff949494"
             radius: 60
             opacity: (index % 5) == 0 && displayAmbient ? 0.2 : (index % 5) == 0 ? 0.6 : displayAmbient ? 0.2 : 0.5
-            width: index % 5 ? parent.width * 0.005 : parent.width * 0.018
+            width: index % 5 ? root.maxSize * 0.005 : root.maxSize * 0.018
             visible: ([0, 30].includes(index)) ? 0 : 1
-            height: ([15, 45].includes(index)) ? parent.height * 0.06 : index % 5 ? parent.height * 0.026 : parent.height * 0.105
+            height: ([15, 45].includes(index)) ? root.maxSize * 0.06 : index % 5 ? root.maxSize * 0.026 : root.maxSize * 0.105
 
             transform: Rotation {
                 origin.x: width / 2
@@ -92,13 +78,13 @@ Item {
 
             z: 0
             antialiasing: true
-            x: centerX + Math.cos(rotM * 2 * Math.PI) * parent.width * 0.463
-            y: centerY + Math.sin(rotM * 2 * Math.PI) * parent.height * 0.463
+            x: centerX + Math.cos(rotM * 2 * Math.PI) * root.maxSize * 0.463
+            y: centerY + Math.sin(rotM * 2 * Math.PI) * root.maxSize * 0.463
             color: "#ff949494"
             opacity: displayAmbient ? 0.2 : 0.5
             radius: 60
-            width: parent.width * 0.022
-            height: parent.height * 0.022
+            width: root.maxSize * 0.022
+            height: root.maxSize * 0.022
 
             transform: Rotation {
                 origin.x: width / 2
@@ -128,12 +114,12 @@ Item {
             font {
                 family: "Teko"
                 styleName: "Regular"
-                pixelSize: parent.height * 0.13
+                pixelSize: root.maxSize * 0.13
             }
 
             transform: Translate {
-                x: Math.cos(angle) * (parent.width + width) * 0.445
-                y: Math.sin(angle) * (parent.height + height) * 0.388 + height * extraY[index]
+                x: Math.cos(angle) * (root.maxSize + width) * 0.445
+                y: Math.sin(angle) * (root.maxSize + height) * 0.388 + height * extraY[index]
             }
 
         }
@@ -147,14 +133,14 @@ Item {
 
         Text {
             property real rotM: (index - 15) / 60
-            property real centerX: parent.width / 2 - width / 2
-            property real centerY: parent.height / 2 - height / 2
+            property real centerX: root.width / 2 - width / 2
+            property real centerY: root.height / 2 - height / 2
             property bool south: index > 15 && index < 45
 
             z: 0
             horizontalAlignment: Text.AlignHCenter
-            x: centerX + Math.cos(rotM * 2 * Math.PI) * parent.width * 0.463
-            y: centerY + Math.sin(rotM * 2 * Math.PI) * parent.height * 0.463
+            x: centerX + Math.cos(rotM * 2 * Math.PI) * root.maxSize * 0.463
+            y: centerY + Math.sin(rotM * 2 * Math.PI) * root.maxSize * 0.463
             opacity: displayAmbient ? 0.5 : 0.9
             color: "#ff949494"
             text: (100 + index).toString().substring(1)
@@ -163,7 +149,7 @@ Item {
             font {
                 family: "Michroma"
                 styleName: "Regular"
-                pixelSize: parent.height * 0.03
+                pixelSize: root.maxSize * 0.03
             }
 
             transform: Rotation {
@@ -183,12 +169,12 @@ Item {
         opacity: displayAmbient ? 0.1 : 0.7
         source: "../watchfaces-img/analog-commander-asteroid-logo.svg"
         antialiasing: true
-        width: parent.width * 0.12
-        height: parent.height * 0.12
+        width: root.maxSize * 0.12
+        height: root.maxSize * 0.12
 
         anchors {
             centerIn: parent
-            verticalCenterOffset: -parent.height * 0.272
+            verticalCenterOffset: -root.maxSize * 0.272
         }
 
         Text {
@@ -224,12 +210,12 @@ Item {
         property var month: wallClock.time.toLocaleString(Qt.locale(), "MM")
 
         onMonthChanged: monthArc.requestPaint()
-        width: parent.width * 0.22
-        height: parent.height * 0.22
+        width: root.maxSize * 0.22
+        height: root.maxSize * 0.22
 
         anchors {
             centerIn: parent
-            horizontalCenterOffset: -parent.width * 0.22
+            horizontalCenterOffset: -root.maxSize * 0.22
         }
 
         Canvas {
@@ -245,11 +231,11 @@ Item {
                 ctx.fillStyle = "#00ffffff";
                 ctx.arc(parent.width / 2, parent.height / 2, parent.width * 0.45, 270 * rad, 360, false);
                 ctx.strokeStyle = "#77ffffff";
-                ctx.lineWidth = root.height * 0.002;
+                ctx.lineWidth = root.maxSize * 0.002;
                 ctx.stroke();
                 ctx.fill();
                 ctx.closePath();
-                ctx.lineWidth = root.height * 0.005;
+                ctx.lineWidth = root.maxSize * 0.005;
                 ctx.lineCap = "round";
                 ctx.strokeStyle = "#ff029cdb";
                 ctx.beginPath();
@@ -279,7 +265,7 @@ Item {
                 text: index === 0 ? 12 : index
 
                 font {
-                    pixelSize: currentMonthHighlight ? root.height * 0.036 : root.height * 0.03
+                    pixelSize: currentMonthHighlight ? root.maxSize * 0.036 : root.maxSize * 0.03
                     letterSpacing: parent.width * 0.004
                     family: "Teko"
                     styleName: currentMonthHighlight ? "Regular" : "Light"
@@ -314,7 +300,7 @@ Item {
                 pixelSize: parent.height * 0.39
                 family: "Teko"
                 styleName: "Light"
-                letterSpacing: -root.width * 0.0018
+                letterSpacing: -root.maxSize * 0.0018
             }
 
         }
@@ -327,19 +313,16 @@ Item {
         property int value: batteryChargePercentage.percent
 
         onValueChanged: batteryArc.requestPaint()
-        width: parent.width * 0.23
-        height: parent.height * 0.23
+        width: root.maxSize * 0.23
+        height: root.maxSize * 0.23
 
         anchors {
             centerIn: parent
-            verticalCenterOffset: parent.width * 0
-            horizontalCenterOffset: parent.width * 0.22
+            horizontalCenterOffset: root.maxSize * 0.22
         }
 
         Canvas {
             id: batteryArc
-
-            property var hour: 0
 
             z: 1
             opacity: !displayAmbient ? 0.8 : 0.3
@@ -351,14 +334,14 @@ Item {
                 ctx.fillStyle = "#00ffffff";
                 ctx.arc(parent.width / 2, parent.height / 2, parent.width * 0.45, 270 * rad, 360, false);
                 ctx.strokeStyle = "#77ffffff";
-                ctx.lineWidth = root.height * 0.002;
+                ctx.lineWidth = root.maxSize * 0.002;
                 ctx.stroke();
                 ctx.fill();
                 ctx.closePath();
                 var gradient = ctx.createRadialGradient(parent.width / 2, parent.height / 2, 0, parent.width / 2, parent.height / 2, parent.width * 0.46);
                 gradient.addColorStop(0.44, batteryChargePercentage.percent < 30 ? "#00EF476F" : batteryChargePercentage.percent < 60 ? "#00D0E562" : "#0023F0C7");
                 gradient.addColorStop(0.97, batteryChargePercentage.percent < 30 ? "#ffEF476F" : batteryChargePercentage.percent < 60 ? "#ffD0E562" : "#ff23F0C7");
-                ctx.lineWidth = root.height * 0.005;
+                ctx.lineWidth = root.maxSize * 0.005;
                 ctx.lineCap = "round";
                 ctx.strokeStyle = gradient;
                 ctx.beginPath();
@@ -421,7 +404,9 @@ Item {
         id: handBox
 
         z: 3
-        anchors.fill: parent
+        width: root.maxSize
+        height: root.maxSize
+        anchors.centerIn: parent
 
         Image {
             id: hourSVG
@@ -434,8 +419,8 @@ Item {
             transform: Rotation {
                 id: hourRot
 
-                origin.x: parent.width / 2
-                origin.y: parent.height / 2
+                origin.x: hourSVG.width / 2
+                origin.y: hourSVG.height / 2
             }
 
             layer.effect: DropShadow {
@@ -460,8 +445,8 @@ Item {
             transform: Rotation {
                 id: minuteRot
 
-                origin.x: parent.width / 2
-                origin.y: parent.height / 2
+                origin.x: minuteSVG.width / 2
+                origin.y: minuteSVG.height / 2
             }
 
             layer.effect: DropShadow {
@@ -487,8 +472,8 @@ Item {
             transform: Rotation {
                 id: secondRot
 
-                origin.x: parent.width / 2
-                origin.y: parent.height / 2
+                origin.x: secondSVG.width / 2
+                origin.y: secondSVG.height / 2
             }
 
             layer.effect: DropShadow {
@@ -505,11 +490,7 @@ Item {
     }
 
     Connections {
-        target: wallClock
-        onTimeChanged: {
-            if (!visible)
-                return ;
-
+        function onTimeChanged() {
             var h = wallClock.time.getHours();
             var min = wallClock.time.getMinutes();
             var sec = wallClock.time.getSeconds();
@@ -518,6 +499,8 @@ Item {
             secondRot.angle = sec * 6;
             root.currentMonth = Number(wallClock.time.toLocaleString(Qt.locale(), "MM"));
         }
+
+        target: wallClock
     }
 
     layer.effect: DropShadow {
