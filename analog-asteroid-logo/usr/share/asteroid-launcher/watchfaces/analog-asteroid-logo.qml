@@ -1,262 +1,317 @@
-/*
- * Copyright (C) 2026 - Timo Könnecke <github.com/moWerk>
- *               2016 - Sylvia van Os <iamsylvie@openmailbox.org>
- *               2015 - Florent Revest <revestflo@gmail.com>
- *               2012 - Vasiliy Sorokin <sorokin.vasiliy@gmail.com>
- *                      Aleksey Mikhailichenko <a.v.mich@gmail.com>
- *                      Arto Jalkanen <ajalkane@gmail.com>
- * All rights reserved.
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Lesser General Public License as
- * published by the Free Software Foundation, either version 2.1 of the
- * License, or (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program. If not, see <http://www.gnu.org/licenses/>.
- */
+// SPDX-FileCopyrightText: 2023 Timo Könnecke <github.com/moWerk>
+// SPDX-FileCopyrightText: 2016 Sylvia van Os <iamsylvie@openmailbox.org>
+// SPDX-FileCopyrightText: 2015 Florent Revest <revestflo@gmail.com>
+// SPDX-FileCopyrightText: 2012 Vasiliy Sorokin <sorokin.vasiliy@gmail.com>
+// SPDX-FileCopyrightText: 2012 Aleksey Mikhailichenko <a.v.mich@gmail.com>
+// SPDX-FileCopyrightText: 2012 Arto Jalkanen <ajalkane@gmail.com>
+// SPDX-License-Identifier: LGPL-2.1-or-later
 /*
  * Based on 002-analog stock watchface.
- * emulated image/png shadow by redrawing path in canvas.
+ * Converted to QtShapes with declarative wallClock bindings.
  */
 
-import QtQuick 2.9
+import QtGraphicalEffects 1.15
+import QtQuick 2.15
+import QtQuick.Shapes 1.15
 
 Item {
-    function prepareContext(ctx) {
-        ctx.reset();
-        ctx.fillStyle = Qt.rgba(1, 1, 1, 0.85);
-        ctx.textAlign = "center";
-        ctx.textBaseline = 'middle';
-        ctx.shadowColor = Qt.rgba(0, 0, 0, 0.75);
-        ctx.shadowOffsetX = parent.height * 0.00625;
-        ctx.shadowOffsetY = parent.height * 0.00625; //2 px on 320x320
-        ctx.shadowBlur = parent.height * 0.01875; //6 px on 320x320
+    id: root
+
+    property real maxSize: Math.min(width, height)
+    property real hourAngle: (wallClock.time.getHours() % 12 + wallClock.time.getMinutes() / 60) / 12 * 360
+    property real minuteAngle: wallClock.time.getMinutes() / 60 * 360
+    property real secondAngle: wallClock.time.getSeconds() / 60 * 360
+
+    anchors.fill: parent
+
+    Item {
+        id: hourStrokes
+
+        width: root.maxSize
+        height: root.maxSize
+        anchors.centerIn: parent
+
+        Repeater {
+            model: 12
+
+            Shape {
+                width: hourStrokes.width
+                height: hourStrokes.height
+                rotation: index * 30
+
+                ShapePath {
+                    fillColor: Qt.rgba(1, 1, 1, 0.85)
+                    strokeColor: "transparent"
+                    startX: hourStrokes.width / 2
+                    startY: hourStrokes.height / 2 + hourStrokes.height * 0.42
+
+                    PathLine {
+                        x: hourStrokes.width / 2 - hourStrokes.width * 0.0096
+                        y: hourStrokes.height / 2 + hourStrokes.height * 0.43
+                    }
+
+                    PathLine {
+                        x: hourStrokes.width / 2
+                        y: hourStrokes.height / 2 + hourStrokes.height * 0.44
+                    }
+
+                    PathLine {
+                        x: hourStrokes.width / 2 + hourStrokes.width * 0.0096
+                        y: hourStrokes.height / 2 + hourStrokes.height * 0.43
+                    }
+
+                    PathLine {
+                        x: hourStrokes.width / 2
+                        y: hourStrokes.height / 2 + hourStrokes.height * 0.42
+                    }
+
+                }
+
+            }
+
+        }
+
+        layer {
+            enabled: true
+            samples: 4
+
+            effect: DropShadow {
+                transparentBorder: true
+                horizontalOffset: root.maxSize * 0.00625
+                verticalOffset: root.maxSize * 0.00625
+                radius: 6
+                samples: 13
+                color: Qt.rgba(0, 0, 0, 0.4)
+            }
+
+        }
+
     }
 
-    Component.onCompleted: {
-        var hour = wallClock.time.getHours();
-        var minute = wallClock.time.getMinutes();
-        var second = wallClock.time.getSeconds();
-        hourCanvas.hour = hour;
-        hourCanvas.minute = minute;
-        hourCanvas.requestPaint();
-        minuteCanvas.minute = minute;
-        minuteCanvas.requestPaint();
-        secondCanvas.second = second;
-        secondCanvas.requestPaint();
+    Item {
+        id: hourHand
+
+        width: root.maxSize
+        height: root.maxSize
+        anchors.centerIn: parent
+        rotation: root.hourAngle
+
+        Shape {
+            width: hourHand.width
+            height: hourHand.height
+
+            ShapePath {
+                fillColor: "transparent"
+                strokeColor: Qt.rgba(1, 1, 1, 1)
+                strokeWidth: hourHand.width * 0.048
+                capStyle: ShapePath.FlatCap
+                startX: hourHand.width / 2
+                startY: hourHand.height / 2 - hourHand.height * 0.13
+
+                PathLine {
+                    x: hourHand.width / 2
+                    y: hourHand.height / 2 - hourHand.height * 0.28
+                }
+
+            }
+
+            ShapePath {
+                fillColor: "transparent"
+                strokeColor: Qt.rgba(1, 1, 1, 1)
+                strokeWidth: hourHand.width * 0.024
+                capStyle: ShapePath.FlatCap
+                joinStyle: ShapePath.MiterJoin
+                startX: hourHand.width / 2 - hourHand.width * 0.0612
+                startY: hourHand.height / 2 - hourHand.height * 0.3304
+
+                PathLine {
+                    x: hourHand.width / 2
+                    y: hourHand.height / 2 - hourHand.height * 0.393
+                }
+
+                PathLine {
+                    x: hourHand.width / 2 + hourHand.width * 0.0612
+                    y: hourHand.height / 2 - hourHand.height * 0.3304
+                }
+
+                PathLine {
+                    x: hourHand.width / 2
+                    y: hourHand.height / 2 - hourHand.height * 0.27
+                }
+
+                PathLine {
+                    x: hourHand.width / 2 - hourHand.width * 0.0612
+                    y: hourHand.height / 2 - hourHand.height * 0.3304
+                }
+
+            }
+
+        }
+
+        layer {
+            enabled: true
+            samples: 4
+
+            effect: DropShadow {
+                transparentBorder: true
+                horizontalOffset: root.maxSize * 0.00625
+                verticalOffset: root.maxSize * 0.00625
+                radius: root.maxSize * 0.024
+                samples: 25
+                color: Qt.rgba(0, 0, 0, 0.4)
+            }
+
+        }
+
+    }
+
+    Item {
+        id: minuteHand
+
+        width: root.maxSize
+        height: root.maxSize
+        anchors.centerIn: parent
+        rotation: root.minuteAngle
+
+        Shape {
+            width: minuteHand.width
+            height: minuteHand.height
+
+            ShapePath {
+                fillColor: "transparent"
+                strokeColor: Qt.rgba(1, 1, 1, 1)
+                strokeWidth: minuteHand.width * 0.03
+                capStyle: ShapePath.FlatCap
+                startX: minuteHand.width / 2
+                startY: minuteHand.height / 2 - minuteHand.height * 0.13
+
+                PathLine {
+                    x: minuteHand.width / 2
+                    y: minuteHand.height / 2 - minuteHand.height * 0.405
+                }
+
+            }
+
+            ShapePath {
+                fillColor: "transparent"
+                strokeColor: Qt.rgba(1, 1, 1, 1)
+                strokeWidth: minuteHand.width * 0.014
+                capStyle: ShapePath.FlatCap
+                joinStyle: ShapePath.MiterJoin
+                startX: minuteHand.width / 2 - minuteHand.width * 0.0339
+                startY: minuteHand.height / 2 - minuteHand.height * 0.4307
+
+                PathLine {
+                    x: minuteHand.width / 2
+                    y: minuteHand.height / 2 - minuteHand.height * 0.464
+                }
+
+                PathLine {
+                    x: minuteHand.width / 2 + minuteHand.width * 0.0339
+                    y: minuteHand.height / 2 - minuteHand.height * 0.4307
+                }
+
+                PathLine {
+                    x: minuteHand.width / 2
+                    y: minuteHand.height / 2 - minuteHand.height * 0.395
+                }
+
+                PathLine {
+                    x: minuteHand.width / 2 - minuteHand.width * 0.0339
+                    y: minuteHand.height / 2 - minuteHand.height * 0.4307
+                }
+
+            }
+
+        }
+
+        layer {
+            enabled: true
+            samples: 4
+
+            effect: DropShadow {
+                transparentBorder: true
+                horizontalOffset: root.maxSize * 0.00625
+                verticalOffset: root.maxSize * 0.00625
+                radius: root.maxSize * 0.024
+                samples: 25
+                color: Qt.rgba(0, 0, 0, 0.4)
+            }
+
+        }
+
+    }
+
+    Item {
+        id: secondHand
+
+        visible: !displayAmbient
+        width: root.maxSize
+        height: root.maxSize
+        anchors.centerIn: parent
+        rotation: root.secondAngle
+
+        Shape {
+            width: secondHand.width
+            height: secondHand.height
+
+            ShapePath {
+                fillColor: "transparent"
+                strokeColor: "red"
+                strokeWidth: secondHand.height * 0.008
+                capStyle: ShapePath.FlatCap
+                startX: secondHand.width / 2
+                startY: secondHand.height / 2 - secondHand.height * 0.13
+
+                PathLine {
+                    x: secondHand.width / 2
+                    y: secondHand.height / 2 - secondHand.height * 0.432
+                }
+
+            }
+
+        }
+
+        layer {
+            enabled: true
+            samples: 4
+
+            effect: DropShadow {
+                transparentBorder: true
+                horizontalOffset: root.maxSize * 0.00625
+                verticalOffset: root.maxSize * 0.00625
+                radius: root.maxSize * 0.024
+                samples: 25
+                color: Qt.rgba(0, 0, 0, 0.4)
+            }
+
+        }
+
     }
 
     Image {
         id: logo
 
-        z: 10
-        source: "..//watchfaces-img/asteroid-logo.svg"
+        source: "../watchfaces-img/asteroid-logo.svg"
         anchors.centerIn: parent
-        width: parent.width / 2.5
-        height: parent.height / 2.5
-    }
+        width: root.maxSize / 2.5
+        height: root.maxSize / 2.5
 
-    Canvas {
-        id: logoShadowPath
+        layer {
+            enabled: true
+            samples: 4
 
-        z: 9
-        anchors.fill: parent
-        smooth: true
-        renderStrategy: Canvas.Cooperative
-        onPaint: {
-            var ctx = getContext("2d");
-            prepareContext(ctx);
-            ctx.shadowColor = Qt.rgba(0, 0, 0, 0.75);
-            ctx.shadowOffsetX = 4;
-            ctx.shadowOffsetY = 4;
-            ctx.shadowBlur = 12;
-            ctx.lineWidth = parent.width * 0.05;
-            ctx.beginPath();
-            ctx.fillStyle = Qt.rgba(1, 1, 1, 5);
-            ctx.moveTo(parent.width / 3.3, parent.height / 2);
-            ctx.lineTo(parent.width / 2, parent.height / 3.3);
-            ctx.lineTo(parent.width / 1.44, parent.height / 2);
-            ctx.lineTo(parent.width / 2, parent.height / 1.44);
-            ctx.lineTo(parent.width / 2, parent.height / 1.6);
-            ctx.lineTo(parent.width / 1.6, parent.height / 2);
-            ctx.lineTo(parent.width / 1.85, parent.height / 2.4);
-            ctx.lineTo(parent.width / 2, parent.height / 2.2);
-            ctx.lineTo(parent.width / 2.18, parent.height / 2.4);
-            ctx.lineTo(parent.width / 2.42, parent.height / 2.16);
-            ctx.lineTo(parent.width / 2.18, parent.height / 1.98);
-            ctx.lineTo(parent.width / 2, parent.height / 2.14);
-            ctx.lineTo(parent.width / 1.88, parent.height / 2);
-            ctx.lineTo(parent.width / 2.2, parent.height / 1.73);
-            ctx.lineTo(parent.width / 2, parent.height / 1.6);
-            ctx.lineTo(parent.width / 2, parent.height / 1.44);
-            ctx.fill();
-            ctx.closePath();
-        }
-    }
-
-    // hour strokes
-    Canvas {
-        // do not paint main hour strokes
-        //if ( i%3 != 0) {
-
-        z: 1
-        anchors.fill: parent
-        smooth: true
-        renderStrategy: Canvas.Cooperative
-        onPaint: {
-            var ctx = getContext("2d");
-            prepareContext(ctx);
-            ctx.shadowBlur = parent.height * 0.01875; //6 px on 320x320
-            ctx.lineWidth = parent.width * 0.012;
-            ctx.strokeStyle = Qt.rgba(1, 1, 1, 0.85);
-            ctx.translate(parent.width / 2, parent.height / 2);
-            for (var i = 0; i < 12; i++) {
-                ctx.beginPath();
-                ctx.moveTo(0, height * 0.42);
-                ctx.lineTo(-height * 0.0096, height * 0.43);
-                ctx.lineTo(0, height * 0.44);
-                ctx.lineTo(+height * 0.0096, height * 0.43);
-                ctx.lineTo(0, height * 0.42);
-                ctx.stroke();
-                //}
-                ctx.rotate(Math.PI / 6);
+            effect: DropShadow {
+                transparentBorder: true
+                horizontalOffset: root.maxSize * 0.0125
+                verticalOffset: root.maxSize * 0.0125
+                radius: root.maxSize * 0.0375
+                samples: 25
+                color: Qt.rgba(0, 0, 0, 0.65)
             }
-        }
-    }
 
-    // hours
-    Canvas {
-        id: hourCanvas
-
-        property var hour: 0
-        property var minute: 0
-
-        z: 3
-        anchors.fill: parent
-        renderStrategy: Canvas.Cooperative
-        onPaint: {
-            var ctx = getContext("2d");
-            prepareContext(ctx);
-            var rot = (hour - 3 + minute / 60) / 12;
-            ctx.beginPath();
-            ctx.strokeStyle = Qt.rgba(1, 1, 1, 1);
-            ctx.fillStyle = Qt.rgba(1, 1, 1, 1);
-            ctx.lineWidth = parent.width * 0.048;
-            ctx.moveTo(parent.width / 2 + Math.cos(rot * 2 * Math.PI) * width * 0.13, parent.height / 2 + Math.sin(rot * 2 * Math.PI) * width * 0.13);
-            ctx.lineTo(parent.width / 2 + Math.cos(rot * 2 * Math.PI) * width * 0.255, parent.height / 2 + Math.sin(rot * 2 * Math.PI) * width * 0.255);
-            ctx.stroke();
-            ctx.closePath();
-            ctx.beginPath();
-            ctx.lineWidth = parent.width * 0.024;
-            ctx.moveTo(parent.width / 2 + Math.cos(((hour - 3.35 + minute / 60) / 12) * 2 * Math.PI) * width * 0.336, parent.height / 2 + Math.sin(((hour - 3.35 + minute / 60) / 12) * 2 * Math.PI) * width * 0.336);
-            ctx.lineTo(parent.width / 2 + Math.cos(rot * 2 * Math.PI) * width * 0.393, parent.height / 2 + Math.sin(rot * 2 * Math.PI) * width * 0.393);
-            ctx.lineTo(parent.width / 2 + Math.cos(((hour - 2.65 + minute / 60) / 12) * 2 * Math.PI) * width * 0.336, parent.height / 2 + Math.sin(((hour - 2.65 + minute / 60) / 12) * 2 * Math.PI) * width * 0.336);
-            ctx.lineTo(parent.width / 2 + Math.cos(rot * 2 * Math.PI) * width * 0.27, parent.height / 2 + Math.sin(rot * 2 * Math.PI) * width * 0.27);
-            ctx.lineTo(parent.width / 2 + Math.cos(((hour - 3.35 + minute / 60) / 12) * 2 * Math.PI) * width * 0.336, parent.height / 2 + Math.sin(((hour - 3.35 + minute / 60) / 12) * 2 * Math.PI) * width * 0.336);
-            ctx.stroke();
-            ctx.closePath();
-            ctx.beginPath();
-            ctx.lineWidth = parent.width * 0.05;
-            ctx.shadowColor = Qt.rgba(0, 0, 0, 0);
-            ctx.moveTo(parent.width / 2 + Math.cos(rot * 2 * Math.PI) * width * 0.13, parent.height / 2 + Math.sin(rot * 2 * Math.PI) * width * 0.13);
-            ctx.lineTo(parent.width / 2 + Math.cos(rot * 2 * Math.PI) * width * 0.28, parent.height / 2 + Math.sin(rot * 2 * Math.PI) * width * 0.28);
-            ctx.stroke();
-            ctx.closePath();
-        }
-    }
-
-    // minutes
-    Canvas {
-        id: minuteCanvas
-
-        property var minute: 0
-
-        z: 4
-        anchors.fill: parent
-        smooth: true
-        renderStrategy: Canvas.Cooperative
-        onPaint: {
-            var ctx = getContext("2d");
-            prepareContext(ctx);
-            ctx.lineWidth = parent.width * 0.03;
-            ctx.beginPath();
-            ctx.strokeStyle = Qt.rgba(1, 1, 1, 1);
-            ctx.moveTo(parent.width / 2 + Math.cos(((minute - 15) / 60) * 2 * Math.PI) * width * 0.13, parent.height / 2 + Math.sin(((minute - 15) / 60) * 2 * Math.PI) * width * 0.13);
-            ctx.lineTo(parent.width / 2 + Math.cos(((minute - 15) / 60) * 2 * Math.PI) * width * 0.395, parent.height / 2 + Math.sin(((minute - 15) / 60) * 2 * Math.PI) * width * 0.395);
-            ctx.stroke();
-            ctx.closePath();
-            ctx.lineWidth = parent.width * 0.014;
-            ctx.beginPath();
-            ctx.strokeStyle = Qt.rgba(1, 1, 1, 1);
-            ctx.moveTo(parent.width / 2 + Math.cos(((minute - 15.75) / 60) * 2 * Math.PI) * width * 0.432, parent.height / 2 + Math.sin(((minute - 15.75) / 60) * 2 * Math.PI) * width * 0.432);
-            ctx.lineTo(parent.width / 2 + Math.cos(((minute - 15) / 60) * 2 * Math.PI) * width * 0.464, parent.height / 2 + Math.sin(((minute - 15) / 60) * 2 * Math.PI) * width * 0.464);
-            ctx.lineTo(parent.width / 2 + Math.cos(((minute - 14.25) / 60) * 2 * Math.PI) * width * 0.432, parent.height / 2 + Math.sin(((minute - 14.25) / 60) * 2 * Math.PI) * width * 0.432);
-            ctx.lineTo(parent.width / 2 + Math.cos(((minute - 15) / 60) * 2 * Math.PI) * width * 0.395, parent.height / 2 + Math.sin(((minute - 15) / 60) * 2 * Math.PI) * width * 0.395);
-            ctx.lineTo(parent.width / 2 + Math.cos(((minute - 15.75) / 60) * 2 * Math.PI) * width * 0.432, parent.height / 2 + Math.sin(((minute - 15.75) / 60) * 2 * Math.PI) * width * 0.432);
-            ctx.stroke();
-            ctx.closePath();
-            ctx.beginPath();
-            ctx.strokeStyle = Qt.rgba(1, 1, 1, 1);
-            ctx.lineWidth = parent.width * 0.03;
-            ctx.shadowColor = Qt.rgba(0, 0, 0, 0);
-            ctx.moveTo(parent.width / 2 + Math.cos(((minute - 15) / 60) * 2 * Math.PI) * width * 0.13, parent.height / 2 + Math.sin(((minute - 15) / 60) * 2 * Math.PI) * width * 0.13);
-            ctx.lineTo(parent.width / 2 + Math.cos(((minute - 15) / 60) * 2 * Math.PI) * width * 0.405, parent.height / 2 + Math.sin(((minute - 15) / 60) * 2 * Math.PI) * width * 0.405);
-            ctx.stroke();
-            ctx.closePath();
-        }
-    }
-
-    // seconds
-    Canvas {
-        id: secondCanvas
-
-        property var second: 0
-
-        z: 5
-        anchors.fill: parent
-        smooth: true
-        renderStrategy: Canvas.Cooperative
-        onPaint: {
-            var ctx = getContext("2d");
-            prepareContext(ctx);
-            ctx.strokeStyle = "red";
-            ctx.beginPath();
-            ctx.lineWidth = parent.height * 0.008;
-            ctx.moveTo(parent.width / 2 + Math.cos((second - 15) / 60 * 2 * Math.PI) * width * 0.13, parent.height / 2 + Math.sin((second - 15) / 60 * 2 * Math.PI) * width * 0.13);
-            ctx.lineTo(parent.width / 2 + Math.cos((second - 15) / 60 * 2 * Math.PI) * width * 0.432, parent.height / 2 + Math.sin((second - 15) / 60 * 2 * Math.PI) * width * 0.432);
-            ctx.stroke();
-            ctx.closePath();
-        }
-    }
-
-    Connections {
-        function onTimeChanged() {
-            if (!visible)
-                return ;
-
-            var hour = wallClock.time.getHours();
-            var minute = wallClock.time.getMinutes();
-            var second = wallClock.time.getSeconds();
-            if (minuteCanvas.minute !== minute) {
-                minuteCanvas.minute = minute;
-                minuteCanvas.requestPaint();
-                hourCanvas.hour = hour;
-                hourCanvas.minute = minute;
-                hourCanvas.requestPaint();
-            }
-            if (secondCanvas.second !== second) {
-                secondCanvas.second = second;
-                secondCanvas.requestPaint();
-            }
         }
 
-        target: wallClock
     }
 
 }
