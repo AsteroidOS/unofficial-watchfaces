@@ -1,33 +1,15 @@
-/*
- * Copyright (C) 2026 - Timo Könnecke <github.com/moWerk>
- *               2021 - Timo Könnecke <github.com/eLtMosen>
- *               2016 - Sylvia van Os <iamsylvie@openmailbox.org>
- *               2015 - Florent Revest <revestflo@gmail.com>
- *               2012 - Vasiliy Sorokin <sorokin.vasiliy@gmail.com>
- *                      Aleksey Mikhailichenko <a.v.mich@gmail.com>
- *                      Arto Jalkanen <ajalkane@gmail.com>
- *
- * All rights reserved.
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Lesser General Public License as
- * published by the Free Software Foundation, either version 2.1 of the
- * License, or (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program. If not, see <http://www.gnu.org/licenses/>.
- */
+// SPDX-FileCopyrightText: 2021 Timo Könnecke <github.com/eLtMosen>
+// SPDX-FileCopyrightText: 2016 Sylvia van Os <iamsylvie@openmailbox.org>
+// SPDX-FileCopyrightText: 2015 Florent Revest <revestflo@gmail.com>
+// SPDX-FileCopyrightText: 2012 Vasiliy Sorokin <sorokin.vasiliy@gmail.com>
+// SPDX-FileCopyrightText: 2012 Aleksey Mikhailichenko <a.v.mich@gmail.com>
+// SPDX-FileCopyrightText: 2012 Arto Jalkanen <ajalkane@gmail.com>
+// SPDX-License-Identifier: LGPL-2.1-or-later
 
 import Nemo.Mce 1.0
 import QtGraphicalEffects 1.15
 import QtQuick 2.15
-import org.asteroid.controls 1.0
-import org.asteroid.utils 1.0
+import QtQuick.Shapes 1.15 as Shapes
 
 Item {
     id: root
@@ -36,7 +18,9 @@ Item {
     property string highColor: !displayAmbient ? "#FFEBAD" : "#aaFFEBAD"
     property string accColor: !displayAmbient ? "#D88C9A" : "#88D88C9A"
     property string imgPath: "../watchfaces-img/analog-goldie-"
-    property real rad: 0.01745
+    property real maxSize: Math.min(width, height)
+    property int currentDayOfWeek: wallClock.time.getDay()
+    property int currentMonth: Number(wallClock.time.toLocaleString(Qt.locale(), "MM"))
 
     anchors.fill: parent
     layer.enabled: true
@@ -48,8 +32,9 @@ Item {
     Image {
         id: backPlate
 
-        z: 0
-        anchors.fill: parent
+        width: root.maxSize
+        height: root.maxSize
+        anchors.centerIn: parent
         visible: !displayAmbient
         source: imgPath + "background.svg"
     }
@@ -57,27 +42,35 @@ Item {
     Image {
         id: hourMarks
 
-        z: 1
-        anchors.fill: parent
+        width: root.maxSize
+        height: root.maxSize
+        anchors.centerIn: parent
         source: imgPath + "hourmarks.svg"
-        layer.enabled: true
 
-        layer.effect: DropShadow {
-            transparentBorder: true
-            horizontalOffset: 0
-            verticalOffset: 0
-            radius: 8
-            samples: 9
-            color: Qt.rgba(0, 0, 0, 1)
+        layer {
+            enabled: true
+
+            effect: DropShadow {
+                transparentBorder: true
+                horizontalOffset: 0
+                verticalOffset: 0
+                radius: 8
+                samples: 9
+                color: Qt.rgba(0, 0, 0, 1)
+            }
+
         }
 
     }
 
+    // faceBox constrained to maxSize square so all children using
+    // parent.width/height automatically reference a square dimension.
     Item {
         id: faceBox
 
-        anchors.fill: parent
-        layer.enabled: true
+        width: root.maxSize
+        height: root.maxSize
+        anchors.centerIn: parent
 
         Repeater {
             model: 60
@@ -87,7 +80,6 @@ Item {
                 property real centerX: parent.width / 2 - width / 2
                 property real centerY: parent.height / 2 - height / 2
 
-                z: 1
                 visible: index % 5
                 antialiasing: true
                 width: parent.width * 0.005
@@ -114,7 +106,6 @@ Item {
                 property real centerX: parent.width / 2 - width / 2
                 property real centerY: parent.height / 2 - height / 2
 
-                z: 1
                 x: index % 6 ? centerX + Math.cos(rotM * 2 * Math.PI) * parent.width * 0.348 : centerX + Math.cos(rotM * 2 * Math.PI) * parent.width * 0.326
                 y: index % 6 ? centerY + Math.sin(rotM * 2 * Math.PI) * parent.width * 0.348 : centerY + Math.sin(rotM * 2 * Math.PI) * parent.width * 0.326
                 color: "#ddffffff"
@@ -162,11 +153,8 @@ Item {
         Item {
             id: dayBox
 
-            property var day: wallClock.time.toLocaleString(Qt.locale(), "dd")
-
             width: parent.width * 0.24
             height: parent.height * 0.24
-            onDayChanged: dayArc.requestPaint()
 
             anchors {
                 centerIn: parent
@@ -174,37 +162,39 @@ Item {
                 horizontalCenterOffset: -parent.width * 0.17
             }
 
-            // Static circle base
             Rectangle {
                 anchors.centerIn: parent
                 width: parent.width * 0.9
                 height: width
                 radius: width / 2
                 color: "#22ffffff"
-                opacity: !displayAmbient ? 1 : 0.3
-                border.width: root.height * 0.002
+                border.width: root.maxSize * 0.002
                 border.color: lowColor
+                opacity: !displayAmbient ? 1 : 0.3
             }
 
-            Canvas {
-                id: dayArc
-
-                z: 1
+            Shapes.Shape {
                 anchors.fill: parent
                 opacity: !displayAmbient ? 1 : 0.3
-                renderStrategy: Canvas.Cooperative
-                onPaint: {
-                    var ctx = getContext("2d");
-                    var day = wallClock.time.getDay();
-                    ctx.reset();
-                    ctx.lineWidth = root.height * 0.005;
-                    ctx.lineCap = "round";
-                    ctx.strokeStyle = accColor;
-                    ctx.beginPath();
-                    ctx.arc(parent.width / 2, parent.height / 2, parent.width * 0.456, 169 * rad, ((day / 7 * 360) + 169) * rad, false);
-                    ctx.stroke();
-                    ctx.closePath();
+
+                Shapes.ShapePath {
+                    fillColor: "transparent"
+                    strokeColor: accColor
+                    strokeWidth: root.maxSize * 0.005
+                    capStyle: Shapes.ShapePath.RoundCap
+
+                    PathAngleArc {
+                        centerX: dayBox.width / 2
+                        centerY: dayBox.height / 2
+                        radiusX: dayBox.width * 0.456
+                        radiusY: dayBox.height * 0.456
+                        startAngle: 169
+                        sweepAngle: root.currentDayOfWeek / 7 * 360
+                        moveToStart: true
+                    }
+
                 }
+
             }
 
             Repeater {
@@ -215,9 +205,8 @@ Item {
                     property real rotM: ((index * 8.7) - 15) / 60
                     property real centerX: parent.width / 2 - width / 2
                     property real centerY: parent.height / 2 - height / 2
-                    property bool currentDayHighlight: new Date(2017, 1, index).toLocaleString(Qt.locale(), "ddd") === wallClock.time.toLocaleString(Qt.locale(), "ddd")
+                    property bool currentDayHighlight: root.currentDayOfWeek === new Date(2017, 1, index).getDay()
 
-                    z: 2
                     x: centerX + Math.cos(rotM * 2 * Math.PI) * parent.width * 0.35
                     y: centerY + Math.sin(rotM * 2 * Math.PI) * parent.width * 0.35
                     antialiasing: true
@@ -225,7 +214,7 @@ Item {
                     text: new Date(2017, 1, index).toLocaleString(Qt.locale(), "ddd").slice(0, 2).toUpperCase()
 
                     font {
-                        pixelSize: currentDayHighlight ? root.height * 0.036 : root.height * 0.03
+                        pixelSize: currentDayHighlight ? root.maxSize * 0.036 : root.maxSize * 0.03
                         letterSpacing: parent.width * 0.004
                         family: "Noto Sans"
                         styleName: currentDayHighlight ? "Black" : "SemiCondensed Bold"
@@ -244,13 +233,12 @@ Item {
             Text {
                 id: dayDisplay
 
-                z: 2
                 color: highColor
                 text: wallClock.time.toLocaleString(Qt.locale(), "dd").slice(0, 2).toUpperCase()
 
                 anchors {
                     centerIn: parent
-                    verticalCenterOffset: -root.width * 0.003
+                    verticalCenterOffset: -root.maxSize * 0.003
                 }
 
                 font {
@@ -266,10 +254,6 @@ Item {
         Item {
             id: monthBox
 
-            // Fixed: was "mm" (minutes) — caused monthly arc repaints every minute
-            property var month: wallClock.time.toLocaleString(Qt.locale(), "MM")
-
-            onMonthChanged: monthArc.requestPaint()
             width: parent.width * 0.24
             height: parent.height * 0.24
 
@@ -279,37 +263,39 @@ Item {
                 horizontalCenterOffset: parent.width * 0.17
             }
 
-            // Static circle base
             Rectangle {
                 anchors.centerIn: parent
                 width: parent.width * 0.9
                 height: width
                 radius: width / 2
                 color: "#22ffffff"
-                opacity: !displayAmbient ? 1 : 0.3
-                border.width: root.height * 0.002
+                border.width: root.maxSize * 0.002
                 border.color: lowColor
+                opacity: !displayAmbient ? 1 : 0.3
             }
 
-            Canvas {
-                id: monthArc
-
-                z: 1
+            Shapes.Shape {
                 anchors.fill: parent
                 opacity: !displayAmbient ? 1 : 0.3
-                renderStrategy: Canvas.Cooperative
-                onPaint: {
-                    var ctx = getContext("2d");
-                    var m = Number(wallClock.time.toLocaleString(Qt.locale(), "MM"));
-                    ctx.reset();
-                    ctx.lineWidth = root.height * 0.005;
-                    ctx.lineCap = "round";
-                    ctx.strokeStyle = accColor;
-                    ctx.beginPath();
-                    ctx.arc(parent.width / 2, parent.height / 2, parent.width * 0.456, 270 * rad, ((m / 12 * 360) + 270) * rad, false);
-                    ctx.stroke();
-                    ctx.closePath();
+
+                Shapes.ShapePath {
+                    fillColor: "transparent"
+                    strokeColor: accColor
+                    strokeWidth: root.maxSize * 0.005
+                    capStyle: Shapes.ShapePath.RoundCap
+
+                    PathAngleArc {
+                        centerX: monthBox.width / 2
+                        centerY: monthBox.height / 2
+                        radiusX: monthBox.width * 0.456
+                        radiusY: monthBox.height * 0.456
+                        startAngle: 270
+                        sweepAngle: root.currentMonth / 12 * 360
+                        moveToStart: true
+                    }
+
                 }
+
             }
 
             Repeater {
@@ -319,9 +305,8 @@ Item {
                     property real rotM: ((index * 5) - 15) / 60
                     property real centerX: parent.width / 2 - width / 2
                     property real centerY: parent.height / 2 - height / 2
-                    property bool currentMonthHighlight: Number(wallClock.time.toLocaleString(Qt.locale(), "MM")) === index || Number(wallClock.time.toLocaleString(Qt.locale(), "MM")) === index + 12
+                    property bool currentMonthHighlight: root.currentMonth === index || root.currentMonth === index + 12
 
-                    z: 2
                     x: centerX + Math.cos(rotM * 2 * Math.PI) * parent.width * 0.35
                     y: centerY + Math.sin(rotM * 2 * Math.PI) * parent.width * 0.35
                     antialiasing: true
@@ -329,7 +314,7 @@ Item {
                     text: index === 0 ? 12 : index
 
                     font {
-                        pixelSize: currentMonthHighlight ? root.height * 0.036 : root.height * 0.03
+                        pixelSize: currentMonthHighlight ? root.maxSize * 0.036 : root.maxSize * 0.03
                         letterSpacing: parent.width * 0.004
                         family: "Noto Sans"
                         styleName: currentMonthHighlight ? "Black" : "Condensed Bold"
@@ -348,7 +333,6 @@ Item {
             Text {
                 id: monthDisplay
 
-                z: 2
                 anchors.centerIn: parent
                 renderType: Text.NativeRendering
                 color: highColor
@@ -367,9 +351,6 @@ Item {
         Item {
             id: batteryBox
 
-            property int value: batteryChargePercentage.percent
-
-            onValueChanged: batteryArc.requestPaint()
             width: parent.width * 0.22
             height: parent.height * 0.22
 
@@ -378,38 +359,44 @@ Item {
                 verticalCenterOffset: parent.width * 0.15
             }
 
-            Canvas {
-                id: batteryArc
+            Rectangle {
+                anchors.centerIn: parent
+                width: parent.width * 0.9
+                height: width
+                radius: width / 2
+                color: "#22ffffff"
+                border.width: root.maxSize * 0.002
+                border.color: lowColor
+                opacity: !displayAmbient ? 1 : 0.3
+            }
 
-                z: 1
+            Shapes.Shape {
                 anchors.fill: parent
                 opacity: !displayAmbient ? 1 : 0.3
-                renderStrategy: Canvas.Cooperative
-                onPaint: {
-                    var ctx = getContext("2d");
-                    ctx.reset();
-                    ctx.beginPath();
-                    ctx.fillStyle = "#22ffffff";
-                    ctx.arc(parent.width / 2, parent.height / 2, parent.width * 0.45, 270 * rad, 360, false);
-                    ctx.strokeStyle = lowColor;
-                    ctx.lineWidth = root.height * 0.002;
-                    ctx.stroke();
-                    ctx.fill();
-                    ctx.closePath();
-                    ctx.lineWidth = root.height * 0.005;
-                    ctx.lineCap = "round";
-                    ctx.strokeStyle = batteryChargePercentage.percent < 30 ? accColor : "#44BBA4";
-                    ctx.beginPath();
-                    ctx.arc(parent.width / 2, parent.height / 2, parent.width * 0.456, 270 * rad, ((batteryChargePercentage.percent / 100 * 360) + 270) * rad, false);
-                    ctx.stroke();
-                    ctx.closePath();
+
+                Shapes.ShapePath {
+                    fillColor: "transparent"
+                    strokeColor: batteryChargePercentage.percent < 30 ? accColor : "#44BBA4"
+                    strokeWidth: root.maxSize * 0.005
+                    capStyle: Shapes.ShapePath.RoundCap
+
+                    PathAngleArc {
+                        centerX: batteryBox.width / 2
+                        centerY: batteryBox.height / 2
+                        radiusX: batteryBox.width * 0.456
+                        radiusY: batteryBox.height * 0.456
+                        startAngle: 270
+                        sweepAngle: batteryChargePercentage.percent / 100 * 360
+                        moveToStart: true
+                    }
+
                 }
+
             }
 
             Text {
                 id: batteryDisplay
 
-                z: 2
                 anchors.centerIn: parent
                 renderType: Text.NativeRendering
                 color: highColor
@@ -448,13 +435,18 @@ Item {
 
         }
 
-        layer.effect: DropShadow {
-            transparentBorder: true
-            horizontalOffset: 2
-            verticalOffset: 2
-            radius: 10
-            samples: 13
-            color: Qt.rgba(0, 0, 0, 0.8)
+        layer {
+            enabled: true
+
+            effect: DropShadow {
+                transparentBorder: true
+                horizontalOffset: 2
+                verticalOffset: 2
+                radius: 10
+                samples: 13
+                color: Qt.rgba(0, 0, 0, 0.8)
+            }
+
         }
 
     }
@@ -462,20 +454,20 @@ Item {
     Item {
         id: handBox
 
-        z: 3
-        anchors.fill: parent
+        width: root.maxSize
+        height: root.maxSize
+        anchors.centerIn: parent
 
         Image {
             id: hourSVG
 
-            z: 3
             source: imgPath + "hour.svg"
             anchors.fill: parent
             layer.enabled: true
 
             transform: Rotation {
-                origin.x: parent.width / 2
-                origin.y: parent.height / 2
+                origin.x: hourSVG.width / 2
+                origin.y: hourSVG.height / 2
                 angle: (wallClock.time.getHours() * 30) + (wallClock.time.getMinutes() * 0.5)
             }
 
@@ -493,14 +485,13 @@ Item {
         Image {
             id: minuteSVG
 
-            z: 4
             source: imgPath + "minute.svg"
             anchors.fill: parent
             layer.enabled: true
 
             transform: Rotation {
-                origin.x: parent.width / 2
-                origin.y: parent.height / 2
+                origin.x: minuteSVG.width / 2
+                origin.y: minuteSVG.height / 2
                 angle: (wallClock.time.getMinutes() * 6) + (wallClock.time.getSeconds() * 6 / 60)
             }
 
@@ -518,15 +509,14 @@ Item {
         Image {
             id: secondSVG
 
-            z: 5
             visible: !displayAmbient
             source: imgPath + "second.svg"
             anchors.fill: parent
             layer.enabled: true
 
             transform: Rotation {
-                origin.x: parent.width / 2
-                origin.y: parent.height / 2
+                origin.x: secondSVG.width / 2
+                origin.y: secondSVG.height / 2
                 angle: wallClock.time.getSeconds() * 6
             }
 
@@ -541,16 +531,6 @@ Item {
 
         }
 
-    }
-
-    Connections {
-        function onTimeChanged() {
-            if (!visible)
-                return ;
-
-        }
-
-        target: wallClock
     }
 
     layer.effect: DropShadow {
