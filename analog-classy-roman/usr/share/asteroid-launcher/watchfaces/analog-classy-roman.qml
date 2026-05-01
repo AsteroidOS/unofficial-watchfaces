@@ -1,23 +1,7 @@
-/*
- * Copyright (C) 2026 - Timo Könnecke <github.com/moWerk>
- *               2021 - Timo Könnecke <github.com/eLtMosen>
- * All rights reserved.
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Lesser General Public License as
- * published by the Free Software Foundation, either version 2.1 of the
- * License, or (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program. If not, see <http://www.gnu.org/licenses/>.
- */
+// SPDX-FileCopyrightText: 2021 Timo Könnecke <github.com/moWerk>
+// SPDX-License-Identifier: LGPL-2.1-or-later
 
-import QtQuick 2.9
+import QtQuick 2.15
 
 Item {
     id: root
@@ -26,15 +10,17 @@ Item {
     property string userColor: ""
     property string imgPath: "../watchfaces-img/analog-classy-roman-"
     property var numeral: ["\u216B", "\u2160", "\u2161", "\u2162", "\u2163", "\u2164", "\u2165", "\u2166", "\u2167", "\u2168", "\u2169", "\u216A"]
+    property real maxSize: Math.min(width, height)
+
+    anchors.fill: parent
 
     Image {
         id: background
 
-        z: 0
-        source: !displayAmbient ? imgPath + "background-white.svg" : imgPath + "background.svg"
+        width: root.maxSize
+        height: root.maxSize
         anchors.centerIn: parent
-        width: parent.width
-        height: parent.height
+        source: !displayAmbient ? imgPath + "background-white.svg" : imgPath + "background.svg"
         state: currentColor
 
         MouseArea {
@@ -68,16 +54,15 @@ Item {
     Image {
         id: logoAsteroid
 
-        z: 1
+        width: root.maxSize / 4.4
+        height: root.maxSize / 4.4
         source: !displayAmbient ? imgPath + "asteroid_logo_bw.png" : imgPath + "asteroid_logo_wb.png"
-        width: parent.width / 4.4
-        height: parent.height / 4.4
         state: currentColor
 
         anchors {
             horizontalCenter: parent.horizontalCenter
             verticalCenter: parent.verticalCenter
-            verticalCenterOffset: -parent.height * 0.37
+            verticalCenterOffset: -root.maxSize * 0.37
         }
 
         states: State {
@@ -106,9 +91,6 @@ Item {
     Text {
         id: asteroidSlogan
 
-        z: 1
-        font.pixelSize: parent.height * 0.042
-        font.family: "Raleway"
         color: "black"
         opacity: 0.8
         horizontalAlignment: Text.AlignHCenter
@@ -117,8 +99,13 @@ Item {
 
         anchors {
             top: parent.top
-            topMargin: parent.height * 0.24
+            topMargin: root.maxSize * 0.24
             horizontalCenter: parent.horizontalCenter
+        }
+
+        font {
+            pixelSize: root.maxSize * 0.042
+            family: "Raleway"
         }
 
         states: State {
@@ -147,10 +134,6 @@ Item {
     Text {
         id: dayDisplay
 
-        z: 1
-        font.pixelSize: parent.height * 0.08
-        font.family: "Roboto"
-        font.styleName: "Bold"
         color: "black"
         opacity: 0.8
         horizontalAlignment: Text.AlignHCenter
@@ -160,7 +143,13 @@ Item {
         anchors {
             verticalCenter: parent.verticalCenter
             horizontalCenter: parent.horizontalCenter
-            horizontalCenterOffset: parent.width * 0.215
+            horizontalCenterOffset: root.maxSize * 0.215
+        }
+
+        font {
+            pixelSize: root.maxSize * 0.08
+            family: "Roboto"
+            styleName: "Bold"
         }
 
         states: State {
@@ -189,10 +178,6 @@ Item {
     Text {
         id: dowDisplay
 
-        z: 1
-        font.pixelSize: parent.height * 0.08
-        font.family: "Roboto"
-        font.styleName: "Bold"
         color: "black"
         opacity: 0.8
         horizontalAlignment: Text.AlignHCenter
@@ -202,7 +187,13 @@ Item {
         anchors {
             verticalCenter: parent.verticalCenter
             horizontalCenter: parent.horizontalCenter
-            horizontalCenterOffset: -parent.width * 0.215
+            horizontalCenterOffset: -root.maxSize * 0.215
+        }
+
+        font {
+            pixelSize: root.maxSize * 0.08
+            family: "Roboto"
+            styleName: "Bold"
         }
 
         states: State {
@@ -231,9 +222,6 @@ Item {
     Text {
         id: monthDisplay
 
-        z: 1
-        font.pixelSize: parent.height * 0.042
-        font.family: "Raleway"
         color: "black"
         opacity: 0.8
         horizontalAlignment: Text.AlignHCenter
@@ -243,7 +231,12 @@ Item {
         anchors {
             horizontalCenter: parent.horizontalCenter
             verticalCenter: parent.verticalCenter
-            verticalCenterOffset: parent.width * 0.22
+            verticalCenterOffset: root.maxSize * 0.22
+        }
+
+        font {
+            pixelSize: root.maxSize * 0.042
+            family: "Raleway"
         }
 
         states: State {
@@ -274,45 +267,19 @@ Item {
 
         Rectangle {
             property real rotM: (index - 15) / 60
-            property real centerX: parent.width / 2 - width / 2
-            property real centerY: parent.height / 2 - height / 2
 
-            z: 0
-            x: centerX + Math.cos(rotM * 2 * Math.PI) * parent.width * 0.47
-            y: centerY + Math.sin(rotM * 2 * Math.PI) * parent.width * 0.47
+            x: root.width / 2 - width / 2 + Math.cos(rotM * 2 * Math.PI) * root.maxSize * 0.47
+            y: root.height / 2 - height / 2 + Math.sin(rotM * 2 * Math.PI) * root.maxSize * 0.47
             antialiasing: true
-            color: "black"
-            // height is identical in both cases — single value
-            width: index % 5 === 0 ? parent.width * 0.02 : parent.width * 0.003
-            height: parent.width * 0.02
+            color: currentColor === "black" ? "white" : "black"
+            width: index % 5 === 0 ? root.maxSize * 0.02 : root.maxSize * 0.003
+            height: root.maxSize * 0.02
             opacity: 0.6
-            state: currentColor
 
             transform: Rotation {
                 origin.x: width / 2
                 origin.y: height / 2
                 angle: index % 5 === 0 ? (index * 6) + 45 : index * 6
-            }
-
-            states: State {
-                name: "black"
-
-                PropertyChanges {
-                    target: minuteStrokes
-                    color: "white"
-                }
-
-            }
-
-            transitions: Transition {
-                from: ""
-                to: "black"
-                reversible: true
-
-                ColorAnimation {
-                    duration: 500
-                }
-
             }
 
         }
@@ -325,47 +292,25 @@ Item {
         model: 12
 
         Text {
-            property real heightFontOffest: -parent.height * 0.002
+            property real heightFontOffest: -root.maxSize * 0.002
             property real rotM: ((index * 5) - 15) / 60
-            property real centerX: parent.width / 2 - width / 2
-            property real centerY: parent.height / 2 - height / 2
 
-            z: 2
-            font.pixelSize: index === 0 ? parent.height * 0.113 : parent.height * 0.1
+            x: index === 0 ? root.width / 2 - width / 2 + Math.cos(rotM * 2 * Math.PI) * root.maxSize * 0.356 : root.width / 2 - width / 2 + Math.cos(rotM * 2 * Math.PI) * root.maxSize * 0.41
+            y: index === 0 ? root.height / 2 - height / 2 + Math.sin(rotM * 2 * Math.PI) * root.maxSize * 0.356 + heightFontOffest : root.height / 2 - height / 2 + Math.sin(rotM * 2 * Math.PI) * root.maxSize * 0.41 + heightFontOffest
             antialiasing: true
-            font.family: "Roboto Condensed"
-            font.styleName: "Bold"
-            x: index === 0 ? centerX + Math.cos(rotM * 2 * Math.PI) * parent.width * 0.356 : centerX + Math.cos(rotM * 2 * Math.PI) * parent.width * 0.41
-            y: index === 0 ? centerY + Math.sin(rotM * 2 * Math.PI) * parent.width * 0.356 + heightFontOffest : centerY + Math.sin(rotM * 2 * Math.PI) * parent.width * 0.41 + heightFontOffest
-            color: "black"
+            color: currentColor === "black" ? "white" : "black"
             text: numeral[index]
-            state: currentColor
+
+            font {
+                pixelSize: index === 0 ? root.maxSize * 0.113 : root.maxSize * 0.1
+                family: "Roboto Condensed"
+                styleName: "Bold"
+            }
 
             transform: Rotation {
                 origin.x: width / 2
-                origin.y: (height / 2) - heightFontOffest
+                origin.y: height / 2 - heightFontOffest
                 angle: index * 30
-            }
-
-            states: State {
-                name: "black"
-
-                PropertyChanges {
-                    target: hourText
-                    color: "white"
-                }
-
-            }
-
-            transitions: Transition {
-                from: ""
-                to: "black"
-                reversible: true
-
-                ColorAnimation {
-                    duration: 500
-                }
-
             }
 
         }
@@ -375,15 +320,14 @@ Item {
     Image {
         id: hourSVG
 
-        z: 3
-        source: imgPath + "hour.svg"
         anchors.centerIn: parent
-        width: parent.width
-        height: parent.height
+        width: root.maxSize
+        height: root.maxSize
+        source: imgPath + "hour.svg"
 
         transform: Rotation {
-            origin.x: parent.width / 2
-            origin.y: parent.height / 2
+            origin.x: hourSVG.width / 2
+            origin.y: hourSVG.height / 2
             angle: (wallClock.time.getHours() * 30) + (wallClock.time.getMinutes() * 0.5)
         }
 
@@ -392,15 +336,14 @@ Item {
     Image {
         id: minuteSVG
 
-        z: 4
-        source: imgPath + "minute.svg"
         anchors.centerIn: parent
-        width: parent.width
-        height: parent.height
+        width: root.maxSize
+        height: root.maxSize
+        source: imgPath + "minute.svg"
 
         transform: Rotation {
-            origin.x: parent.width / 2
-            origin.y: parent.height / 2
+            origin.x: minuteSVG.width / 2
+            origin.y: minuteSVG.height / 2
             angle: (wallClock.time.getMinutes() * 6) + (wallClock.time.getSeconds() * 6 / 60)
         }
 
@@ -409,29 +352,18 @@ Item {
     Image {
         id: secondSVG
 
-        z: 4
-        visible: !displayAmbient
-        source: imgPath + "second.svg"
         anchors.centerIn: parent
-        width: parent.width
-        height: parent.height
+        visible: !displayAmbient
+        width: root.maxSize
+        height: root.maxSize
+        source: imgPath + "second.svg"
 
         transform: Rotation {
-            origin.x: parent.width / 2
-            origin.y: parent.height / 2
+            origin.x: secondSVG.width / 2
+            origin.y: secondSVG.height / 2
             angle: wallClock.time.getSeconds() * 6
         }
 
-    }
-
-    Connections {
-        function onTimeChanged() {
-            if (!visible)
-                return ;
-
-        }
-
-        target: wallClock
     }
 
     Connections {
