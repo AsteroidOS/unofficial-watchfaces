@@ -1,26 +1,50 @@
-import Nemo.Mce 1.0
-import Qt.labs.settings 1.0
-import QtGraphicalEffects 1.12
+import Qt5Compat.GraphicalEffects
+import QtCore
 import QtQuick 2.15
 import QtQuick.Controls 2.15
-import QtQuick.Dialogs 1.1
 import QtQuick.Layouts 1.2
+import WatchfaceConfig 1.0
 
 ApplicationWindow {
     id: appRoot
 
     property bool displayAmbient: ambientCheckBox.checked
     property bool nightstand: nightstandCheckBox.checked
-    property var nameOfWatchfaceToBeTested: Qt.application.arguments[1]
-    property var backgroundImage: Qt.application.arguments[2]
-    property var backgroundRoundImage: Qt.application.arguments[3]
-    property var relativeRootDir: Qt.application.arguments[4]
+    property var nameOfWatchfaceToBeTested: WatchfaceConfig.watchfaceName
+    property var backgroundImage: WatchfaceConfig.backgroundImage
+    property var backgroundRoundImage: WatchfaceConfig.backgroundRoundImage
+    property var relativeRootDir: WatchfaceConfig.relativeRootDir
     readonly property var initialStaticTime: new Date('2021-12-02T13:37:42')
     readonly property real mouseWheelScale: 1 / 15
 
     title: nameOfWatchfaceToBeTested
     minimumWidth: 640 + controls.width
     minimumHeight: 640
+    visible: true
+
+    QtObject {
+        id: global
+
+        property real heartrate: 0
+        property real battery: 50
+        property real compassAzimuth: 0
+        property int batteryChargeState: 0
+        property int batteryChargerType: 0
+    }
+
+    QtObject {
+        id: burnInProtectionManager
+
+        property real widthOffset: 0
+        property real heightOffset: 0
+    }
+
+    QtObject {
+        id: compositor
+
+        signal displayAmbientEntered()
+        signal displayAmbientLeft()
+    }
 
     Settings {
         property alias round: roundCheckBox.checked
@@ -32,19 +56,19 @@ ApplicationWindow {
     }
 
     Binding {
-        target: Global
+        target: global
         property: "heartrate"
         value: heartRate.value
     }
 
     Binding {
-        target: Global
+        target: global
         property: "battery"
         value: batteryCharge.value
     }
 
     Binding {
-        target: Global
+        target: global
         property: "compassAzimuth"
         value: compassAzimuth.value
     }
