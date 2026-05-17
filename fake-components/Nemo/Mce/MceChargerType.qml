@@ -1,5 +1,5 @@
 import QtQuick 2.9
 
 Item {
-    property int value: Global.batteryChargerType
+    property int value: global.batteryChargerType
 }
