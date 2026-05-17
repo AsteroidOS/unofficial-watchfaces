@@ -8,7 +8,7 @@
 #
 # Key features:
 # - Deploy watchfaces to an AsteroidOS watch
-# - Test watchfaces locally using qmlscene
+# - Test watchfaces locally using qml
 # - Clone existing watchfaces to create new ones
 # - Interactive menu systems (text-based and GUI)
 # - Automatic font configuration handling for custom fonts
@@ -56,7 +56,7 @@ version         display the version of this program and exit
 deploy WF       push the named watchface to the watch and activate it
 deployall       deploy all watchfaces
 clone WF NEWWF  clone the named watchface WF to new watchface NEWWF
-test WF         test the named watchface on the computer using qmlscene
+test WF         test the named watchface on the computer using qml
 raw QMLFILE     test a raw QML file without the standard directory structure
 
 EOF
@@ -106,6 +106,38 @@ TRANSPORT_ID=
 # Command execution state
 COMMAND=""                      # Command to execute (deploy, test, clone, etc.)
 declare -a COMMAND_ARGS=()      # Arguments for the command
+
+# Binary detection
+QML_BIN=""
+for bin in qml6 qml-qt6; do
+    if hash "${bin}" 2>/dev/null; then
+        QML_BIN="${bin}"
+        break
+    fi
+done
+
+# Watchface config helper
+function createWatchfaceConfig {
+    CONFIG_TMPDIR=$(mktemp -d -t asteroid-wf-XXXXXX)
+    mkdir -p "${CONFIG_TMPDIR}/WatchfaceConfig"
+
+    cat > "${CONFIG_TMPDIR}/WatchfaceConfig/qmldir" << EOF
+module WatchfaceConfig
+singleton WatchfaceConfig 1.0 WatchfaceConfig.qml
+EOF
+
+    cat > "${CONFIG_TMPDIR}/WatchfaceConfig/WatchfaceConfig.qml" << EOF
+pragma Singleton
+import QtQuick 2.15
+
+QtObject {
+    readonly property string watchfaceName: "$1"
+    readonly property string backgroundImage: "$2"
+    readonly property string backgroundRoundImage: "$3"
+    readonly property string relativeRootDir: "$4"
+}
+EOF
+}
 
 # ============================================================================
 # Core Communication Functions
@@ -322,7 +354,7 @@ function deleteTempFontconfig {
     rm -f "${temp_font_config}"
 }
 
-# Test a watchface locally using qmlscene
+# Test a watchface locally using qml
 # This function sets up the environment to test a watchface on the computer
 # without deploying it to the watch. It handles custom fonts by creating
 # temporary fontconfig configuration.
@@ -396,7 +428,14 @@ EOF
         WALLPAPER_ROUND="${SCRIPT_DIRPATH}/${WALLPAPER_ROUND}"
     fi
     
-    qmlscene "${sourcewatchfacename}" "${PWD}/${WALLPAPER}" "${PWD}/${WALLPAPER_ROUND}" "${sourcewatchfacedir}/usr/share/asteroid-launcher/watchfaces/" "${SCRIPT_DIRPATH}/loader.qml" -I "${SCRIPT_DIRPATH}/fake-components"
+    if [[ -z "${QML_BIN}" ]]; then
+        echo "Error: no Qt6 QML binary found (tried qml6, qml-qt6). Install qt6-declarative." >&2
+        exit 1
+    fi
+    createWatchfaceConfig "${sourcewatchfacename}" "${PWD}/${WALLPAPER}" "${PWD}/${WALLPAPER_ROUND}" "${sourcewatchfacedir}/usr/share/asteroid-launcher/watchfaces/"
+    trap "rm -rf '${CONFIG_TMPDIR}'" EXIT
+    QML_IMPORT_PATH="${SCRIPT_DIRPATH}/fake-components:${CONFIG_TMPDIR}" \
+        ${QML_BIN} "${SCRIPT_DIRPATH}/loader.qml"
     
     convertPreviews "${sourcewatchfacename}" "${sourcewatchfacedir}"
 }
@@ -457,7 +496,14 @@ EOF
         WALLPAPER_ROUND="${SCRIPT_DIRPATH}/${WALLPAPER_ROUND}"
     fi
     
-    qmlscene "${qml_name}" "${PWD}/${WALLPAPER}" "${PWD}/${WALLPAPER_ROUND}" "${qml_dir}/" "${SCRIPT_DIRPATH}/loader.qml" -I "${SCRIPT_DIRPATH}/fake-components"
+    if [[ -z "${QML_BIN}" ]]; then
+        echo "Error: no Qt6 QML binary found (tried qml6, qml-qt6). Install qt6-declarative." >&2
+        exit 1
+    fi
+    createWatchfaceConfig "${qml_name}" "${PWD}/${WALLPAPER}" "${PWD}/${WALLPAPER_ROUND}" "${qml_dir}/"
+    trap "rm -rf '${CONFIG_TMPDIR}'" EXIT
+    QML_IMPORT_PATH="${SCRIPT_DIRPATH}/fake-components:${CONFIG_TMPDIR}" \
+        ${QML_BIN} "${SCRIPT_DIRPATH}/loader.qml"
 }
 
 # Convert preview images for a watchface
