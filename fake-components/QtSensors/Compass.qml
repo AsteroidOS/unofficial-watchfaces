@@ -1,6 +1,6 @@
 // need this for Global
-import Nemo.Mce 1.0
-import QtQuick 2.9
+import Nemo.Mce
+import QtQuick
 
 Item {
     property bool active: Global.compassActive
