@@ -1,2 +1,2 @@
 module org.asteroid.utils
-singleton DeviceSpecs 1.0 DeviceSpecs.qml
+singleton DeviceSpecs DeviceSpecs.qml
