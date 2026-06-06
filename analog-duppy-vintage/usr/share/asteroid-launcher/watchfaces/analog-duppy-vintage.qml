@@ -1,4 +1,4 @@
-// SPDX-FileCopyrightText: 2022 Timo Könnecke <github.com/eLtMosen>
+// SPDX-FileCopyrightText: 2022 Timo Könnecke <github.com/moWerk>
 // SPDX-FileCopyrightText: 2016 Sylvia van Os <iamsylvie@openmailbox.org>
 // SPDX-FileCopyrightText: 2015 Florent Revest <revestflo@gmail.com>
 // SPDX-FileCopyrightText: 2012 Vasiliy Sorokin <sorokin.vasiliy@gmail.com>
@@ -6,9 +6,9 @@
 // SPDX-FileCopyrightText: 2012 Arto Jalkanen <ajalkane@gmail.com>
 // SPDX-License-Identifier: LGPL-2.1-or-later
 
-import Nemo.Mce 1.0
-import QtGraphicalEffects 1.15
-import QtQuick 2.15
+import Nemo.Mce
+import Qt5Compat.GraphicalEffects
+import QtQuick
 
 Item {
     id: root
@@ -22,7 +22,6 @@ Item {
     property real maxSize: Math.min(width, height)
 
     anchors.fill: parent
-    layer.enabled: true
 
     MceBatteryLevel {
         id: batteryChargePercentage
@@ -36,7 +35,6 @@ Item {
         width: root.maxSize
         height: root.maxSize
         anchors.centerIn: parent
-        layer.enabled: true
 
         Repeater {
             model: 60
@@ -331,15 +329,6 @@ Item {
 
         }
 
-    }
-
-    layer.effect: DropShadow {
-        transparentBorder: true
-        horizontalOffset: 2
-        verticalOffset: 2
-        radius: 8
-        samples: 9
-        color: Qt.rgba(0, 0, 0, 0.3)
     }
 
 }
