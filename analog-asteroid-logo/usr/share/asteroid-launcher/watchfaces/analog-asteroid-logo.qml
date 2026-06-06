@@ -5,14 +5,12 @@
 // SPDX-FileCopyrightText: 2012 Aleksey Mikhailichenko <a.v.mich@gmail.com>
 // SPDX-FileCopyrightText: 2012 Arto Jalkanen <ajalkane@gmail.com>
 // SPDX-License-Identifier: LGPL-2.1-or-later
-/*
- * Based on 002-analog stock watchface.
- * Converted to QtShapes with declarative wallClock bindings.
- */
+// Based on 002-analog stock watchface.
+// Converted to QtShapes with declarative wallClock bindings.
 
-import QtGraphicalEffects 1.15
-import QtQuick 2.15
-import QtQuick.Shapes 1.15
+import Qt5Compat.GraphicalEffects
+import QtQuick
+import QtQuick.Shapes
 
 Item {
     id: root
@@ -73,7 +71,6 @@ Item {
 
         layer {
             enabled: true
-            samples: 4
 
             effect: DropShadow {
                 transparentBorder: true
@@ -150,7 +147,6 @@ Item {
 
         layer {
             enabled: true
-            samples: 4
 
             effect: DropShadow {
                 transparentBorder: true
@@ -227,7 +223,6 @@ Item {
 
         layer {
             enabled: true
-            samples: 4
 
             effect: DropShadow {
                 transparentBorder: true
@@ -272,21 +267,6 @@ Item {
 
         }
 
-        layer {
-            enabled: true
-            samples: 4
-
-            effect: DropShadow {
-                transparentBorder: true
-                horizontalOffset: root.maxSize * 0.00625
-                verticalOffset: root.maxSize * 0.00625
-                radius: root.maxSize * 0.024
-                samples: 25
-                color: Qt.rgba(0, 0, 0, 0.4)
-            }
-
-        }
-
     }
 
     Image {
@@ -299,7 +279,6 @@ Item {
 
         layer {
             enabled: true
-            samples: 4
 
             effect: DropShadow {
                 transparentBorder: true
