@@ -6,8 +6,8 @@
 // SPDX-FileCopyrightText: 2012 Arto Jalkanen <ajalkane@gmail.com>
 // SPDX-License-Identifier: LGPL-2.1-or-later
 
-import QtGraphicalEffects 1.15
-import QtQuick 2.15
+import Qt5Compat.GraphicalEffects
+import QtQuick
 
 Item {
     id: root
@@ -86,8 +86,8 @@ Item {
             layer.enabled: true
 
             transform: Rotation {
-                origin.x: parent.width / 2
-                origin.y: parent.height / 2
+                origin.x: hourSVG.width / 2
+                origin.y: hourSVG.height / 2
                 angle: (wallClock.time.getHours() * 30) + (wallClock.time.getMinutes() * 0.5)
             }
 
@@ -111,8 +111,8 @@ Item {
             layer.enabled: true
 
             transform: Rotation {
-                origin.x: parent.width / 2
-                origin.y: parent.height / 2
+                origin.x: minuteSVG.width / 2
+                origin.y: minuteSVG.height / 2
                 angle: (wallClock.time.getMinutes() * 6) + (wallClock.time.getSeconds() * 6 / 60)
             }
 
@@ -134,21 +134,11 @@ Item {
             visible: !displayAmbient
             source: imgPath + "second.svg"
             anchors.fill: parent
-            layer.enabled: true
 
             transform: Rotation {
-                origin.x: parent.width / 2
-                origin.y: parent.height / 2
+                origin.x: secondSVG.width / 2
+                origin.y: secondSVG.height / 2
                 angle: (wallClock.time.getSeconds() * 6)
-            }
-
-            layer.effect: DropShadow {
-                transparentBorder: true
-                horizontalOffset: 4
-                verticalOffset: 4
-                radius: 8
-                samples: 9
-                color: Qt.rgba(0, 0, 0, 0.3)
             }
 
         }
