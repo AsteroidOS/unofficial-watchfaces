@@ -9,8 +9,10 @@ import QtQuick
 Item {
     id: root
 
+    property real maxSize: Math.min(width, height)
     property real arcEnd: wallClock.time.getSeconds() * 6
 
+    anchors.fill: parent
     onArcEndChanged: seconds.requestPaint()
     layer.enabled: true
 
@@ -18,19 +20,21 @@ Item {
         id: seconds
 
         visible: !displayAmbient
-        anchors.fill: parent
+        width: root.maxSize
+        height: root.maxSize
+        anchors.centerIn: parent
         rotation: -90
         onPaint: {
             var ctx = getContext("2d");
-            var x = root.width / 2;
-            var y = root.height / 2;
+            var x = width / 2;
+            var y = height / 2;
             var start = 0;
             var end = Math.PI * (parent.arcEnd / 180);
             ctx.reset();
             ctx.beginPath();
             ctx.lineCap = "round";
-            ctx.arc(x, y, (root.width / 2) - parent.height * 0.124 / 2, start, end, false);
-            ctx.lineWidth = parent.height * 0.03;
+            ctx.arc(x, y, (width / 2) - height * 0.124 / 2, start, end, false);
+            ctx.lineWidth = height * 0.03;
             ctx.strokeStyle = "#CCC";
             ctx.stroke();
         }
@@ -45,14 +49,14 @@ Item {
         text: ":"
 
         font {
-            pixelSize: root.height * 0.28
+            pixelSize: root.maxSize * 0.27
             family: "Noto Sans"
         }
 
         anchors {
             centerIn: root
             horizontalCenterOffset: root.width * 0.01
-            verticalCenterOffset: root.width * -0.05
+            verticalCenterOffset: root.width * -0.03
         }
 
     }
@@ -67,8 +71,8 @@ Item {
         text: use12H.value ? wallClock.time.toLocaleString(Qt.locale(), "hh ap").slice(0, 2) : wallClock.time.toLocaleString(Qt.locale(), "HH")
 
         font {
-            pixelSize: root.height * 0.25
-            letterSpacing: root.height * 0.004
+            pixelSize: root.maxSize * 0.24
+            letterSpacing: root.maxSize * 0.004
             family: "Noto Sans"
         }
 
@@ -88,8 +92,8 @@ Item {
         text: wallClock.time.toLocaleString(Qt.locale(), "mm")
 
         font {
-            pixelSize: root.height * 0.25
-            letterSpacing: root.height * 0.004
+            pixelSize: root.maxSize * 0.24
+            letterSpacing: root.maxSize * 0.004
             family: "Noto Sans"
         }
 
@@ -109,15 +113,15 @@ Item {
         text: wallClock.time.toLocaleString(Qt.locale(), "ddd, MMM dd").replace(".", "")
 
         font {
-            pixelSize: root.height * 0.07
-            letterSpacing: root.height * 0.006
+            pixelSize: root.maxSize * 0.07
+            letterSpacing: root.maxSize * 0.006
             family: "Noto Sans"
         }
 
         anchors {
             horizontalCenter: root.horizontalCenter
             top: colon.bottom
-            topMargin: root.height * -0.04
+            topMargin: root.maxSize * -0.04
         }
 
     }
