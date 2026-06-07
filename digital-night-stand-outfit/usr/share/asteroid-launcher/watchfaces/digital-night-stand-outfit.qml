@@ -9,12 +9,11 @@ import org.asteroid.controls
 Item {
     id: root
 
+    property real maxSize: Math.min(width, height)
     property real rad: 0.01745
     property string userColor: "#65AFFF" // green: #9BE564 / orange: #EA9010 / blue: #65AFFF
 
-    anchors.centerIn: parent
-    width: parent.width
-    height: parent.height
+    anchors.fill: parent
     layer.enabled: true
 
     MceBatteryLevel {
@@ -28,8 +27,8 @@ Item {
 
         onValueChanged: batteryArc.requestPaint()
         anchors.centerIn: parent
-        width: parent.width * 0.85
-        height: parent.height * 0.88
+        width: root.maxSize * 0.85
+        height: root.maxSize * 0.88
 
         Canvas {
             id: batteryArc
@@ -39,7 +38,7 @@ Item {
             onPaint: {
                 var ctx = getContext("2d");
                 ctx.reset();
-                ctx.lineWidth = root.height * 0.009;
+                ctx.lineWidth = root.maxSize * 0.009;
                 ctx.lineCap = "round";
                 ctx.strokeStyle = userColor;
                 ctx.beginPath();
@@ -59,11 +58,11 @@ Item {
 
             anchors {
                 centerIn: parent
-                verticalCenterOffset: -root.height * 0.21
+                verticalCenterOffset: -root.maxSize * 0.21
             }
 
             font {
-                pixelSize: root.height * 0.12
+                pixelSize: root.maxSize * 0.12
                 family: "Outfit"
                 styleName: "Light"
             }
