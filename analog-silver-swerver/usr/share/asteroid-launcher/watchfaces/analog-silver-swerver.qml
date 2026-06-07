@@ -472,9 +472,9 @@ Item {
             layer.enabled: true
 
             transform: Rotation {
-                origin.x: parent.width / 2
-                origin.y: parent.height / 2
-                angle: (wallClock.time.getHours() * 30) + (wallClock.time.getMinutes() * 0.5)
+                origin.x: minuteSVG.width / 2
+                origin.y: minuteSVG.height / 2
+                angle: (wallClock.time.getMinutes() * 6) + (wallClock.time.getSeconds() * 6 / 60)
             }
 
             layer.effect: DropShadow {
@@ -496,9 +496,9 @@ Item {
             layer.enabled: true
 
             transform: Rotation {
-                origin.x: parent.width / 2
-                origin.y: parent.height / 2
-                angle: (wallClock.time.getMinutes() * 6) + (wallClock.time.getSeconds() * 6 / 60)
+                origin.x: secondSVG.width / 2
+                origin.y: secondSVG.height / 2
+                angle: (wallClock.time.getSeconds() * 6)
             }
 
             layer.effect: DropShadow {
