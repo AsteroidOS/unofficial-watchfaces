@@ -56,15 +56,6 @@ Item {
 
             }
 
-            layer.effect: DropShadow {
-                transparentBorder: true
-                horizontalOffset: 0
-                verticalOffset: 0
-                radius: 12
-                samples: 9
-                color: Qt.rgba(0, 1, 1, 0.3)
-            }
-
         }
 
         Repeater {
@@ -179,15 +170,6 @@ Item {
                 horizontalCenterOffset: parent.width / 2.76
             }
 
-            layer.effect: DropShadow {
-                transparentBorder: true
-                horizontalOffset: 0
-                verticalOffset: 0
-                radius: 3
-                samples: 6
-                color: "#00ffff"
-            }
-
         }
 
         Image {
@@ -276,15 +258,6 @@ Item {
                 origin.x: secondSVG.width / 2
                 origin.y: secondSVG.height / 2
                 angle: (wallClock.time.getSeconds() * 6)
-            }
-
-            layer.effect: DropShadow {
-                transparentBorder: true
-                horizontalOffset: 8
-                verticalOffset: 8
-                radius: 10
-                samples: 9
-                color: Qt.rgba(0, 0, 0, 0.4)
             }
 
         }
