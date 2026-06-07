@@ -1,7 +1,7 @@
 // SPDX-FileCopyrightText: 2026 ncaat <github.com/ncaat>
 // SPDX-License-Identifier: LGPL-2.1-or-later
 
-import QtQuick 2.9
+import QtQuick
 
 Rectangle {
     id: root
