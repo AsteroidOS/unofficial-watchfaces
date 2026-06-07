@@ -8,7 +8,7 @@
 // Native QML only — no Canvas.
 // Font: Inter Tight (SIL OFL 1.1)
 
-import QtGraphicalEffects
+import Qt5Compat.GraphicalEffects
 import QtQuick
 
 Item {
@@ -19,6 +19,7 @@ Item {
     property int h12: 12
     property real angleRad: 0
     readonly property real rootRadius: Math.min(width, height) * 0.41
+    readonly property real maxSize: Math.min(width, height)
     readonly property color fg: Qt.rgba(1, 1, 1, displayAmbient ? 0.75 : 1)
     readonly property color dim: Qt.rgba(1, 1, 1, displayAmbient ? 0.45 : 0.7)
 
@@ -47,8 +48,8 @@ Item {
         font {
             family: "Inter Tight"
             weight: Font.Thin
-            pixelSize: root.height * 0.5
-            letterSpacing: -root.height * 0.03
+            pixelSize: root.maxSize * 0.5
+            letterSpacing: -root.maxSize * 0.03
         }
 
     }
@@ -72,7 +73,7 @@ Item {
             font {
                 family: "Inter Tight"
                 weight: dist === 0 ? Font.Medium : Font.Light
-                pixelSize: root.height * 0.1
+                pixelSize: root.maxSize * 0.1
             }
 
         }
@@ -95,8 +96,8 @@ Item {
         font {
             family: "Inter Tight"
             weight: Font.Light
-            pixelSize: root.height * 0.054
-            letterSpacing: root.height * 0.012
+            pixelSize: root.maxSize * 0.054
+            letterSpacing: root.maxSize * 0.012
         }
 
     }
