@@ -13,7 +13,9 @@ Item {
     id: root
 
     property string imgPath: "../watchfaces-img/analog-nort-"
+    property real maxSize: Math.min(width, height)
 
+    anchors.fill: parent
     Component.onCompleted: {
         var h = wallClock.time.getHours();
         var min = wallClock.time.getMinutes();
@@ -21,74 +23,83 @@ Item {
         minuteRot.angle = min * 6 + (wallClock.time.getSeconds() * 6 / 60);
     }
 
-    Image {
-        id: hourSVG
+    Item {
+        id: faceBox
 
-        anchors.centerIn: root
-        source: imgPath + "hour.svg"
-        width: root.width
-        height: root.height
-        layer.enabled: true
+        width: root.maxSize
+        height: root.maxSize
+        anchors.centerIn: parent
 
-        transform: Rotation {
-            id: hourRot
+        Image {
+            id: hourSVG
 
-            origin.x: root.width / 2
-            origin.y: root.height / 2
+            anchors.centerIn: parent
+            source: imgPath + "hour.svg"
+            width: parent.width
+            height: parent.width
+            layer.enabled: true
+
+            transform: Rotation {
+                id: hourRot
+
+                origin.x: hourSVG.width / 2
+                origin.y: hourSVG.height / 2
+            }
+
+            layer.effect: DropShadow {
+                transparentBorder: true
+                horizontalOffset: 0
+                verticalOffset: 0
+                radius: 8
+                samples: 9
+                color: "#66fbfb"
+            }
+
         }
 
-        layer.effect: DropShadow {
-            transparentBorder: true
-            horizontalOffset: 0
-            verticalOffset: 0
-            radius: 8
-            samples: 9
-            color: "#66fbfb"
+        Image {
+            id: minuteSVG
+
+            anchors.centerIn: parent
+            source: imgPath + "minute.svg"
+            width: parent.width
+            height: parent.width
+            layer.enabled: true
+
+            transform: Rotation {
+                id: minuteRot
+
+                origin.x: minuteSVG.width / 2
+                origin.y: minuteSVG.height / 2
+            }
+
+            layer.effect: DropShadow {
+                transparentBorder: true
+                horizontalOffset: 0
+                verticalOffset: 0
+                radius: 8
+                samples: 9
+                color: "#66fbfb"
+            }
+
         }
 
-    }
+        Image {
+            id: secondSVG
 
-    Image {
-        id: minuteSVG
+            anchors.centerIn: parent
+            source: imgPath + "second.svg"
+            width: parent.width
+            height: parent.width
+            visible: !displayAmbient
 
-        anchors.centerIn: root
-        source: imgPath + "minute.svg"
-        width: root.width
-        height: root.height
-        layer.enabled: true
+            transform: Rotation {
+                id: secondRot
 
-        transform: Rotation {
-            id: minuteRot
+                origin.x: secondSVG.width / 2
+                origin.y: secondSVG.height / 2
+            }
 
-            origin.x: root.width / 2
-            origin.y: root.height / 2
-        }
-
-        layer.effect: DropShadow {
-            transparentBorder: true
-            horizontalOffset: 0
-            verticalOffset: 0
-            radius: 8
-            samples: 9
-            color: "#66fbfb"
-        }
-
-    }
-
-    Image {
-        id: secondSVG
-
-        anchors.centerIn: root
-        source: imgPath + "second.svg"
-        width: root.width
-        height: root.height
-        visible: !displayAmbient
-
-        transform: Rotation {
-            id: secondRot
-
-            origin.x: root.width / 2
-            origin.y: root.height / 2
         }
 
     }
@@ -106,7 +117,7 @@ Item {
     Connections {
         function onTimeChanged() {
             if (!visible)
-                return;
+                return ;
 
             var h = wallClock.time.getHours();
             var min = wallClock.time.getMinutes();
