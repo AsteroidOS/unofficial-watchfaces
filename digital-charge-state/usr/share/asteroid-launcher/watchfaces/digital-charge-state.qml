@@ -133,15 +133,16 @@ Item {
     }
 
     Connections {
-        target: wallClock
-        onTimeChanged: {
+        function onTimeChanged() {
             if (!visible)
-                return ;
+                return;
 
             datetext.text = wallClock.time.toLocaleString(Qt.locale(), "ddd dd");
             time.text = wallClock.time.toLocaleString(Qt.locale(), use12H.value ? "hhmm ap" : "HHmm").slice(0, 4);
             ampm.text = wallClock.time.toLocaleString(Qt.locale(), "ap");
         }
+
+        target: wallClock
     }
 
 }
