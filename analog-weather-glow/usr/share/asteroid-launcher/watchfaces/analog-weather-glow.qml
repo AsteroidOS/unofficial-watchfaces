@@ -8,15 +8,17 @@
 // SPDX-FileCopyrightText: 2012 Arto Jalkanen <ajalkane@gmail.com>
 // SPDX-License-Identifier: LGPL-2.1-or-later
 
-import Connman 0.2
-import Nemo.Configuration 1.0
-import Nemo.Mce 1.0
-import QtGraphicalEffects 1.15
-import QtQuick 2.15
-import QtQuick.Shapes 1.15
-import QtSensors 5.11
-import org.asteroid.controls 1.0
-import org.asteroid.utils 1.0
+import Connman
+import Nemo.Configuration
+import Nemo.Mce
+// QtQuick must precede Qt5Compat.GraphicalEffects when ColorOverlay is used —
+// GraphicalEffects types inherit from QtQuick.Item and require it to be loaded first.
+import QtQuick
+import Qt5Compat.GraphicalEffects
+import QtQuick.Shapes
+import QtSensors
+import org.asteroid.controls
+import org.asteroid.utils
 import "weathericons.js" as WeatherIcons
 
 Item {
