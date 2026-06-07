@@ -9,7 +9,7 @@
 // Binary hour and minute bars rotated 90° with digital overlay.
 // Seconds stripped and displays enlarged for cleaner design.
 
-import QtQuick 2.1
+import QtQuick
 
 Item {
     id: root
