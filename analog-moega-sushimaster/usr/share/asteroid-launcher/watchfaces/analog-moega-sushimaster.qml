@@ -20,7 +20,9 @@ Item {
     Item {
         id: faceBox
 
-        anchors.fill: parent
+        width: Math.min(parent.width, parent.height)
+        height: width
+        anchors.centerIn: parent
         layer.enabled: true
 
         Image {
@@ -75,7 +77,9 @@ Item {
         id: handBox
 
         z: 3
-        anchors.fill: parent
+        width: Math.min(parent.width, parent.height)
+        height: width
+        anchors.centerIn: parent
 
         Image {
             id: hourSVG
