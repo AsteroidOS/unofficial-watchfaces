@@ -1,8 +1,10 @@
 // SPDX-FileCopyrightText: 2023 Timo Könnecke <github.com/moWerk>
 // SPDX-License-Identifier: LGPL-2.1-or-later
 
-import QtGraphicalEffects 1.12
-import QtQuick 2.9
+// QtQuick must precede Qt5Compat.GraphicalEffects when LinearGradient is used —
+// GraphicalEffects types inherit from QtQuick.Item and require it to be loaded first.
+import QtQuick
+import Qt5Compat.GraphicalEffects
 
 Item {
     id: root
