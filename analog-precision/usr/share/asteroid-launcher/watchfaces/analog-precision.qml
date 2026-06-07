@@ -11,7 +11,7 @@
 // for hours and minutes, correct dropshadows for the hands, and other
 // small improvements.
 
-import QtQuick 2.9
+import QtQuick
 
 Item {
     Component.onCompleted: {
