@@ -1,8 +1,8 @@
 // SPDX-FileCopyrightText: 2021 Timo Könnecke <github.com/moWerk>
 // SPDX-License-Identifier: LGPL-2.1-or-later
 
-import QtGraphicalEffects 1.15
-import QtQuick 2.9
+import Qt5Compat.GraphicalEffects
+import QtQuick
 
 Item {
     id: root
