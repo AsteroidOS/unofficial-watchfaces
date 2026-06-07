@@ -13,6 +13,7 @@ import QtQuick
 Item {
     id: root
 
+    anchors.fill: parent
     Component.onCompleted: {
         var h = wallClock.time.getHours();
         var min = wallClock.time.getMinutes();
@@ -44,159 +45,168 @@ Item {
         }
     }
 
-    Image {
-        id: backGround
+    Item {
+        id: faceBox
 
-        source: "../watchfaces-img/day-clock-center.svg"
+        width: Math.min(parent.width, parent.height)
+        height: width
         anchors.centerIn: parent
-        width: parent.width / 3
-        height: parent.height / 3
 
         Image {
-            id: backStars
+            id: backGround
 
-            source: "../watchfaces-img/day-clock-center-stars.svg"
+            source: "../watchfaces-img/day-clock-center.svg"
             anchors.centerIn: parent
-            width: parent.width
-            height: parent.height
-            layer.enabled: true
+            width: parent.width / 3
+            height: parent.height / 3
 
-            layer.effect: DropShadow {
-                transparentBorder: true
-                horizontalOffset: 0
-                verticalOffset: 0
-                radius: 12
-                samples: 9
-                color: "#ccffcc00"
+            Image {
+                id: backStars
+
+                source: "../watchfaces-img/day-clock-center-stars.svg"
+                anchors.centerIn: parent
+                width: parent.width
+                height: parent.height
+                layer.enabled: true
+
+                layer.effect: DropShadow {
+                    transparentBorder: true
+                    horizontalOffset: 0
+                    verticalOffset: 0
+                    radius: 12
+                    samples: 9
+                    color: "#ccffcc00"
+                }
+
             }
 
         }
 
-    }
+        Text {
+            id: hourDisplay
 
-    Text {
-        id: hourDisplay
+            property real offset: height * 0.5
 
-        property real offset: height * 0.5
+            color: "white"
+            style: Text.Outline
+            styleColor: "#80000000"
+            opacity: 0.9
+            horizontalAlignment: Text.AlignHCenter
+            x: parent.width / 14
+            y: parent.height / 2.5 - offset
+            text: use12H.value ? wallClock.time.toLocaleString(Qt.locale(), "hh ap").slice(0, 2) : wallClock.time.toLocaleString(Qt.locale(), "HH")
 
-        color: "white"
-        style: Text.Outline
-        styleColor: "#80000000"
-        opacity: 0.9
-        horizontalAlignment: Text.AlignHCenter
-        x: parent.width / 14
-        y: parent.height / 2.5 - offset
-        text: use12H.value ? wallClock.time.toLocaleString(Qt.locale(), "hh ap").slice(0, 2) : wallClock.time.toLocaleString(Qt.locale(), "HH")
+            font {
+                pixelSize: parent.height * 0.22
+                family: "Vollkorn"
+                styleName: "Regular"
+            }
 
-        font {
-            pixelSize: parent.height * 0.22
-            family: "Vollkorn"
-            styleName: "Regular"
         }
 
-    }
+        Text {
+            id: minuteDisplay
 
-    Text {
-        id: minuteDisplay
+            property real offset: height * 0.5
 
-        property real offset: height * 0.5
+            color: "white"
+            style: Text.Outline
+            styleColor: "#80000000"
+            opacity: 0.9
+            horizontalAlignment: Text.AlignHCenter
+            x: parent.width / 14
+            y: parent.height / 1.65 - offset
+            text: wallClock.time.toLocaleString(Qt.locale(), "mm")
 
-        color: "white"
-        style: Text.Outline
-        styleColor: "#80000000"
-        opacity: 0.9
-        horizontalAlignment: Text.AlignHCenter
-        x: parent.width / 14
-        y: parent.height / 1.65 - offset
-        text: wallClock.time.toLocaleString(Qt.locale(), "mm")
+            font {
+                pixelSize: parent.height * 0.22
+                family: "Vollkorn"
+                styleName: "Regular"
+            }
 
-        font {
-            pixelSize: parent.height * 0.22
-            family: "Vollkorn"
-            styleName: "Regular"
         }
 
-    }
+        Text {
+            id: dayDisplay
 
-    Text {
-        id: dayDisplay
+            property real offset: height * 0.5
 
-        property real offset: height * 0.5
+            color: "white"
+            style: Text.Outline
+            styleColor: "#80000000"
+            opacity: 0.5
+            x: parent.width * 0.7
+            y: parent.height / 2.5 - offset
 
-        color: "white"
-        style: Text.Outline
-        styleColor: "#80000000"
-        opacity: 0.5
-        x: parent.width * 0.7
-        y: parent.height / 2.5 - offset
+            font {
+                pixelSize: parent.height * 0.2
+                family: "Vollkorn"
+                styleName: "Regular"
+            }
 
-        font {
-            pixelSize: parent.height * 0.2
-            family: "Vollkorn"
-            styleName: "Regular"
         }
 
-    }
+        Text {
+            id: percentDisplay
 
-    Text {
-        id: percentDisplay
+            property real offset: height * 0.5
 
-        property real offset: height * 0.5
+            color: "white"
+            style: Text.Outline
+            styleColor: "#80000000"
+            opacity: 0.5
+            x: parent.width * 0.73
+            y: parent.height / 1.58 - offset
+            text: "%"
 
-        color: "white"
-        style: Text.Outline
-        styleColor: "#80000000"
-        opacity: 0.5
-        x: parent.width * 0.73
-        y: parent.height / 1.58 - offset
-        text: "%"
+            font {
+                pixelSize: parent.height * 0.2
+                family: "Vollkorn"
+                styleName: "Regular"
+            }
 
-        font {
-            pixelSize: parent.height * 0.2
-            family: "Vollkorn"
-            styleName: "Regular"
         }
 
-    }
+        Text {
+            id: dayofweekDisplay
 
-    Text {
-        id: dayofweekDisplay
+            lineHeight: parent.height * 0.0025
+            color: "white"
+            style: Text.Outline
+            styleColor: "#80000000"
+            opacity: 0.7
+            horizontalAlignment: Text.AlignHCenter
+            anchors.horizontalCenter: parent.horizontalCenter
+            y: parent.height / 9
+            text: wallClock.time.toLocaleString(Qt.locale(), "dddd")
 
-        lineHeight: parent.height * 0.0025
-        color: "white"
-        style: Text.Outline
-        styleColor: "#80000000"
-        opacity: 0.7
-        horizontalAlignment: Text.AlignHCenter
-        anchors.horizontalCenter: parent.horizontalCenter
-        y: parent.height / 9
-        text: wallClock.time.toLocaleString(Qt.locale(), "dddd")
+            font {
+                pixelSize: parent.height * 0.1
+                family: "Vollkorn"
+                styleName: "Regular"
+            }
 
-        font {
-            pixelSize: parent.height * 0.1
-            family: "Vollkorn"
-            styleName: "Regular"
         }
 
-    }
+        Text {
+            id: dateDisplay
 
-    Text {
-        id: dateDisplay
+            lineHeight: parent.height * 0.0025
+            color: "white"
+            style: Text.Outline
+            styleColor: "#80000000"
+            opacity: 0.8
+            horizontalAlignment: Text.AlignHCenter
+            anchors.horizontalCenter: parent.horizontalCenter
+            y: parent.height / 1.32
+            text: wallClock.time.toLocaleString(Qt.locale(), "yyyy MM dd")
 
-        lineHeight: parent.height * 0.0025
-        color: "white"
-        style: Text.Outline
-        styleColor: "#80000000"
-        opacity: 0.8
-        horizontalAlignment: Text.AlignHCenter
-        anchors.horizontalCenter: parent.horizontalCenter
-        y: parent.height / 1.32
-        text: wallClock.time.toLocaleString(Qt.locale(), "yyyy MM dd")
+            font {
+                pixelSize: parent.height * 0.1
+                family: "Vollkorn"
+                styleName: "Regular"
+            }
 
-        font {
-            pixelSize: parent.height * 0.1
-            family: "Vollkorn"
-            styleName: "Regular"
         }
 
     }
