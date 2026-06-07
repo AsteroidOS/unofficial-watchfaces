@@ -22,7 +22,6 @@ import org.asteroid.utils
 import "weathericons.js" as WeatherIcons
 
 Item {
-    // Uranian Blue
     // Prepare for feature where the secondary hardware button activates HRM mode.
     // Keycode 134 = Sawfish lower button.
     /*Keys.onPressed: {
@@ -60,6 +59,7 @@ Item {
     property string boxColor: "#E8DCB9"
     // Dutch White
     property string switchColor: "#A2D6F9"
+    // Uranian Blue
     // HRM initialisation. Needs to be declared global since hrmBox and hrmSwitch both need it.
     property int hrmBpm: 0
     property bool hrmSensorActive: false
@@ -76,8 +76,6 @@ Item {
     }
 
     anchors.fill: parent
-    // Slight dropshadow under all Items.
-    layer.enabled: true
 
     MceBatteryState {
         id: batteryChargeState
@@ -1063,15 +1061,6 @@ Item {
         }
 
         target: compositor
-    }
-
-    layer.effect: DropShadow {
-        transparentBorder: true
-        horizontalOffset: 1
-        verticalOffset: 1
-        radius: 6
-        samples: 9
-        color: Qt.rgba(0, 0, 0, 0.7)
     }
 
 }
