@@ -37,12 +37,13 @@ Item {
     // Radian per degree used by all canvas arcs
     property real rad: 0.01745
     // Element sizes, positioning, linewidth and opacity
-    property real switchSize: root.width * 0.1375
-    property real boxSize: root.width * 0.35
-    property real switchPosition: root.width * 0.26
-    property real boxPosition: root.width * 0.25
-    property real innerArcLineWidth: root.height * 0.008
-    property real outerArcLineWidth: root.height * 0.016
+    property real maxSize: Math.min(width, height)
+    property real switchSize: maxSize * 0.1375
+    property real boxSize: maxSize * 0.35
+    property real switchPosition: maxSize * 0.26
+    property real boxPosition: maxSize * 0.25
+    property real innerArcLineWidth: maxSize * 0.008
+    property real outerArcLineWidth: maxSize * 0.016
     property real activeArcOpacity: !displayAmbient ? 0.7 : 0.4
     property real inactiveArcOpacity: !displayAmbient ? 0.5 : 0.3
     property real activeContentOpacity: !displayAmbient ? 0.95 : 0.6
@@ -95,15 +96,17 @@ Item {
         visible: dockMode.active
 
         Shape {
-            id: chargeArc
+                id: chargeArc
 
-            property real angle: batteryChargePercentage.percent * 360 / 100
-            property real arcStrokeWidth: 0.016
-            property real scalefactor: 0.39 - (arcStrokeWidth / 2)
-            property var chargecolor: Math.floor(batteryChargePercentage.percent / 33.35)
-            readonly property var colorArray: ["red", "yellow", Qt.rgba(0.318, 1, 0.051, 0.9)]
+                property real angle: batteryChargePercentage.percent * 360 / 100
+                property real arcStrokeWidth: 0.016
+                property real scalefactor: 0.39 - (arcStrokeWidth / 2)
+                property var chargecolor: Math.floor(batteryChargePercentage.percent / 33.35)
+                readonly property var colorArray: ["red", "yellow", Qt.rgba(0.318, 1, 0.051, 0.9)]
 
-            anchors.fill: parent
+                width: root.maxSize
+                height: root.maxSize
+                anchors.centerIn: parent
 
             ShapePath {
                 fillColor: "transparent"
@@ -199,7 +202,7 @@ Item {
             text: (index === 0 ? 12 : index) * (hourSVG.toggle24h ? 2 : 1)
 
             font {
-                pixelSize: root.height * 0.06
+                pixelSize: root.maxSize * 0.06
                 family: "Noto Sans"
                 styleName: "Bold"
             }
@@ -982,8 +985,9 @@ Item {
         // Wrapper for the analog hands
         id: handBox
 
-        width: root.width
-        height: root.height
+        width: root.maxSize
+        height: root.maxSize
+        anchors.centerIn: parent
 
         Image {
             id: hourSVG
