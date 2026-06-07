@@ -1,15 +1,13 @@
-/*
- * Typographic joke. Big Bungee HH, smaller MM wedged against it. Every
- * second the digits visibly shove sideways (NumberAnimation easing)
- * — time as a kerning problem. Seconds progress bar runs beneath.
- * Weekday stands vertical in the left margin.
- *
- * Fonts: Bungee (OFL), Space Mono (OFL)
- */
 // SPDX-FileCopyrightText: 2026 Timo Könnecke <github.com/moWerk>
 // SPDX-License-Identifier: BSD-3-Clause
+// Kerning Panic — AsteroidOS watchface
+// Typographic joke. Big Bungee HH, smaller MM wedged against it. Every
+// second the digits visibly shove sideways (NumberAnimation easing)
+// — time as a kerning problem. Seconds progress bar runs beneath.
+// Weekday stands vertical in the left margin.
+// Fonts: Bungee (OFL), Space Mono (OFL)
 
-import QtQuick 2.15
+import QtQuick
 
 Item {
     id: root
