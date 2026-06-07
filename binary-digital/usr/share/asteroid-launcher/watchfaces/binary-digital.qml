@@ -16,8 +16,9 @@ Item {
 
     property int radius: Math.min(root.width / 24, root.height / 16)
 
-    width: parent.width
+    width: Math.min(parent.width, parent.height)
     height: width
+    anchors.centerIn: parent
 
     Component {
         id: draw_led_hour
@@ -131,7 +132,7 @@ Item {
 
             anchors {
                 centerIn: parent
-                verticalCenterOffset: parent.height * 0.038
+                verticalCenterOffset: parent.height * 0.12
                 horizontalCenterOffset: -parent.height * 0.235 + hoffset
             }
 
@@ -151,7 +152,7 @@ Item {
 
             anchors {
                 centerIn: parent
-                verticalCenterOffset: parent.height * 0.038
+                verticalCenterOffset: parent.height * 0.12
                 horizontalCenterOffset: parent.height * 0.235 + hoffset
             }
 
