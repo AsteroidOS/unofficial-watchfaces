@@ -19,7 +19,6 @@ Item {
 
     // ── Static dark background band ───────────────────────────────────────────
     Rectangle {
-        x: 0
         y: root.barY - root.barH
         width: parent.width
         height: root.barH
@@ -87,7 +86,6 @@ Item {
     Text {
         id: hourDisplay
 
-        z: 6
         renderType: Text.NativeRendering
         font.pixelSize: parent.height * 0.2
         font.family: "CPMono_v07"
@@ -103,7 +101,6 @@ Item {
     Text {
         id: minuteDisplay
 
-        z: 6
         renderType: Text.NativeRendering
         font.pixelSize: parent.height * 0.2
         font.family: "CPMono_v07"
@@ -123,7 +120,6 @@ Item {
     Text {
         id: secondDisplay
 
-        z: 6
         renderType: Text.NativeRendering
         font.pixelSize: parent.height * 0.2
         font.family: "CPMono_v07"
