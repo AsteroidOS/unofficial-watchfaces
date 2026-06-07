@@ -98,7 +98,6 @@ Item {
             id: chargeArc
 
             property real angle: batteryChargePercentage.percent * 360 / 100
-            // radius of arc is scalefactor * height or width
             property real arcStrokeWidth: 0.016
             property real scalefactor: 0.39 - (arcStrokeWidth / 2)
             property var chargecolor: Math.floor(batteryChargePercentage.percent / 33.35)
@@ -109,17 +108,17 @@ Item {
             ShapePath {
                 fillColor: "transparent"
                 strokeColor: chargeArc.colorArray[chargeArc.chargecolor]
-                strokeWidth: parent.height * chargeArc.arcStrokeWidth
+                strokeWidth: chargeArc.height * chargeArc.arcStrokeWidth
                 capStyle: ShapePath.RoundCap
                 joinStyle: ShapePath.MiterJoin
-                startX: width / 2
-                startY: height * (0.5 - chargeArc.scalefactor)
+                startX: chargeArc.width / 2
+                startY: chargeArc.height * (0.5 - chargeArc.scalefactor)
 
                 PathAngleArc {
-                    centerX: parent.width / 2
-                    centerY: parent.height / 2
-                    radiusX: chargeArc.scalefactor * parent.width
-                    radiusY: chargeArc.scalefactor * parent.height
+                    centerX: chargeArc.width / 2
+                    centerY: chargeArc.height / 2
+                    radiusX: chargeArc.scalefactor * chargeArc.width
+                    radiusY: chargeArc.scalefactor * chargeArc.height
                     startAngle: -90
                     sweepAngle: chargeArc.angle
                     moveToStart: false
