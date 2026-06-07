@@ -9,10 +9,10 @@
 // SPDX-License-Identifier: LGPL-2.1-or-later
 
 import Nemo.Mce
+import Qt5Compat.GraphicalEffects
 // QtQuick must precede Qt5Compat.GraphicalEffects when LinearGradient is used
 // GraphicalEffects types inherit from QtQuick.Item and require it to be loaded first.
 import QtQuick
-import Qt5Compat.GraphicalEffects
 import QtQuick.Shapes as Shapes
 
 Item {
@@ -532,16 +532,6 @@ Item {
 
         }
 
-    }
-
-    Connections {
-        function onTimeChanged() {
-            if (!visible)
-                return ;
-
-        }
-
-        target: wallClock
     }
 
 }
