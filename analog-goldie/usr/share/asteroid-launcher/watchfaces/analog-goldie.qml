@@ -1,4 +1,4 @@
-// SPDX-FileCopyrightText: 2021 Timo Könnecke <github.com/eLtMosen>
+// SPDX-FileCopyrightText: 2022 Timo Könnecke <github.com/moWerk>
 // SPDX-FileCopyrightText: 2016 Sylvia van Os <iamsylvie@openmailbox.org>
 // SPDX-FileCopyrightText: 2015 Florent Revest <revestflo@gmail.com>
 // SPDX-FileCopyrightText: 2012 Vasiliy Sorokin <sorokin.vasiliy@gmail.com>
@@ -6,10 +6,10 @@
 // SPDX-FileCopyrightText: 2012 Arto Jalkanen <ajalkane@gmail.com>
 // SPDX-License-Identifier: LGPL-2.1-or-later
 
-import Nemo.Mce 1.0
-import QtGraphicalEffects 1.15
-import QtQuick 2.15
-import QtQuick.Shapes 1.15 as Shapes
+import Nemo.Mce
+import Qt5Compat.GraphicalEffects
+import QtQuick
+import QtQuick.Shapes as Shapes
 
 Item {
     id: root
@@ -23,7 +23,6 @@ Item {
     property int currentMonth: Number(wallClock.time.toLocaleString(Qt.locale(), "MM"))
 
     anchors.fill: parent
-    layer.enabled: true
 
     MceBatteryLevel {
         id: batteryChargePercentage
@@ -181,7 +180,7 @@ Item {
                     fillColor: "transparent"
                     strokeColor: accColor
                     strokeWidth: root.maxSize * 0.005
-                    capStyle: Shapes.ShapePath.RoundCap
+                    capStyle: ShapePath.RoundCap
 
                     PathAngleArc {
                         centerX: dayBox.width / 2
@@ -282,7 +281,7 @@ Item {
                     fillColor: "transparent"
                     strokeColor: accColor
                     strokeWidth: root.maxSize * 0.005
-                    capStyle: Shapes.ShapePath.RoundCap
+                    capStyle: ShapePath.RoundCap
 
                     PathAngleArc {
                         centerX: monthBox.width / 2
@@ -378,7 +377,7 @@ Item {
                     fillColor: "transparent"
                     strokeColor: batteryChargePercentage.percent < 30 ? accColor : "#44BBA4"
                     strokeWidth: root.maxSize * 0.005
-                    capStyle: Shapes.ShapePath.RoundCap
+                    capStyle: ShapePath.RoundCap
 
                     PathAngleArc {
                         centerX: batteryBox.width / 2
@@ -520,26 +519,8 @@ Item {
                 angle: wallClock.time.getSeconds() * 6
             }
 
-            layer.effect: DropShadow {
-                transparentBorder: true
-                horizontalOffset: 4
-                verticalOffset: 4
-                radius: 8
-                samples: 9
-                color: Qt.rgba(0, 0, 0, 0.3)
-            }
-
         }
 
-    }
-
-    layer.effect: DropShadow {
-        transparentBorder: true
-        horizontalOffset: 2
-        verticalOffset: 2
-        radius: 8
-        samples: 9
-        color: Qt.rgba(0, 0, 0, 0.3)
     }
 
 }
