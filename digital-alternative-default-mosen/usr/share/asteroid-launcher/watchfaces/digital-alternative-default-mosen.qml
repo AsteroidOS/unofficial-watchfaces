@@ -6,7 +6,7 @@
 // Fixed am/pm display by slicing to two chars.
 // Calculated ctx.shadows with variable px size for better display in watchface-settings.
 
-import QtQuick 2.9
+import QtQuick
 
 Item {
     function twoDigits(x) {
