@@ -258,12 +258,6 @@ Item {
 
         anchors.fill: parent
 
-        layer {
-            enabled: true
-            samples: 4
-            textureSize: Qt.size(root.width * 2, root.height * 2)
-        }
-
         Repeater {
             id: segmentedArc
 
