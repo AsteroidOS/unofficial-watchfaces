@@ -7,7 +7,7 @@
 // SPDX-FileCopyrightText: 2012 Arto Jalkanen <ajalkane@gmail.com>
 // SPDX-License-Identifier: LGPL-2.1-or-later
 
-import QtQuick 2.9
+import QtQuick
 
 Item {
     property string imgPath: "../watchfaces-img/analog-modern-steel-"
@@ -252,8 +252,8 @@ Item {
         transform: Rotation {
             id: hourRot
 
-            origin.x: parent.width / 2
-            origin.y: parent.height / 2
+            origin.x: hourSVG.width / 2
+            origin.y: hourSVG.height / 2
         }
 
     }
@@ -271,8 +271,8 @@ Item {
         transform: Rotation {
             id: minuteRot
 
-            origin.x: parent.width / 2
-            origin.y: parent.height / 2
+            origin.x: minuteSVG.width / 2
+            origin.y: minuteSVG.height / 2
         }
 
     }
@@ -290,17 +290,16 @@ Item {
         transform: Rotation {
             id: secondRot
 
-            origin.x: parent.width / 2
-            origin.y: parent.height / 2
+            origin.x: secondSVG.width / 2
+            origin.y: secondSVG.height / 2
         }
 
     }
 
     Connections {
-        target: wallClock
-        onTimeChanged: {
+        function onTimeChanged() {
             if (!visible)
-                return ;
+                return;
 
             var h = wallClock.time.getHours();
             var min = wallClock.time.getMinutes();
@@ -310,6 +309,8 @@ Item {
             secondRot.angle = sec * 6;
             monthRot.angle = (wallClock.time.getMonth() + 1) * 30;
         }
+
+        target: wallClock
     }
 
 }
