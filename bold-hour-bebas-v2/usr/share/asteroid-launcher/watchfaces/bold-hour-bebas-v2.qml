@@ -11,22 +11,31 @@ import QtQuick
 Item {
     id: root
 
+    property real maxSize: Math.min(width, height)
+
     function updateMinute() {
         var m = wallClock.time.getMinutes();
         var angle = (m - 15) / 60 * 2 * Math.PI;
-        var cx = parent.width / 2;
-        var cy = parent.height / 2;
-        var r = parent.width / 2.75;
+        var cx = root.maxSize / 2;
+        var cy = root.maxSize / 2;
+        var r = root.maxSize / 2.75;
         minuteCircle.minuteX = cx + Math.cos(angle) * r;
         minuteCircle.minuteY = cy + Math.sin(angle) * r;
-        minuteDisplay.x = cx - minuteDisplay.width / 2 + Math.cos(angle) * parent.width * 0.364;
-        minuteDisplay.y = cy - minuteDisplay.height / 2 + Math.sin(angle) * parent.width * 0.364;
+        minuteDisplay.x = cx - minuteDisplay.width / 2 + Math.cos(angle) * root.maxSize * 0.364;
+        minuteDisplay.y = cy - minuteDisplay.height / 2 + Math.sin(angle) * root.maxSize * 0.364;
     }
 
-    Component.onCompleted: {
-        minuteArc.minute = wallClock.time.getMinutes();
-        minuteArc.requestPaint();
-        updateMinute();
+    anchors.fill: parent
+
+    Timer {
+        interval: 1
+        repeat: false
+        running: true
+        onTriggered: {
+            minuteArc.minute = wallClock.time.getMinutes();
+            minuteArc.requestPaint();
+            updateMinute();
+        }
     }
 
     Canvas {
@@ -56,19 +65,23 @@ Item {
     Text {
         id: hourDisplay
 
-        property real offset: height * 0.38
+        property real offset: height * 0.42
 
         renderType: Text.NativeRendering
-        font.pixelSize: parent.height * 0.94
-        font.family: "Bebas Neue"
-        font.styleName: "Bold"
         color: Qt.rgba(1, 1, 1, 0.85)
         style: Text.Outline
         styleColor: Qt.rgba(0, 0, 0, 0.4)
         horizontalAlignment: Text.AlignHCenter
-        x: parent.width / 2 - width / 1.88
-        y: parent.height / 2 - offset
+        x: root.maxSize / 2 - width / 1.88
+        y: root.maxSize / 2 - offset
         text: use12H.value ? wallClock.time.toLocaleString(Qt.locale(), "hh ap").slice(0, 2) : wallClock.time.toLocaleString(Qt.locale(), "HH")
+
+        font {
+            pixelSize: root.maxSize * 0.94
+            family: "Bebas Neue"
+            styleName: "Bold"
+        }
+
     }
 
     // Minute circle — plain Rectangle replaces Canvas full-circle arc
@@ -89,11 +102,15 @@ Item {
     Text {
         id: minuteDisplay
 
-        font.pixelSize: parent.height / 5.6
-        font.family: "BebasKai"
-        font.styleName: "Condensed"
         color: "white"
         text: wallClock.time.toLocaleString(Qt.locale(), "mm")
+
+        font {
+            pixelSize: root.maxSize / 5.6
+            family: "BebasKai"
+            styleName: "Condensed"
+        }
+
     }
 
     Connections {
