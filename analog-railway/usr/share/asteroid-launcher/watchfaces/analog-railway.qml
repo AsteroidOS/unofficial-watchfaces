@@ -10,7 +10,7 @@
 // Homage to classic European railway service clocks. Canvas-drawn
 // polygon hands with a signature red second arm carrying a circle arc.
 
-import QtQuick 2.9
+import QtQuick
 
 Item {
     id: root
