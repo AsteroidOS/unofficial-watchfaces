@@ -11,6 +11,10 @@ import QtQuick
 Item {
     id: root
 
+    property real maxSize: Math.min(width, height)
+
+    anchors.fill: parent
+
     Component.onCompleted: {
         var hour = wallClock.time.getHours();
         var minute = wallClock.time.getMinutes();
@@ -30,279 +34,288 @@ Item {
         secondCanvas.second = second;
         secondCanvas.requestPaint();
     }
+    
+    Item {
+        id: faceBox
 
-    // ── Static hour tick marks ────────────────────────────────────────────────
-    Repeater {
-        model: 12
+        width: root.maxSize
+        height: root.maxSize
+        anchors.centerIn: parent
 
-        Rectangle {
-            property real angle: index / 12 * 2 * Math.PI
+        // ── Static hour tick marks ────────────────────────────────────────────────
+        Repeater {
+            model: 12
 
-            x: root.width / 2 + Math.cos(angle) * root.height * 0.34 - width / 2
-            y: root.height / 2 + Math.sin(angle) * root.height * 0.34 - height / 2
-            width: root.width * 0.012
-            height: root.height * 0.025
-            color: Qt.rgba(1, 1, 1, 0.85)
+            Rectangle {
+                property real angle: index / 12 * 2 * Math.PI
 
-            transform: Rotation {
-                origin.x: width / 2
-                origin.y: height / 2
-                angle: index * 30
+                x: root.maxSize / 2 + Math.cos(angle) * root.maxSize * 0.34 - width / 2
+                y: root.maxSize / 2 + Math.sin(angle) * root.maxSize * 0.34 - height / 2
+                width: root.maxSize * 0.012
+                height: root.maxSize * 0.025
+                color: Qt.rgba(1, 1, 1, 0.85)
+
+                transform: Rotation {
+                    origin.x: width / 2
+                    origin.y: height / 2
+                    angle: index * 30
+                }
+
             }
 
         }
 
-    }
+        // ── Static minute tick marks (skip every 5th — hour mark position) ────────
+        Repeater {
+            model: 60
 
-    // ── Static minute tick marks (skip every 5th — hour mark position) ────────
-    Repeater {
-        model: 60
+            Rectangle {
+                property real angle: index / 60 * 2 * Math.PI
 
-        Rectangle {
-            property real angle: index / 60 * 2 * Math.PI
+                visible: index % 5 !== 0
+                x: root.maxSize / 2 + Math.cos(angle) * root.maxSize * 0.3425 - width / 2
+                y: root.maxSize / 2 + Math.sin(angle) * root.maxSize * 0.3425 - height / 2
+                width: root.maxSize * 0.005
+                height: root.maxSize * 0.015
+                color: Qt.rgba(1, 1, 1, 0.85)
 
-            visible: index % 5 !== 0
-            x: root.width / 2 + Math.cos(angle) * root.height * 0.3425 - width / 2
-            y: root.height / 2 + Math.sin(angle) * root.height * 0.3425 - height / 2
-            width: root.width * 0.005
-            height: root.height * 0.015
-            color: Qt.rgba(1, 1, 1, 0.85)
+                transform: Rotation {
+                    origin.x: width / 2
+                    origin.y: height / 2
+                    angle: index * 6
+                }
 
-            transform: Rotation {
-                origin.x: width / 2
-                origin.y: height / 2
-                angle: index * 6
             }
 
         }
 
-    }
+        // ── Hour numerals — static Canvas, paint once only ────────────────────────
+        Canvas {
+            id: numberStrokes
 
-    // ── Hour numerals — static Canvas, paint once only ────────────────────────
-    Canvas {
-        id: numberStrokes
+            anchors.fill: parent
+            renderStrategy: Canvas.Cooperative
+            onPaint: {
+                var ctx = getContext("2d");
+                ctx.reset();
+                ctx.fillStyle = Qt.rgba(1, 1, 1, 0.85);
+                ctx.strokeStyle = Qt.rgba(0, 0, 0, 0.4);
+                ctx.lineWidth = parent.height * 0.004;
+                ctx.textAlign = "center";
+                ctx.textBaseline = "middle";
+                ctx.font = "80 " + parent.height * 0.09 + "px Reglo";
+                ctx.translate(parent.width / 2, parent.height / 2);
+                var voffset = -parent.height * 0.02;
+                for (var i = 1; i < 13; i++) {
+                    var x = Math.cos((i - 3) / 12 * 2 * Math.PI) * parent.height * 0.42;
+                    var y = Math.sin((i - 3) / 12 * 2 * Math.PI) * parent.height * 0.42 - voffset;
+                    ctx.beginPath();
+                    ctx.fillText(i, x, y);
+                    ctx.strokeText(i, x, y);
+                    ctx.closePath();
+                }
+            }
+        }
 
-        anchors.fill: parent
-        renderStrategy: Canvas.Cooperative
-        onPaint: {
-            var ctx = getContext("2d");
-            ctx.reset();
-            ctx.fillStyle = Qt.rgba(1, 1, 1, 0.85);
-            ctx.strokeStyle = Qt.rgba(0, 0, 0, 0.4);
-            ctx.lineWidth = parent.height * 0.004;
-            ctx.textAlign = "center";
-            ctx.textBaseline = "middle";
-            ctx.font = "80 " + parent.height * 0.09 + "px Reglo";
-            ctx.translate(parent.width / 2, parent.height / 2);
-            var voffset = -parent.height * 0.02;
-            for (var i = 1; i < 13; i++) {
-                var x = Math.cos((i - 3) / 12 * 2 * Math.PI) * parent.height * 0.42;
-                var y = Math.sin((i - 3) / 12 * 2 * Math.PI) * parent.height * 0.42 - voffset;
+        Canvas {
+            id: hourCanvas
+
+            property int hour: 0
+            property int minute: 0
+
+            anchors.fill: parent
+            renderStrategy: Canvas.Cooperative
+            onPaint: {
+                var ctx = getContext("2d");
+                var m = minute;
+                ctx.reset();
+                ctx.shadowColor = Qt.rgba(0, 0, 0, 0.8);
+                ctx.shadowOffsetX = 1;
+                ctx.shadowOffsetY = 1;
+                ctx.shadowBlur = 3;
+                ctx.fillStyle = Qt.rgba(1, 1, 1, 1);
                 ctx.beginPath();
-                ctx.fillText(i, x, y);
-                ctx.strokeText(i, x, y);
+                ctx.arc(parent.width / 2, parent.height / 2, parent.height * 0.024, 0, 2 * Math.PI, false);
+                ctx.moveTo(parent.width / 2 + Math.cos(((hour - 3.02 + m / 60) / 12) * 2 * Math.PI) * width * 0.31, parent.height / 2 + Math.sin(((hour - 3.02 + m / 60) / 12) * 2 * Math.PI) * width * 0.31);
+                ctx.lineTo(parent.width / 2 + Math.cos(((hour - 3.22 + m / 60) / 12) * 2 * Math.PI) * width * 0.2, parent.height / 2 + Math.sin(((hour - 3.22 + m / 60) / 12) * 2 * Math.PI) * width * 0.2);
+                ctx.lineTo(parent.width / 2 + Math.cos(((hour - 7 + m / 60) / 12) * 2 * Math.PI) * width * 0.01, parent.height / 2 + Math.sin(((hour - 7 + m / 60) / 12) * 2 * Math.PI) * width * 0.01);
+                ctx.lineTo(parent.width / 2 + Math.cos(((hour - 11 + m / 60) / 12) * 2 * Math.PI) * width * 0.01, parent.height / 2 + Math.sin(((hour - 11 + m / 60) / 12) * 2 * Math.PI) * width * 0.01);
+                ctx.lineTo(parent.width / 2 + Math.cos(((hour - 2.78 + m / 60) / 12) * 2 * Math.PI) * width * 0.2, parent.height / 2 + Math.sin(((hour - 2.78 + m / 60) / 12) * 2 * Math.PI) * width * 0.2);
+                ctx.lineTo(parent.width / 2 + Math.cos(((hour - 2.98 + m / 60) / 12) * 2 * Math.PI) * width * 0.31, parent.height / 2 + Math.sin(((hour - 2.98 + m / 60) / 12) * 2 * Math.PI) * width * 0.31);
+                ctx.fill();
                 ctx.closePath();
             }
         }
-    }
 
-    Canvas {
-        id: hourCanvas
+        Canvas {
+            id: minuteCanvas
 
-        property int hour: 0
-        property int minute: 0
+            property int minute: 0
 
-        anchors.fill: parent
-        renderStrategy: Canvas.Cooperative
-        onPaint: {
-            var ctx = getContext("2d");
-            var m = minute;
-            ctx.reset();
-            ctx.shadowColor = Qt.rgba(0, 0, 0, 0.8);
-            ctx.shadowOffsetX = 1;
-            ctx.shadowOffsetY = 1;
-            ctx.shadowBlur = 3;
-            ctx.fillStyle = Qt.rgba(1, 1, 1, 1);
-            ctx.beginPath();
-            ctx.arc(parent.width / 2, parent.height / 2, parent.height * 0.024, 0, 2 * Math.PI, false);
-            ctx.moveTo(parent.width / 2 + Math.cos(((hour - 3.02 + m / 60) / 12) * 2 * Math.PI) * width * 0.31, parent.height / 2 + Math.sin(((hour - 3.02 + m / 60) / 12) * 2 * Math.PI) * width * 0.31);
-            ctx.lineTo(parent.width / 2 + Math.cos(((hour - 3.22 + m / 60) / 12) * 2 * Math.PI) * width * 0.2, parent.height / 2 + Math.sin(((hour - 3.22 + m / 60) / 12) * 2 * Math.PI) * width * 0.2);
-            ctx.lineTo(parent.width / 2 + Math.cos(((hour - 7 + m / 60) / 12) * 2 * Math.PI) * width * 0.01, parent.height / 2 + Math.sin(((hour - 7 + m / 60) / 12) * 2 * Math.PI) * width * 0.01);
-            ctx.lineTo(parent.width / 2 + Math.cos(((hour - 11 + m / 60) / 12) * 2 * Math.PI) * width * 0.01, parent.height / 2 + Math.sin(((hour - 11 + m / 60) / 12) * 2 * Math.PI) * width * 0.01);
-            ctx.lineTo(parent.width / 2 + Math.cos(((hour - 2.78 + m / 60) / 12) * 2 * Math.PI) * width * 0.2, parent.height / 2 + Math.sin(((hour - 2.78 + m / 60) / 12) * 2 * Math.PI) * width * 0.2);
-            ctx.lineTo(parent.width / 2 + Math.cos(((hour - 2.98 + m / 60) / 12) * 2 * Math.PI) * width * 0.31, parent.height / 2 + Math.sin(((hour - 2.98 + m / 60) / 12) * 2 * Math.PI) * width * 0.31);
-            ctx.fill();
-            ctx.closePath();
-        }
-    }
-
-    Canvas {
-        id: minuteCanvas
-
-        property int minute: 0
-
-        anchors.fill: parent
-        renderStrategy: Canvas.Cooperative
-        onPaint: {
-            var ctx = getContext("2d");
-            var m = minute;
-            ctx.reset();
-            ctx.shadowColor = Qt.rgba(0, 0, 0, 0.8);
-            ctx.shadowOffsetX = 1;
-            ctx.shadowOffsetY = 1;
-            ctx.shadowBlur = 3;
-            ctx.fillStyle = Qt.rgba(1, 1, 1, 1);
-            ctx.beginPath();
-            ctx.moveTo(parent.width / 2 + Math.cos(((m - 15.08) / 60) * 2 * Math.PI) * width * 0.41, parent.height / 2 + Math.sin(((m - 15.08) / 60) * 2 * Math.PI) * width * 0.41);
-            ctx.lineTo(parent.width / 2 + Math.cos(((m - 15.7) / 60) * 2 * Math.PI) * width * 0.285, parent.height / 2 + Math.sin(((m - 15.7) / 60) * 2 * Math.PI) * width * 0.285);
-            ctx.lineTo(parent.width / 2 + Math.cos(((m - 37) / 60) * 2 * Math.PI) * width * 0.01, parent.height / 2 + Math.sin(((m - 37) / 60) * 2 * Math.PI) * width * 0.01);
-            ctx.lineTo(parent.width / 2 + Math.cos(((m - 53) / 60) * 2 * Math.PI) * width * 0.01, parent.height / 2 + Math.sin(((m - 53) / 60) * 2 * Math.PI) * width * 0.01);
-            ctx.lineTo(parent.width / 2 + Math.cos(((m - 14.3) / 60) * 2 * Math.PI) * width * 0.285, parent.height / 2 + Math.sin(((m - 14.3) / 60) * 2 * Math.PI) * width * 0.285);
-            ctx.lineTo(parent.width / 2 + Math.cos(((m - 14.92) / 60) * 2 * Math.PI) * width * 0.41, parent.height / 2 + Math.sin(((m - 14.92) / 60) * 2 * Math.PI) * width * 0.41);
-            ctx.fill();
-            ctx.closePath();
-        }
-    }
-
-    // ── Second hand — only the line stays in Canvas, dots are Rectangles ──────
-    Rectangle {
-        id: secondDot
-
-        visible: !displayAmbient
-        anchors.centerIn: parent
-        width: parent.height * 0.024 * 2
-        height: width
-        radius: width / 2
-        color: "red"
-    }
-
-    Canvas {
-        id: secondCanvas
-
-        property int second: 0
-
-        visible: !displayAmbient
-        anchors.fill: parent
-        renderStrategy: Canvas.Cooperative
-        onPaint: {
-            var ctx = getContext("2d");
-            ctx.reset();
-            ctx.shadowColor = Qt.rgba(0, 0, 0, 0.8);
-            ctx.shadowOffsetX = 0;
-            ctx.shadowOffsetY = 0;
-            ctx.shadowBlur = 2;
-            ctx.strokeStyle = "red";
-            ctx.lineCap = "round";
-            ctx.lineWidth = parent.height * 0.008;
-            ctx.beginPath();
-            ctx.moveTo(parent.width / 2, parent.height / 2);
-            ctx.lineTo(parent.width / 2 + Math.cos((second - 15) / 60 * 2 * Math.PI) * width * 0.35, parent.height / 2 + Math.sin((second - 15) / 60 * 2 * Math.PI) * height * 0.35);
-            ctx.stroke();
-            ctx.closePath();
-        }
-    }
-
-    Rectangle {
-        id: secondCap
-
-        visible: !displayAmbient
-        anchors.centerIn: parent
-        width: parent.height * 0.012 * 2
-        height: width
-        radius: width / 2
-        color: "white"
-    }
-
-    // ── Day of week — plain Text replaces Canvas ──────────────────────────────
-    Text {
-        color: Qt.rgba(1, 1, 1, 0.85)
-        style: Text.Outline
-        styleColor: Qt.rgba(0, 0, 0, 0.4)
-        text: wallClock.time.toLocaleString(Qt.locale(), "ddd").slice(0, 2).toUpperCase()
-
-        anchors {
-            centerIn: parent
-            horizontalCenterOffset: -parent.width * 0.175
-            verticalCenterOffset: parent.height * 0.0125
+            anchors.fill: parent
+            renderStrategy: Canvas.Cooperative
+            onPaint: {
+                var ctx = getContext("2d");
+                var m = minute;
+                ctx.reset();
+                ctx.shadowColor = Qt.rgba(0, 0, 0, 0.8);
+                ctx.shadowOffsetX = 1;
+                ctx.shadowOffsetY = 1;
+                ctx.shadowBlur = 3;
+                ctx.fillStyle = Qt.rgba(1, 1, 1, 1);
+                ctx.beginPath();
+                ctx.moveTo(parent.width / 2 + Math.cos(((m - 15.08) / 60) * 2 * Math.PI) * width * 0.41, parent.height / 2 + Math.sin(((m - 15.08) / 60) * 2 * Math.PI) * width * 0.41);
+                ctx.lineTo(parent.width / 2 + Math.cos(((m - 15.7) / 60) * 2 * Math.PI) * width * 0.285, parent.height / 2 + Math.sin(((m - 15.7) / 60) * 2 * Math.PI) * width * 0.285);
+                ctx.lineTo(parent.width / 2 + Math.cos(((m - 37) / 60) * 2 * Math.PI) * width * 0.01, parent.height / 2 + Math.sin(((m - 37) / 60) * 2 * Math.PI) * width * 0.01);
+                ctx.lineTo(parent.width / 2 + Math.cos(((m - 53) / 60) * 2 * Math.PI) * width * 0.01, parent.height / 2 + Math.sin(((m - 53) / 60) * 2 * Math.PI) * width * 0.01);
+                ctx.lineTo(parent.width / 2 + Math.cos(((m - 14.3) / 60) * 2 * Math.PI) * width * 0.285, parent.height / 2 + Math.sin(((m - 14.3) / 60) * 2 * Math.PI) * width * 0.285);
+                ctx.lineTo(parent.width / 2 + Math.cos(((m - 14.92) / 60) * 2 * Math.PI) * width * 0.41, parent.height / 2 + Math.sin(((m - 14.92) / 60) * 2 * Math.PI) * width * 0.41);
+                ctx.fill();
+                ctx.closePath();
+            }
         }
 
-        font {
-            pixelSize: parent.height * 0.05
-            family: "Reglo"
+        // ── Second hand — only the line stays in Canvas, dots are Rectangles ──────
+        Rectangle {
+            id: secondDot
+
+            visible: !displayAmbient
+            anchors.centerIn: parent
+            width: parent.height * 0.024 * 2
+            height: width
+            radius: width / 2
+            color: "red"
         }
 
-    }
+        Canvas {
+            id: secondCanvas
 
-    // ── AM/PM — plain Text replaces Canvas ───────────────────────────────────
-    Text {
-        visible: use12H.value
-        color: Qt.rgba(1, 1, 1, 0.85)
-        style: Text.Outline
-        styleColor: Qt.rgba(0, 0, 0, 0.4)
-        text: wallClock.time.toLocaleString(Qt.locale(), "ap").slice(0, 2).toUpperCase()
+            property int second: 0
 
-        anchors {
-            centerIn: parent
-            horizontalCenterOffset: parent.width * 0.175
-            verticalCenterOffset: parent.height * 0.0125
+            visible: !displayAmbient
+            anchors.fill: parent
+            renderStrategy: Canvas.Cooperative
+            onPaint: {
+                var ctx = getContext("2d");
+                ctx.reset();
+                ctx.shadowColor = Qt.rgba(0, 0, 0, 0.8);
+                ctx.shadowOffsetX = 0;
+                ctx.shadowOffsetY = 0;
+                ctx.shadowBlur = 2;
+                ctx.strokeStyle = "red";
+                ctx.lineCap = "round";
+                ctx.lineWidth = parent.height * 0.008;
+                ctx.beginPath();
+                ctx.moveTo(parent.width / 2, parent.height / 2);
+                ctx.lineTo(parent.width / 2 + Math.cos((second - 15) / 60 * 2 * Math.PI) * width * 0.35, parent.height / 2 + Math.sin((second - 15) / 60 * 2 * Math.PI) * height * 0.35);
+                ctx.stroke();
+                ctx.closePath();
+            }
         }
 
-        font {
-            pixelSize: parent.height * 0.05
-            family: "Reglo"
-            styleName: "Bold"
+        Rectangle {
+            id: secondCap
+
+            visible: !displayAmbient
+            anchors.centerIn: parent
+            width: parent.height * 0.012 * 2
+            height: width
+            radius: width / 2
+            color: "white"
         }
 
-    }
+        // ── Day of week — plain Text replaces Canvas ──────────────────────────────
+        Text {
+            color: Qt.rgba(1, 1, 1, 0.85)
+            style: Text.Outline
+            styleColor: Qt.rgba(0, 0, 0, 0.4)
+            text: wallClock.time.toLocaleString(Qt.locale(), "ddd").slice(0, 2).toUpperCase()
 
-    // ── Date — plain Text replaces Canvas ────────────────────────────────────
-    Text {
-        color: Qt.rgba(1, 1, 1, 0.85)
-        style: Text.Outline
-        styleColor: Qt.rgba(0, 0, 0, 0.4)
-        text: wallClock.time.toLocaleString(Qt.locale(), "dd")
+            anchors {
+                centerIn: parent
+                horizontalCenterOffset: -parent.width * 0.175
+                verticalCenterOffset: parent.height * 0.0125
+            }
 
-        anchors {
-            horizontalCenter: parent.horizontalCenter
-            top: parent.top
-            topMargin: parent.height * 0.265
+            font {
+                pixelSize: parent.height * 0.05
+                family: "Reglo"
+            }
+
         }
 
-        font {
-            pixelSize: parent.height * 0.075
-            family: "Reglo"
+        // ── AM/PM — plain Text replaces Canvas ───────────────────────────────────
+        Text {
+            visible: use12H.value
+            color: Qt.rgba(1, 1, 1, 0.85)
+            style: Text.Outline
+            styleColor: Qt.rgba(0, 0, 0, 0.4)
+            text: wallClock.time.toLocaleString(Qt.locale(), "ap").slice(0, 2).toUpperCase()
+
+            anchors {
+                centerIn: parent
+                horizontalCenterOffset: parent.width * 0.175
+                verticalCenterOffset: parent.height * 0.0125
+            }
+
+            font {
+                pixelSize: parent.height * 0.05
+                family: "Reglo"
+                styleName: "Bold"
+            }
+
         }
 
-    }
+        // ── Date — plain Text replaces Canvas ────────────────────────────────────
+        Text {
+            color: Qt.rgba(1, 1, 1, 0.85)
+            style: Text.Outline
+            styleColor: Qt.rgba(0, 0, 0, 0.4)
+            text: wallClock.time.toLocaleString(Qt.locale(), "dd")
 
-    // ── Month — plain Text replaces Canvas ───────────────────────────────────
-    Text {
-        color: Qt.rgba(1, 1, 1, 0.85)
-        style: Text.Outline
-        styleColor: Qt.rgba(0, 0, 0, 0.4)
-        text: wallClock.time.toLocaleString(Qt.locale(), "MMMM").toUpperCase()
+            anchors {
+                horizontalCenter: parent.horizontalCenter
+                top: parent.top
+                topMargin: parent.height * 0.26
+            }
 
-        anchors {
-            horizontalCenter: parent.horizontalCenter
-            top: parent.top
-            topMargin: parent.height * 0.322
+            font {
+                pixelSize: parent.height * 0.075
+                family: "Reglo"
+            }
+
         }
 
-        font {
-            pixelSize: parent.height * 0.05
-            family: "Reglo"
+        // ── Month — plain Text replaces Canvas ───────────────────────────────────
+        Text {
+            color: Qt.rgba(1, 1, 1, 0.85)
+            style: Text.Outline
+            styleColor: Qt.rgba(0, 0, 0, 0.4)
+            text: wallClock.time.toLocaleString(Qt.locale(), "MMMM").toUpperCase()
+
+            anchors {
+                horizontalCenter: parent.horizontalCenter
+                top: parent.top
+                topMargin: parent.height * 0.34
+            }
+
+            font {
+                pixelSize: parent.height * 0.05
+                family: "Reglo"
+            }
+
         }
 
-    }
+        Image {
+            id: logoAsteroid
 
-    Image {
-        id: logoAsteroid
-
-        source: "../watchfaces-img/asteroid-logo.svg"
-        anchors.centerIn: parent
-        anchors.verticalCenterOffset: parent.height * 0.18
-        width: parent.width / 8
-        height: width
+            source: "../watchfaces-img/asteroid-logo.svg"
+            anchors.centerIn: parent
+            anchors.verticalCenterOffset: parent.height * 0.18
+            width: parent.width / 8
+            height: width
+        }
+        
     }
 
     Connections {
