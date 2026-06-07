@@ -7,13 +7,14 @@ import QtQuick
 Item {
     id: root
 
-    property int topbottomMargin: root.height * 0.02
-    property int leftrightMargin: root.height * 0.001
-    property int verticalDateOffset: root.width * 0.006
-    property int verticalFontOffset: -root.width * 0.43
-    property int horizontalDateOffset: -root.width * 0.032
-    property int horizontalFontOffset: -root.height * 0.504
-    property var numeralSize: Qt.size(root.width * 0.7, root.height * 0.7)
+    property real maxSize: Math.min(width, height)
+    property int topbottomMargin: maxSize * 0.02
+    property int leftrightMargin: maxSize * 0.001
+    property int verticalDateOffset: maxSize * 0.006
+    property int verticalFontOffset: -maxSize * 0.43
+    property int horizontalDateOffset: -maxSize * 0.032
+    property int horizontalFontOffset: -maxSize * 0.504
+    property var numeralSize: Qt.size(maxSize * 0.7, maxSize * 0.7)
     property string imagePath: "../watchfaces-img/digital-random-color-pop-"
     property var colorSchemes: [["#230007", "#A40606", "#D7CF07", "#D98324"], ["#264653", "#2A9D8F", "#E9C46A", "#F4A261"], ["#564138", "#2E86AB", "#F6F5AE", "#F1F514"], ["#C84630", "#D4A0A7", "#E3E3E3", "#898989"], ["#32292F", "#575366", "#6E7DAB", "#5762D5"], ["#7D7ABC", "#6457A6", "#23F0C7", "#EF767A"], ["#FF773D", "#F19143", "#FFB238", "#FABC3C"], ["#361134", "#B0228C", "#EA3788", "#E56B70"], ["#D91E36", "#DA344D", "#EC5766", "#EF7674"], ["#00916E", "#EE6123", "#FEEFE5", "#FFCF00"], ["#995D81", "#EB8258", "#F6F740", "#D8DC6A"], ["#466060", "#57886C", "#81A684", "#F8C7CC"], ["#815E5B", "#685155", "#7A6F9B", "#8B85C1"], ["#252627", "#BB0A21", "#D3D4D9", "#4B88A2"], ["#CA7DF9", "#F896D8", "#EDF67D", "#724CF9"], ["#3D3522", "#4A442D", "#386150", "#58B09C"], ["#CB769E", "#ADBCA5", "#E8B9AB", "#E09891"], ["#4E4187", "#3083DC", "#F8FFE5", "#7DDE92"], ["#01161E", "#124559", "#598392", "#AEC3B0"], ["#922D50", "#95AFBA", "#B8C480", "#D4E79E"], ["#1A1423", "#3D314A", "#684756", "#96705B"], ["#04E762", "#008BF8", "#DC0073", "#F5B700"], ["#D0B17A", "#A89F68", "#F5FDC6", "#F5C396"], ["#2C363F", "#E75A7C", "#F2F5EA", "#D6DBD2"], ["#3C493F", "#7E8D85", "#F0F7F4", "#B3BFB8"], ["#8B1E3F", "#3C153B", "#89BD9E", "#F0C987"], ["#2E4057", "#048BA8", "#F18F01", "#99C24D"], ["#9EE37D", "#63C132", "#CFFCFF", "#AAEFDF"], ["#5BC0EB", "#9BC53D", "#C3423F", "#FDE74C"], ["#F08080", "#F4978E", "#F8AD9D", "#FBC4AB"], ["#170312", "#33032F", "#A0ACAD", "#531253"], ["#1B9AAA", "#EF476F", "#F8FFE5", "#06D6A0"], ["#FFC4D1", "#EFAAC4", "#6B717E", "#FFE8E1"], ["#C49792", "#AD91A3", "#FE938C", "#EDAF97"], ["#F7F7FF", "#C49991", "#279AF1", "#60656F"], ["#EF3E36", "#17BEBB", "#2E282A", "#EDB88B"], ["#481620", "#0075A2", "#00FFC5", "#ADF5FF"], ["#CEC2FF", "#B3B3F1", "#DCB6D5", "#CF8BA9"], ["#E89005", "#EC7505", "#D84A05", "#F42B03"], ["#3F7CAC", "#95AFBA", "#BDC4A7", "#D5E1A3"], ["#FCAA67", "#B0413E", "#FFFFC7", "#548687"], ["#F2F3AE", "#EDD382", "#FC9E4F", "#FF521B"], ["#FFAFF0", "#F092DD", "#392F5A", "#EEC8E0"], ["#5D4E60", "#826C7F", "#A88FAC", "#D4B2D8"], ["#638475", "#90E39A", "#DDF093", "#F6D0B1"], ["#2F4858", "#33658A", "#F6AE2D", "#55DDE0"], ["#18261F", "#A22C29", "#747158", "#9D9F7F"], ["#0A1045", "#00C2D1", "#F9E900", "#F6AF65"], ["#EC9F05", "#D76A03", "#8EA604", "#F5BB00"], ["#0C1B33", "#7A306C", "#A49B79", "#03B5AA"], ["#073B3A", "#0B6E4F", "#08A045", "#6BBF59"], ["#587291", "#2F97C1", "#1CCAD8", "#15E6CD"], ["#C5283D", "#E9724C", "#FFC857", "#481D24"], ["#E8AA14", "#6EEB83", "#E4FF1A", "#1BE7FF"], ["#F433AB", "#CB04A5", "#934683", "#65334D"], ["#524632", "#8F7E4F", "#C3C49E", "#D8FFDD"], ["#2C2C54", "#846C5B", "#F15BB5", "#00B8F5"], ["#0D1B2A", "#1B263B", "#415A77", "#778DA9"], ["#CC444B", "#DA5552", "#DF7373", "#E39695"], ["#504136", "#A49E8D", "#689689", "#65CDA9"]]
     property int randomScheme: Math.floor(Math.random() * colorSchemes.length)
@@ -758,10 +759,10 @@ Item {
         }
 
         font {
-            pixelSize: root.height * 0.1
+            pixelSize: root.maxSize * 0.1
             family: "Noto Sans"
             styleName: "Condensed Light"
-            letterSpacing: root.height * 0.0002
+            letterSpacing: root.maxSize * 0.0002
         }
 
         layer.effect: DropShadow {
@@ -792,10 +793,10 @@ Item {
         }
 
         font {
-            pixelSize: root.height * 0.116
+            pixelSize: root.maxSize * 0.116
             family: "Noto Sans"
             styleName: "SemiCondensed Light"
-            letterSpacing: root.height * 0.0002
+            letterSpacing: root.maxSize * 0.0002
         }
 
         layer.effect: DropShadow {
