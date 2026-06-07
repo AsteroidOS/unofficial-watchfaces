@@ -14,7 +14,6 @@ Item {
     property real maxSize: Math.min(width, height)
 
     anchors.fill: parent
-
     Component.onCompleted: {
         var hour = wallClock.time.getHours();
         var minute = wallClock.time.getMinutes();
@@ -34,7 +33,7 @@ Item {
         secondCanvas.second = second;
         secondCanvas.requestPaint();
     }
-    
+
     Item {
         id: faceBox
 
@@ -115,6 +114,98 @@ Item {
                     ctx.closePath();
                 }
             }
+        }
+
+        // ── Day of week — plain Text replaces Canvas ──────────────────────────────
+        Text {
+            color: Qt.rgba(1, 1, 1, 0.85)
+            style: Text.Outline
+            styleColor: Qt.rgba(0, 0, 0, 0.4)
+            text: wallClock.time.toLocaleString(Qt.locale(), "ddd").slice(0, 2).toUpperCase()
+
+            anchors {
+                centerIn: parent
+                horizontalCenterOffset: -parent.width * 0.175
+                verticalCenterOffset: parent.height * 0.0125
+            }
+
+            font {
+                pixelSize: parent.height * 0.05
+                family: "Reglo"
+            }
+
+        }
+
+        // ── AM/PM — plain Text replaces Canvas ───────────────────────────────────
+        Text {
+            visible: use12H.value
+            color: Qt.rgba(1, 1, 1, 0.85)
+            style: Text.Outline
+            styleColor: Qt.rgba(0, 0, 0, 0.4)
+            text: wallClock.time.toLocaleString(Qt.locale(), "ap").slice(0, 2).toUpperCase()
+
+            anchors {
+                centerIn: parent
+                horizontalCenterOffset: parent.width * 0.175
+                verticalCenterOffset: parent.height * 0.0125
+            }
+
+            font {
+                pixelSize: parent.height * 0.05
+                family: "Reglo"
+                styleName: "Bold"
+            }
+
+        }
+
+        // ── Date — plain Text replaces Canvas ────────────────────────────────────
+        Text {
+            color: Qt.rgba(1, 1, 1, 0.85)
+            style: Text.Outline
+            styleColor: Qt.rgba(0, 0, 0, 0.4)
+            text: wallClock.time.toLocaleString(Qt.locale(), "dd")
+
+            anchors {
+                horizontalCenter: parent.horizontalCenter
+                top: parent.top
+                topMargin: parent.height * 0.26
+            }
+
+            font {
+                pixelSize: parent.height * 0.075
+                family: "Reglo"
+            }
+
+        }
+
+        // ── Month — plain Text replaces Canvas ───────────────────────────────────
+        Text {
+            color: Qt.rgba(1, 1, 1, 0.85)
+            style: Text.Outline
+            styleColor: Qt.rgba(0, 0, 0, 0.4)
+            text: wallClock.time.toLocaleString(Qt.locale(), "MMMM").toUpperCase()
+
+            anchors {
+                horizontalCenter: parent.horizontalCenter
+                top: parent.top
+                topMargin: parent.height * 0.34
+            }
+
+            font {
+                pixelSize: parent.height * 0.05
+                family: "Reglo"
+            }
+
+        }
+
+        Image {
+            id: logoAsteroid
+
+            source: "../watchfaces-img/asteroid-logo.svg"
+            anchors.centerIn: parent
+            anchors.verticalCenterOffset: parent.height * 0.18
+            width: parent.width / 8
+            height: width
         }
 
         Canvas {
@@ -224,98 +315,6 @@ Item {
             color: "white"
         }
 
-        // ── Day of week — plain Text replaces Canvas ──────────────────────────────
-        Text {
-            color: Qt.rgba(1, 1, 1, 0.85)
-            style: Text.Outline
-            styleColor: Qt.rgba(0, 0, 0, 0.4)
-            text: wallClock.time.toLocaleString(Qt.locale(), "ddd").slice(0, 2).toUpperCase()
-
-            anchors {
-                centerIn: parent
-                horizontalCenterOffset: -parent.width * 0.175
-                verticalCenterOffset: parent.height * 0.0125
-            }
-
-            font {
-                pixelSize: parent.height * 0.05
-                family: "Reglo"
-            }
-
-        }
-
-        // ── AM/PM — plain Text replaces Canvas ───────────────────────────────────
-        Text {
-            visible: use12H.value
-            color: Qt.rgba(1, 1, 1, 0.85)
-            style: Text.Outline
-            styleColor: Qt.rgba(0, 0, 0, 0.4)
-            text: wallClock.time.toLocaleString(Qt.locale(), "ap").slice(0, 2).toUpperCase()
-
-            anchors {
-                centerIn: parent
-                horizontalCenterOffset: parent.width * 0.175
-                verticalCenterOffset: parent.height * 0.0125
-            }
-
-            font {
-                pixelSize: parent.height * 0.05
-                family: "Reglo"
-                styleName: "Bold"
-            }
-
-        }
-
-        // ── Date — plain Text replaces Canvas ────────────────────────────────────
-        Text {
-            color: Qt.rgba(1, 1, 1, 0.85)
-            style: Text.Outline
-            styleColor: Qt.rgba(0, 0, 0, 0.4)
-            text: wallClock.time.toLocaleString(Qt.locale(), "dd")
-
-            anchors {
-                horizontalCenter: parent.horizontalCenter
-                top: parent.top
-                topMargin: parent.height * 0.26
-            }
-
-            font {
-                pixelSize: parent.height * 0.075
-                family: "Reglo"
-            }
-
-        }
-
-        // ── Month — plain Text replaces Canvas ───────────────────────────────────
-        Text {
-            color: Qt.rgba(1, 1, 1, 0.85)
-            style: Text.Outline
-            styleColor: Qt.rgba(0, 0, 0, 0.4)
-            text: wallClock.time.toLocaleString(Qt.locale(), "MMMM").toUpperCase()
-
-            anchors {
-                horizontalCenter: parent.horizontalCenter
-                top: parent.top
-                topMargin: parent.height * 0.34
-            }
-
-            font {
-                pixelSize: parent.height * 0.05
-                family: "Reglo"
-            }
-
-        }
-
-        Image {
-            id: logoAsteroid
-
-            source: "../watchfaces-img/asteroid-logo.svg"
-            anchors.centerIn: parent
-            anchors.verticalCenterOffset: parent.height * 0.18
-            width: parent.width / 8
-            height: width
-        }
-        
     }
 
     Connections {
