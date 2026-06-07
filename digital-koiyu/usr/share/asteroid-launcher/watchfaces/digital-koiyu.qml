@@ -1,9 +1,9 @@
 // SPDX-FileCopyrightText: 2023 Arseniy Movshev <dodoradio@outlook.com>
 // SPDX-License-Identifier: BSD-3-Clause
 
-import Nemo.Mce 1.0
-import QtGraphicalEffects 1.15
-import QtQuick 2.15
+import Nemo.Mce
+import Qt5Compat.GraphicalEffects
+import QtQuick
 
 Item {
     // this blob is used to decode the state of the various displays
@@ -49,6 +49,8 @@ Item {
             " ": [[0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0]]
         }
     }
+
+    anchors.fill: parent
 
     Item {
         id: segmentParent
