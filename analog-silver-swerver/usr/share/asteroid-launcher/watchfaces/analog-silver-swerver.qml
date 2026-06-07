@@ -26,8 +26,6 @@ Item {
     property real rad: 0.01745
 
     anchors.fill: parent
-    // DropShadow on all hands
-    layer.enabled: true
 
     MceBatteryLevel {
         id: batteryChargePercentage
@@ -528,15 +526,6 @@ Item {
                 angle: (wallClock.time.getSeconds() * 6)
             }
 
-            layer.effect: DropShadow {
-                transparentBorder: true
-                horizontalOffset: 6
-                verticalOffset: 6
-                radius: 8
-                samples: 9
-                color: Qt.rgba(0, 0, 0, 0.3)
-            }
-
         }
 
     }
@@ -549,15 +538,6 @@ Item {
         }
 
         target: wallClock
-    }
-
-    layer.effect: DropShadow {
-        transparentBorder: true
-        horizontalOffset: 2
-        verticalOffset: 2
-        radius: 8
-        samples: 17
-        color: Qt.rgba(0, 0, 0, 0.3)
     }
 
 }
