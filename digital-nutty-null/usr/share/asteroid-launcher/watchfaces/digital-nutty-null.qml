@@ -1,4 +1,3 @@
-// Font: Inter Tight (SIL OFL 1.1)
 // SPDX-FileCopyrightText: 2026 Timo Könnecke <github.com/moWerk>
 // SPDX-License-Identifier: BSD-3-Clause
 // Nutty Null — AsteroidOS watchface
@@ -7,6 +6,7 @@
 // 3 at the 3 o'clock mark, 9 at the 9 o'clock mark. You read the
 // hour as position, the minute as number.
 // Native QML only — no Canvas.
+// Font: Inter Tight (SIL OFL 1.1)
 
 import QtGraphicalEffects
 import QtQuick
