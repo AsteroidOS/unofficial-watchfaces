@@ -1,17 +1,12 @@
-/*
- * Zeitgeber — AsteroidOS watchface
- *
- * 60 ticks around the rim. A golden comet sweeps continuously to the current
- * fractional-minute position via a 16 ms timer. Non-glow ticks render as
- * 5-minute major / minor pairs. Seconds pulse a faint outer ring.
- * A giant hour digit in Major Mono Display sits centred behind.
- *
- * Ambient: current-minute tick + quarter marks + hour digit only.
- *
- * Fonts: Major Mono Display (OFL), Space Mono (OFL)
- */
 // SPDX-FileCopyrightText: 2026 Timo Könnecke <github.com/moWerk>
 // SPDX-License-Identifier: BSD-3-Clause
+// Zeitgeber — AsteroidOS watchface
+// 60 ticks around the rim. A golden comet sweeps continuously to the current
+// fractional-minute position via a 16 ms timer. Non-glow ticks render as
+// 5-minute major / minor pairs. Seconds pulse a faint outer ring.
+// A giant hour digit in Major Mono Display sits centred behind.
+// Ambient: current-minute tick + quarter marks + hour digit only.
+// Fonts: Major Mono Display (OFL), Space Mono (OFL)
 
 import QtQuick 2.15
 
