@@ -4,6 +4,8 @@
 import QtQuick
 
 Item {
+    id: root
+
     // these three constants describe decimal time
     readonly property int decimalHoursPerStandardDay: 10
     readonly property int decimalMinutesPerDecimalHour: 100
@@ -32,118 +34,127 @@ Item {
         return Math.round(decimalMillis / decimalSecondsScaleFactor);
     }
 
+    anchors.fill: parent
     Component.onCompleted: {
         logoRot.angle = getDecimalHours(wallClock.time) * 360 * revolutionsPerDay / decimalHoursPerStandardDay;
     }
 
-    Repeater {
-        id: minuteTicks
+    Item {
+        id: faceBox
 
-        model: decimalMinutesPerDecimalHour / revolutionsPerDay
+        width: Math.min(parent.width, parent.height)
+        height: width
+        anchors.centerIn: parent
 
-        Tick {
-            angle: (index) * 360 / minuteTicks.count
-            color: "lightgreen"
-            opacity: 0.6
-            visible: !displayAmbient
-            width: parent.width * 0.005
-            height: parent.width * (index % majorMinuteTicksEvery === 0 ? 0.03 : 0.015)
+        Repeater {
+            id: minuteTicks
+
+            model: decimalMinutesPerDecimalHour / revolutionsPerDay
+
+            Tick {
+                angle: (index) * 360 / minuteTicks.count
+                color: "lightgreen"
+                opacity: 0.6
+                visible: !displayAmbient
+                width: parent.width * 0.005
+                height: parent.width * (index % majorMinuteTicksEvery === 0 ? 0.03 : 0.015)
+            }
+
         }
 
-    }
+        Repeater {
+            id: hourTicks
 
-    Repeater {
-        id: hourTicks
+            model: decimalHoursPerStandardDay / revolutionsPerDay
 
-        model: decimalHoursPerStandardDay / revolutionsPerDay
+            Tick {
+                angle: (index) * 360 / hourTicks.count
+                color: "lightgreen"
+                opacity: displayAmbient ? 0.3 : 0.6
+                width: parent.width * 0.01
+                height: parent.width * 0.03
+            }
 
-        Tick {
-            angle: (index) * 360 / hourTicks.count
-            color: "lightgreen"
-            opacity: displayAmbient ? 0.3 : 0.6
-            width: parent.width * 0.01
-            height: parent.width * 0.03
         }
 
-    }
+        Repeater {
+            id: hourLabels
 
-    Repeater {
-        id: hourLabels
+            model: decimalHoursPerStandardDay / revolutionsPerDay
 
-        model: decimalHoursPerStandardDay / revolutionsPerDay
+            Text {
+                id: hourLabel
 
-        Text {
-            id: hourLabel
+                color: "lightblue"
+                antialiasing: true
+                opacity: displayAmbient ? 0.3 : 0.6
+                text: index ? index : hourLabels.count
+                transform: [
+                    Rotation {
+                        origin.x: hourLabel.width / 2
+                        origin.y: hourLabel.height + parent.width * 0.4
+                        angle: (index) * 360 / (decimalHoursPerStandardDay / revolutionsPerDay)
+                    },
+                    Translate {
+                        x: (parent.width - hourLabel.width) / 2
+                        y: parent.height / 2 - parent.width * 0.4 - hourLabel.height
+                    }
+                ]
 
-            color: "lightblue"
+                font {
+                    pixelSize: parent.height * 0.08
+                    family: "CPMono_v07"
+                    styleName: "Plain"
+                }
+
+            }
+
+        }
+
+        Image {
+            id: logoAsteroid
+
             antialiasing: true
-            opacity: displayAmbient ? 0.3 : 0.6
-            text: index ? index : hourLabels.count
+            opacity: displayAmbient ? 0.6 : 1
+            source: "../watchfaces-img/asteroid-logo.svg"
+            width: parent.width / 12
+            height: width
             transform: [
                 Rotation {
-                    origin.x: hourLabel.width / 2
-                    origin.y: hourLabel.height + parent.width * 0.4
-                    angle: (index) * 360 / (decimalHoursPerStandardDay / revolutionsPerDay)
+                    id: logoRot
+
+                    origin.x: logoAsteroid.width / 2
+                    origin.y: logoAsteroid.height + parent.width * 0.275
                 },
                 Translate {
-                    x: (parent.width - hourLabel.width) / 2
-                    y: parent.height / 2 - parent.width * 0.4 - hourLabel.height
+                    x: (parent.width - logoAsteroid.width) / 2
+                    y: parent.height / 2 - logoAsteroid.height - parent.width * 0.275
                 }
             ]
-
-            font {
-                pixelSize: parent.height * 0.08
-                family: "CPMono_v07"
-                styleName: "Plain"
-            }
-
         }
 
-    }
+        PlainText {
+            id: conventionalTime
 
-    Image {
-        id: logoAsteroid
+            anchors.verticalCenterOffset: +parent.width * 0.18
+            text: use12H.value ? wallClock.time.toLocaleString(Qt.locale(), "hh:mm:ss ap") : wallClock.time.toLocaleString(Qt.locale(), "HH:mm:ss")
+        }
 
-        antialiasing: true
-        opacity: displayAmbient ? 0.6 : 1
-        source: "../watchfaces-img/asteroid-logo.svg"
-        width: parent.width / 12
-        height: width
-        transform: [
-            Rotation {
-                id: logoRot
+        PlainText {
+            id: conventionalDate
 
-                origin.x: logoAsteroid.width / 2
-                origin.y: logoAsteroid.height + parent.width * 0.275
-            },
-            Translate {
-                x: (parent.width - logoAsteroid.width) / 2
-                y: parent.height / 2 - logoAsteroid.height - parent.width * 0.275
-            }
-        ]
-    }
+            anchors.verticalCenterOffset: -parent.width * 0.18
+            text: wallClock.time.toLocaleDateString(Qt.locale(), Locale.ShortFormat)
+        }
 
-    PlainText {
-        id: conventionalTime
+        PlainText {
+            id: decimalHours
 
-        anchors.verticalCenterOffset: +parent.width * 0.18
-        text: use12H.value ? wallClock.time.toLocaleString(Qt.locale(), "hh:mm:ss ap") : wallClock.time.toLocaleString(Qt.locale(), "HH:mm:ss")
-    }
+            font.pixelSize: parent.width * 0.15
+            textFormat: Text.RichText
+            text: getDecimalHours(new Date()).toPrecision(5)
+        }
 
-    PlainText {
-        id: conventionalDate
-
-        anchors.verticalCenterOffset: -parent.width * 0.18
-        text: wallClock.time.toLocaleDateString(Qt.locale(), Locale.ShortFormat)
-    }
-
-    PlainText {
-        id: decimalHours
-
-        font.pixelSize: parent.width * 0.15
-        anchors.verticalCenterOffset: parent.width * 0.016
-        textFormat: Text.RichText
-        text: getDecimalHours(new Date()).toPrecision(5)
     }
 
     Timer {
