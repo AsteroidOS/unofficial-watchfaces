@@ -1,11 +1,11 @@
 // SPDX-FileCopyrightText: 2022 Ed Beroset <github.com/beroset>
 // SPDX-License-Identifier: LGPL-2.1-or-later
 
-import Nemo.Mce 1.0
-import QtQuick 2.15
-import QtQuick.Shapes 1.15
-import org.asteroid.controls 1.0
-import org.asteroid.utils 1.0
+import Nemo.Mce
+import QtQuick
+import QtQuick.Shapes
+import org.asteroid.controls
+import org.asteroid.utils
 
 Item {
     Component.onCompleted: {
