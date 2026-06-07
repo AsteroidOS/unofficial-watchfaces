@@ -1,20 +1,16 @@
 // SPDX-FileCopyrightText: 2026 Timo Könnecke <github.com/moWerk>
 // SPDX-License-Identifier: BSD-3-Clause
-//
 // Lucida — AsteroidOS watchface
-//
 // Painting on glass. 12 hairline hour indices + 60 minute dots.
 // A single italic Roman XII marks 12. Hour and minute hands are
 // hollow outlines — the wallpaper fills them; they are windows, not
 // objects. A single red hairline second hand with a small balance
 // ring is the only warm accent. No numerals, no date, no logo.
-//
 // Ambient: second hand + minute dots hidden. Just twelve indices,
 // two outlined hands, one italic XII.
-//
 // Font: EB Garamond (SIL OFL 1.1)
 
-import QtQuick 2.15
+import QtQuick
 
 Item {
     id: root
