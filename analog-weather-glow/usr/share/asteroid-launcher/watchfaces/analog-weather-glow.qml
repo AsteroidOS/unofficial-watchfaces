@@ -998,8 +998,8 @@ Item {
             smooth: true
 
             transform: Rotation {
-                origin.x: parent.width / 2
-                origin.y: parent.height / 2
+                origin.x: hourSVG.width / 2
+                origin.y: hourSVG.height / 2
                 angle: hourSVG.toggle24h ? (wallClock.time.getHours() * 15) + (wallClock.time.getMinutes() * 0.25) : (wallClock.time.getHours() * 30) + (wallClock.time.getMinutes() * 0.5)
             }
 
@@ -1016,8 +1016,8 @@ Item {
             smooth: true
 
             transform: Rotation {
-                origin.x: parent.width / 2
-                origin.y: parent.height / 2
+                origin.x: minuteSVG.width / 2
+                origin.y: minuteSVG.height / 2
                 angle: (wallClock.time.getMinutes() * 6) + (wallClock.time.getSeconds() * 6 / 60)
             }
 
@@ -1035,8 +1035,8 @@ Item {
             visible: !displayAmbient && !dockMode.active
 
             transform: Rotation {
-                origin.x: parent.width / 2
-                origin.y: parent.height / 2
+                origin.x: secondSVG.width / 2
+                origin.y: secondSVG.height / 2
                 angle: wallClock.time.getSeconds() * 6
             }
 
