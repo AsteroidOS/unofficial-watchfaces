@@ -1,15 +1,12 @@
 // SPDX-FileCopyrightText: 2026 Timo Könnecke <github.com/moWerk>
 // SPDX-License-Identifier: BSD-3-Clause
-//
 // Magnetic Field — AsteroidOS watchface
-//
 // Iron-filings field in three rings, each stroke tilted toward the
 // hour-hand angle with influence decaying by cos(angular distance).
 // Minute hand sweeps smoothly via 16 ms timer.
-//
 // Font: Space Mono (OFL)
 
-import QtQuick 2.15
+import QtQuick
 
 Item {
     id: root
