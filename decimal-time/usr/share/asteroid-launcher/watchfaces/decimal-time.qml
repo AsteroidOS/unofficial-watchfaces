@@ -1,7 +1,7 @@
 // SPDX-FileCopyrightText: 2021-2024 Ed Beroset <github.com/beroset>
 // SPDX-License-Identifier: LGPL-2.1-or-later
 
-import QtQuick 2.9
+import QtQuick
 
 Item {
     // these three constants describe decimal time
