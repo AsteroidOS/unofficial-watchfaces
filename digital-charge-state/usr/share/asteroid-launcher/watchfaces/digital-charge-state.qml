@@ -104,17 +104,17 @@ Item {
         ShapePath {
             fillColor: "transparent"
             strokeColor: chargeArc.colorArray[chargeArc.chargecolor]
-            strokeWidth: parent.height * 0.02
+            strokeWidth: chargeArc.height * 0.02
             capStyle: ShapePath.RoundCap
             joinStyle: ShapePath.RoundJoin
-            startX: width / 2
-            startY: height * (0.5 - chargeArc.scalefactor)
+            startX: chargeArc.width / 2
+            startY: chargeArc.height * (0.5 - chargeArc.scalefactor)
 
             PathAngleArc {
-                centerX: parent.width / 2
-                centerY: parent.height / 2
-                radiusX: chargeArc.scalefactor * parent.width
-                radiusY: chargeArc.scalefactor * parent.height
+                centerX: chargeArc.width / 2
+                centerY: chargeArc.height / 2
+                radiusX: chargeArc.scalefactor * chargeArc.width
+                radiusY: chargeArc.scalefactor * chargeArc.height
                 startAngle: -90
                 sweepAngle: chargeArc.angle
                 moveToStart: false
