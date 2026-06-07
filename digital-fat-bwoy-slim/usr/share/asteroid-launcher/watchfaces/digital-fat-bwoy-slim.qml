@@ -1,10 +1,10 @@
 // SPDX-FileCopyrightText: 2023 Timo Könnecke <github.com/moWerk>
 // SPDX-License-Identifier: LGPL-2.1-or-later
 
+import Qt5Compat.GraphicalEffects
 // QtQuick must precede Qt5Compat.GraphicalEffects when LinearGradient is used —
 // GraphicalEffects types inherit from QtQuick.Item and require it to be loaded first.
 import QtQuick
-import Qt5Compat.GraphicalEffects
 
 Item {
     id: root
@@ -14,10 +14,9 @@ Item {
     property bool hourEndingOne: use12H.value ? wallClock.time.toLocaleString(Qt.locale(), "hh ap").slice(1, 2) === "1" : wallClock.time.toLocaleString(Qt.locale(), "HH").slice(1, 2) === "1"
     property bool minuteLeadingOne: wallClock.time.toLocaleString(Qt.locale(), "mm").slice(0, 1) === "1"
     property bool minuteEndingOne: wallClock.time.toLocaleString(Qt.locale(), "mm").slice(1, 2) === "1"
+    property real maxSize: Math.min(parent.width, parent.height)
 
-    anchors.centerIn: parent
-    width: parent.width
-    height: parent.height
+    anchors.fill: parent
 
     Text {
         id: dowDisplay
@@ -25,18 +24,21 @@ Item {
         z: 0
         renderType: Text.NativeRendering
         visible: !displayAmbient
-        font.pixelSize: root.height * 0.08
-        font.family: "Outfit"
-        font.styleName: "ExtraLight"
-        font.letterSpacing: -root.height * 0.001
         color: "#ccffffff"
         horizontalAlignment: Text.AlignHCenter
         text: wallClock.time.toLocaleString(Qt.locale(), "dddd").toUpperCase()
         layer.enabled: true
 
+        font {
+            pixelSize: root.maxSize * 0.08
+            family: "Outfit"
+            styleName: "ExtraLight"
+            letterSpacing: -root.maxSize * 0.001
+        }
+
         anchors {
             bottom: root.verticalCenter
-            bottomMargin: root.height * 0.286
+            bottomMargin: root.maxSize * 0.286
             horizontalCenter: root.horizontalCenter
         }
 
@@ -57,21 +59,24 @@ Item {
         z: 4
         renderType: Text.NativeRendering
         visible: use12H.value
-        font.pixelSize: root.height * 0.08
-        font.family: "NASDAQER"
-        font.styleName: "Bold"
         style: Text.Outline
         styleColor: "#ddffffff"
-        font.letterSpacing: root.height * 0.0002
         color: "#22ffffff"
         text: wallClock.time.toLocaleString(Qt.locale(), "ap").toUpperCase()
         layer.enabled: true
 
+        font {
+            pixelSize: root.maxSize * 0.08
+            family: "NASDAQER"
+            styleName: "Bold"
+            letterSpacing: root.maxSize * 0.0002
+        }
+
         anchors {
             left: topRight.right
-            leftMargin: hourEndingOne ? -parent.width * 0.096 : parent.width * 0.02
+            leftMargin: hourEndingOne ? -root.maxSize * 0.096 : root.maxSize * 0.02
             bottom: topRight.bottom
-            bottomMargin: parent.width * 0.038
+            bottomMargin: root.maxSize * 0.038
         }
 
         layer.effect: DropShadow {
@@ -91,14 +96,14 @@ Item {
         z: 1
         visible: false
         fillMode: Image.PreserveAspectFit
-        sourceSize: Qt.size(parent.width * 0.36, parent.height * 0.36)
+        sourceSize: Qt.size(root.maxSize * 0.36, root.maxSize * 0.36)
         source: use12H.value ? imgPath + wallClock.time.toLocaleString(Qt.locale(), "hh ap").slice(0, 1) + ".svg" : imgPath + wallClock.time.toLocaleString(Qt.locale(), "HH").slice(0, 1) + ".svg"
 
         anchors {
             right: parent.horizontalCenter
-            rightMargin: hourLeadingOne ? parent.width * 0.094 : parent.width * 0.004
+            rightMargin: hourLeadingOne ? root.maxSize * 0.094 : root.maxSize * 0.004
             bottom: parent.verticalCenter
-            bottomMargin: -parent.width * 0.084
+            bottomMargin: -root.maxSize * 0.084
         }
 
     }
@@ -109,12 +114,12 @@ Item {
         z: 2
         visible: false
         fillMode: Image.PreserveAspectFit
-        sourceSize: Qt.size(parent.width * 0.36, parent.height * 0.36)
+        sourceSize: Qt.size(root.maxSize * 0.36, root.maxSize * 0.36)
         source: use12H.value ? imgPath + wallClock.time.toLocaleString(Qt.locale(), "hh ap").slice(1, 2) + ".svg" : imgPath + wallClock.time.toLocaleString(Qt.locale(), "HH").slice(1, 2) + ".svg"
 
         anchors {
             left: topLeft.right
-            leftMargin: hourLeadingOne ? hourEndingOne ? -parent.width * 0.14 : -parent.width * 0.092 : hourEndingOne ? -parent.width * 0.094 : -parent.width * 0.064
+            leftMargin: hourLeadingOne ? hourEndingOne ? -root.maxSize * 0.14 : -root.maxSize * 0.092 : hourEndingOne ? -root.maxSize * 0.094 : -root.maxSize * 0.064
             bottom: topLeft.bottom
         }
 
@@ -126,14 +131,14 @@ Item {
         z: 3
         visible: false
         fillMode: Image.PreserveAspectFit
-        sourceSize: Qt.size(parent.width * 0.24, parent.height * 0.24)
+        sourceSize: Qt.size(root.maxSize * 0.24, root.maxSize * 0.24)
         source: imgPath + wallClock.time.toLocaleString(Qt.locale(), "mm").slice(0, 1) + ".svg"
 
         anchors {
             right: parent.horizontalCenter
-            rightMargin: minuteLeadingOne ? -parent.width * 0.164 : -parent.width * 0.172
+            rightMargin: minuteLeadingOne ? -root.maxSize * 0.164 : -root.maxSize * 0.172
             top: parent.verticalCenter
-            topMargin: parent.width * 0.032
+            topMargin: root.maxSize * 0.032
         }
 
     }
@@ -144,12 +149,12 @@ Item {
         z: 4
         visible: false
         fillMode: Image.PreserveAspectFit
-        sourceSize: Qt.size(parent.width * 0.24, parent.height * 0.24)
+        sourceSize: Qt.size(root.maxSize * 0.24, root.maxSize * 0.24)
         source: imgPath + wallClock.time.toLocaleString(Qt.locale(), "mm").slice(1, 2) + ".svg"
 
         anchors {
             left: bottomLeft.right
-            leftMargin: minuteLeadingOne ? -parent.width * 0.065 : minuteEndingOne ? -parent.width * 0.062 : -parent.width * 0.04
+            leftMargin: minuteLeadingOne ? -root.maxSize * 0.065 : minuteEndingOne ? -root.maxSize * 0.062 : -root.maxSize * 0.04
             bottom: bottomLeft.bottom
         }
 
@@ -279,20 +284,23 @@ Item {
         z: 0
         renderType: Text.NativeRendering
         visible: !displayAmbient
-        font.pixelSize: root.height * 0.2
-        font.family: "Outfit"
-        font.styleName: "ExtraLight"
-        font.letterSpacing: -root.height * 0.008
         color: "#ccffffff"
         horizontalAlignment: Text.AlignHCenter
         text: wallClock.time.toLocaleString(Qt.locale(), "dd").toUpperCase()
         layer.enabled: true
 
+        font {
+            pixelSize: root.maxSize * 0.2
+            family: "Outfit"
+            styleName: "ExtraLight"
+            letterSpacing: -root.maxSize * 0.008
+        }
+
         anchors {
             top: root.verticalCenter
-            topMargin: root.height * 0.06
+            topMargin: root.maxSize * 0.06
             right: root.horizontalCenter
-            rightMargin: root.height * 0.112
+            rightMargin: root.maxSize * 0.112
         }
 
         layer.effect: DropShadow {
@@ -312,8 +320,8 @@ Item {
         z: 0
         renderType: Text.NativeRendering
         visible: !displayAmbient
-        font.pixelSize: root.height * 0.08
-        font.letterSpacing: -root.height * 0.001
+        font.pixelSize: root.maxSize * 0.08
+        font.letterSpacing: -root.maxSize * 0.001
         font.family: "Outfit"
         font.styleName: "ExtraLight"
         color: "#ccffffff"
@@ -323,7 +331,7 @@ Item {
 
         anchors {
             top: root.verticalCenter
-            topMargin: root.height * 0.286
+            topMargin: root.maxSize * 0.286
             horizontalCenter: root.horizontalCenter
         }
 
