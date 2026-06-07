@@ -6,7 +6,7 @@
 // SPDX-FileCopyrightText: 2012 Arto Jalkanen <ajalkane@gmail.com>
 // SPDX-License-Identifier: LGPL-2.1-or-later
 
-import QtQuick 2.9
+import QtQuick
 
 Item {
     id: root
@@ -207,10 +207,9 @@ Item {
     }
 
     Connections {
-        target: wallClock
-        onTimeChanged: {
+        function onTimeChanged() {
             if (!visible)
-                return ;
+                return;
 
             var h = wallClock.time.getHours();
             var min = wallClock.time.getMinutes();
@@ -218,6 +217,8 @@ Item {
             hourRot.angle = h * 30 + min * 0.5;
             minuteRot.angle = min * 6 + sec * 6 / 60;
         }
+
+        target: wallClock
     }
 
     Connections {
