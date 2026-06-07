@@ -82,7 +82,6 @@ Item {
     Canvas {
         id: numberStrokes
 
-        z: 0
         anchors.fill: parent
         renderStrategy: Canvas.Cooperative
         onPaint: {
@@ -113,7 +112,6 @@ Item {
         property int hour: 0
         property int minute: 0
 
-        z: 1
         anchors.fill: parent
         renderStrategy: Canvas.Cooperative
         onPaint: {
@@ -143,7 +141,6 @@ Item {
 
         property int minute: 0
 
-        z: 2
         anchors.fill: parent
         renderStrategy: Canvas.Cooperative
         onPaint: {
@@ -171,7 +168,6 @@ Item {
     Rectangle {
         id: secondDot
 
-        z: 3
         visible: !displayAmbient
         anchors.centerIn: parent
         width: parent.height * 0.024 * 2
@@ -185,7 +181,6 @@ Item {
 
         property int second: 0
 
-        z: 4
         visible: !displayAmbient
         anchors.fill: parent
         renderStrategy: Canvas.Cooperative
@@ -210,7 +205,6 @@ Item {
     Rectangle {
         id: secondCap
 
-        z: 5
         visible: !displayAmbient
         anchors.centerIn: parent
         width: parent.height * 0.012 * 2
@@ -221,7 +215,6 @@ Item {
 
     // ── Day of week — plain Text replaces Canvas ──────────────────────────────
     Text {
-        z: 3
         color: Qt.rgba(1, 1, 1, 0.85)
         style: Text.Outline
         styleColor: Qt.rgba(0, 0, 0, 0.4)
@@ -242,7 +235,6 @@ Item {
 
     // ── AM/PM — plain Text replaces Canvas ───────────────────────────────────
     Text {
-        z: 3
         visible: use12H.value
         color: Qt.rgba(1, 1, 1, 0.85)
         style: Text.Outline
@@ -265,7 +257,6 @@ Item {
 
     // ── Date — plain Text replaces Canvas ────────────────────────────────────
     Text {
-        z: 3
         color: Qt.rgba(1, 1, 1, 0.85)
         style: Text.Outline
         styleColor: Qt.rgba(0, 0, 0, 0.4)
@@ -286,7 +277,6 @@ Item {
 
     // ── Month — plain Text replaces Canvas ───────────────────────────────────
     Text {
-        z: 3
         color: Qt.rgba(1, 1, 1, 0.85)
         style: Text.Outline
         styleColor: Qt.rgba(0, 0, 0, 0.4)
