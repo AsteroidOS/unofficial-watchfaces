@@ -1,14 +1,11 @@
-/*
- * Horizon line across the center; big JetBrains Mono HH:MM sits above it.
- * A gnomon shadow arm sweeps with the seconds, tinted by time of day
- * (amber at noon, indigo at midnight). Date below the horizon.
- *
- * Ambient: shadow hidden; time and date remain.
- *
- * Font: JetBrains Mono (OFL)
- */
 // SPDX-FileCopyrightText: 2026 Timo Könnecke <github.com/moWerk>
 // SPDX-License-Identifier: BSD-3-Clause
+// Sundial — AsteroidOS watchface
+// Horizon line across the center; big JetBrains Mono HH:MM sits above it.
+// A gnomon shadow arm sweeps with the seconds, tinted by time of day
+// (amber at noon, indigo at midnight). Date below the horizon.
+// Ambient: shadow hidden; time and date remain.
+// Font: JetBrains Mono (OFL)
 
 import QtQuick 2.15
 
