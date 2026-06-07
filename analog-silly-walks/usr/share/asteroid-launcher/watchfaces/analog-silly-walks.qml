@@ -137,8 +137,8 @@ Item {
         transform: Rotation {
             id: hourRot
 
-            origin.x: root.width / 2
-            origin.y: root.height / 2
+            origin.x: hourSVG.width / 2
+            origin.y: hourSVG.height / 2
         }
 
     }
@@ -155,8 +155,8 @@ Item {
         transform: Rotation {
             id: minuteRot
 
-            origin.x: root.width / 2
-            origin.y: root.height / 2
+            origin.x: minuteSVG.width / 2
+            origin.y: minuteSVG.height / 2
         }
 
     }
@@ -189,8 +189,8 @@ Item {
         transform: Rotation {
             id: secondRot
 
-            origin.x: root.width / 2
-            origin.y: root.height / 2
+            origin.x: secondSVG.width / 2
+            origin.y: secondSVG.height / 2
         }
 
     }
