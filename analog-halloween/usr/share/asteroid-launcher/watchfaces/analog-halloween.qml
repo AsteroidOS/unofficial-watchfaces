@@ -11,8 +11,12 @@
 import QtQuick
 
 Item {
-    property string imgPath: "../watchfaces-img/analog-halloween-"
+    id: root
 
+    property string imgPath: "../watchfaces-img/analog-halloween-"
+    property real maxSize: Math.min(width, height)
+
+    anchors.fill: parent
     Component.onCompleted: {
         var h = wallClock.time.getHours();
         var min = wallClock.time.getMinutes();
@@ -20,86 +24,89 @@ Item {
         minuteRot.angle = min * 6;
     }
 
-    Repeater {
-        model: 12
+    Item {
+        id: faceBox
 
-        Rectangle {
-            id: hourTicks
+        width: root.maxSize
+        height: root.maxSize
+        anchors.centerIn: parent
 
-            property real rotM: (index - 3) / 12
-            property real centerX: parent.width / 2 - width / 2
-            property real centerY: parent.height / 2 - height / 2
+        Repeater {
+            model: 12
 
-            z: 1
-            antialiasing: true
-            x: centerX + Math.cos(rotM * 2 * Math.PI) * parent.width * 0.46
-            y: centerY + Math.sin(rotM * 2 * Math.PI) * parent.width * 0.46
-            color: "orange"
-            width: parent.width * 0.02
-            height: parent.height * 0.03
-            opacity: 0.9
+            Rectangle {
+                id: hourTicks
 
-            transform: Rotation {
-                origin.x: width / 2
-                origin.y: height / 2
-                angle: (index) * 30
+                property real rotM: (index - 3) / 12
+                property real centerX: parent.width / 2 - width / 2
+                property real centerY: parent.height / 2 - height / 2
+
+                z: 1
+                antialiasing: true
+                x: centerX + Math.cos(rotM * 2 * Math.PI) * parent.width * 0.46
+                y: centerY + Math.sin(rotM * 2 * Math.PI) * parent.width * 0.46
+                color: "orange"
+                width: parent.width * 0.02
+                height: parent.height * 0.03
+                opacity: 0.9
+
+                transform: Rotation {
+                    origin.x: width / 2
+                    origin.y: height / 2
+                    angle: (index) * 30
+                }
+
             }
 
         }
 
-    }
+        Image {
+            id: hourSVG
 
-    Image {
-        id: hourSVG
+            z: 2
+            source: imgPath + "hour.svg"
+            anchors.fill: parent
 
-        z: 2
-        source: imgPath + "hour.svg"
-        anchors.centerIn: parent
-        width: parent.width
-        height: parent.height
+            transform: Rotation {
+                id: hourRot
 
-        transform: Rotation {
-            id: hourRot
+                origin.x: hourSVG.width / 2
+                origin.y: hourSVG.height / 2
+            }
 
-            origin.x: hourSVG.width / 2
-            origin.y: hourSVG.height / 2
         }
 
-    }
+        Image {
+            id: minuteSVG
 
-    Image {
-        id: minuteSVG
+            z: 3
+            source: imgPath + "minute.svg"
+            anchors.fill: parent
 
-        z: 3
-        source: imgPath + "minute.svg"
-        anchors.centerIn: parent
-        width: parent.width
-        height: parent.height
+            transform: Rotation {
+                id: minuteRot
 
-        transform: Rotation {
-            id: minuteRot
+                origin.x: minuteSVG.width / 2
+                origin.y: minuteSVG.height / 2
+            }
 
-            origin.x: minuteSVG.width / 2
-            origin.y: minuteSVG.height / 2
         }
 
-    }
+        Image {
+            id: secondSVG
 
-    Image {
-        id: secondSVG
+            z: 4
+            visible: !displayAmbient
+            source: imgPath + "second.svg"
+            anchors.fill: parent
 
-        z: 4
-        visible: !displayAmbient
-        source: imgPath + "second.svg"
-        anchors.centerIn: parent
-        width: parent.width
-        height: parent.height
+            transform: Rotation {
+                id: secondRot
 
-        transform: Rotation {
-            id: secondRot
+                origin.x: secondSVG.width / 2
+                origin.y: secondSVG.height / 2
+            }
 
-            origin.x: secondSVG.width / 2
-            origin.y: secondSVG.height / 2
         }
 
     }
@@ -118,7 +125,7 @@ Item {
     Connections {
         function onTimeChanged() {
             if (!visible)
-                return;
+                return ;
 
             var h = wallClock.time.getHours();
             var min = wallClock.time.getMinutes();
