@@ -16,7 +16,6 @@ Item {
     property real maxSize: Math.min(width, height)
 
     anchors.fill: parent
-
     Component.onCompleted: {
         var h = wallClock.time.getHours();
         var min = wallClock.time.getMinutes();
@@ -312,7 +311,7 @@ Item {
     Connections {
         function onTimeChanged() {
             if (!visible)
-                return;
+                return ;
 
             var h = wallClock.time.getHours();
             var min = wallClock.time.getMinutes();
