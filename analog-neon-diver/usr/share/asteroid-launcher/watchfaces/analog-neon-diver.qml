@@ -21,8 +21,8 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-import QtGraphicalEffects 1.15
-import QtQuick 2.9
+import Qt5Compat.GraphicalEffects
+import QtQuick
 
 Item {
     property string imgPath: "../watchfaces-img/analog-neon-diver-"
@@ -30,7 +30,6 @@ Item {
     Image {
         id: backplate
 
-        z: 0
         source: imgPath + "backplate.svg"
         antialiasing: true
         anchors.centerIn: parent
@@ -42,7 +41,6 @@ Item {
         Image {
             id: modeDisplay
 
-            z: 0
             source: hourSVG.toggle24h ? imgPath + "backplate-24hindicator.svg" : imgPath + "backplate-12hindicator.svg"
             antialiasing: true
             anchors.centerIn: parent
@@ -82,7 +80,6 @@ Item {
             property real centerX: parent.width / 2 - width / 2
             property real centerY: parent.height / 2 - height / 2
 
-            z: 1
             visible: index % 5 != 0
             antialiasing: true
             x: centerX + Math.cos(rotM * 2 * Math.PI) * parent.width * 0.465
@@ -112,7 +109,6 @@ Item {
             property real centerX: parent.width / 2 - width / 2
             property real centerY: parent.height / 2 - height / 2
 
-            z: 1
             antialiasing: true
             font.pixelSize: parent.height * 0.066
             font.letterSpacing: parent.width * 0.004
@@ -136,7 +132,6 @@ Item {
     Image {
         id: asteroidLogo
 
-        z: 0
         visible: !displayAmbient
         source: "../watchfaces-img/asteroid-logo.svg"
         antialiasing: true
@@ -152,7 +147,6 @@ Item {
         Text {
             id: asteroidSlogan
 
-            z: 1
             visible: !displayAmbient
             font.pixelSize: parent.height * 0.315
             font.family: "Raleway"
@@ -172,7 +166,6 @@ Item {
     Text {
         id: dowDisplay
 
-        z: 1
         antialiasing: true
         font.pixelSize: parent.height * 0.046
         font.family: "League Spartan"
@@ -205,7 +198,6 @@ Item {
 
         property bool toggle24h: false
 
-        z: 2
         source: hourSVG.toggle24h ? imgPath + "hour-24h.svg" : imgPath + "hour-12h.svg"
         antialiasing: true
         anchors.centerIn: parent
@@ -248,7 +240,6 @@ Item {
     Image {
         id: minuteSVG
 
-        z: 3
         source: imgPath + "minute.svg"
         antialiasing: true
         anchors.centerIn: parent
@@ -276,7 +267,6 @@ Item {
     Image {
         id: secondSVG
 
-        z: 4
         antialiasing: true
         visible: !displayAmbient
         source: imgPath + "second.svg"
