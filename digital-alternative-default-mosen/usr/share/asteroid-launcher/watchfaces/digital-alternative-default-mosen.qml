@@ -29,8 +29,7 @@ Item {
         ctx.shadowBlur = faceBox.height * 0.0156;
     }
 
-anchors.fill: parent
-
+    anchors.fill: parent
     Component.onCompleted: {
         var hour = wallClock.time.getHours();
         var minute = wallClock.time.getMinutes();
@@ -76,7 +75,7 @@ anchors.fill: parent
             onPaint: {
                 var ctx = getContext("2d");
                 prepareContext(ctx);
-                ctx.font = "64 " + height * 0.385 + "px Roboto";
+                ctx.font = "bold " + height * 0.385 + "px Roboto";
                 ctx.fillText(twoDigits(hour), width * 0.3, height * 0.54);
             }
         }
@@ -94,7 +93,7 @@ anchors.fill: parent
                 var ctx = getContext("2d");
                 prepareContext(ctx);
                 ctx.shadowBlur = parent.height * 0.00937; //3 px on 320x320
-                ctx.font = "24 " + height * 0.222 + "px Roboto";
+                ctx.font = "300 " + height * 0.222 + "px Roboto";
                 ctx.fillText(twoDigits(minute), width * 0.642, height * 0.47);
             }
         }
@@ -114,7 +113,7 @@ anchors.fill: parent
                 ctx.shadowBlur = parent.height * 0.00625; //2 px on 320x320
                 ctx.textAlign = "right";
                 ctx.textBaseline = "right";
-                ctx.font = "22 " + height * 0.111 + "px Roboto";
+                ctx.font = "300 " + height * 0.111 + "px Roboto";
                 ctx.fillText(twoDigits(second), width * 0.902, height * 0.419);
             }
         }
@@ -135,7 +134,7 @@ anchors.fill: parent
                 ctx.shadowBlur = parent.height * 0.00625; //2 px on 320x320
                 ctx.textAlign = "right";
                 ctx.textBaseline = "right";
-                ctx.font = "14 " + height * 0.08 + "px Raleway";
+                ctx.font = "300 " + height * 0.08 + "px Raleway";
                 ctx.fillText(wallClock.time.toLocaleString(Qt.locale(), "AP").slice(0, 2), width * 0.902, height * 0.5135);
             }
         }
@@ -156,7 +155,7 @@ anchors.fill: parent
                 ctx.textAlign = "center";
                 ctx.textBaseline = "middle";
                 var ctx = getContext("2d");
-                ctx.font = "20 " + height * 0.111 + "px Raleway";
+                ctx.font = "300 " + height * 0.111 + "px Raleway";
                 ctx.fillText(wallClock.time.toLocaleString(Qt.locale(), "MMM").slice(0, 3).toUpperCase(), width * 0.642, height * 0.615);
             }
         }
@@ -177,7 +176,7 @@ anchors.fill: parent
                 ctx.textAlign = "right";
                 ctx.textBaseline = "right";
                 var ctx = getContext("2d");
-                ctx.font = "42 " + height * 0.112 + "px Roboto";
+                ctx.font = "500 " + height * 0.112 + "px Roboto";
                 ctx.fillText(wallClock.time.toLocaleString(Qt.locale(), "dd"), width * 0.902, height * 0.612);
             }
         }
