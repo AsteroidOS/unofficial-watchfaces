@@ -8,7 +8,7 @@
 // Ambient: current-minute tick + quarter marks + hour digit only.
 // Fonts: Major Mono Display (OFL), Space Mono (OFL)
 
-import QtQuick 2.15
+import QtQuick
 
 Item {
     id: root
