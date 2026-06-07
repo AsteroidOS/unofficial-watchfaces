@@ -25,7 +25,7 @@ Item {
         var sec = wallClock.time.getSeconds();
         hh.text = root.pad(h);
         mm.text = root.pad(min);
-        hh.wobbleOffset = Math.sin(sec * Math.PI / 30) * (root.width * 0.018);
+        hh.wobbleOffset = Math.sin(sec * Math.PI / 30) * (watchfaceRoot.width * 0.018);
         mm.wobbleOffset = hh.wobbleOffset;
         dowText.text = wallClock.time.toLocaleString(Qt.locale(), "dddd").toUpperCase();
         dateText.text = root.pad(wallClock.time.getDate()) + " " + wallClock.time.toLocaleString(Qt.locale(), "MMM").toUpperCase();
@@ -55,8 +55,8 @@ Item {
 
             font {
                 family: "Space Mono"
-                pixelSize: root.height * 0.05
-                letterSpacing: root.width * 0.018
+                pixelSize: watchfaceRoot.height * 0.05
+                letterSpacing: watchfaceRoot.width * 0.018
             }
 
         }
@@ -90,7 +90,7 @@ Item {
 
                 font {
                     family: "Bungee"
-                    pixelSize: root.height * 0.32
+                    pixelSize: watchfaceRoot.height * 0.32
                 }
 
                 Behavior on wobbleOffset {
@@ -120,7 +120,7 @@ Item {
 
                 font {
                     family: "Bungee"
-                    pixelSize: root.height * 0.32
+                    pixelSize: watchfaceRoot.height * 0.32
                 }
 
                 Behavior on wobbleOffset {
@@ -174,7 +174,7 @@ Item {
 
             font {
                 family: "Space Mono"
-                pixelSize: root.height * 0.05
+                pixelSize: watchfaceRoot.height * 0.05
                 letterSpacing: 2
             }
 
@@ -198,7 +198,7 @@ Item {
             var h = wallClock.time.getHours();
             var min = wallClock.time.getMinutes();
             var sec = wallClock.time.getSeconds();
-            var wobble = displayAmbient ? 0 : Math.sin(sec * Math.PI / 30) * (root.width * 0.04);
+            var wobble = displayAmbient ? 0 : Math.sin(sec * Math.PI / 30) * (watchfaceRoot.width * 0.04);
             hh.text = root.pad(h);
             mm.text = root.pad(min);
             hh.wobbleOffset = wobble;
