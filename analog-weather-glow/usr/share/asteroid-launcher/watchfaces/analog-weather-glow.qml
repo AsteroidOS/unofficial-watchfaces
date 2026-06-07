@@ -11,10 +11,10 @@
 import Connman
 import Nemo.Configuration
 import Nemo.Mce
+import Qt5Compat.GraphicalEffects
 // QtQuick must precede Qt5Compat.GraphicalEffects when ColorOverlay is used —
 // GraphicalEffects types inherit from QtQuick.Item and require it to be loaded first.
 import QtQuick
-import Qt5Compat.GraphicalEffects
 import QtQuick.Shapes
 import QtSensors
 import org.asteroid.controls
@@ -96,17 +96,17 @@ Item {
         visible: dockMode.active
 
         Shape {
-                id: chargeArc
+            id: chargeArc
 
-                property real angle: batteryChargePercentage.percent * 360 / 100
-                property real arcStrokeWidth: 0.016
-                property real scalefactor: 0.39 - (arcStrokeWidth / 2)
-                property var chargecolor: Math.floor(batteryChargePercentage.percent / 33.35)
-                readonly property var colorArray: ["red", "yellow", Qt.rgba(0.318, 1, 0.051, 0.9)]
+            property real angle: batteryChargePercentage.percent * 360 / 100
+            property real arcStrokeWidth: 0.016
+            property real scalefactor: 0.39 - (arcStrokeWidth / 2)
+            property var chargecolor: Math.floor(batteryChargePercentage.percent / 33.35)
+            readonly property var colorArray: ["red", "yellow", Qt.rgba(0.318, 1, 0.051, 0.9)]
 
-                width: root.maxSize
-                height: root.maxSize
-                anchors.centerIn: parent
+            width: root.maxSize
+            height: root.maxSize
+            anchors.centerIn: parent
 
             ShapePath {
                 fillColor: "transparent"
@@ -1046,16 +1046,6 @@ Item {
 
         }
 
-    }
-
-    Connections {
-        function onTimeChanged() {
-            if (!visible)
-                return ;
-
-        }
-
-        target: wallClock
     }
 
     Connections {
