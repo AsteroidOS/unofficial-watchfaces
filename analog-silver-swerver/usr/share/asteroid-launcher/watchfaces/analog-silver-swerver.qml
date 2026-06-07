@@ -23,6 +23,7 @@ Item {
     property string accColor: !displayAmbient ? "#aeacb9" : "#aaaeacb9"
     property string accColor2: !displayAmbient ? "#F55D3E" : "#88F55D3E"
     property string imgPath: "../watchfaces-img/analog-silver-swerver-"
+    property real maxSize: Math.min(width, height)
     property real rad: 0.01745
 
     anchors.fill: parent
@@ -34,7 +35,9 @@ Item {
     Item {
         id: faceBox
 
-        anchors.fill: parent
+        width: Math.min(parent.width, parent.height)
+        height: width
+        anchors.centerIn: parent
         // DropShadow on all faceBox items
         layer.enabled: true
 
@@ -62,17 +65,17 @@ Item {
                 Shapes.ShapePath {
                     fillColor: "transparent"
                     strokeColor: chargeArc.colorArray[chargeArc.chargecolor]
-                    strokeWidth: parent.height * chargeArc.arcStrokeWidth
+                    strokeWidth: chargeArc.height * chargeArc.arcStrokeWidth
                     capStyle: ShapePath.RoundCap
                     joinStyle: ShapePath.MiterJoin
-                    startX: width / 2
-                    startY: height * (0.5 - chargeArc.scalefactor)
+                    startX: chargeArc.width / 2
+                    startY: chargeArc.height * (0.5 - chargeArc.scalefactor)
 
                     PathAngleArc {
-                        centerX: parent.width / 2
-                        centerY: parent.height / 2
-                        radiusX: chargeArc.scalefactor * parent.width
-                        radiusY: chargeArc.scalefactor * parent.height
+                        centerX: chargeArc.width / 2
+                        centerY: chargeArc.height / 2
+                        radiusX: chargeArc.scalefactor * chargeArc.width
+                        radiusY: chargeArc.scalefactor * chargeArc.height
                         startAngle: -90
                         sweepAngle: chargeArc.angle
                         moveToStart: false
@@ -183,7 +186,7 @@ Item {
                 height: width
                 radius: width / 2
                 color: "#22ffffff"
-                border.width: root.height * 0.002
+                border.width: root.maxSize * 0.002
                 border.color: lowColor
                 opacity: !displayAmbient ? 1 : 0.3
             }
@@ -198,7 +201,7 @@ Item {
                     var ctx = getContext("2d");
                     var day = wallClock.time.getDay();
                     ctx.reset();
-                    ctx.lineWidth = root.height * 0.005;
+                    ctx.lineWidth = root.maxSize * 0.005;
                     ctx.lineCap = "round";
                     ctx.strokeStyle = accColor;
                     ctx.beginPath();
@@ -227,7 +230,7 @@ Item {
                     text: new Date(2017, 1, index).toLocaleString(Qt.locale(), "ddd").slice(0, 2).toUpperCase()
 
                     font {
-                        pixelSize: currentDayHighlight ? root.height * 0.036 : root.height * 0.03
+                        pixelSize: currentDayHighlight ? root.maxSize * 0.036 : root.maxSize * 0.03
                         letterSpacing: parent.width * 0.004
                         family: "Noto Sans"
                         styleName: currentDayHighlight ? "Black" : "SemiCondensed Bold"
@@ -287,7 +290,7 @@ Item {
                 height: width
                 radius: width / 2
                 color: "#22ffffff"
-                border.width: root.height * 0.002
+                border.width: root.maxSize * 0.002
                 border.color: lowColor
                 opacity: !displayAmbient ? 1 : 0.3
             }
@@ -302,7 +305,7 @@ Item {
                     var ctx = getContext("2d");
                     var m = Number(wallClock.time.toLocaleString(Qt.locale(), "MM"));
                     ctx.reset();
-                    ctx.lineWidth = root.height * 0.005;
+                    ctx.lineWidth = root.maxSize * 0.005;
                     ctx.lineCap = "round";
                     ctx.strokeStyle = accColor;
                     ctx.beginPath();
@@ -330,7 +333,7 @@ Item {
                     text: index === 0 ? 12 : index
 
                     font {
-                        pixelSize: currentMonthHighlight ? root.height * 0.036 : root.height * 0.03
+                        pixelSize: currentMonthHighlight ? root.maxSize * 0.036 : root.maxSize * 0.03
                         letterSpacing: parent.width * 0.004
                         family: "Noto Sans"
                         styleName: currentMonthHighlight ? "Black" : "Condensed Bold"
@@ -393,11 +396,11 @@ Item {
                     ctx.fillStyle = "#22ffffff";
                     ctx.arc(parent.width / 2, parent.height / 2, parent.width * 0.45, 270 * rad, 360, false);
                     ctx.strokeStyle = lowColor;
-                    ctx.lineWidth = root.height * 0.002;
+                    ctx.lineWidth = root.maxSize * 0.002;
                     ctx.stroke();
                     ctx.fill();
                     ctx.closePath();
-                    ctx.lineWidth = root.height * 0.005;
+                    ctx.lineWidth = root.maxSize * 0.005;
                     ctx.lineCap = "round";
                     ctx.strokeStyle = batteryBox.value < 30 ? accColor2 : "#2E933C";
                     ctx.beginPath();
@@ -462,7 +465,9 @@ Item {
     Item {
         id: handBox
 
-        anchors.fill: parent
+        width: Math.min(parent.width, parent.height)
+        height: width
+        anchors.centerIn: parent
 
         Image {
             id: hourSVG
@@ -472,9 +477,9 @@ Item {
             layer.enabled: true
 
             transform: Rotation {
-                origin.x: minuteSVG.width / 2
-                origin.y: minuteSVG.height / 2
-                angle: (wallClock.time.getMinutes() * 6) + (wallClock.time.getSeconds() * 6 / 60)
+                origin.x: hourSVG.width / 2
+                origin.y: hourSVG.height / 2
+                angle: (wallClock.time.getHours() * 30) + (wallClock.time.getMinutes() * 0.5)
             }
 
             layer.effect: DropShadow {
@@ -496,9 +501,9 @@ Item {
             layer.enabled: true
 
             transform: Rotation {
-                origin.x: secondSVG.width / 2
-                origin.y: secondSVG.height / 2
-                angle: (wallClock.time.getSeconds() * 6)
+                origin.x: minuteSVG.width / 2
+                origin.y: minuteSVG.height / 2
+                angle: (wallClock.time.getMinutes() * 6) + (wallClock.time.getSeconds() * 6 / 60)
             }
 
             layer.effect: DropShadow {
@@ -518,11 +523,10 @@ Item {
             visible: !displayAmbient
             source: imgPath + "second.svg"
             anchors.fill: parent
-            layer.enabled: true
 
             transform: Rotation {
-                origin.x: parent.width / 2
-                origin.y: parent.height / 2
+                origin.x: secondSVG.width / 2
+                origin.y: secondSVG.height / 2
                 angle: (wallClock.time.getSeconds() * 6)
             }
 
