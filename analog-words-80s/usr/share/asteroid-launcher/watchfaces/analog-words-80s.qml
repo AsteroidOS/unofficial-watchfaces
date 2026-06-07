@@ -60,8 +60,8 @@ Item {
         layer.enabled: true
 
         transform: Rotation {
-            origin.x: root.width / 2
-            origin.y: root.height / 2
+            origin.x: hourSVG.width / 2
+            origin.y: hourSVG.height / 2
             angle: (wallClock.time.getHours() * 30) + (wallClock.time.getMinutes() * 0.5)
         }
 
@@ -90,8 +90,8 @@ Item {
         }
 
         transform: Rotation {
-            origin.x: root.width / 2
-            origin.y: root.height / 2
+            origin.x: minuteSVG.width / 2
+            origin.y: minuteSVG.height / 2
             angle: (wallClock.time.getMinutes() * 6) + (wallClock.time.getSeconds() * 6 / 60)
         }
 
@@ -121,8 +121,8 @@ Item {
         }
 
         transform: Rotation {
-            origin.x: root.width / 2
-            origin.y: root.height / 2
+            origin.x: secondSVG.width / 2
+            origin.y: secondSVG.height / 2
             angle: (wallClock.time.getSeconds() * 6)
         }
 
