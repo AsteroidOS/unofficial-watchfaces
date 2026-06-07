@@ -160,14 +160,4 @@ Item {
 
     }
 
-    Connections {
-        function onTimeChanged() {
-            if (!visible)
-                return ;
-
-        }
-
-        target: wallClock
-    }
-
 }
