@@ -49,13 +49,6 @@ Item {
             anchors.fill: parent
             visible: nightstandMode.active
 
-            layer {
-                enabled: true
-                samples: 4
-                smooth: true
-                textureSize: Qt.size(nightstandMode.width * 2, nightstandMode.height * 2)
-            }
-
             Shapes.Shape {
                 id: chargeArc
 
