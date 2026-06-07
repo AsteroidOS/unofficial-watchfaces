@@ -7,11 +7,13 @@ import QtQuick
 Item {
     id: root
 
-    property real topbottomMargin: root.height * 0.022
-    property real leftrightMargin: -root.height * 0.018
-    property var numeralSize: Qt.size(root.width * 0.32, root.height * 0.32)
+    property real maxSize: Math.min(width, height)
+    property real topbottomMargin: maxSize * 0.022
+    property real leftrightMargin: -maxSize * 0.018
+    property var numeralSize: Qt.size(maxSize * 0.32, maxSize * 0.32)
     property string imagePath: "../watchfaces-img/digital-numeral-unity-"
 
+    anchors.fill: parent
     layer.enabled: true
 
     Image {
