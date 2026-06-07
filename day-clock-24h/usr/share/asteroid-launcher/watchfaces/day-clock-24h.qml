@@ -7,8 +7,8 @@
 // SPDX-License-Identifier: LGPL-2.1-or-later
 // Based on kitt by velox/jgibbon regarding arcs and image embedding.
 
-import QtGraphicalEffects 1.15
-import QtQuick 2.9
+import Qt5Compat.GraphicalEffects
+import QtQuick
 
 Item {
     id: root
