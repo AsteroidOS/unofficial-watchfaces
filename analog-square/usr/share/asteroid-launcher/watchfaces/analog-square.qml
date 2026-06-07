@@ -1,7 +1,7 @@
 // SPDX-FileCopyrightText: 2025 Ed Beroset <github.com/beroset>
 // SPDX-License-Identifier: LGPL-2.1-or-later
 
-import QtQuick 2.15
+import QtQuick
 
 Item {
     property string imgPath: "../watchfaces-img/analog-square-"
