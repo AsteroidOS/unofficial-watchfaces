@@ -21,7 +21,6 @@ Item {
     }
 
     anchors.fill: parent
-
     Component.onCompleted: {
         hourMinuteCanvas.requestPaint();
         dateCanvas.requestPaint();
@@ -49,7 +48,7 @@ Item {
                     text = wallClock.time.toLocaleString(Qt.locale(), "hh:mm ap").substring(0, 5);
                 else
                     text = wallClock.time.toLocaleString(Qt.locale(), "HH:mm");
-                ctx.font = "50 " + parent.height * 0.25 + "px " + "GeneraleMono";
+                ctx.font = "500 " + parent.height * 0.25 + "px GeneraleMono";
                 ctx.fillText(text, parent.width * 0.5, parent.height * 0.546);
             }
         }
@@ -70,7 +69,7 @@ Item {
                 text = wallClock.time.toLocaleString(Qt.locale(), "AP");
                 var fontSize = parent.height * 0.072;
                 var fontFamily = "GeneraleMono";
-                ctx.font = "0 " + fontSize + px + fontFamily;
+                ctx.font = "300 " + fontSize + px + fontFamily;
                 if (use12H.value)
                     ctx.fillText(text, centerX, centerY + verticalOffset);
 
@@ -86,7 +85,7 @@ Item {
             onPaint: {
                 var ctx = getContext("2d");
                 prepareContext(ctx);
-                ctx.font = "0 " + parent.height * 0.0725 + "px " + "GeneraleMono";
+                ctx.font = "300 " + parent.height * 0.0725 + "px GeneraleMono";
                 ctx.fillText(wallClock.time.toLocaleString(Qt.locale(), "ddd dd MMM"), parent.width * 0.5, parent.height * 0.692);
             }
         }
