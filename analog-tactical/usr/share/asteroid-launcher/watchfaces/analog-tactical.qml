@@ -11,7 +11,7 @@
 // Main attraction is the seconds arm advancing over the clock centre.
 // Hour and minute arms feature distinct outer and centre segments.
 
-import QtQuick 2.9
+import QtQuick
 
 Item {
     Component.onCompleted: {
