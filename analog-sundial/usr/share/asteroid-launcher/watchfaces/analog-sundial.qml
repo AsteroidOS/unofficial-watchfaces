@@ -7,7 +7,7 @@
 // Ambient: shadow hidden; time and date remain.
 // Font: JetBrains Mono (OFL)
 
-import QtQuick 2.15
+import QtQuick
 
 Item {
     id: root
