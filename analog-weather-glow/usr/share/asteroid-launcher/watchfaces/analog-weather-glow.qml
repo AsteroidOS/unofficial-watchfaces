@@ -96,13 +96,6 @@ Item {
         anchors.fill: parent
         visible: dockMode.active
 
-        layer {
-            enabled: true
-            samples: 4
-            smooth: true
-            textureSize: Qt.size(dockMode.width * 2, dockMode.height * 2)
-        }
-
         Shape {
             id: chargeArc
 
