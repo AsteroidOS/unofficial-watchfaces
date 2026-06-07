@@ -7,10 +7,10 @@
 // SPDX-FileCopyrightText: 2012 Arto Jalkanen <ajalkane@gmail.com>
 // SPDX-License-Identifier: LGPL-2.1-or-later
 
-import Nemo.Mce 1.0
-import QtGraphicalEffects 1.15
-import QtQuick 2.15
-import QtQuick.Shapes 1.15
+import Nemo.Mce
+import Qt5Compat.GraphicalEffects
+import QtQuick
+import QtQuick.Shapes
 
 Item {
     id: root
