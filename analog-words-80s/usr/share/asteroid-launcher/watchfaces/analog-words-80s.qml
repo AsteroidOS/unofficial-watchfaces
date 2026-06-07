@@ -14,12 +14,11 @@ Item {
     property real maxSize: Math.min(width, height)
 
     anchors.fill: parent
-
     Component.onCompleted: {
         root.currentHour = wallClock.time.toLocaleString(Qt.locale(), "hh ap").slice(0, 2);
         root.hourColor = Math.floor(Math.random() * neonColor.length);
     }
-    
+
     Item {
         id: faceBox
 
@@ -94,7 +93,6 @@ Item {
             width: parent.width
             height: parent.width
             layer.enabled: true
-
             anchors.centerIn: parent
 
             transform: Rotation {
@@ -123,7 +121,6 @@ Item {
             width: parent.width
             height: parent.width
             layer.enabled: true
-
             anchors.centerIn: parent
 
             transform: Rotation {
@@ -132,17 +129,8 @@ Item {
                 angle: (wallClock.time.getSeconds() * 6)
             }
 
-            layer.effect: DropShadow {
-                transparentBorder: true
-                horizontalOffset: 6
-                verticalOffset: 6
-                radius: 5
-                samples: 8
-                color: "#66000000"
-            }
-
         }
-        
+
     }
 
     Connections {
