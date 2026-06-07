@@ -16,10 +16,11 @@ Item {
     id: root
 
     property string imgPath: "../watchfaces-img/digital-namazu-no-henka-"
-    property var largeNumeralSize: Qt.size(parent.width * 0.25, parent.height * 0.25)
-    property var smallNumeralSize: Qt.size(parent.width * 0.076, parent.height * 0.076)
-    property real largeNumeralOffset: -parent.height * 0.02
-    property real smallNumeralOffset: parent.height * 0.0606
+    property real maxSize: Math.min(width, height)
+    property var largeNumeralSize: Qt.size(maxSize * 0.25, maxSize * 0.25)
+    property var smallNumeralSize: Qt.size(maxSize * 0.076, maxSize * 0.076)
+    property real largeNumeralOffset: -maxSize * 0.02
+    property real smallNumeralOffset: maxSize * 0.0606
     property string hour: wallClock.time.toLocaleString(Qt.locale(), "HH")
     property string minute: wallClock.time.toLocaleString(Qt.locale(), "mm")
     property string month: wallClock.time.toLocaleString(Qt.locale(), "MM")
@@ -31,6 +32,7 @@ Item {
         return num;
     }
 
+    anchors.fill: parent
     layer.enabled: true
 
     MceBatteryLevel {
@@ -50,7 +52,7 @@ Item {
 
             anchors {
                 right: parent.horizontalCenter
-                rightMargin: -parent.height * 0.01
+                rightMargin: -maxSize * 0.01
                 bottom: parent.verticalCenter
                 bottomMargin: largeNumeralOffset
             }
@@ -65,7 +67,7 @@ Item {
 
             anchors {
                 right: parent.horizontalCenter
-                rightMargin: (-parent.height * 0.01) + (parent.height * 0.165)
+                rightMargin: (-maxSize * 0.01) + (maxSize * 0.165)
                 bottom: parent.verticalCenter
                 bottomMargin: largeNumeralOffset
             }
@@ -94,7 +96,7 @@ Item {
 
             anchors {
                 left: parent.horizontalCenter
-                leftMargin: (parent.height * 0.155) + (-parent.height * 0.165)
+                leftMargin: (maxSize * 0.155) + (-maxSize * 0.165)
                 bottom: parent.verticalCenter
                 bottomMargin: largeNumeralOffset
             }
@@ -109,7 +111,7 @@ Item {
 
             anchors {
                 left: parent.horizontalCenter
-                leftMargin: parent.height * 0.157
+                leftMargin: maxSize * 0.157
                 bottom: parent.verticalCenter
                 bottomMargin: largeNumeralOffset
             }
@@ -131,7 +133,7 @@ Item {
 
             anchors {
                 right: parent.horizontalCenter
-                rightMargin: parent.height * 0.288
+                rightMargin: maxSize * 0.288
                 top: parent.verticalCenter
                 topMargin: smallNumeralOffset
             }
@@ -146,7 +148,7 @@ Item {
 
             anchors {
                 right: parent.horizontalCenter
-                rightMargin: parent.height * 0.229
+                rightMargin: maxSize * 0.229
                 top: parent.verticalCenter
                 topMargin: smallNumeralOffset
             }
@@ -161,7 +163,7 @@ Item {
 
             anchors {
                 right: parent.horizontalCenter
-                rightMargin: parent.height * 0.17
+                rightMargin: maxSize * 0.17
                 top: parent.verticalCenter
                 topMargin: smallNumeralOffset
             }
@@ -176,7 +178,7 @@ Item {
 
             anchors {
                 left: parent.horizontalCenter
-                leftMargin: -parent.height * 0.187
+                leftMargin: -maxSize * 0.187
                 top: parent.verticalCenter
                 topMargin: smallNumeralOffset
             }
@@ -191,7 +193,7 @@ Item {
 
             anchors {
                 left: parent.horizontalCenter
-                leftMargin: -parent.height * 0.127
+                leftMargin: -maxSize * 0.127
                 top: parent.verticalCenter
                 topMargin: smallNumeralOffset
             }
@@ -215,9 +217,9 @@ Item {
 
             anchors {
                 right: parent.horizontalCenter
-                rightMargin: parent.height * 0.021
+                rightMargin: maxSize * 0.021
                 top: parent.verticalCenter
-                topMargin: parent.height * 0.3
+                topMargin: maxSize * 0.3
             }
 
         }
@@ -231,7 +233,7 @@ Item {
             anchors {
                 horizontalCenter: parent.horizontalCenter
                 top: parent.verticalCenter
-                topMargin: parent.height * 0.3
+                topMargin: maxSize * 0.3
             }
 
         }
@@ -244,9 +246,9 @@ Item {
 
             anchors {
                 left: parent.horizontalCenter
-                leftMargin: parent.height * 0.021
+                leftMargin: maxSize * 0.021
                 top: parent.verticalCenter
-                topMargin: parent.height * 0.3
+                topMargin: maxSize * 0.3
             }
 
         }
@@ -275,6 +277,7 @@ Item {
             Shape {
                 id: segment
 
+                anchors.fill: parent
                 visible: index === 0 ? true : (index / segmentedArc.segmentAmount) <= (segmentedArc.inputValue - 0.1)
 
                 ShapePath {
