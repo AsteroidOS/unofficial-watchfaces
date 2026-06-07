@@ -7,7 +7,7 @@
 // SPDX-FileCopyrightText: 2012 Arto Jalkanen <ajalkane@gmail.com>
 // SPDX-License-Identifier: LGPL-2.1-or-later
 
-import QtQuick 2.15
+import QtQuick
 
 Item {
     id: root
