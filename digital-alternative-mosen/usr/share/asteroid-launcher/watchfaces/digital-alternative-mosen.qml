@@ -15,10 +15,12 @@ Item {
         ctx.textAlign = "center";
         ctx.textBaseline = 'middle';
         ctx.shadowColor = Qt.rgba(0, 0, 0, 0.8);
-        ctx.shadowOffsetX = parent.height * 0.00625;
-        ctx.shadowOffsetY = parent.height * 0.00625; //2 px on 320x320
-        ctx.shadowBlur = parent.height * 0.0156; //5 px on 320x320
+        ctx.shadowOffsetX = faceBox.height * 0.00625;
+        ctx.shadowOffsetY = faceBox.height * 0.00625;
+        ctx.shadowBlur = faceBox.height * 0.0156;
     }
+
+    anchors.fill: parent
 
     Component.onCompleted: {
         hourMinuteCanvas.requestPaint();
@@ -26,60 +28,69 @@ Item {
         amPmCanvas.requestPaint();
     }
 
-    Canvas {
-        id: hourMinuteCanvas
+    Item {
+        id: faceBox
 
-        anchors.fill: parent
-        antialiasing: true
-        renderStrategy: Canvas.Cooperative
-        onPaint: {
-            var ctx = getContext("2d");
-            prepareContext(ctx);
-            var text;
-            if (use12H.value)
-                text = wallClock.time.toLocaleString(Qt.locale(), "hh:mm ap").substring(0, 5);
-            else
-                text = wallClock.time.toLocaleString(Qt.locale(), "HH:mm");
-            ctx.font = "50 " + parent.height * 0.25 + "px " + "GeneraleMono";
-            ctx.fillText(text, parent.width * 0.5, parent.height * 0.546);
+        width: Math.min(parent.width, parent.height)
+        height: width
+        anchors.centerIn: parent
+
+        Canvas {
+            id: hourMinuteCanvas
+
+            anchors.fill: parent
+            antialiasing: true
+            renderStrategy: Canvas.Cooperative
+            onPaint: {
+                var ctx = getContext("2d");
+                prepareContext(ctx);
+                var text;
+                if (use12H.value)
+                    text = wallClock.time.toLocaleString(Qt.locale(), "hh:mm ap").substring(0, 5);
+                else
+                    text = wallClock.time.toLocaleString(Qt.locale(), "HH:mm");
+                ctx.font = "50 " + parent.height * 0.25 + "px " + "GeneraleMono";
+                ctx.fillText(text, parent.width * 0.5, parent.height * 0.546);
+            }
         }
-    }
 
-    Canvas {
-        id: amPmCanvas
+        Canvas {
+            id: amPmCanvas
 
-        anchors.fill: parent
-        renderStrategy: Canvas.Cooperative
-        onPaint: {
-            var ctx = getContext("2d");
-            prepareContext(ctx);
-            var px = "px ";
-            var centerX = parent.width / 2;
-            var centerY = parent.height * 0.382;
-            var verticalOffset = -parent.height * 0.003;
-            var text;
-            text = wallClock.time.toLocaleString(Qt.locale(), "AP");
-            var fontSize = parent.height * 0.072;
-            var fontFamily = "GeneraleMono";
-            ctx.font = "0 " + fontSize + px + fontFamily;
-            if (use12H.value)
-                ctx.fillText(text, centerX, centerY + verticalOffset);
+            anchors.fill: parent
+            renderStrategy: Canvas.Cooperative
+            onPaint: {
+                var ctx = getContext("2d");
+                prepareContext(ctx);
+                var px = "px ";
+                var centerX = parent.width / 2;
+                var centerY = parent.height * 0.382;
+                var verticalOffset = -parent.height * 0.003;
+                var text;
+                text = wallClock.time.toLocaleString(Qt.locale(), "AP");
+                var fontSize = parent.height * 0.072;
+                var fontFamily = "GeneraleMono";
+                ctx.font = "0 " + fontSize + px + fontFamily;
+                if (use12H.value)
+                    ctx.fillText(text, centerX, centerY + verticalOffset);
 
+            }
         }
-    }
 
-    Canvas {
-        id: dateCanvas
+        Canvas {
+            id: dateCanvas
 
-        anchors.fill: parent
-        antialiasing: true
-        renderStrategy: Canvas.Cooperative
-        onPaint: {
-            var ctx = getContext("2d");
-            prepareContext(ctx);
-            ctx.font = "0 " + parent.height * 0.0725 + "px " + "GeneraleMono";
-            ctx.fillText(wallClock.time.toLocaleString(Qt.locale(), "ddd dd MMM"), parent.width * 0.5, parent.height * 0.692);
+            anchors.fill: parent
+            antialiasing: true
+            renderStrategy: Canvas.Cooperative
+            onPaint: {
+                var ctx = getContext("2d");
+                prepareContext(ctx);
+                ctx.font = "0 " + parent.height * 0.0725 + "px " + "GeneraleMono";
+                ctx.fillText(wallClock.time.toLocaleString(Qt.locale(), "ddd dd MMM"), parent.width * 0.5, parent.height * 0.692);
+            }
         }
+
     }
 
     Connections {
