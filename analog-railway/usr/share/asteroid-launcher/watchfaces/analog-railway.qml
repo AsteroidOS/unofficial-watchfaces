@@ -32,7 +32,6 @@ Item {
 
     // background circle — static, paints once only
     Canvas {
-        z: 0
         anchors.fill: parent
         antialiasing: true
         renderStrategy: Canvas.Cooperative
@@ -53,7 +52,6 @@ Item {
 
     // hour strokes — static, paints once only
     Canvas {
-        z: 1
         anchors.fill: parent
         renderStrategy: Canvas.Cooperative
         onPaint: {
@@ -73,7 +71,6 @@ Item {
 
     // 5min strokes — static, paints once only
     Canvas {
-        z: 1
         anchors.fill: parent
         renderStrategy: Canvas.Cooperative
         onPaint: {
@@ -93,7 +90,6 @@ Item {
 
     // minute strokes — static, paints once only
     Canvas {
-        z: 1
         anchors.fill: parent
         renderStrategy: Canvas.Cooperative
         onPaint: {
@@ -119,7 +115,6 @@ Item {
         property real hour: 0
         property real minute: 0
 
-        z: 2
         anchors.fill: parent
         renderStrategy: Canvas.Cooperative
         onPaint: {
@@ -147,7 +142,6 @@ Item {
 
         property real minute: 0
 
-        z: 3
         anchors.fill: parent
         renderStrategy: Canvas.Cooperative
         onPaint: {
@@ -175,7 +169,6 @@ Item {
 
         property real second: 0
 
-        z: 4
         anchors.fill: parent
         renderStrategy: Canvas.Cooperative
         onPaint: {
