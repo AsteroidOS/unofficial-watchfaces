@@ -8,12 +8,12 @@
 // SPDX-FileCopyrightText: 2012 Arto Jalkanen <ajalkane@gmail.com>
 // SPDX-License-Identifier: LGPL-2.1-or-later
 
-import Nemo.Mce 1.0
-import QtGraphicalEffects 1.15
-import QtQuick 2.15
-import QtQuick.Shapes 1.15
-import org.asteroid.controls 1.0
-import org.asteroid.utils 1.0
+import Nemo.Mce
+// QtQuick must precede Qt5Compat.GraphicalEffects when LinearGradient is used
+// GraphicalEffects types inherit from QtQuick.Item and require it to be loaded first.
+import QtQuick
+import Qt5Compat.GraphicalEffects
+import QtQuick.Shapes as Shapes
 
 Item {
     id: root
@@ -56,7 +56,7 @@ Item {
                 textureSize: Qt.size(nightstandMode.width * 2, nightstandMode.height * 2)
             }
 
-            Shape {
+            Shapes.Shape {
                 id: chargeArc
 
                 property real angle: batteryChargePercentage.percent * 360 / 100
@@ -68,7 +68,7 @@ Item {
 
                 anchors.fill: parent
 
-                ShapePath {
+                Shapes.ShapePath {
                     fillColor: "transparent"
                     strokeColor: chargeArc.colorArray[chargeArc.chargecolor]
                     strokeWidth: parent.height * chargeArc.arcStrokeWidth
