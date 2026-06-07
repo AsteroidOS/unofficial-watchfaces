@@ -28,7 +28,6 @@ Item {
         property real hour: 0
         property real minute: 0
 
-        z: 1
         anchors.fill: parent
         renderStrategy: Canvas.Cooperative
         onPaint: {
@@ -48,7 +47,6 @@ Item {
     Image {
         id: backGround
 
-        z: 2
         source: "../watchfaces-img/day-clock-center.svg"
         anchors.centerIn: parent
         width: parent.width / 3
@@ -57,7 +55,6 @@ Item {
         Image {
             id: backStars
 
-            z: 2
             source: "../watchfaces-img/day-clock-center-stars.svg"
             anchors.centerIn: parent
             width: parent.width
@@ -82,7 +79,6 @@ Item {
 
         property real offset: height * 0.5
 
-        z: 3
         color: "white"
         style: Text.Outline
         styleColor: "#80000000"
@@ -105,7 +101,6 @@ Item {
 
         property real offset: height * 0.5
 
-        z: 3
         color: "white"
         style: Text.Outline
         styleColor: "#80000000"
@@ -128,7 +123,6 @@ Item {
 
         property real offset: height * 0.5
 
-        z: 4
         color: "white"
         style: Text.Outline
         styleColor: "#80000000"
@@ -149,7 +143,6 @@ Item {
 
         property real offset: height * 0.5
 
-        z: 4
         color: "white"
         style: Text.Outline
         styleColor: "#80000000"
@@ -169,7 +162,6 @@ Item {
     Text {
         id: dayofweekDisplay
 
-        z: 5
         lineHeight: parent.height * 0.0025
         color: "white"
         style: Text.Outline
@@ -191,7 +183,6 @@ Item {
     Text {
         id: dateDisplay
 
-        z: 6
         lineHeight: parent.height * 0.0025
         color: "white"
         style: Text.Outline
