@@ -13,52 +13,64 @@ Item {
     id: root
 
     property string imgPath: "../watchfaces-img/analog-nihil-light-"
+    property real maxSize: Math.min(width, height)
 
-    Image {
-        id: hourSVG
+    anchors.fill: parent
 
-        anchors.centerIn: root
-        source: imgPath + ((displayAmbient) ? "hour-standby.svg" : "hour.svg")
-        width: root.width
-        height: root.height
+    Item {
+        id: faceBox
 
-        transform: Rotation {
-            origin.x: hourSVG.width / 2
-            origin.y: hourSVG.height / 2
-            angle: (wallClock.time.getHours() * 30) + (wallClock.time.getMinutes() * 0.5)
+        width: root.maxSize
+        height: root.maxSize
+        anchors.centerIn: parent
+
+        Image {
+            id: hourSVG
+
+            anchors.centerIn: parent
+            source: imgPath + ((displayAmbient) ? "hour-standby.svg" : "hour.svg")
+            width: parent.width
+            height: parent.width
+
+            transform: Rotation {
+                origin.x: hourSVG.width / 2
+                origin.y: hourSVG.height / 2
+                angle: (wallClock.time.getHours() * 30) + (wallClock.time.getMinutes() * 0.5)
+            }
+
         }
 
-    }
+        Image {
+            id: minuteSVG
 
-    Image {
-        id: minuteSVG
+            anchors.centerIn: parent
+            source: imgPath + "minute.svg"
+            width: parent.width
+            height: parent.width
 
-        anchors.centerIn: root
-        source: imgPath + "minute.svg"
-        width: root.width
-        height: root.height
+            transform: Rotation {
+                origin.x: minuteSVG.width / 2
+                origin.y: minuteSVG.height / 2
+                angle: (wallClock.time.getMinutes() * 6) + (wallClock.time.getSeconds() * 6 / 60)
+            }
 
-        transform: Rotation {
-            origin.x: minuteSVG.width / 2
-            origin.y: minuteSVG.height / 2
-            angle: (wallClock.time.getMinutes() * 6) + (wallClock.time.getSeconds() * 6 / 60)
         }
 
-    }
+        Image {
+            id: secondSVG
 
-    Image {
-        id: secondSVG
+            anchors.centerIn: parent
+            source: imgPath + "second.svg"
+            width: parent.width
+            height: parent.width
+            visible: !displayAmbient
 
-        anchors.centerIn: root
-        source: imgPath + "second.svg"
-        width: root.width
-        height: root.height
-        visible: !displayAmbient
+            transform: Rotation {
+                origin.x: secondSVG.width / 2
+                origin.y: secondSVG.height / 2
+                angle: (wallClock.time.getSeconds() * 6)
+            }
 
-        transform: Rotation {
-            origin.x: secondSVG.width / 2
-            origin.y: secondSVG.height / 2
-            angle: (wallClock.time.getSeconds() * 6)
         }
 
     }
