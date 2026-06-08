@@ -15,6 +15,7 @@ Item {
     property string timeStr: ""
     property string secStr: ""
     property string dateStr: ""
+    readonly property real maxSize: Math.min(width, height)
     readonly property color termGreen: "#8affc1"
     readonly property color termDim: "#598a74"
 
@@ -48,7 +49,7 @@ Item {
         id: stack
 
         anchors.centerIn: parent
-        spacing: parent.height * 0.008
+        spacing: root.maxSize * 0.008
 
         layer {
             enabled: !displayAmbient
@@ -70,7 +71,7 @@ Item {
 
             font {
                 family: "VT323"
-                pixelSize: root.height * 0.085
+                pixelSize: root.maxSize * 0.085
             }
 
         }
@@ -87,8 +88,8 @@ Item {
 
                 font {
                     family: "VT323"
-                    pixelSize: root.height * 0.26
-                    letterSpacing: root.height * 0.006
+                    pixelSize: root.maxSize * 0.26
+                    letterSpacing: root.maxSize * 0.006
                 }
 
             }
@@ -103,7 +104,7 @@ Item {
 
                 font {
                     family: "VT323"
-                    pixelSize: root.height * 0.17
+                    pixelSize: root.maxSize * 0.17
                 }
 
             }
@@ -117,14 +118,14 @@ Item {
 
             font {
                 family: "VT323"
-                pixelSize: root.height * 0.085
+                pixelSize: root.maxSize * 0.085
             }
 
         }
 
         // Cursor block
         Row {
-            spacing: root.width * 0.012
+            spacing: root.maxSize * 0.012
             visible: !displayAmbient
 
             Text {
@@ -133,14 +134,14 @@ Item {
 
                 font {
                     family: "VT323"
-                    pixelSize: root.height * 0.085
+                    pixelSize: root.maxSize * 0.085
                 }
 
             }
 
             Rectangle {
-                width: root.width * 0.045
-                height: root.height * 0.08
+                width: root.maxSize * 0.045
+                height: root.maxSize * 0.08
                 color: root.cursorOn ? root.termGreen : "transparent"
                 anchors.verticalCenter: parent.verticalCenter
             }
