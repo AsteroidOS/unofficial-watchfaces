@@ -8,8 +8,8 @@
 import Nemo.Configuration
 import Nemo.Mce
 import Qt5Compat.GraphicalEffects
-import QtQuick
 import Qt5Compat.GraphicalEffects
+import QtQuick
 import QtQuick.Shapes
 import QtSensors
 import org.asteroid.controls
@@ -20,6 +20,7 @@ import "weathericons.js" as WeatherIcons
 Item {
     id: root
 
+    property real maxSize: Math.min(width, height)
     property string imgPath: "../watchfaces-img/digital-weather-hrm-steps-"
     property int dayNb: 0
     // HRM initialisation. Needs to be declared global since hrmBox and hrmSwitch both need it.
@@ -55,7 +56,7 @@ Item {
         ctx.shadowColor = "black";
         ctx.shadowOffsetX = 0;
         ctx.shadowOffsetY = 0;
-        ctx.shadowBlur = root.height * 0.0125;
+        ctx.shadowBlur = root.maxSize * 0.0125;
     }
 
     anchors.fill: parent
