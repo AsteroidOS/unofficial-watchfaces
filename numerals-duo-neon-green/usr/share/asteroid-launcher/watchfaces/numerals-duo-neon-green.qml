@@ -7,10 +7,9 @@
 // SPDX-FileCopyrightText: 2012 Arto Jalkanen <ajalkane@gmail.com>
 // SPDX-License-Identifier: LGPL-2.1-or-later
 
-import QtGraphicalEffects 1.12
-import QtQuick 2.9
-import org.asteroid.controls 1.0
-import org.asteroid.utils 1.0
+import Qt5Compat.GraphicalEffects
+import QtQuick
+import org.asteroid.utils
 
 Item {
     id: root
