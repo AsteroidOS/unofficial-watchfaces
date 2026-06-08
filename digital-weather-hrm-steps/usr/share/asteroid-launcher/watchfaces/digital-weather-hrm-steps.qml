@@ -389,11 +389,6 @@ Item {
             anchors.fill: parent
             visible: nightstandMode.active
 
-            layer {
-                enabled: true
-                samples: 4
-            }
-
             Repeater {
                 id: segmentedArc
 
