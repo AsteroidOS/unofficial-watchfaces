@@ -11,6 +11,7 @@ import QtQuick
 Item {
     id: root
 
+    property real maxSize: Math.min(width, height)
     property real radian: 0.0174533
     property string imgPath: "../watchfaces-img/orbiting-asteroids-"
 
@@ -43,6 +44,7 @@ Item {
         secondDisplay.y = h / 2 - sdH / 2 + Math.sin(rotSt * 2 * Math.PI) * sdH * 4.54;
     }
 
+    anchors.fill: parent
     Component.onCompleted: {
         var hour = wallClock.time.getHours();
         var minute = wallClock.time.getMinutes();
@@ -181,7 +183,7 @@ Item {
     Text {
         id: hourDisplay
 
-        font.pixelSize: parent.height / 4
+        font.pixelSize: root.maxSize / 4
         font.family: "OpenSans"
         font.styleName: "Bold"
         color: "white"
@@ -197,7 +199,7 @@ Item {
     Text {
         id: minuteDisplay
 
-        font.pixelSize: parent.height / 12.7
+        font.pixelSize: root.maxSize / 12.7
         font.family: "OpenSans"
         color: "white"
         style: Text.Outline
@@ -209,7 +211,7 @@ Item {
     Text {
         id: secondDisplay
 
-        font.pixelSize: parent.height / 14
+        font.pixelSize: root.maxSize / 14
         font.family: "OpenSans"
         color: "white"
         style: Text.Outline
