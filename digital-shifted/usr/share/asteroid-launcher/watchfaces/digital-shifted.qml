@@ -19,7 +19,6 @@ Item {
     Image {
         id: ring
 
-        z: 0
         visible: !displayAmbient
         source: "../watchfaces-img/digital-shifted-ring.svg"
         width: root.maxSize
@@ -129,7 +128,6 @@ Item {
         Text {
             id: dowDisplay
 
-            z: 2
             visible: !displayAmbient
             font.pixelSize: parent.height * 0.06
             font.family: "Open Sans"
@@ -151,7 +149,6 @@ Item {
         Text {
             id: apDisplay
 
-            z: 2
             visible: !displayAmbient
             font.pixelSize: parent.height * 0.1
             font.family: "Open Sans"
@@ -173,7 +170,6 @@ Item {
         Text {
             id: monthDisplay
 
-            z: 2
             visible: !displayAmbient
             font.pixelSize: parent.height * 0.06
             font.family: "Open Sans"
