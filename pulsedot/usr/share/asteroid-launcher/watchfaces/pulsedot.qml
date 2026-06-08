@@ -53,7 +53,6 @@ Item {
     Rectangle {
         id: circleTransBack
 
-        z: 0
         antialiasing: true
         visible: !displayAmbient
         x: root.width / 2 - width / 2
@@ -94,7 +93,6 @@ Item {
         property int minute: 0
         property var colorctx: Qt.rgba(0, 0, 0, 0.6)
 
-        z: 1
         visible: !displayAmbient
         anchors.fill: parent
         renderStrategy: Canvas.Cooperative
@@ -114,7 +112,6 @@ Item {
     Rectangle {
         id: circlePulse
 
-        z: 2
         visible: !displayAmbient
         antialiasing: true
         x: root.width / 2 - width / 2
@@ -169,7 +166,6 @@ Item {
 
         property int toggle: 1
 
-        z: 3
         antialiasing: true
         x: root.width / 2 - width / 2
         y: root.height / 2 - width / 2
@@ -227,7 +223,6 @@ Item {
         property real centerX: root.width / 2 - width / 2
         property real centerY: root.height / 2 - height / 2
 
-        z: 4
         antialiasing: true
         x: centerX + Math.cos(rotM * 2 * Math.PI) * root.width * 0.3
         y: centerY + Math.sin(rotM * 2 * Math.PI) * root.width * 0.3
@@ -283,7 +278,6 @@ Item {
         property real centerX: root.width / 2 - width / 2
         property real centerY: root.height / 2 - height / 2
 
-        z: 5
         font.pixelSize: root.height / 7.4
         font.family: "SourceSansPro"
         font.styleName: "Regular"
@@ -358,7 +352,6 @@ Item {
     Text {
         id: hourDisplay
 
-        z: 6
         font.pixelSize: root.height * 0.36
         font.family: "SourceSansPro"
         font.styleName: "Semibold"
