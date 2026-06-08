@@ -10,163 +10,176 @@ import Nemo.Mce
 import QtQuick
 
 Item {
-    Rectangle {
-        id: timeBack
+    id: root
 
+    anchors.fill: parent
+
+    Item {
+        id: faceBox
+
+        width: Math.min(parent.width, parent.height)
+        height: width
         anchors.centerIn: parent
-        color: Qt.rgba(0, 0, 0, 0.7)
-        width: parent.width
-        height: parent.height * 0.22
-    }
 
-    Text {
-        id: dateDisplay
+        Rectangle {
+            id: timeBack
 
-        color: Qt.rgba(1, 0, 0.5, 1)
-        horizontalAlignment: Text.AlignHCenter
-        text: Qt.formatDate(wallClock.time, "dd")
-
-        font {
-            pixelSize: parent.height * 0.123
-            family: "Elektra"
-            styleName: "Thin"
+            anchors.centerIn: parent
+            color: Qt.rgba(0, 0, 0, 0.7)
+            width: parent.width
+            height: parent.height * 0.22
         }
 
-        anchors {
-            bottomMargin: parent.height * 0.0245
-            bottom: hourDisplay.bottom
-            right: hourDisplay.left
-            rightMargin: parent.width * 0.0354
+        Text {
+            id: dateDisplay
+
+            color: Qt.rgba(1, 0, 0.5, 1)
+            horizontalAlignment: Text.AlignHCenter
+            text: Qt.formatDate(wallClock.time, "dd")
+
+            font {
+                pixelSize: parent.height * 0.123
+                family: "Elektra"
+                styleName: "Thin"
+            }
+
+            anchors {
+                bottomMargin: parent.height * 0.0245
+                bottom: hourDisplay.bottom
+                right: hourDisplay.left
+                rightMargin: parent.width * 0.0354
+            }
+
         }
 
-    }
+        Text {
+            id: hourDisplay
 
-    Text {
-        id: hourDisplay
+            renderType: Text.NativeRendering
+            color: Qt.rgba(0, 1, 1, 1)
+            horizontalAlignment: Text.AlignHCenter
+            text: use12H.value ? wallClock.time.toLocaleString(Qt.locale(), "hh ap").slice(0, 2) + wallClock.time.toLocaleString(Qt.locale(), ":mm") : wallClock.time.toLocaleString(Qt.locale(), "HH") + wallClock.time.toLocaleString(Qt.locale(), ":mm")
 
-        renderType: Text.NativeRendering
-        color: Qt.rgba(0, 1, 1, 1)
-        horizontalAlignment: Text.AlignHCenter
-        text: use12H.value ? wallClock.time.toLocaleString(Qt.locale(), "hh ap").slice(0, 2) + wallClock.time.toLocaleString(Qt.locale(), ":mm") : wallClock.time.toLocaleString(Qt.locale(), "HH") + wallClock.time.toLocaleString(Qt.locale(), ":mm")
+            font {
+                pixelSize: parent.height * 0.246
+                family: "Elektra"
+                letterSpacing: parent.width * 0.01
+            }
 
-        font {
-            pixelSize: parent.height * 0.246
-            family: "Elektra"
-            letterSpacing: parent.width * 0.01
+            anchors {
+                verticalCenter: parent.verticalCenter
+                horizontalCenter: parent.horizontalCenter
+                horizontalCenterOffset: parent.width * 0.0062
+            }
+
         }
 
-        anchors {
-            verticalCenter: parent.verticalCenter
-            horizontalCenter: parent.horizontalCenter
-            horizontalCenterOffset: parent.width * 0.0062
+        Text {
+            id: secondDisplay
+
+            renderType: Text.NativeRendering
+            color: Qt.rgba(0, 1, 1, 0.9)
+            horizontalAlignment: Text.AlignHCenter
+            text: wallClock.time.toLocaleString(Qt.locale(), "ss")
+
+            font {
+                pixelSize: parent.height * 0.123
+                family: "Elektra"
+                styleName: "Thin"
+            }
+
+            anchors {
+                topMargin: parent.height * 0.0246
+                top: hourDisplay.top
+                left: hourDisplay.right
+                leftMargin: parent.width * 0.024
+            }
+            //x: parent.width / 6 * 5.35 - width / 2
+
         }
 
-    }
+        Text {
+            id: dowDisplay
 
-    Text {
-        id: secondDisplay
+            color: Qt.rgba(1, 1, 0, 0.9)
+            horizontalAlignment: Text.AlignHCenter
+            text: Qt.formatDate(wallClock.time, "ddd").slice(0, 3).toUpperCase()
 
-        renderType: Text.NativeRendering
-        color: Qt.rgba(0, 1, 1, 0.9)
-        horizontalAlignment: Text.AlignHCenter
-        text: wallClock.time.toLocaleString(Qt.locale(), "ss")
+            font {
+                pixelSize: parent.height * 0.08
+                family: "Elektra"
+            }
 
-        font {
-            pixelSize: parent.height * 0.123
-            family: "Elektra"
-            styleName: "Thin"
+            anchors {
+                topMargin: parent.height * 0.032
+                top: hourDisplay.top
+                right: hourDisplay.left
+                rightMargin: parent.width * 0.035
+            }
+
         }
 
-        anchors {
-            topMargin: parent.height * 0.0246
-            top: hourDisplay.top
-            left: hourDisplay.right
-            leftMargin: parent.width * 0.024
-        }
-        //x: parent.width / 6 * 5.35 - width / 2
+        Text {
+            id: apDisplay
 
-    }
+            visible: use12H.value
+            color: Qt.rgba(1, 0, 1, 0.95)
+            horizontalAlignment: Text.AlignHCenter
+            text: wallClock.time.toLocaleString(Qt.locale(), "ap").slice(0, 2).toUpperCase()
 
-    Text {
-        id: dowDisplay
+            font {
+                pixelSize: parent.height * 0.08
+                family: "Elektra"
+            }
 
-        color: Qt.rgba(1, 1, 0, 0.9)
-        horizontalAlignment: Text.AlignHCenter
-        text: Qt.formatDate(wallClock.time, "ddd").slice(0, 3).toUpperCase()
+            anchors {
+                bottomMargin: parent.height * 0.032
+                bottom: hourDisplay.bottom
+                left: hourDisplay.right
+                leftMargin: parent.width * 0.025
+            }
 
-        font {
-            pixelSize: parent.height * 0.08
-            family: "Elektra"
-        }
-
-        anchors {
-            topMargin: parent.height * 0.032
-            top: hourDisplay.top
-            right: hourDisplay.left
-            rightMargin: parent.width * 0.035
         }
 
-    }
+        Rectangle {
+            id: batteryBack
 
-    Text {
-        id: apDisplay
+            color: batteryChargePercentage.percent < 30 ? 'red' : batteryChargePercentage.percent < 60 ? 'yellow' : Qt.rgba(0, 1, 0, 1)
+            width: parent.width / 100 * batteryChargePercentage.percent
+            height: parent.height * 0.004
 
-        visible: use12H.value
-        color: Qt.rgba(1, 0, 1, 0.95)
-        horizontalAlignment: Text.AlignHCenter
-        text: wallClock.time.toLocaleString(Qt.locale(), "ap").slice(0, 2).toUpperCase()
+            anchors {
+                bottom: timeBack.top
+                //topMargin: -parent.height*0.03
+                horizontalCenter: parent.horizontalCenter
+            }
 
-        font {
-            pixelSize: parent.height * 0.08
-            family: "Elektra"
         }
 
-        anchors {
-            bottomMargin: parent.height * 0.032
-            bottom: hourDisplay.bottom
-            left: hourDisplay.right
-            leftMargin: parent.width * 0.025
+        Text {
+            id: batteryDisplay
+
+            color: batteryChargePercentage.percent < 30 ? 'red' : batteryChargePercentage.percent < 60 ? 'yellow' : Qt.rgba(0, 1, 0, 1)
+            horizontalAlignment: Text.AlignHCenter
+            text: batteryChargePercentage.percent
+
+            font {
+                pixelSize: parent.height * 0.05
+                family: "Elektra"
+            }
+
+            anchors {
+                top: batteryBack.bottom
+                topMargin: -parent.height * 0.0055
+                horizontalCenter: parent.horizontalCenter
+            }
+
         }
 
-    }
-
-    Rectangle {
-        id: batteryBack
-
-        color: batteryChargePercentage.percent < 30 ? 'red' : batteryChargePercentage.percent < 60 ? 'yellow' : Qt.rgba(0, 1, 0, 1)
-        width: parent.width / 100 * batteryChargePercentage.percent
-        height: parent.height * 0.004
-
-        anchors {
-            bottom: timeBack.top
-            //topMargin: -parent.height*0.03
-            horizontalCenter: parent.horizontalCenter
+        MceBatteryLevel {
+            id: batteryChargePercentage
         }
 
-    }
-
-    Text {
-        id: batteryDisplay
-
-        color: batteryChargePercentage.percent < 30 ? 'red' : batteryChargePercentage.percent < 60 ? 'yellow' : Qt.rgba(0, 1, 0, 1)
-        horizontalAlignment: Text.AlignHCenter
-        text: batteryChargePercentage.percent
-
-        font {
-            pixelSize: parent.height * 0.05
-            family: "Elektra"
-        }
-
-        anchors {
-            top: batteryBack.bottom
-            topMargin: -parent.height * 0.0055
-            horizontalCenter: parent.horizontalCenter
-        }
-
-    }
-
-    MceBatteryLevel {
-        id: batteryChargePercentage
     }
 
 }
