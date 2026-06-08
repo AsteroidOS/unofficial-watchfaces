@@ -16,11 +16,12 @@ import QtQuick
 Item {
     id: root
 
+    readonly property real maxSize: Math.min(width, height)
     readonly property string displayFont: "Noto Sans"
     readonly property real scaleFactor: 1.2
-    readonly property real tapeFontSize: height * 0.18 * scaleFactor
-    readonly property real itemSpacingPrimary: height * 0.14 * scaleFactor
-    readonly property real itemSpacingSecondary: height * 0.12 * scaleFactor
+    readonly property real tapeFontSize: maxSize * 0.18 * scaleFactor
+    readonly property real itemSpacingPrimary: maxSize * 0.14 * scaleFactor
+    readonly property real itemSpacingSecondary: maxSize * 0.12 * scaleFactor
     readonly property real colWidth: parent.width * 0.32 * scaleFactor
     readonly property real edgeMargin: parent.width * 0.1
     readonly property real itemOpacityPrimary: 0.3
