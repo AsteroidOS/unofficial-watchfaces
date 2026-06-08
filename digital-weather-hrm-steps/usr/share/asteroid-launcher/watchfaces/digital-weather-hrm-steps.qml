@@ -5,15 +5,16 @@
 // SPDX-FileCopyrightText: 2017 Florent Revest <revestflo@gmail.com>
 // SPDX-License-Identifier: BSD-3-Clause
 
-import Nemo.Configuration 1.0
-import Nemo.Mce 1.0
-import QtGraphicalEffects 1.15
-import QtQuick 2.15
-import QtQuick.Shapes 1.15
-import QtSensors 5.11
-import org.asteroid.controls 1.0
-import org.asteroid.sensorlogd 1.0
-import org.asteroid.utils 1.0
+import Nemo.Configuration
+import Nemo.Mce
+import Qt5Compat.GraphicalEffects
+import QtQuick
+import Qt5Compat.GraphicalEffects
+import QtQuick.Shapes
+import QtSensors
+import org.asteroid.controls
+import org.asteroid.sensorlogd
+import org.asteroid.utils
 import "weathericons.js" as WeatherIcons
 
 Item {
