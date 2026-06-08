@@ -9,7 +9,7 @@
 // rotate fonts to align them to other objects.
 // v2, changed font to Sinner for more edgy look fitting the logo.
 
-import QtQuick 2.1
+import QtQuick
 
 Item {
     Image {
