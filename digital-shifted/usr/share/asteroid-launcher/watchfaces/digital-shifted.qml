@@ -129,13 +129,16 @@ Item {
             id: dowDisplay
 
             visible: !displayAmbient
-            font.pixelSize: parent.height * 0.06
-            font.family: "Open Sans"
-            font.styleName: "Condensed Light"
-            font.letterSpacing: -parent.height * 0.0006
             color: "#ddffffff"
             horizontalAlignment: Text.AlignHCenter
             text: wallClock.time.toLocaleString(Qt.locale(), "dddd").toUpperCase()
+
+            font {
+                pixelSize: parent.height * 0.06
+                family: "Open Sans"
+                styleName: "Condensed Light"
+                letterSpacing: -parent.height * 0.0006
+            }
 
             anchors {
                 left: topCenter.right
@@ -150,13 +153,16 @@ Item {
             id: apDisplay
 
             visible: !displayAmbient
-            font.pixelSize: parent.height * 0.1
-            font.family: "Open Sans"
-            font.styleName: "Light"
-            font.letterSpacing: -parent.height * 0.006
             color: "#ddffffff"
             horizontalAlignment: Text.AlignHCenter
             text: wallClock.time.toLocaleString(Qt.locale(), "<b>ap</b>").toUpperCase()
+
+            font {
+                pixelSize: parent.height * 0.1
+                family: "Open Sans"
+                styleName: "Light"
+                letterSpacing: -parent.height * 0.006
+            }
 
             anchors {
                 left: topCenter.right
@@ -171,13 +177,16 @@ Item {
             id: monthDisplay
 
             visible: !displayAmbient
-            font.pixelSize: parent.height * 0.06
-            font.family: "Open Sans"
-            font.styleName: "Condensed Light"
-            font.letterSpacing: -parent.height * 0.0006
             color: "#ddffffff"
             horizontalAlignment: Text.AlignHCenter
             text: wallClock.time.toLocaleString(Qt.locale(), "MMMM").toUpperCase()
+
+            font {
+                pixelSize: parent.height * 0.06
+                family: "Open Sans"
+                styleName: "Condensed Light"
+                letterSpacing: -parent.height * 0.0006
+            }
 
             anchors {
                 right: bottomCenter.left
@@ -193,13 +202,16 @@ Item {
 
             z: 2
             visible: !displayAmbient
-            font.pixelSize: parent.height * 0.122
-            font.family: "Open Sans"
-            font.styleName: "Light"
-            font.letterSpacing: -parent.height * 0.008
             color: "#ddffffff"
             horizontalAlignment: Text.AlignHCenter
             text: wallClock.time.toLocaleString(Qt.locale(), "dd").toUpperCase()
+
+            font {
+                pixelSize: parent.height * 0.122
+                family: "Open Sans"
+                styleName: "Light"
+                letterSpacing: -parent.height * 0.008
+            }
 
             anchors {
                 right: bottomCenter.left
