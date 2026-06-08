@@ -12,86 +12,99 @@
 import QtQuick
 
 Item {
-    Image {
-        source: "../watchfaces-img/asteroid-logo.svg"
-        opacity: 0.75
-        anchors.horizontalCenter: parent.horizontalCenter
-        anchors.verticalCenter: parent.verticalCenter
-        width: parent.width / 1.68
-        height: parent.height / 1.68
-    }
+    id: root
 
-    Text {
-        id: hourDisplay
+    anchors.fill: parent
 
-        property var hoffset: parent.width * 0.28
-        property var voffset: -parent.height * 0.03
-        property var rotH: (wallClock.time.getHours() - 3 + wallClock.time.getMinutes() / 60) / 12
+    Item {
+        id: faceBox
 
-        font.pixelSize: parent.height / 4
-        font.family: "sinner"
-        color: Qt.rgba(1, 1, 1, 0.8)
-        opacity: 0.95
-        style: Text.Outline
-        styleColor: Qt.rgba(0, 0, 0, 0.4)
-        x: parent.width / 3.8 - hoffset
-        y: parent.height / 3.8 - voffset
-        horizontalAlignment: Text.AlignHCenter
-        text: {
-            if (use12H.value)
-                wallClock.time.toLocaleString(Qt.locale(), "hh ap").slice(0, 2);
-            else
-                wallClock.time.toLocaleString(Qt.locale(), "HH");
+        width: Math.min(parent.width, parent.height)
+        height: width
+        anchors.centerIn: parent
+
+        Image {
+            source: "../watchfaces-img/asteroid-logo.svg"
+            opacity: 0.75
+            anchors.horizontalCenter: parent.horizontalCenter
+            anchors.verticalCenter: parent.verticalCenter
+            width: parent.width / 1.68
+            height: parent.height / 1.68
         }
 
-        transform: Rotation {
-            angle: -45
+        Text {
+            id: hourDisplay
+
+            property var hoffset: parent.width * 0.28
+            property var voffset: -parent.height * 0.03
+            property var rotH: (wallClock.time.getHours() - 3 + wallClock.time.getMinutes() / 60) / 12
+
+            font.pixelSize: parent.height / 4
+            font.family: "sinner"
+            color: Qt.rgba(1, 1, 1, 0.8)
+            opacity: 0.95
+            style: Text.Outline
+            styleColor: Qt.rgba(0, 0, 0, 0.4)
+            x: parent.width / 3.8 - hoffset
+            y: parent.height / 3.8 - voffset
+            horizontalAlignment: Text.AlignHCenter
+            text: {
+                if (use12H.value)
+                    wallClock.time.toLocaleString(Qt.locale(), "hh ap").slice(0, 2);
+                else
+                    wallClock.time.toLocaleString(Qt.locale(), "HH");
+            }
+
+            transform: Rotation {
+                angle: -45
+            }
+
         }
 
-    }
+        Text {
+            id: minuteDisplay
 
-    Text {
-        id: minuteDisplay
+            property var hoffset: parent.width * 0.035
+            property var voffset: parent.height * 0.28
 
-        property var hoffset: parent.width * 0.035
-        property var voffset: parent.height * 0.28
+            font.pixelSize: parent.height / 4
+            font.family: "sinner"
+            color: Qt.rgba(1, 1, 1, 0.8)
+            opacity: 0.95
+            style: Text.Outline
+            styleColor: Qt.rgba(0, 0, 0, 0.4)
+            x: parent.width / 1.35 - hoffset
+            y: parent.height / 3.8 - voffset
+            horizontalAlignment: Text.AlignHCenter
+            text: wallClock.time.toLocaleString(Qt.locale(), "mm")
 
-        font.pixelSize: parent.height / 4
-        font.family: "sinner"
-        color: Qt.rgba(1, 1, 1, 0.8)
-        opacity: 0.95
-        style: Text.Outline
-        styleColor: Qt.rgba(0, 0, 0, 0.4)
-        x: parent.width / 1.35 - hoffset
-        y: parent.height / 3.8 - voffset
-        horizontalAlignment: Text.AlignHCenter
-        text: wallClock.time.toLocaleString(Qt.locale(), "mm")
+            transform: Rotation {
+                angle: +45
+            }
 
-        transform: Rotation {
-            angle: +45
         }
 
-    }
+        Text {
+            id: secondDisplay
 
-    Text {
-        id: secondDisplay
+            property var hoffset: parent.width * 0.28
+            property var voffset: -parent.height * 0.03
 
-        property var hoffset: parent.width * 0.28
-        property var voffset: -parent.height * 0.03
+            font.pixelSize: parent.height / 4
+            font.family: "sinner"
+            color: Qt.rgba(1, 1, 1, 0.8)
+            opacity: 0.95
+            style: Text.Outline
+            styleColor: Qt.rgba(0, 0, 0, 0.4)
+            x: parent.width / 1.35 - hoffset
+            y: parent.height / 1.35 - voffset
+            horizontalAlignment: Text.AlignHCenter
+            text: wallClock.time.toLocaleString(Qt.locale(), "ss")
 
-        font.pixelSize: parent.height / 4
-        font.family: "sinner"
-        color: Qt.rgba(1, 1, 1, 0.8)
-        opacity: 0.95
-        style: Text.Outline
-        styleColor: Qt.rgba(0, 0, 0, 0.4)
-        x: parent.width / 1.35 - hoffset
-        y: parent.height / 1.35 - voffset
-        horizontalAlignment: Text.AlignHCenter
-        text: wallClock.time.toLocaleString(Qt.locale(), "ss")
+            transform: Rotation {
+                angle: -45
+            }
 
-        transform: Rotation {
-            angle: -45
         }
 
     }
