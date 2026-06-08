@@ -1,13 +1,9 @@
-/*
- * Terminal Haiku — AsteroidOS watchface
- *
- * Time rendered as if a terminal just printed `date +%T`.
- * Cursor blinks at 1 Hz. Ambient-aware.
- *
- * Font: VT323 (SIL OFL 1.1)
- */
 // SPDX-FileCopyrightText: 2026 Timo Könnecke <github.com/moWerk>
 // SPDX-License-Identifier: BSD-3-Clause
+// Terminal Haiku — AsteroidOS watchface
+// Time rendered as if a terminal just printed `date +%T`.
+// Cursor blinks at 1 Hz. Ambient-aware.
+// Font: VT323 (SIL OFL 1.1)
 
 import QtGraphicalEffects 1.15
 import QtQuick 2.15
