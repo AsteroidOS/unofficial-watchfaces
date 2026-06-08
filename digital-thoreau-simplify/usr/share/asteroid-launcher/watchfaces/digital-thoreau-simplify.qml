@@ -1,7 +1,7 @@
 // SPDX-FileCopyrightText: 2022 Ed Beroset <github.com/beroset>
 // SPDX-License-Identifier: LGPL-2.1-or-later
 
-import QtQuick 2.12
+import QtQuick
 
 Item {
     Rectangle {
