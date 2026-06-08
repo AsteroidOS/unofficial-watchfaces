@@ -7,12 +7,13 @@ import QtQuick
 Item {
     id: root
 
-    property real topbottomMargin: parent.height * 0.0086
-    property real leftrightMargin: -parent.height * 0.048
-    property size numeralSize: Qt.size(parent.width * 0.25, parent.height * 0.25)
+    property real maxSize: Math.min(width, height)
+    property real topbottomMargin: maxSize * 0.0086
+    property real leftrightMargin: -maxSize * 0.048
+    property size numeralSize: Qt.size(maxSize * 0.25, maxSize * 0.25)
     property real arcEnd: wallClock.time.getSeconds() * 6
 
-    // Fire requestPaint once per second on tick, not on every animation frame.
+    anchors.fill: parent
     onArcEndChanged: canvas.requestPaint()
 
     Image {
@@ -21,28 +22,30 @@ Item {
         z: 0
         visible: !displayAmbient
         source: "../watchfaces-img/digital-shifted-ring.svg"
+        width: root.maxSize
+        height: root.maxSize
         anchors.centerIn: parent
-        width: parent.width
-        height: parent.height
     }
 
     Canvas {
         id: canvas
 
         visible: !displayAmbient
-        anchors.fill: parent
+        width: root.maxSize
+        height: root.maxSize
+        anchors.centerIn: parent
         rotation: -90
         onPaint: {
             var ctx = getContext("2d");
-            var x = root.width / 2;
-            var y = root.height / 2;
+            var x = width / 2;
+            var y = height / 2;
             var start = 0;
             var end = Math.PI * (root.arcEnd / 180);
             ctx.reset();
             ctx.beginPath();
             ctx.lineCap = "round";
-            ctx.arc(x, y, (root.width / 2) - parent.height * 0.124 / 2, start, end, false);
-            ctx.lineWidth = parent.height * 0.03;
+            ctx.arc(x, y, (width / 2) - height * 0.124 / 2, start, end, false);
+            ctx.lineWidth = height * 0.03;
             ctx.strokeStyle = "#7738FF12";
             ctx.stroke();
         }
@@ -60,9 +63,9 @@ Item {
     }
 
     Item {
+        width: root.maxSize
+        height: root.maxSize
         anchors.centerIn: parent
-        width: parent.width
-        height: parent.height
         layer.enabled: true
 
         Image {
