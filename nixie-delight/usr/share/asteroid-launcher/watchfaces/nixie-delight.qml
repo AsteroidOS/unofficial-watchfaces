@@ -1,130 +1,143 @@
 // SPDX-FileCopyrightText: 2021 Ed Beroset <github.com/beroset>
 // SPDX-License-Identifier: LGPL-2.1-or-later
 
-import QtQuick
 import Qt5Compat.GraphicalEffects
+import QtQuick
 
 Item {
+    id: root
+
     function getTimeDigit(t, index) {
         var timestring = t.toLocaleString(Qt.locale(), (use12H.value ? "hhmmss ap" : "HHmmss"));
         return timestring[index];
     }
 
-    Repeater {
-        id: digits
+    anchors.fill: parent
 
-        model: 4
+    Item {
+        id: faceBox
 
-        Item {
-            id: digitHolder
+        width: Math.min(parent.width, parent.height)
+        height: width
+        anchors.centerIn: parent
 
-            property real sizefactor: parent.width / 2 / 289
+        Repeater {
+            id: digits
 
-            width: parent.width / 6
-            height: parent.width / 3
-            x: parent.width / 5 * index + parent.width / 8
-            y: parent.height / 3
+            model: 4
 
-            Image {
-                id: nixieBackground
+            Item {
+                id: digitHolder
 
-                visible: !displayAmbient
-                scale: sizefactor
-                opacity: displayAmbient ? 0.6 : 1
-                source: "../watchfaces-img/nixie-delight-nixie.png"
+                property real sizefactor: parent.width / 2 / 289
 
-                anchors {
-                    centerIn: parent
-                    verticalCenterOffset: parent.height * 0.15
+                width: parent.width / 6
+                height: parent.width / 3
+                x: parent.width / 5 * index + parent.width / 8
+                y: parent.height / 3
+
+                Image {
+                    id: nixieBackground
+
+                    visible: !displayAmbient
+                    scale: sizefactor
+                    opacity: displayAmbient ? 0.6 : 1
+                    source: "../watchfaces-img/nixie-delight-nixie.png"
+
+                    anchors {
+                        centerIn: parent
+                        verticalCenterOffset: parent.height * 0.15
+                    }
+
                 }
 
-            }
+                Text {
+                    id: digit
 
-            Text {
-                id: digit
+                    anchors.centerIn: parent
+                    color: "orange"
+                    visible: !displayAmbient
+                    horizontalAlignment: Text.AlignHCenter
+                    text: getTimeDigit(wallClock.time, index)
 
-                anchors.centerIn: parent
-                color: "orange"
-                visible: !displayAmbient
-                horizontalAlignment: Text.AlignHCenter
-                text: getTimeDigit(wallClock.time, index)
+                    font {
+                        pixelSize: nixieBackground.height * 0.35 * sizefactor
+                        family: "Montserrat"
+                        weight: Font.Light
+                    }
 
-                font {
-                    pixelSize: nixieBackground.height * 0.35 * sizefactor
-                    family: "Montserrat"
-                    weight: Font.Light
                 }
 
-            }
-
-            Glow {
-                anchors.fill: digit
-                radius: displayAmbient ? 10 : 20
-                samples: 9
-                color: "darkorange"
-                source: digit
-            }
-
-        }
-
-    }
-
-    Text {
-        visible: !displayAmbient
-        font.pixelSize: parent.height * 0.1
-        font.family: "Feronia"
-        color: "brown"
-        style: Text.Outline
-        styleColor: "darkorange"
-        horizontalAlignment: Text.AlignHCenter
-        text: "Asteroid OS"
-
-        anchors {
-            centerIn: parent
-            verticalCenterOffset: parent.width * 0.3
-        }
-
-    }
-
-    Repeater {
-        id: secondMarks
-
-        model: 60
-
-        Rectangle {
-            id: second
-
-            visible: !displayAmbient
-            antialiasing: true
-            color: "black"
-            width: parent.width * 0.04
-            height: parent.height * 0.04
-            radius: parent.height * 0.02
-            transform: [
-                Rotation {
-                    origin.x: second.width / 2
-                    origin.y: second.height + parent.height * 0.45
-                    angle: (index) * 360 / secondMarks.count
-                },
-                Translate {
-                    x: (parent.width - second.width) / 2
-                    y: parent.height / 2 - (second.height + parent.height * 0.45)
-                }
-            ]
-
-            Rectangle {
-                anchors.centerIn: parent
-                height: parent.height * 0.8
-                width: parent.width * 0.8
-                radius: parent.width * 0.4
-                color: "orange"
-                opacity: wallClock.time.getSeconds() == index ? 1 : 0
-                layer.enabled: wallClock.time.getSeconds() == index
-
-                layer.effect: Glow {
-                    radius: 7
+                Glow {
+                    anchors.fill: digit
+                    radius: displayAmbient ? 10 : 20
                     samples: 9
                     color: "darkorange"
+                    source: digit
+                }
+
+            }
+
+        }
+
+        Text {
+            visible: !displayAmbient
+            font.pixelSize: parent.height * 0.1
+            font.family: "Feronia"
+            color: "brown"
+            style: Text.Outline
+            styleColor: "darkorange"
+            horizontalAlignment: Text.AlignHCenter
+            text: "Asteroid OS"
+
+            anchors {
+                centerIn: parent
+                verticalCenterOffset: parent.width * 0.3
+            }
+
+        }
+
+        Repeater {
+            id: secondMarks
+
+            model: 60
+
+            Rectangle {
+                id: second
+
+                visible: !displayAmbient
+                antialiasing: true
+                color: "black"
+                width: parent.width * 0.04
+                height: parent.height * 0.04
+                radius: parent.height * 0.02
+                transform: [
+                    Rotation {
+                        origin.x: second.width / 2
+                        origin.y: second.height + parent.height * 0.45
+                        angle: (index) * 360 / secondMarks.count
+                    },
+                    Translate {
+                        x: (parent.width - second.width) / 2
+                        y: parent.height / 2 - (second.height + parent.height * 0.45)
+                    }
+                ]
+
+                Rectangle {
+                    anchors.centerIn: parent
+                    height: parent.height * 0.8
+                    width: parent.width * 0.8
+                    radius: parent.width * 0.4
+                    color: "orange"
+                    opacity: wallClock.time.getSeconds() == index ? 1 : 0
+                    layer.enabled: wallClock.time.getSeconds() == index
+
+                    layer.effect: Glow {
+                        radius: 7
+                        samples: 9
+                        color: "darkorange"
+                    }
+
                 }
 
             }
