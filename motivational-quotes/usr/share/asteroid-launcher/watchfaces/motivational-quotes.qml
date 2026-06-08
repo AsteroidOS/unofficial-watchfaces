@@ -30,122 +30,13 @@ Item {
         timeShadow.text = "<b>" + q + "</b>";
         timeShadow2.text = "<b>" + q + "</b>";
     }
-
-    Text {
-        id: timeDisplay
-
-        z: 4
-        textFormat: Text.RichText
-        font.pixelSize: parent.height * 0.15
-        font.family: "Lobster"
-        font.styleName: "Regular"
-        font.capitalization: Font.Capitalize
-        lineHeight: 0.8
-        font.letterSpacing: 0.83
-        color: Qt.rgba(1, 1, 1, 0.95)
-        style: Text.Outline
-        styleColor: Qt.rgba(1, 0.502, 0.502, 0.85)
-        horizontalAlignment: Text.AlignHCenter
-        y: parent.height / 2 - height / 1.8
-
-        anchors {
-            left: parent.left
-            right: parent.right
-        }
-
-        transform: Rotation {
-            origin.x: timeDisplay.width / 2
-            origin.y: timeDisplay.height / 2
-            angle: -4
-        }
-
-        Behavior on text {
-            SequentialAnimation {
-                NumberAnimation {
-                    target: timeDisplay
-                    property: "opacity"
-                    to: 0
-                    duration: 150
-                }
-
-                PropertyAction {
-                }
-
-                NumberAnimation {
-                    target: timeDisplay
-                    property: "opacity"
-                    to: 1
-                    duration: 150
-                }
-
-            }
-
-        }
-
-    }
-
-    Text {
-        id: timeShadow
-
-        z: 3
-        textFormat: Text.RichText
-        font.pixelSize: parent.height * 0.16
-        font.family: "Lobster"
-        font.styleName: "Regular"
-        font.capitalization: Font.Capitalize
-        lineHeight: 0.8
-        font.letterSpacing: 0.83
-        color: Qt.rgba(1, 0.667, 0.667, 0.8)
-        horizontalAlignment: Text.AlignHCenter
-        y: parent.height / 2 - height / 1.8
-
-        anchors {
-            left: parent.left
-            right: parent.right
-        }
-
-        transform: Rotation {
-            origin.x: timeDisplay.width / 2
-            origin.y: timeDisplay.height / 2
-            angle: -8
-        }
-
-    }
-
-    Text {
-        id: timeShadow2
-
-        z: 2
-        textFormat: Text.RichText
-        font.pixelSize: parent.height * 0.17
-        font.family: "Lobster"
-        font.styleName: "Regular"
-        font.capitalization: Font.Capitalize
-        lineHeight: 0.8
-        font.letterSpacing: 0.83
-        color: Qt.rgba(1, 0.667, 0.667, 0.5)
-        horizontalAlignment: Text.AlignHCenter
-        y: parent.height / 2 - height / 1.8
-
-        anchors {
-            left: parent.left
-            right: parent.right
-        }
-
-        transform: Rotation {
-            origin.x: timeDisplay.width / 2
-            origin.y: timeDisplay.height / 2
-            angle: -12
-        }
-
-    }
+    anchors.fill: parent
 
     Canvas {
         id: hourHand
 
         property real rotH: 0
 
-        z: 0
         anchors.fill: parent
         renderStrategy: Canvas.Cooperative
         onPaint: {
@@ -181,7 +72,6 @@ Item {
 
         property real rotM: 0
 
-        z: 1
         anchors.fill: parent
         renderStrategy: Canvas.Cooperative
         onPaint: {
@@ -212,30 +102,144 @@ Item {
         }
     }
 
-    Canvas {
-        property real voffset: -parent.height * 0.017
+    Item {
+        id: faceBox
 
-        z: 3
-        anchors.fill: parent
-        renderStrategy: Canvas.Cooperative
-        onPaint: {
-            var ctx = getContext("2d");
-            ctx.reset();
-            ctx.fillStyle = "white";
-            ctx.strokeStyle = Qt.rgba(1, 0.667, 0.667, 0.8);
-            ctx.textAlign = "center";
-            ctx.textBaseline = "middle";
-            ctx.font = "bold " + height * 0.13 + "px Lobster";
-            ctx.translate(parent.width / 2, parent.height / 2);
-            for (var i = 1; i < 13; i++) {
-                var x = Math.cos((i - 3) / 12 * 2 * Math.PI) * height * 0.42;
-                var y = Math.sin((i - 3) / 12 * 2 * Math.PI) * height * 0.42 - voffset;
-                ctx.beginPath();
-                ctx.fillText(i, x, y);
-                ctx.strokeText(i, x, y);
-                ctx.closePath();
+        width: Math.min(parent.width, parent.height)
+        height: width
+        anchors.centerIn: parent
+
+        Canvas {
+            property real voffset: -parent.height * 0.017
+
+            anchors.fill: parent
+            renderStrategy: Canvas.Cooperative
+            onPaint: {
+                var ctx = getContext("2d");
+                ctx.reset();
+                ctx.fillStyle = "white";
+                ctx.strokeStyle = Qt.rgba(1, 0.667, 0.667, 0.8);
+                ctx.textAlign = "center";
+                ctx.textBaseline = "middle";
+                ctx.font = "bold " + height * 0.13 + "px Lobster";
+                ctx.translate(parent.width / 2, parent.height / 2);
+                for (var i = 1; i < 13; i++) {
+                    var x = Math.cos((i - 3) / 12 * 2 * Math.PI) * height * 0.42;
+                    var y = Math.sin((i - 3) / 12 * 2 * Math.PI) * height * 0.42 - voffset;
+                    ctx.beginPath();
+                    ctx.fillText(i, x, y);
+                    ctx.strokeText(i, x, y);
+                    ctx.closePath();
+                }
             }
         }
+
+        Text {
+            id: timeShadow2
+
+            textFormat: Text.RichText
+            font.pixelSize: parent.height * 0.17
+            font.family: "Lobster"
+            font.styleName: "Regular"
+            font.capitalization: Font.Capitalize
+            lineHeight: 0.8
+            font.letterSpacing: 0.83
+            color: Qt.rgba(1, 0.667, 0.667, 0.5)
+            horizontalAlignment: Text.AlignHCenter
+            y: parent.height / 2 - height / 1.8
+
+            anchors {
+                left: parent.left
+                right: parent.right
+            }
+
+            transform: Rotation {
+                origin.x: timeDisplay.width / 2
+                origin.y: timeDisplay.height / 2
+                angle: -12
+            }
+
+        }
+
+        Text {
+            id: timeShadow
+
+            textFormat: Text.RichText
+            font.pixelSize: parent.height * 0.16
+            font.family: "Lobster"
+            font.styleName: "Regular"
+            font.capitalization: Font.Capitalize
+            lineHeight: 0.8
+            font.letterSpacing: 0.83
+            color: Qt.rgba(1, 0.667, 0.667, 0.8)
+            horizontalAlignment: Text.AlignHCenter
+            y: parent.height / 2 - height / 1.8
+
+            anchors {
+                left: parent.left
+                right: parent.right
+            }
+
+            transform: Rotation {
+                origin.x: timeDisplay.width / 2
+                origin.y: timeDisplay.height / 2
+                angle: -8
+            }
+
+        }
+
+        Text {
+            id: timeDisplay
+
+            textFormat: Text.RichText
+            font.pixelSize: parent.height * 0.15
+            font.family: "Lobster"
+            font.styleName: "Regular"
+            font.capitalization: Font.Capitalize
+            lineHeight: 0.8
+            font.letterSpacing: 0.83
+            color: Qt.rgba(1, 1, 1, 0.95)
+            style: Text.Outline
+            styleColor: Qt.rgba(1, 0.502, 0.502, 0.85)
+            horizontalAlignment: Text.AlignHCenter
+            y: parent.height / 2 - height / 1.8
+
+            anchors {
+                left: parent.left
+                right: parent.right
+            }
+
+            transform: Rotation {
+                origin.x: timeDisplay.width / 2
+                origin.y: timeDisplay.height / 2
+                angle: -4
+            }
+
+            Behavior on text {
+                SequentialAnimation {
+                    NumberAnimation {
+                        target: timeDisplay
+                        property: "opacity"
+                        to: 0
+                        duration: 150
+                    }
+
+                    PropertyAction {
+                    }
+
+                    NumberAnimation {
+                        target: timeDisplay
+                        property: "opacity"
+                        to: 1
+                        duration: 150
+                    }
+
+                }
+
+            }
+
+        }
+
     }
 
     Connections {
