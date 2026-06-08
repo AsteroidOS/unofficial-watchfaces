@@ -23,10 +23,6 @@ Item {
         width: Math.min(parent.width, parent.height)
         height: width
         anchors.centerIn: parent
-        Component.onCompleted: {
-            secondDisplay.second = wallClock.time.getSeconds();
-            secondDisplay.requestPaint();
-        }
 
         Canvas {
             anchors.fill: parent
@@ -85,9 +81,13 @@ Item {
             styleColor: Qt.rgba(0.1, 0.1, 0.1, 0.95)
             opacity: 0.98
             horizontalAlignment: Text.AlignHCenter
-            anchors.horizontalCenter: parent.horizontalCenter
-            y: parent.height / 4
             text: use12H.value ? wallClock.time.toLocaleString(Qt.locale(), "hh ap").slice(0, 2) : wallClock.time.toLocaleString(Qt.locale(), "HH")
+
+            anchors {
+                horizontalCenter: parent.horizontalCenter
+                verticalCenter: parent.verticalCenter
+                verticalCenterOffset: -parent.width * 0.15
+            }
 
             font {
                 pixelSize: parent.height * 0.3
@@ -106,9 +106,13 @@ Item {
             styleColor: Qt.rgba(0.1, 0.1, 0.1, 0.95)
             opacity: 0.98
             horizontalAlignment: Text.AlignHCenter
-            anchors.horizontalCenter: parent.horizontalCenter
-            y: parent.height / 1.95
             text: wallClock.time.toLocaleString(Qt.locale(), "mm")
+
+            anchors {
+                horizontalCenter: parent.horizontalCenter
+                verticalCenter: parent.verticalCenter
+                verticalCenterOffset: parent.width * 0.11
+            }
 
             font {
                 pixelSize: parent.height * 0.3
