@@ -5,8 +5,8 @@
 // Cursor blinks at 1 Hz. Ambient-aware.
 // Font: VT323 (SIL OFL 1.1)
 
-import QtGraphicalEffects 1.15
-import QtQuick 2.15
+import Qt5Compat.GraphicalEffects
+import QtQuick
 
 Item {
     id: root
