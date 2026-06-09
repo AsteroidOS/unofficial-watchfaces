@@ -14,7 +14,7 @@
 // Permission is for non-commercial, community-driven distribution within the AsteroidOS
 // unofficial-watchfaces repository.
 
-import QtQuick 2.9
+import QtQuick
 
 Item {
     id: root
@@ -169,8 +169,7 @@ Item {
     }
 
     Connections {
-        target: wallClock
-        onTimeChanged: {
+        function onTimeChanged() {
             var hour = wallClock.time.getHours();
             var minute = wallClock.time.getMinutes();
             var second = wallClock.time.getSeconds();
@@ -188,6 +187,8 @@ Item {
                 hourHand.requestPaint();
             }
         }
+
+        target: wallClock
     }
 
 }
