@@ -13,7 +13,7 @@
 // Permission is for non-commercial, community-driven distribution within the AsteroidOS
 // unofficial-watchfaces repository.
 
-import QtQuick 2.9
+import QtQuick
 
 Item {
     Rectangle {
