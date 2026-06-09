@@ -16,92 +16,105 @@
 import QtQuick
 
 Item {
+    id: root
+
+    property real maxSize: Math.min(width, height)
+
+    anchors.fill: parent
+
     Rectangle {
-        z: 0
         anchors.fill: parent
         color: Qt.rgba(0, 0, 0, 0.7)
     }
 
-    Text {
-        id: hourDisplay
+    Item {
+        id: faceBox
 
-        z: 1
-        color: Qt.rgba(0.592, 0.937, 0.937, 1)
-        text: wallClock.time.toLocaleString(Qt.locale(), "HH:mm")
+        width: root.maxSize
+        height: root.maxSize
+        anchors.centerIn: parent
 
-        font {
-            pixelSize: parent.height * 0.33
-            family: "Source Sans Pro"
-            styleName: "ExtraLight"
+        Text {
+            id: hourDisplay
+
+            color: Qt.rgba(0.592, 0.937, 0.937, 1)
+            text: wallClock.time.toLocaleString(Qt.locale(), "HH:mm")
+
+            font {
+                pixelSize: root.maxSize * 0.33
+                family: "Source Sans Pro"
+                styleName: "ExtraLight"
+            }
+
+            anchors {
+                topMargin: root.maxSize * 0.11
+                top: parent.top
+                horizontalCenter: parent.horizontalCenter
+            }
+
         }
 
-        anchors {
-            topMargin: parent.height * 0.11
-            top: parent.top
-            horizontalCenter: parent.horizontalCenter
+        Text {
+            id: dowDisplay
+
+            color: Qt.rgba(0.592, 0.937, 0.937, 0.9)
+            horizontalAlignment: Text.AlignHCenter
+            text: Qt.formatDate(wallClock.time, "dddd")
+
+            font {
+                pixelSize: root.maxSize * 0.11
+                family: "Sail Sans Pro"
+                styleName: "ExtraLight"
+            }
+
+            anchors {
+                topMargin: -root.maxSize * 0.015
+                top: hourDisplay.bottom
+                left: hourDisplay.left
+            }
+
         }
 
-    }
+        Text {
+            id: dayDisplay
 
-    Text {
-        id: dowDisplay
+            color: Qt.rgba(1, 1, 1, 1)
+            horizontalAlignment: Text.AlignHCenter
+            text: Qt.formatDate(wallClock.time, "dd")
 
-        color: Qt.rgba(0.592, 0.937, 0.937, 0.9)
-        horizontalAlignment: Text.AlignHCenter
-        text: Qt.formatDate(wallClock.time, "dddd")
+            font {
+                pixelSize: root.maxSize * 0.28
+                family: "Source Sans Pro"
+                styleName: "ExtraLight"
+            }
 
-        font {
-            pixelSize: parent.height * 0.11
-            family: "Sail Sans Pro"
-            styleName: "ExtraLight"
+            anchors {
+                topMargin: -root.maxSize * 0.075
+                top: hourDisplay.bottom
+                right: hourDisplay.right
+            }
+
         }
 
-        anchors {
-            topMargin: -parent.height * 0.015
-            top: hourDisplay.bottom
-            left: hourDisplay.left
-        }
+        Text {
+            id: monthDisplay
 
-    }
+            color: Qt.rgba(0.592, 0.937, 0.937, 0.6)
+            horizontalAlignment: Text.AlignHCenter
+            text: Qt.formatDate(wallClock.time, "MMMM")
 
-    Text {
-        id: dayDisplay
+            font {
+                pixelSize: root.maxSize * 0.1
+                family: "Sail Sans Pro"
+                styleName: "ExtraLight"
+            }
 
-        color: Qt.rgba(1, 1, 1, 1)
-        horizontalAlignment: Text.AlignHCenter
-        text: Qt.formatDate(wallClock.time, "dd")
+            anchors {
+                topMargin: -root.maxSize * 0.03
+                top: dowDisplay.bottom
+                left: dowDisplay.left
+            }
 
-        font {
-            pixelSize: parent.height * 0.28
-            family: "Source Sans Pro"
-            styleName: "ExtraLight"
-        }
-
-        anchors {
-            topMargin: -parent.height * 0.075
-            top: hourDisplay.bottom
-            right: hourDisplay.right
-        }
-
-    }
-
-    Text {
-        id: monthDisplay
-
-        color: Qt.rgba(0.592, 0.937, 0.937, 0.6)
-        horizontalAlignment: Text.AlignHCenter
-        text: Qt.formatDate(wallClock.time, "MMMM")
-
-        font {
-            pixelSize: parent.height * 0.1
-            family: "Sail Sans Pro"
-            styleName: "ExtraLight"
-        }
-
-        anchors {
-            topMargin: -parent.height * 0.03
-            top: dowDisplay.bottom
-            left: dowDisplay.left
         }
 
     }
