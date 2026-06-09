@@ -11,21 +11,23 @@ import QtQuick
 Item {
     id: root
 
+    property real maxSize: Math.min(width, height)
     property real radian: 0.01745
     property string currentColor: "black"
     property string userColor: ""
 
     function growShrink() {
-        circleDoubleClickCover.width = root.width * 0.8;
-        circleDoubleClickCover.height = root.width * 0.8;
+        circleDoubleClickCover.width = root.maxSize * 0.8;
+        circleDoubleClickCover.height = root.maxSize * 0.8;
         shrink.start();
     }
 
+    anchors.fill: parent
     Component.onCompleted: {
         var second = wallClock.time.getSeconds();
         var minute = wallClock.time.getMinutes();
-        circlePulse.width = (second % 2) ? root.width * 0.5 : root.width * 0.65;
-        circlePulse.height = (second % 2) ? root.height * 0.5 : root.height * 0.65;
+        circlePulse.width = (second % 2) ? root.maxSize * 0.5 : root.maxSize * 0.65;
+        circlePulse.height = (second % 2) ? root.maxSize * 0.5 : root.maxSize * 0.65;
         secondCanvas.second = second;
         secondCanvas.minute = minute;
         secondCanvas.requestPaint();
@@ -37,14 +39,14 @@ Item {
         NumberAnimation {
             target: circleDoubleClickCover
             property: "height"
-            to: root.width * 0.5
+            to: root.maxSize * 0.5
             duration: 300
         }
 
         NumberAnimation {
             target: circleDoubleClickCover
             property: "width"
-            to: root.width * 0.5
+            to: root.maxSize * 0.5
             duration: 300
         }
 
@@ -58,8 +60,8 @@ Item {
         x: root.width / 2 - width / 2
         y: root.height / 2 - width / 2
         color: Qt.rgba(1, 1, 1, 0.3)
-        width: root.width * 0.65
-        height: root.height * 0.65
+        width: root.maxSize * 0.65
+        height: root.maxSize * 0.65
         radius: width * 0.5
         state: currentColor
 
@@ -115,10 +117,10 @@ Item {
         visible: !displayAmbient
         antialiasing: true
         x: root.width / 2 - width / 2
-        y: root.height / 2 - width / 2
+        y: root.height / 2 - height / 2
         color: Qt.rgba(1, 1, 1, 1)
-        width: root.width * 0.5
-        height: root.height * 0.5
+        width: root.maxSize * 0.5
+        height: root.maxSize * 0.5
         radius: width * 0.5
         state: currentColor
 
@@ -170,8 +172,8 @@ Item {
         x: root.width / 2 - width / 2
         y: root.height / 2 - width / 2
         color: "white"
-        width: root.width * 0.5
-        height: root.height * 0.5
+        width: root.maxSize * 0.5
+        height: root.maxSize * 0.5
         radius: width * 0.5
         state: currentColor
 
@@ -227,8 +229,8 @@ Item {
         x: centerX + Math.cos(rotM * 2 * Math.PI) * root.width * 0.3
         y: centerY + Math.sin(rotM * 2 * Math.PI) * root.width * 0.3
         color: "white"
-        width: root.width * 0.24
-        height: root.height * 0.24
+        width: root.maxSize * 0.24
+        height: width
         radius: width * 0.5
         state: currentColor
 
@@ -278,7 +280,7 @@ Item {
         property real centerX: root.width / 2 - width / 2
         property real centerY: root.height / 2 - height / 2
 
-        font.pixelSize: root.height / 7.4
+        font.pixelSize: root.maxSize / 7.4
         font.family: "SourceSansPro"
         font.styleName: "Regular"
         color: "black"
@@ -352,10 +354,10 @@ Item {
     Text {
         id: hourDisplay
 
-        font.pixelSize: root.height * 0.36
+        font.pixelSize: root.maxSize * 0.36
         font.family: "SourceSansPro"
         font.styleName: "Semibold"
-        font.letterSpacing: -root.height * 0.026
+        font.letterSpacing: -root.maxSize * 0.026
         horizontalAlignment: Text.AlignHCenter
         verticalAlignment: Text.AlignVCenter
         color: "black"
@@ -441,8 +443,8 @@ Item {
         function onTimeChanged() {
             var second = wallClock.time.getSeconds();
             var minute = wallClock.time.getMinutes();
-            circlePulse.width = (second % 2) ? root.width * 0.5 : root.width * 0.65;
-            circlePulse.height = (second % 2) ? root.height * 0.5 : root.height * 0.65;
+            circlePulse.width = (second % 2) ? root.maxSize * 0.5 : root.maxSize * 0.65;
+            circlePulse.height = (second % 2) ? root.maxSize * 0.5 : root.maxSize * 0.65;
             if (secondCanvas.second !== second) {
                 secondCanvas.second = second;
                 secondCanvas.minute = minute;
