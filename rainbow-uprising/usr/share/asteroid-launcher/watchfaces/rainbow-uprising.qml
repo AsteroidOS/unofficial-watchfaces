@@ -9,6 +9,11 @@
 import QtQuick
 
 Item {
+    id: root
+
+    property real maxSize: Math.min(width, height)
+
+    anchors.fill: parent
     Component.onCompleted: {
         var hour = wallClock.time.getHours();
         var minute = wallClock.time.getMinutes();
@@ -23,7 +28,6 @@ Item {
 
     // Static rainbow background — plain Rectangles replace former Canvas.
     Rectangle {
-        z: 1
         x: parent.width / 6 * 0
         width: parent.width / 6
         height: parent.height
@@ -31,7 +35,6 @@ Item {
     }
 
     Rectangle {
-        z: 1
         x: parent.width / 6 * 1
         width: parent.width / 6
         height: parent.height
@@ -39,7 +42,6 @@ Item {
     }
 
     Rectangle {
-        z: 1
         x: parent.width / 6 * 2
         width: parent.width / 6
         height: parent.height
@@ -47,7 +49,6 @@ Item {
     }
 
     Rectangle {
-        z: 1
         x: parent.width / 6 * 3
         width: parent.width / 6
         height: parent.height
@@ -55,7 +56,6 @@ Item {
     }
 
     Rectangle {
-        z: 1
         x: parent.width / 6 * 4
         width: parent.width / 6
         height: parent.height
@@ -63,7 +63,6 @@ Item {
     }
 
     Rectangle {
-        z: 1
         x: parent.width / 6 * 5
         width: parent.width / 6
         height: parent.height
@@ -71,7 +70,6 @@ Item {
     }
 
     Rectangle {
-        z: 4
         anchors.verticalCenter: parent.verticalCenter
         anchors.horizontalCenter: parent.horizontalCenter
         color: Qt.rgba(0, 0, 0, 0.7)
@@ -84,7 +82,6 @@ Item {
 
         property int hour: 0
 
-        z: 3
         anchors.fill: parent
         renderStrategy: Canvas.Cooperative
         onPaint: {
@@ -103,7 +100,6 @@ Item {
 
         property int minute: 0
 
-        z: 3
         anchors.fill: parent
         renderStrategy: Canvas.Cooperative
         onPaint: {
@@ -122,7 +118,6 @@ Item {
 
         property int second: 0
 
-        z: 3
         anchors.fill: parent
         renderStrategy: Canvas.Cooperative
         onPaint: {
@@ -139,52 +134,58 @@ Item {
     Text {
         id: hourDisplay
 
-        z: 6
         renderType: Text.NativeRendering
-        font.pixelSize: parent.height * 0.25
-        font.family: "Titillium"
-        font.styleName: "Bold"
-        lineHeight: parent.height / 330
         color: Qt.rgba(1, 1, 1, 1)
         horizontalAlignment: Text.AlignHCenter
         anchors.top: parent.top
-        anchors.topMargin: parent.height * 0.395
+        anchors.topMargin: root.maxSize * 0.395
         x: parent.width / 6 - width / 2
         text: use12H.value ? wallClock.time.toLocaleString(Qt.locale(), "hh ap").slice(0, 2) : wallClock.time.toLocaleString(Qt.locale(), "HH")
+
+        font {
+            pixelSize: root.maxSize * 0.25
+            family: "Titillium"
+            styleName: "Bold"
+        }
+
     }
 
     Text {
         id: minuteDisplay
 
-        z: 6
         renderType: Text.NativeRendering
-        font.pixelSize: parent.height * 0.25
-        font.family: "Titillium"
-        font.styleName: "Regular"
-        lineHeight: parent.height / 330
         color: Qt.rgba(1, 1, 1, 1)
         horizontalAlignment: Text.AlignHCenter
         anchors.top: parent.top
-        anchors.topMargin: parent.height * 0.395
+        anchors.topMargin: root.maxSize * 0.395
         anchors.horizontalCenter: parent.horizontalCenter
         text: wallClock.time.toLocaleString(Qt.locale(), "mm")
+
+        font {
+            pixelSize: root.maxSize * 0.25
+            family: "Titillium"
+            styleName: "Regular"
+        }
+
     }
 
     Text {
         id: secondDisplay
 
-        z: 6
         renderType: Text.NativeRendering
-        font.pixelSize: parent.height * 0.25
-        font.family: "Titillium"
-        font.styleName: "Thin"
-        lineHeight: parent.height / 330
         color: Qt.rgba(1, 1, 1, 1)
         horizontalAlignment: Text.AlignHCenter
         anchors.top: parent.top
-        anchors.topMargin: parent.height * 0.395
+        anchors.topMargin: root.maxSize * 0.395
         x: parent.width / 6 * 5 - width / 2
         text: wallClock.time.toLocaleString(Qt.locale(), "ss")
+
+        font {
+            pixelSize: root.maxSize * 0.25
+            family: "Titillium"
+            styleName: "Thin"
+        }
+
     }
 
     Connections {
