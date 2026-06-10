@@ -277,17 +277,17 @@ Item {
                 ShapePath {
                     fillColor: "transparent"
                     strokeColor: segmentedArc.colorArray[segmentedArc.chargecolor]
-                    strokeWidth: parent.height * segmentedArc.arcStrokeWidth
+                    strokeWidth: segment.height * segmentedArc.arcStrokeWidth
                     capStyle: ShapePath.FlatCap
                     joinStyle: ShapePath.MiterJoin
-                    startX: parent.width / 2
-                    startY: parent.height * (0.5 - segmentedArc.scalefactor)
+                    startX: segment.width / 2
+                    startY: segment.height * (0.5 - segmentedArc.scalefactor)
 
                     PathAngleArc {
-                        centerX: parent.width / 2
-                        centerY: parent.height / 2
-                        radiusX: segmentedArc.scalefactor * parent.width
-                        radiusY: segmentedArc.scalefactor * parent.height
+                        centerX: segment.width / 2
+                        centerY: segment.height / 2
+                        radiusX: segmentedArc.scalefactor * segment.width
+                        radiusY: segmentedArc.scalefactor * segment.height
                         startAngle: -90 + index * (sweepAngle + (segmentedArc.clockwise ? +segmentedArc.gap : -segmentedArc.gap)) + segmentedArc.start
                         sweepAngle: segmentedArc.clockwise ? (segmentedArc.endFromStart / segmentedArc.segmentAmount) - segmentedArc.gap : -(segmentedArc.endFromStart / segmentedArc.segmentAmount) + segmentedArc.gap
                         moveToStart: true
