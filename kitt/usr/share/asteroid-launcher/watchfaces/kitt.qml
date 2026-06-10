@@ -14,12 +14,6 @@ Item {
 
     anchors.fill: parent
 
-    FontLoader {
-        id: localFont
-
-        name: 'Digital-7 Mono'
-    }
-
     Image {
         id: backgroundImage
 
@@ -52,7 +46,7 @@ Item {
             text: wallClock.time.toLocaleString(Qt.locale(), "<b>ddd</b> d MMM")
 
             font {
-                family: localFont.name
+                family: "Digital-7 Mono"
                 pixelSize: parent.width * 0.1
                 capitalization: Font.Capitalize
             }
@@ -90,7 +84,7 @@ Item {
                 text: use12H.value ? wallClock.time.toLocaleString(Qt.locale(), "hh:mm ap").slice(0, 5) : wallClock.time.toLocaleString(Qt.locale(), "HH:mm")
 
                 font {
-                    family: localFont.name
+                    family: "Digital-7 Mono"
                     pixelSize: parent.width * 0.35
                     capitalization: Font.Capitalize
                 }
@@ -112,7 +106,7 @@ Item {
                 }
 
                 font {
-                    family: localFont.name
+                    family: "Digital-7 Mono"
                     pixelSize: timeDisplay.font.pixelSize * 0.5
                     capitalization: Font.Capitalize
                 }
