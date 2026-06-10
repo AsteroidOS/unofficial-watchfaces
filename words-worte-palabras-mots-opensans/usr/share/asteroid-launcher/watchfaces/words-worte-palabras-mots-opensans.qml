@@ -22,7 +22,7 @@ Item {
         ctx.shadowColor = "black";
         ctx.shadowOffsetX = 0;
         ctx.shadowOffsetY = 0;
-        ctx.shadowBlur = parent.height * 0.0125;
+        ctx.shadowBlur = watchfaceRoot.height * 0.0125;
     }
 
     anchors.fill: parent
@@ -175,7 +175,6 @@ Item {
             style: Text.Outline
             styleColor: "#80000000"
             opacity: 0.9
-            font.pixelSize: parent.height * 0.07
             text: wallClock.time.toLocaleString(Qt.locale(), "<b>ddd</b> d MMM")
 
             anchors {
@@ -183,6 +182,10 @@ Item {
                 top: timeDisplay.bottom
                 left: parent.left
                 right: parent.right
+            }
+
+            font {
+                pixelSize: parent.height * 0.07
             }
 
         }
