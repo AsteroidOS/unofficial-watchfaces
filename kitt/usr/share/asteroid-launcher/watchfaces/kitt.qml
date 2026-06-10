@@ -8,9 +8,11 @@ import org.asteroid.controls
 import org.asteroid.utils
 
 Item {
-    id: watchFace
+    id: root
 
     property string imgPath: "../watchfaces-img/"
+
+    anchors.fill: parent
 
     FontLoader {
         id: localFont
@@ -30,13 +32,13 @@ Item {
     Item {
         id: lcdArea
 
-        height: parent.height * 0.26
+        height: parent.width * 0.26
         width: parent.width * 0.68
 
         anchors {
             horizontalCenter: parent.horizontalCenter
             top: parent.top
-            topMargin: parent.height * 0.22
+            topMargin: parent.width * 0.22
         }
 
         Text {
