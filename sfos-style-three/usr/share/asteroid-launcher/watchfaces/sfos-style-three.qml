@@ -18,104 +18,117 @@ import QtQuick
 Item {
     id: root
 
-    // invisible dark layer used as alpha mask source for the shader knockout effect
-    Rectangle {
-        id: layer2mask
+    property real maxSize: Math.min(width, height)
 
-        anchors.fill: parent
-        color: Qt.rgba(0, 0, 0, 0.7)
-        opacity: 0
-        layer.enabled: true
-    }
+    anchors.fill: parent
 
-    Rectangle {
-        id: _mask
+    Item {
+        id: faceBox
 
-        anchors.fill: layer2mask
-        layer.enabled: true
-        layer.samplerName: "maskSource"
+        width: root.maxSize
+        height: root.maxSize
+        anchors.centerIn: parent
 
+        // invisible dark layer used as alpha mask source for the shader knockout effect
+        Rectangle {
+            id: layer2mask
+
+            anchors.fill: parent
+            color: Qt.rgba(0, 0, 0, 0.7)
+            opacity: 0
+            layer.enabled: true
+        }
+
+        Rectangle {
+            id: _mask
+
+            anchors.fill: layer2mask
+            layer.enabled: true
+            layer.samplerName: "maskSource"
+
+            Text {
+                renderType: Text.NativeRendering
+                color: Qt.rgba(1, 1, 1, 1)
+                text: wallClock.time.toLocaleString(Qt.locale(), "HH")
+
+                font {
+                    pixelSize: root.maxSize * 0.66
+                    family: "Lexend"
+                    styleName: "Black"
+                }
+
+                anchors {
+                    top: parent.top
+                    topMargin: -root.maxSize * 0.16
+                    horizontalCenter: parent.horizontalCenter
+                }
+
+            }
+
+            Text {
+                renderType: Text.NativeRendering
+                color: Qt.rgba(1, 1, 1, 1)
+                text: wallClock.time.toLocaleString(Qt.locale(), "mm")
+
+                font {
+                    pixelSize: root.maxSize * 0.66
+                    family: "Lexend"
+                    styleName: "Black"
+                }
+
+                anchors {
+                    bottom: parent.bottom
+                    bottomMargin: -root.maxSize * 0.16
+                    horizontalCenter: parent.horizontalCenter
+                }
+
+            }
+
+            layer.effect: ShaderEffect {
+                property variant source: layer2mask
+
+                fragmentShader: "../watchfaces-img/sfos-style-three.qsb"
+            }
+
+        }
+
+        // cyan ghost text visible through the knockout — gives the SFOS glow effect
         Text {
             renderType: Text.NativeRendering
-            color: Qt.rgba(1, 1, 1, 1)
+            color: Qt.rgba(0, 0.937, 0.937, 0.4)
             text: wallClock.time.toLocaleString(Qt.locale(), "HH")
 
             font {
-                pixelSize: parent.height * 0.66
+                pixelSize: root.maxSize * 0.66
                 family: "Lexend"
                 styleName: "Black"
             }
 
             anchors {
-                top: parent.top
-                topMargin: -parent.height * 0.16
-                horizontalCenter: parent.horizontalCenter
+                top: faceBox.top
+                topMargin: -root.maxSize * 0.16
+                horizontalCenter: faceBox.horizontalCenter
             }
 
         }
 
         Text {
             renderType: Text.NativeRendering
-            color: Qt.rgba(1, 1, 1, 1)
+            color: Qt.rgba(0, 0.937, 0.937, 0.4)
             text: wallClock.time.toLocaleString(Qt.locale(), "mm")
 
             font {
-                pixelSize: parent.height * 0.66
+                pixelSize: root.maxSize * 0.66
                 family: "Lexend"
                 styleName: "Black"
             }
 
             anchors {
-                bottom: parent.bottom
-                bottomMargin: -parent.height * 0.16
-                horizontalCenter: parent.horizontalCenter
+                bottom: faceBox.bottom
+                bottomMargin: -root.maxSize * 0.16
+                horizontalCenter: faceBox.horizontalCenter
             }
 
-        }
-
-        layer.effect: ShaderEffect {
-            property variant source: layer2mask
-
-            fragmentShader: "../watchfaces-img/sfos-style-three.qsb"
-        }
-
-    }
-
-    // cyan ghost text visible through the knockout — gives the SFOS glow effect
-    Text {
-        renderType: Text.NativeRendering
-        color: Qt.rgba(0, 0.937, 0.937, 0.4)
-        text: wallClock.time.toLocaleString(Qt.locale(), "HH")
-
-        font {
-            pixelSize: parent.height * 0.66
-            family: "Lexend"
-            styleName: "Black"
-        }
-
-        anchors {
-            top: parent.top
-            topMargin: -parent.height * 0.16
-            horizontalCenter: parent.horizontalCenter
-        }
-
-    }
-
-    Text {
-        renderType: Text.NativeRendering
-        color: Qt.rgba(0, 0.937, 0.937, 0.4)
-        text: wallClock.time.toLocaleString(Qt.locale(), "mm")
-
-        font {
-            pixelSize: parent.height * 0.66
-            family: "Lexend"
-            styleName: "Black"
-        }
-
-        anchors {
-            bottom: parent.bottom
-            bottomMargin: -parent.height * 0.16
-            horizontalCenter: parent.horizontalCenter
         }
 
     }
