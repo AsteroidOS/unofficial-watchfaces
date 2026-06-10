@@ -6,12 +6,10 @@
 // SPDX-FileCopyrightText: 2014 Aleksi Suomalainen <suomalainen.aleksi@gmail.com>
 // SPDX-License-Identifier: BSD-3-Clause
 
-import Nemo.Mce 1.0
-import QtGraphicalEffects 1.15
-import QtQuick 2.15
-import QtQuick.Shapes 1.15
-import org.asteroid.controls 1.0
-import org.asteroid.utils 1.0
+import Nemo.Mce
+import QtQuick
+import QtQuick.Shapes
+import org.asteroid.controls
 
 Item {
     id: root
