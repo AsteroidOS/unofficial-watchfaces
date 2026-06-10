@@ -1,11 +1,11 @@
 // SPDX-FileCopyrightText: 2016 Velox <github.com/velox>
 // SPDX-License-Identifier: LGPL-2.1-or-later
 
-import Nemo.Mce 1.0
-import QtQuick 2.9
-import QtSensors 5.11
-import org.asteroid.controls 1.0
-import org.asteroid.utils 1.0
+import Nemo.Mce
+import QtQuick
+import QtSensors
+import org.asteroid.controls
+import org.asteroid.utils
 
 Item {
     id: watchFace
