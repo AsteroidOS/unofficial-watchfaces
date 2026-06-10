@@ -6,10 +6,8 @@
 // SPDX-FileCopyrightText: 2012 Arto Jalkanen <ajalkane@gmail.com>
 // SPDX-License-Identifier: LGPL-2.1-or-later
 
-import Nemo.Mce 1.0
-import QtQuick 2.1
-import org.asteroid.controls 1.0
-import org.asteroid.utils 1.0
+import Nemo.Mce
+import QtQuick
 
 Item {
     Component.onCompleted: {
@@ -356,16 +354,15 @@ Item {
     }
 
     Connections {
-        target: wallClock
-        onTimeChanged: {
+        function onTimeChanged() {
             var hour = wallClock.time.getHours();
             var minute = wallClock.time.getMinutes();
             var second = wallClock.time.getSeconds();
             // Update orbiting battery label position imperatively to avoid
             // per-frame trig binding evaluation.
             var rotB = (batteryChargePercentage.percent - 25) / 100;
-            var cx = parent.width / 2 - batteryDisplay.width / 2;
-            var cy = parent.height / 2 - batteryDisplay.height / 2;
+            var cx = root.width / 2 - batteryDisplay.width / 2;
+            var cy = root.height / 2 - batteryDisplay.height / 2;
             batteryDisplay.x = cx + Math.cos(rotB * 2 * Math.PI) * batteryDisplay.height * 4.5;
             batteryDisplay.y = cy + Math.sin(rotB * 2 * Math.PI) * batteryDisplay.height * 4.5;
             if (secondHand.second !== second) {
@@ -382,6 +379,8 @@ Item {
                 hourArc.requestPaint();
             }
         }
+
+        target: wallClock
     }
 
 }
