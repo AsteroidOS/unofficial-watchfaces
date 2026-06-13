@@ -17,68 +17,59 @@ Item {
 
     anchors.fill: parent
 
-    Item {
-        id: faceBox
+    Rectangle {
+        id: layer2mask
 
-        width: root.maxSize
-        height: root.maxSize
-        anchors.centerIn: parent
-        
-        Rectangle {
-            id: layer2mask
+        anchors.fill: parent
+        color: Qt.rgba(0, 0, 0, 0.75)
+        opacity: 0
+        layer.enabled: true
+    }
 
-            anchors.fill: parent
-            color: Qt.rgba(0, 0, 0, 1)
-            opacity: 0
-            layer.enabled: true
+    Rectangle {
+        id: _mask
+
+        anchors.fill: layer2mask
+        color: Qt.rgba(0, 1, 0, 0)
+        layer.enabled: true
+        layer.samplerName: "maskSource"
+
+        Text {
+            renderType: Text.NativeRendering
+            color: Qt.rgba(1, 1, 1, 1)
+            x: parent.width / 2 - width / 2.075
+            y: parent.height / 2 - (height * 0.885)
+            text: use12H.value ? wallClock.time.toLocaleString(Qt.locale(), "hh ap").slice(0, 2) : wallClock.time.toLocaleString(Qt.locale(), "HH")
+
+            font {
+                pixelSize: root.maxSize * 0.585
+                letterSpacing: -root.maxSize * 0.06
+                family: "Item"
+                styleName: "Black"
+            }
+
         }
 
-        Rectangle {
-            id: _mask
+        Text {
+            renderType: Text.NativeRendering
+            color: Qt.rgba(1, 1, 1, 1)
+            x: parent.width / 2 - width / 2.075
+            y: parent.height / 2.65
+            text: wallClock.time.toLocaleString(Qt.locale(), "mm")
 
-            anchors.fill: layer2mask
-            color: Qt.rgba(0, 1, 0, 0)
-            layer.enabled: true
-            layer.samplerName: "maskSource"
-
-            Text {
-                renderType: Text.NativeRendering
-                color: Qt.rgba(1, 1, 1, 1)
-                x: parent.width / 2 - width / 2.075
-                y: parent.height / 2 - (height * 0.885)
-                text: use12H.value ? wallClock.time.toLocaleString(Qt.locale(), "hh ap").slice(0, 2) : wallClock.time.toLocaleString(Qt.locale(), "HH")
-
-                font {
-                    pixelSize: parent.height * 0.585
-                    letterSpacing: -parent.width * 0.06
-                    family: "Item"
-                    styleName: "Black"
-                }
-
+            font {
+                pixelSize: root.maxSize * 0.585
+                letterSpacing: -root.maxSize * 0.06
+                family: "Item"
+                styleName: "Black"
             }
 
-            Text {
-                renderType: Text.NativeRendering
-                color: Qt.rgba(1, 1, 1, 1)
-                x: parent.width / 2 - width / 2.075
-                y: parent.height / 2.65
-                text: wallClock.time.toLocaleString(Qt.locale(), "mm")
+        }
 
-                font {
-                    pixelSize: parent.height * 0.585
-                    letterSpacing: -parent.width * 0.06
-                    family: "Item"
-                    styleName: "Black"
-                }
+        layer.effect: ShaderEffect {
+            property variant source: layer2mask
 
-            }
-
-            layer.effect: ShaderEffect {
-                property variant source: layer2mask
-
-                fragmentShader: "../watchfaces-img/humongous.qsb"
-            }
-
+            fragmentShader: "../watchfaces-img/humongous.qsb"
         }
 
     }
