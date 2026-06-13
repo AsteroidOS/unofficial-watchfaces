@@ -8,7 +8,7 @@
 // Based on a well known Pebble watchface design using the Item font.
 // Fragment shader cuts a dark overlay using giant digit layers as a knockout mask.
 
-import QtQuick 2.9
+import QtQuick
 
 Item {
     Rectangle {
