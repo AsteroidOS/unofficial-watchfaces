@@ -1,4 +1,4 @@
-#!/bin/bash
+#! /usr/bin/env bash
 #
 # Quick Test Examples
 # Run these commands to test specific scenarios

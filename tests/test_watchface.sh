@@ -1,4 +1,4 @@
-#!/bin/bash
+#! /usr/bin/env bash
 #
 # Test suite for the watchface script
 # This file contains automated tests for the watchface utility
