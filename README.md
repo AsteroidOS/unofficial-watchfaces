@@ -1,3 +1,18 @@
+> [!WARNING]
+> **Qt5 (AsteroidOS 2.1, 2.0 and below) users read this first.** As of June 2026 this repository has been refactored for Qt6 and the watchfaces here will no longer work correctly on AsteroidOS 2.1 and below (Qt5).
+>
+> If you are on AsteroidOS 2.1 (i.e. not actively working on the Qt6 migration), do not pull the latest changes. Clone the last Qt5-compatible state instead:
+>
+> ```bash
+> git clone https://github.com/AsteroidOS/asteroid-launcher-community-watchfaces && \
+> cd asteroid-launcher-community-watchfaces && \
+> git reset --hard d493587
+> ```
+>
+> If you already have a local clone, run `git reset --hard d493587` inside it instead of pulling.
+>
+> AsteroidOS 2.2 (Qt6) users can continue pulling normally.
+
 This repository tries to keep track of AsteroidOS unofficial watchfaces.
 Watchface creation in QtQuick is really easy!
 You can learn how to make your own by following the [Watchface Creation](https://asteroidos.org/wiki/watchfaces-creation/) Guide.
