@@ -4,8 +4,8 @@
 > If you are on AsteroidOS 2.1 (i.e. not actively working on the Qt6 migration), do not pull the latest changes. Clone the last Qt5-compatible state instead:
 >
 > ```bash
-> git clone https://github.com/AsteroidOS/asteroid-launcher-community-watchfaces && \
-> cd asteroid-launcher-community-watchfaces && \
+> git clone https://github.com/AsteroidOS/unofficial-watchfaces && \
+> cd unofficial-watchfaces && \
 > git reset --hard d493587
 > ```
 >
