@@ -1,36 +1,18 @@
-/*
- * Copyright (C) 2016 - Velox <github.com/velox>
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Lesser General Public License as
- * published by the Free Software Foundation, either version 2.1 of the
- * License, or (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program. If not, see <http://www.gnu.org/licenses/>.
- */
+// SPDX-FileCopyrightText: 2016 Velox <github.com/velox>
+// SPDX-License-Identifier: LGPL-2.1-or-later
 
-import Nemo.Mce 1.0
-import QtQuick 2.9
-import QtSensors 5.11
-import org.asteroid.controls 1.0
-import org.asteroid.utils 1.0
+import Nemo.Mce
+import QtQuick
+import QtSensors
+import org.asteroid.controls
+import org.asteroid.utils
 
 Item {
-    id: watchFace
+    id: root
 
     property string imgPath: "../watchfaces-img/"
 
-    FontLoader {
-        id: localFont
-
-        name: 'Digital-7 Mono'
-    }
+    anchors.fill: parent
 
     Image {
         id: backgroundImage
@@ -44,13 +26,13 @@ Item {
     Item {
         id: lcdArea
 
-        height: parent.height * 0.26
+        height: parent.width * 0.26
         width: parent.width * 0.68
 
         anchors {
             horizontalCenter: parent.horizontalCenter
             top: parent.top
-            topMargin: parent.height * 0.22
+            topMargin: parent.width * 0.22
         }
 
         Text {
@@ -64,7 +46,7 @@ Item {
             text: wallClock.time.toLocaleString(Qt.locale(), "<b>ddd</b> d MMM")
 
             font {
-                family: localFont.name
+                family: "Digital-7 Mono"
                 pixelSize: parent.width * 0.1
                 capitalization: Font.Capitalize
             }
@@ -102,7 +84,7 @@ Item {
                 text: use12H.value ? wallClock.time.toLocaleString(Qt.locale(), "hh:mm ap").slice(0, 5) : wallClock.time.toLocaleString(Qt.locale(), "HH:mm")
 
                 font {
-                    family: localFont.name
+                    family: "Digital-7 Mono"
                     pixelSize: parent.width * 0.35
                     capitalization: Font.Capitalize
                 }
@@ -124,7 +106,7 @@ Item {
                 }
 
                 font {
-                    family: localFont.name
+                    family: "Digital-7 Mono"
                     pixelSize: timeDisplay.font.pixelSize * 0.5
                     capitalization: Font.Capitalize
                 }
