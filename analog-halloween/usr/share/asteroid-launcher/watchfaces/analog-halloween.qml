@@ -1,33 +1,22 @@
-/*
- * Copyright (C) 2021 - Ed Beroset <github.com/beroset>
- *               2021 - CosmosDev <github.com/CosmosDev>
- *               2021 - Timo Könnecke <github.com/eLtMosen>
- *               2016 - Sylvia van Os <iamsylvie@openmailbox.org>
- *               2015 - Florent Revest <revestflo@gmail.com>
- *               2012 - Vasiliy Sorokin <sorokin.vasiliy@gmail.com>
- *                      Aleksey Mikhailichenko <a.v.mich@gmail.com>
- *                      Arto Jalkanen <ajalkane@gmail.com>
- * All rights reserved.
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Lesser General Public License as
- * published by the Free Software Foundation, either version 2.1 of the
- * License, or (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program. If not, see <http://www.gnu.org/licenses/>.
- */
+// SPDX-FileCopyrightText: 2021 Ed Beroset <github.com/beroset>
+// SPDX-FileCopyrightText: 2021 CosmosDev <github.com/CosmosDev>
+// SPDX-FileCopyrightText: 2021 Timo Könnecke <github.com/moWerk>
+// SPDX-FileCopyrightText: 2016 Sylvia van Os <iamsylvie@openmailbox.org>
+// SPDX-FileCopyrightText: 2015 Florent Revest <revestflo@gmail.com>
+// SPDX-FileCopyrightText: 2012 Vasiliy Sorokin <sorokin.vasiliy@gmail.com>
+// SPDX-FileCopyrightText: 2012 Aleksey Mikhailichenko <a.v.mich@gmail.com>
+// SPDX-FileCopyrightText: 2012 Arto Jalkanen <ajalkane@gmail.com>
+// SPDX-License-Identifier: LGPL-2.1-or-later
 
-import QtQuick 2.9
+import QtQuick
 
 Item {
-    property string imgPath: "../watchfaces-img/analog-halloween-"
+    id: root
 
+    property string imgPath: "../watchfaces-img/analog-halloween-"
+    property real maxSize: Math.min(width, height)
+
+    anchors.fill: parent
     Component.onCompleted: {
         var h = wallClock.time.getHours();
         var min = wallClock.time.getMinutes();
@@ -35,86 +24,89 @@ Item {
         minuteRot.angle = min * 6;
     }
 
-    Repeater {
-        model: 12
+    Item {
+        id: faceBox
 
-        Rectangle {
-            id: hourTicks
+        width: root.maxSize
+        height: root.maxSize
+        anchors.centerIn: parent
 
-            property real rotM: (index - 3) / 12
-            property real centerX: parent.width / 2 - width / 2
-            property real centerY: parent.height / 2 - height / 2
+        Repeater {
+            model: 12
 
-            z: 1
-            antialiasing: true
-            x: centerX + Math.cos(rotM * 2 * Math.PI) * parent.width * 0.46
-            y: centerY + Math.sin(rotM * 2 * Math.PI) * parent.width * 0.46
-            color: "orange"
-            width: parent.width * 0.02
-            height: parent.height * 0.03
-            opacity: 0.9
+            Rectangle {
+                id: hourTicks
 
-            transform: Rotation {
-                origin.x: width / 2
-                origin.y: height / 2
-                angle: (index) * 30
+                property real rotM: (index - 3) / 12
+                property real centerX: parent.width / 2 - width / 2
+                property real centerY: parent.height / 2 - height / 2
+
+                z: 1
+                antialiasing: true
+                x: centerX + Math.cos(rotM * 2 * Math.PI) * parent.width * 0.46
+                y: centerY + Math.sin(rotM * 2 * Math.PI) * parent.width * 0.46
+                color: "orange"
+                width: parent.width * 0.02
+                height: parent.height * 0.03
+                opacity: 0.9
+
+                transform: Rotation {
+                    origin.x: width / 2
+                    origin.y: height / 2
+                    angle: (index) * 30
+                }
+
             }
 
         }
 
-    }
+        Image {
+            id: hourSVG
 
-    Image {
-        id: hourSVG
+            z: 2
+            source: imgPath + "hour.svg"
+            anchors.fill: parent
 
-        z: 2
-        source: imgPath + "hour.svg"
-        anchors.centerIn: parent
-        width: parent.width
-        height: parent.height
+            transform: Rotation {
+                id: hourRot
 
-        transform: Rotation {
-            id: hourRot
+                origin.x: hourSVG.width / 2
+                origin.y: hourSVG.height / 2
+            }
 
-            origin.x: parent.width / 2
-            origin.y: parent.height / 2
         }
 
-    }
+        Image {
+            id: minuteSVG
 
-    Image {
-        id: minuteSVG
+            z: 3
+            source: imgPath + "minute.svg"
+            anchors.fill: parent
 
-        z: 3
-        source: imgPath + "minute.svg"
-        anchors.centerIn: parent
-        width: parent.width
-        height: parent.height
+            transform: Rotation {
+                id: minuteRot
 
-        transform: Rotation {
-            id: minuteRot
+                origin.x: minuteSVG.width / 2
+                origin.y: minuteSVG.height / 2
+            }
 
-            origin.x: parent.width / 2
-            origin.y: parent.height / 2
         }
 
-    }
+        Image {
+            id: secondSVG
 
-    Image {
-        id: secondSVG
+            z: 4
+            visible: !displayAmbient
+            source: imgPath + "second.svg"
+            anchors.fill: parent
 
-        z: 4
-        visible: !displayAmbient
-        source: imgPath + "second.svg"
-        anchors.centerIn: parent
-        width: parent.width
-        height: parent.height
+            transform: Rotation {
+                id: secondRot
 
-        transform: Rotation {
-            id: secondRot
+                origin.x: secondSVG.width / 2
+                origin.y: secondSVG.height / 2
+            }
 
-            origin.x: parent.width / 2
-            origin.y: parent.height / 2
         }
 
     }
@@ -131,8 +123,7 @@ Item {
     }
 
     Connections {
-        target: wallClock
-        onTimeChanged: {
+        function onTimeChanged() {
             if (!visible)
                 return ;
 
@@ -141,6 +132,8 @@ Item {
             hourRot.angle = h * 30 + min * 0.5;
             minuteRot.angle = min * 6;
         }
+
+        target: wallClock
     }
 
 }
