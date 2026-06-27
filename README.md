@@ -6,7 +6,7 @@
 > ```bash
 > git clone https://github.com/AsteroidOS/unofficial-watchfaces && \
 > cd unofficial-watchfaces && \
-> git reset --hard d493587
+> git reset --hard 2c605dc
 > ```
 >
 > If you already have a local clone, run `git reset --hard d493587` inside it instead of pulling.
