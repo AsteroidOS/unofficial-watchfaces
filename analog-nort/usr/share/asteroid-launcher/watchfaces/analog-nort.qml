@@ -6,8 +6,8 @@
 // SPDX-FileCopyrightText: 2012 Arto Jalkanen <ajalkane@gmail.com>
 // SPDX-License-Identifier: LGPL-2.1-or-later
 
-import Qt5Compat.GraphicalEffects
 import QtQuick
+import QtQuick.Effects
 
 Item {
     id: root
@@ -46,13 +46,12 @@ Item {
                 origin.y: hourSVG.height / 2
             }
 
-            layer.effect: DropShadow {
-                transparentBorder: true
-                horizontalOffset: 0
-                verticalOffset: 0
-                radius: 8
-                samples: 9
-                color: "#66fbfb"
+            layer.effect: MultiEffect {
+                shadowEnabled: true
+                shadowColor: "#66fbfb"
+                shadowHorizontalOffset: 0
+                shadowVerticalOffset: 0
+                shadowBlur: 0.7
             }
 
         }
@@ -73,13 +72,12 @@ Item {
                 origin.y: minuteSVG.height / 2
             }
 
-            layer.effect: DropShadow {
-                transparentBorder: true
-                horizontalOffset: 0
-                verticalOffset: 0
-                radius: 8
-                samples: 9
-                color: "#66fbfb"
+            layer.effect: MultiEffect {
+                shadowEnabled: true
+                shadowColor: "#66fbfb"
+                shadowHorizontalOffset: 0
+                shadowVerticalOffset: 0
+                shadowBlur: 0.7
             }
 
         }
