@@ -65,6 +65,9 @@ deployall       deploy all watchfaces
 clone WF NEWWF  clone the named watchface WF to new watchface NEWWF
 test WF         test the named watchface on the computer using qml
 raw QMLFILE     test a raw QML file without the standard directory structure
+capture WF      render the named watchface headless and store its shipped
+                preview master (watchfaces-preview/WF-full.webp)
+captureall      capture every watchface in the repository
 
 EOF
 }
@@ -133,6 +136,8 @@ done
 
 # Watchface config helper
 function createWatchfaceConfig {
+    local captureMode="${5:-false}"
+    local captureTime="${6:-2021-12-02T13:37:42}"
     CONFIG_TMPDIR=$(mktemp -d -t asteroid-wf-XXXXXX)
     mkdir -p "${CONFIG_TMPDIR}/WatchfaceConfig"
 
@@ -150,6 +155,10 @@ QtObject {
     readonly property string backgroundImage: "$2"
     readonly property string backgroundRoundImage: "$3"
     readonly property string relativeRootDir: "$4"
+    readonly property bool captureMode: ${captureMode}
+    readonly property string captureTime: "${captureTime}"
+    readonly property string galleryThumbnail: "file://${PWD}/.thumbnails/$1.webp"
+    readonly property string galleryThumbnailRound: "file://${PWD}/.thumbnails/$1-round.webp"
 }
 EOF
 }
@@ -389,16 +398,11 @@ function deleteTempFontconfig {
 # temporary fontconfig configuration.
 # Args:
 #   $1 - sourcewatchfacename: Name of the watchface to test
-function testface {
-    local sourcewatchfacename="${1%/*}"
-
-    if ! sourcewatchfacedir=$(findWatchface "${sourcewatchfacename}") ; then
-        exit 1
-    fi
-
-    echo "Testing ${sourcewatchfacename}"
-
-    WATCHFACE_FONTS_PATH="${sourcewatchfacedir}/usr/share/fonts/"
+# Point fontconfig at a watchface's bundled fonts for a local qml run
+# Args:
+#   $1 - Watchface directory (fonts expected under usr/share/fonts/)
+function setupWatchfaceFontconfig {
+    WATCHFACE_FONTS_PATH="${1}/usr/share/fonts/"
 
     if [ -d "${WATCHFACE_FONTS_PATH}" ]; then
         printVerbose "Watchface has custom fonts in path \"${WATCHFACE_FONTS_PATH}\""
@@ -449,6 +453,18 @@ EOF
     else
         printVerbose "Watchface has no custom fonts"
     fi
+}
+
+function testface {
+    local sourcewatchfacename="${1%/*}"
+
+    if ! sourcewatchfacedir=$(findWatchface "${sourcewatchfacename}") ; then
+        exit 1
+    fi
+
+    echo "Testing ${sourcewatchfacename}"
+
+    setupWatchfaceFontconfig "${sourcewatchfacedir}"
 
     if [ ! -f "${PWD}/${WALLPAPER}" ] ; then
         WALLPAPER="${SCRIPT_DIRPATH}/${WALLPAPER}"
@@ -541,6 +557,49 @@ EOF
 # Args:
 #   $1 - watchfacename: Name of the watchface
 #   $2 - watchfacedir: Directory path of the watchface
+# Render one watchface headless and store its shipped preview master. This is
+# the pipeline that generates every watchfaces-preview/<name>-full.webp in the
+# repository: a fixed capture time (13:37:37 on digital faces, 10:12:00 with
+# happy hands on analog ones), battery at 96, square geometry and a transparent
+# background, grabbed once the face has finished loading and settled.
+# Args:
+#   $1 - Watchface name
+function captureface {
+    local sourcewatchfacename="${1%/*}"
+
+    if ! sourcewatchfacedir=$(findWatchface "${sourcewatchfacename}") ; then
+        return 1
+    fi
+    if [[ -z "${QML_BIN}" ]]; then
+        echo "Error: no Qt6 QML binary found (tried qml6, qml-qt6). Install qt6-declarative." >&2
+        return 1
+    fi
+
+    local capturetime="2021-12-02T10:12:00"
+    case "${sourcewatchfacename}" in
+        digital-*) capturetime="2021-12-02T13:37:37" ;;
+    esac
+
+    echo "Capturing ${sourcewatchfacename}"
+    setupWatchfaceFontconfig "${sourcewatchfacedir}"
+    createWatchfaceConfig "${sourcewatchfacename}" "${PWD}/${WALLPAPER}" "${PWD}/${WALLPAPER_ROUND}" "${sourcewatchfacedir}/usr/share/asteroid-launcher/watchfaces/" true "${capturetime}"
+    trap "rm -rf '${CONFIG_TMPDIR}'" EXIT
+    QML_IMPORT_PATH="${SCRIPT_DIRPATH}/fake-components:${CONFIG_TMPDIR}" \
+        ${QML_BIN} "${SCRIPT_DIRPATH}/loader.qml" || return 1
+
+    convertPreviews "${sourcewatchfacename}" "${sourcewatchfacedir}"
+}
+
+# Capture every watchface in the repository in one run
+function captureall {
+    local wf
+    local faces
+    mapfile -t faces < <(find . -maxdepth 3 -type d -path "*/usr/share" 2>/dev/null | sed 's|/usr/share$||' | sort | awk -F '/' '{print $2}')
+    for wf in "${faces[@]}" ; do
+        captureface "${wf}" || echo "Warning: capture failed for ${wf}" >&2
+    done
+}
+
 function convertPreviews {
     local watchfacename="$1"
     local watchfacedir="$2"
@@ -894,13 +953,13 @@ case "$COMMAND" in
             exit 1
         fi
         ;;
-    "deploy"|"test"|"raw")
+    "deploy"|"test"|"raw"|"capture")
         if [[ ${#COMMAND_ARGS[@]} -ne 1 ]]; then
             echo "Error: $COMMAND command requires exactly 1 argument" >&2
             exit 1
         fi
         ;;
-    "deployall"|"update"|"version")
+    "deployall"|"captureall"|"update"|"version")
         if [[ ${#COMMAND_ARGS[@]} -ne 0 ]]; then
             echo "Error: $COMMAND command takes no arguments" >&2
             exit 1
@@ -936,6 +995,14 @@ case "$COMMAND" in
         ;;
     "test")
         testface "${COMMAND_ARGS[0]}"
+        SKIP_INTERACTIVE_PROMPT=true
+        ;;
+    "capture")
+        captureface "${COMMAND_ARGS[0]}" || exit 1
+        SKIP_INTERACTIVE_PROMPT=true
+        ;;
+    "captureall")
+        captureall
         SKIP_INTERACTIVE_PROMPT=true
         ;;
     "raw")
