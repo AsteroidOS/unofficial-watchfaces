@@ -151,7 +151,7 @@ create_test_watchface() {
     local watchface_dir="${base_dir}/${name}"
     
     mkdir -p "${watchface_dir}/usr/share/asteroid-launcher/watchfaces"
-    mkdir -p "${watchface_dir}/usr/share/asteroid-launcher/watchfaces-preview/128"
+    mkdir -p "${watchface_dir}/usr/share/asteroid-launcher/watchfaces-preview"
     
     # Create a minimal QML file
     cat > "${watchface_dir}/usr/share/asteroid-launcher/watchfaces/${name}.qml" << EOF
@@ -169,8 +169,8 @@ Item {
 }
 EOF
     
-    # Create a dummy preview image
-    touch "${watchface_dir}/usr/share/asteroid-launcher/watchfaces-preview/128/${name}.png"
+    # Create a dummy preview master
+    touch "${watchface_dir}/usr/share/asteroid-launcher/watchfaces-preview/${name}-full.webp"
     
     echo "$watchface_dir"
 }
