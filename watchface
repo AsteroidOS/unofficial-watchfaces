@@ -507,8 +507,8 @@ EOF
 }
 
 # Convert preview images for a watchface
-# This function processes PNG preview images and converts them to various
-# resolutions for both the watch and web display
+# This function stores the transparent master as the single shipped watch
+# preview and builds the web thumbnails for the README
 # Args:
 #   $1 - watchfacename: Name of the watchface
 #   $2 - watchfacedir: Directory path of the watchface
@@ -520,33 +520,32 @@ function convertPreviews {
     local magickcmd=""
 
     if [ -f "${transparent}" ] ; then
-        echo "Converting ${transparent}"
         magickcmd="$(command -v magick || command -v convert)"
-
         if [ -z "${magickcmd}" ] ; then
             echo "Error: cannot find either magick or convert (part of ImageMagick) on path"
-            exit 1
+            return 1
         fi
+        echo "Converting ${transparent}"
 
-        # Generate the transparent thumbnail images for the watch
-        # Various resolutions are needed for different watch models
-        for res in 112 128 144 160 182 ; do
-            respath="${watchfacedir}/usr/share/asteroid-launcher/watchfaces-preview/${res}"
-            mkdir -p "${respath}"
-            "${magickcmd}" "${transparent}" \
-                -resize "${res}x${res}" -adaptive-sharpen 0x.8 -quality 70 -strip \
-                "${respath}/${watchfacename}.png"
-        done
+        # Store the transparent master as the single shipped preview, sized to
+        # 40 percent of the current largest display (480px), stripped of image
+        # metadata. The store downloads this and the launcher regenerates a
+        # device sized preview from the live face, so no per resolution PNG set
+        # needs shipping.
+        local previewdir="${watchfacedir}/usr/share/asteroid-launcher/watchfaces-preview"
+        mkdir -p "${previewdir}"
+        "${magickcmd}" "${transparent}" -resize 192x192 -quality 90 -strip "${previewdir}/${watchfacename}-full.webp"
 
         # Generate the thumbnail images for the web (README display)
         [ -d "${PWD}/.thumbnails" ] || mkdir "${PWD}/.thumbnails"
         for thumb in "${watchfacename}" "${watchfacename}-round" ; do
+            [ -f "${thumb}.png" ] || continue
             "${magickcmd}" "${thumb}.png" \
                 -resize "${webResolution}x${webResolution}" -adaptive-sharpen 0x.4 -quality 85 \
                 "${PWD}/.thumbnails/${thumb}.webp"
         done
 
-        rm "${watchfacename}.png" "${watchfacename}-round.png" "${transparent}"
+        rm -f "${watchfacename}.png" "${watchfacename}-round.png" "${transparent}"
 
         echo "| ![thumbnail](.thumbnails/${watchfacename}-round.webp) |![thumbnail](.thumbnails/${watchfacename}.webp) | [${watchfacename}](${watchfacename}/usr/share/asteroid-launcher/watchfaces/${watchfacename}.qml) | [yourname](https://github.com/yourname) |" > "${watchfacename}.md"
         echo "Add the contents of ${watchfacename}.md to README.md, adding font licenses and your name"
