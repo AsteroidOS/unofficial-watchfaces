@@ -1,3 +1,4 @@
 module QtSensors
 HrmSensor HrmSensor.qml
 Compass Compass.qml
+StepCounterSensor StepCounterSensor.qml
