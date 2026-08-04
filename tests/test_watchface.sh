@@ -318,6 +318,20 @@ test_test_command_validation() {
     assert_failure "$exit_code" "Test command fails with nonexistent watchface"
 }
 
+test_capture_command_validation() {
+    echo -e "\n${YELLOW}Testing: Capture command validation${NC}"
+    
+    "$WATCHFACE_SCRIPT" capture nonexistent-watchface 2>&1
+    local exit_code=$?
+    
+    assert_failure "$exit_code" "Capture command fails with nonexistent watchface"
+    
+    "$WATCHFACE_SCRIPT" capture 2>&1
+    exit_code=$?
+    
+    assert_failure "$exit_code" "Capture command requires a watchface argument"
+}
+
 # ============================================================================
 # Test Runner
 # ============================================================================
@@ -339,6 +353,7 @@ run_tests() {
     test_invalid_command
     test_clone_wrong_args
     test_test_command_validation
+    test_capture_command_validation
     
     teardown
     
