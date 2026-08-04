@@ -50,6 +50,13 @@ Available options:
 -w or --wall WP         set the wallpaper for deploy or test to the named file (WP)
 -v or --verbose         print verbose messages (useful for debugging)
 
+Deployment target:
+Watchfaces deploy to the ceres user folder (~/.local/share/asteroid-launcher,
+fonts to ~/.fonts), the same place the on-device store installs into, and
+activate without a session restart. A watchface previously deployed into
+/usr/share/asteroid-launcher by an older version of this script shadows the
+user copy; remove it from the system folder manually.
+
 Available commands:
 update          use git to update your local copy of the unoffical-watchfaces repository
 version         display the version of this program and exit
@@ -91,6 +98,14 @@ SKIP_INTERACTIVE_PROMPT=false
 # Default wallpaper files unless user specifies others
 WALLPAPER="background.jpg"              # Square display wallpaper
 WALLPAPER_ROUND="background-round.jpg"  # Circular display wallpaper
+
+# XDG user install paths on the watch (ceres)
+# The watchface store installs community watchfaces into the user data folder,
+# so deploying to the same place matches the on device layout and never writes
+# to the read only system folder.
+CERES_HOME="/home/ceres"
+XDG_LAUNCHER_DIR="${CERES_HOME}/.local/share/asteroid-launcher"
+XDG_FONTS_DIR="${CERES_HOME}/.fonts"
 
 # Watchface deployment settings
 DEFAULTOPTION=OFF               # Default to all watchfaces unselected for deploy
@@ -211,11 +226,22 @@ function pushFiles {
     fi
 }
 
-# Push a watchface directory structure to the watch
+# Push a watchface directory structure to the watch user folder
+# The asteroid-launcher content goes to the XDG data folder and any bundled
+# fonts to the user font folder, both owned by ceres. In ADB mode the push runs
+# as root, so ownership is corrected afterwards.
 # Args:
 #   $1 - Watchface directory path containing usr/share/* structure
 function pushWatchface {
-    pushFiles "root" "${1}"'/usr/share/*' "/usr/share/"
+    local dir="$1"
+    runWatchCommand "ceres" "mkdir -p ${XDG_LAUNCHER_DIR} ${XDG_FONTS_DIR}" || return 1
+    pushFiles "ceres" "${dir}"'/usr/share/asteroid-launcher/*' "${XDG_LAUNCHER_DIR}/" || return 1
+    if [ -d "${dir}/usr/share/fonts" ] ; then
+        pushFiles "ceres" "${dir}"'/usr/share/fonts/*' "${XDG_FONTS_DIR}/" || return 1
+    fi
+    if [ "$ADB" = "true" ] ; then
+        runWatchCommand "root" "chown -R ceres:ceres ${XDG_LAUNCHER_DIR} ${XDG_FONTS_DIR}" || return 1
+    fi
 }
 
 # Push a wallpaper image to the watch and set it as the active background
@@ -225,16 +251,14 @@ function pushWallpaper {
     local source="$1"
     local wallpaper
     wallpaper="$(basename "$1")"
-    local destination="/usr/share/asteroid-launcher/wallpapers/full/${wallpaper}"
-    pushFiles "root" "${source}" "${destination}"
+    local destdir="${XDG_LAUNCHER_DIR}/wallpapers/full"
+    local destination="${destdir}/${wallpaper}"
+    runWatchCommand "ceres" "mkdir -p ${destdir}" || return 1
+    pushFiles "ceres" "${source}" "${destination}" || return 1
+    if [ "$ADB" = "true" ] ; then
+        runWatchCommand "root" "chown -R ceres:ceres ${XDG_LAUNCHER_DIR}/wallpapers" || return 1
+    fi
     setDconf "/desktop/asteroid/background-filename" "${destination}"
-}
-
-# Restart the ceres user session on the watch
-# This is necessary after deploying new watchfaces or fonts
-# to make them available to the launcher
-function restartCeres {
-    runWatchCommand "root" "systemctl restart user@1000"
 }
 
 # Reboot the entire watch
@@ -247,7 +271,7 @@ function rebootWatch {
 # Args:
 #   $1 - Watchface name (without .qml extension)
 function activateWatchface {
-    setDconf "/desktop/asteroid/watchface" "/usr/share/asteroid-launcher/watchfaces/${1}.qml"
+    setDconf "/desktop/asteroid/watchface" "${XDG_LAUNCHER_DIR}/watchfaces/${1}.qml"
 }
 
 # ============================================================================
@@ -334,12 +358,17 @@ function deployface {
     fi
 
     echo "Deploying ${sourcewatchfacename}"
-    pushWatchface "${sourcewatchfacedir}"
+    # Activation is gated on the push: pointing the launcher at a file that
+    # never arrived shows a blank homescreen while the script reports success.
+    if ! pushWatchface "${sourcewatchfacedir}" ; then
+        echo "Error: deploying ${sourcewatchfacename} to the watch failed, not activating" >&2
+        return 1
+    fi
 
     if [ "${activate}" = "true" ] ; then
         activateWatchface "${sourcewatchfacename}"
         if [ -f "${WALLPAPER}" ] ; then
-            pushWallpaper "${WALLPAPER}"
+            pushWallpaper "${WALLPAPER}" || echo "Warning: wallpaper push failed" >&2
         fi
     fi
 }
@@ -641,7 +670,6 @@ function guiMenu {
                 deployface "${wf}" "${first}"
                 first=false
             done
-            restartCeres
             if [ "${REBOOT}" = "true" ] ; then
                 rebootWatch
             fi
@@ -903,8 +931,7 @@ case "$COMMAND" in
         SKIP_INTERACTIVE_PROMPT=true
         ;;
     "deploy")
-        deployface "${COMMAND_ARGS[0]}" true
-        restartCeres
+        deployface "${COMMAND_ARGS[0]}" true || exit 1
         SKIP_INTERACTIVE_PROMPT=true
         ;;
     "test")
