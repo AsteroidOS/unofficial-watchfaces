@@ -1,2 +1,3 @@
 module org.asteroid.utils
 singleton DeviceSpecs DeviceSpecs.qml
+BluetoothStatus BluetoothStatus.qml

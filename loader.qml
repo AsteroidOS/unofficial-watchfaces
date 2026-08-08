@@ -8,7 +8,7 @@ import WatchfaceConfig 1.0
 ApplicationWindow {
     id: appRoot
 
-    property bool displayAmbient: ambientCheckBox.checked
+    property bool displayAmbient: ambientCheckBox.checked && !WatchfaceConfig.captureMode
     property bool nightstand: nightstandCheckBox.checked
     property var nameOfWatchfaceToBeTested: WatchfaceConfig.watchfaceName
     property var backgroundImage: WatchfaceConfig.backgroundImage
@@ -46,6 +46,32 @@ ApplicationWindow {
         signal displayAmbientLeft()
     }
 
+    // Headless capture: wait until the face has actually loaded, let bindings
+    // and Canvas painting settle a few ticks, then grab one square transparent
+    // frame and quit. Capture state is applied through bindings on
+    // WatchfaceConfig.captureMode rather than by toggling the persisted GUI
+    // controls, so a batch run neither depends on the developer's last saved
+    // interactive settings nor overwrites them.
+    Timer {
+        id: captureTimer
+
+        property int settleTicks: 0
+
+        running: WatchfaceConfig.captureMode && watchfaceLoader.status === Loader.Ready
+        interval: 400
+        repeat: true
+        onTriggered: {
+            if (++settleTicks < 3)
+                return ;
+
+            running = false;
+            watchfaceDisplayFrame.grabToImage(function(result) {
+                result.saveToFile(appRoot.nameOfWatchfaceToBeTested + "-trans.png");
+                Qt.quit();
+            }, Qt.size(384, 384));
+        }
+    }
+
     Settings {
         property alias round: roundCheckBox.checked
         property alias nonSquare: nonSquare.checked
@@ -64,7 +90,7 @@ ApplicationWindow {
     Binding {
         target: global
         property: "battery"
-        value: batteryCharge.value
+        value: WatchfaceConfig.captureMode ? 96 : batteryCharge.value
     }
 
     Binding {
@@ -207,6 +233,15 @@ ApplicationWindow {
                             ToolTip.visible: hovered
                             ToolTip.delay: 600
                             ToolTip.text: qsTr("Scale down view to 320x320px from 640px")
+                        }
+
+                        CheckBox {
+                            id: referenceCheckBox
+
+                            text: qsTr("ref")
+                            ToolTip.visible: hovered
+                            ToolTip.delay: 600
+                            ToolTip.text: qsTr("Overlay the upstream gallery thumbnail to align positions")
                         }
 
                     }
@@ -569,27 +604,33 @@ ApplicationWindow {
             id: watchfaceDisplayFrame
 
             function snapshot(suffix) {
+                var refWasOn = referenceCheckBox.checked;
+                referenceCheckBox.checked = false;
                 watchfaceDisplayFrame.grabToImage(function(result) {
                     result.saveToFile(appRoot.nameOfWatchfaceToBeTested + suffix);
+                    referenceCheckBox.checked = refWasOn;
                 }, Qt.size(640, 640));
             }
 
-            height: halfSize.checked ? 320 : 640
-            width: nonSquare.checked ? height * 0.85 : height
+            // Capture is always the full transparent square, whatever
+            // geometry the GUI toggles last held.
+            color: WatchfaceConfig.captureMode ? "transparent" : "white"
+            height: WatchfaceConfig.captureMode ? 640 : (halfSize.checked ? 320 : 640)
+            width: WatchfaceConfig.captureMode ? height : (nonSquare.checked ? height * 0.85 : height)
 
             Rectangle {
                 id: frame
 
                 anchors.fill: parent
-                color: "black"
+                color: WatchfaceConfig.captureMode ? "transparent" : "black"
                 focus: true
-                layer.enabled: roundCheckBox.checked
+                layer.enabled: roundCheckBox.checked && !WatchfaceConfig.captureMode
                 Keys.onReturnPressed: watchfaceDisplayFrame.snapshot()
 
                 Image {
                     id: background
 
-                    visible: !appRoot.displayAmbient
+                    visible: !appRoot.displayAmbient && !WatchfaceConfig.captureMode
                     source: appRoot.backgroundImage
                     anchors.fill: parent
                 }
@@ -599,6 +640,18 @@ ApplicationWindow {
 
                     anchors.fill: parent
                     source: appRoot.relativeRootDir + appRoot.nameOfWatchfaceToBeTested + ".qml"
+                }
+
+                Image {
+                    id: referenceOverlay
+
+                    z: 100
+                    anchors.fill: parent
+                    source: roundCheckBox.checked ? WatchfaceConfig.galleryThumbnailRound : WatchfaceConfig.galleryThumbnail
+                    opacity: referenceCheckBox.checked ? 0.5 : 0
+                    // An alignment aid only: never part of a capture, and
+                    // snapshot() hides it around the grab.
+                    visible: opacity > 0 && !WatchfaceConfig.captureMode
                 }
 
                 layer.effect: OpacityMask {
@@ -618,13 +671,13 @@ ApplicationWindow {
             Item {
                 id: use12H
 
-                property bool value: twelveHourCheckBox.checked
+                property bool value: twelveHourCheckBox.checked && !WatchfaceConfig.captureMode
             }
 
             Item {
                 id: wallClock
 
-                property var time: getDisplayTime()
+                property var time: WatchfaceConfig.captureMode ? new Date(WatchfaceConfig.captureTime) : getDisplayTime()
 
                 function getDisplayTime(statictime) {
                     var displayTime = new Date();
@@ -637,7 +690,7 @@ ApplicationWindow {
 
                 Timer {
                     interval: 1000
-                    running: true
+                    running: !WatchfaceConfig.captureMode
                     repeat: true
                     onTriggered: wallClock.time = wallClock.getDisplayTime()
                 }
