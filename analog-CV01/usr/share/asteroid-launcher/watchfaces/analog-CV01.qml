@@ -1,5 +1,6 @@
 /*
- * Copyright (C) 2022 - Ivo Hulsman <github.com/ivohulsman>
+ * Copyright (C) 2026 - Jessica Tran <https://cambionn.nl>
+ *               2022 - Ivo Hulsman <github.com/ivohulsman>
  *               2021 - Timo Könnecke <github.com/eLtMosen>
  *               2016 - Sylvia van Os <iamsylvie@openmailbox.org>
  *               2015 - Florent Revest <revestflo@gmail.com>
