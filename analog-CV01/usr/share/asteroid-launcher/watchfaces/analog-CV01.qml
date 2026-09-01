@@ -227,6 +227,7 @@ Item {
                 ctx.stroke();
                 ctx.closePath();
             }
+
         }
 
         Text {
