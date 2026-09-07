@@ -115,7 +115,6 @@ Item {
                 ctx.stroke();
                 ctx.closePath();
             }
-
         }
 
         Repeater {
@@ -227,7 +226,6 @@ Item {
                 ctx.stroke();
                 ctx.closePath();
             }
-
         }
 
         Text {
@@ -372,4 +370,3 @@ Item {
     }
 
 }
-
