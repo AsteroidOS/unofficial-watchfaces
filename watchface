@@ -50,6 +50,13 @@ Available options:
 -w or --wall WP         set the wallpaper for deploy or test to the named file (WP)
 -v or --verbose         print verbose messages (useful for debugging)
 
+Deployment target:
+Watchfaces deploy to the ceres user folder (~/.local/share/asteroid-launcher,
+fonts to ~/.fonts), the same place the on-device store installs into, and
+activate without a session restart. A watchface previously deployed into
+/usr/share/asteroid-launcher by an older version of this script shadows the
+user copy; remove it from the system folder manually.
+
 Available commands:
 update          use git to update your local copy of the unoffical-watchfaces repository
 version         display the version of this program and exit
@@ -58,6 +65,9 @@ deployall       deploy all watchfaces
 clone WF NEWWF  clone the named watchface WF to new watchface NEWWF
 test WF         test the named watchface on the computer using qml
 raw QMLFILE     test a raw QML file without the standard directory structure
+capture WF      render the named watchface headless and store its shipped
+                preview master (watchfaces-preview/WF-full.webp)
+captureall      capture every watchface in the repository
 
 EOF
 }
@@ -92,6 +102,14 @@ SKIP_INTERACTIVE_PROMPT=false
 WALLPAPER="background.jpg"              # Square display wallpaper
 WALLPAPER_ROUND="background-round.jpg"  # Circular display wallpaper
 
+# XDG user install paths on the watch (ceres)
+# The watchface store installs community watchfaces into the user data folder,
+# so deploying to the same place matches the on device layout and never writes
+# to the read only system folder.
+CERES_HOME="/home/ceres"
+XDG_LAUNCHER_DIR="${CERES_HOME}/.local/share/asteroid-launcher"
+XDG_FONTS_DIR="${CERES_HOME}/.fonts"
+
 # Watchface deployment settings
 DEFAULTOPTION=OFF               # Default to all watchfaces unselected for deploy
 DEPLOY_ALL=false                # Default to not deploying all watchfaces
@@ -118,6 +136,8 @@ done
 
 # Watchface config helper
 function createWatchfaceConfig {
+    local captureMode="${5:-false}"
+    local captureTime="${6:-2021-12-02T13:37:42}"
     CONFIG_TMPDIR=$(mktemp -d -t asteroid-wf-XXXXXX)
     mkdir -p "${CONFIG_TMPDIR}/WatchfaceConfig"
 
@@ -135,6 +155,10 @@ QtObject {
     readonly property string backgroundImage: "$2"
     readonly property string backgroundRoundImage: "$3"
     readonly property string relativeRootDir: "$4"
+    readonly property bool captureMode: ${captureMode}
+    readonly property string captureTime: "${captureTime}"
+    readonly property string galleryThumbnail: "file://${PWD}/.thumbnails/$1.webp"
+    readonly property string galleryThumbnailRound: "file://${PWD}/.thumbnails/$1-round.webp"
 }
 EOF
 }
@@ -211,11 +235,22 @@ function pushFiles {
     fi
 }
 
-# Push a watchface directory structure to the watch
+# Push a watchface directory structure to the watch user folder
+# The asteroid-launcher content goes to the XDG data folder and any bundled
+# fonts to the user font folder, both owned by ceres. In ADB mode the push runs
+# as root, so ownership is corrected afterwards.
 # Args:
 #   $1 - Watchface directory path containing usr/share/* structure
 function pushWatchface {
-    pushFiles "root" "${1}"'/usr/share/*' "/usr/share/"
+    local dir="$1"
+    runWatchCommand "ceres" "mkdir -p ${XDG_LAUNCHER_DIR} ${XDG_FONTS_DIR}" || return 1
+    pushFiles "ceres" "${dir}"'/usr/share/asteroid-launcher/*' "${XDG_LAUNCHER_DIR}/" || return 1
+    if [ -d "${dir}/usr/share/fonts" ] ; then
+        pushFiles "ceres" "${dir}"'/usr/share/fonts/*' "${XDG_FONTS_DIR}/" || return 1
+    fi
+    if [ "$ADB" = "true" ] ; then
+        runWatchCommand "root" "chown -R ceres:ceres ${XDG_LAUNCHER_DIR} ${XDG_FONTS_DIR}" || return 1
+    fi
 }
 
 # Push a wallpaper image to the watch and set it as the active background
@@ -225,16 +260,14 @@ function pushWallpaper {
     local source="$1"
     local wallpaper
     wallpaper="$(basename "$1")"
-    local destination="/usr/share/asteroid-launcher/wallpapers/full/${wallpaper}"
-    pushFiles "root" "${source}" "${destination}"
+    local destdir="${XDG_LAUNCHER_DIR}/wallpapers/full"
+    local destination="${destdir}/${wallpaper}"
+    runWatchCommand "ceres" "mkdir -p ${destdir}" || return 1
+    pushFiles "ceres" "${source}" "${destination}" || return 1
+    if [ "$ADB" = "true" ] ; then
+        runWatchCommand "root" "chown -R ceres:ceres ${XDG_LAUNCHER_DIR}/wallpapers" || return 1
+    fi
     setDconf "/desktop/asteroid/background-filename" "${destination}"
-}
-
-# Restart the ceres user session on the watch
-# This is necessary after deploying new watchfaces or fonts
-# to make them available to the launcher
-function restartCeres {
-    runWatchCommand "root" "systemctl restart user@1000"
 }
 
 # Reboot the entire watch
@@ -247,7 +280,7 @@ function rebootWatch {
 # Args:
 #   $1 - Watchface name (without .qml extension)
 function activateWatchface {
-    setDconf "/desktop/asteroid/watchface" "/usr/share/asteroid-launcher/watchfaces/${1}.qml"
+    setDconf "/desktop/asteroid/watchface" "${XDG_LAUNCHER_DIR}/watchfaces/${1}.qml"
 }
 
 # ============================================================================
@@ -334,12 +367,17 @@ function deployface {
     fi
     
     echo "Deploying ${sourcewatchfacename}"
-    pushWatchface "${sourcewatchfacedir}"
+    # Activation is gated on the push: pointing the launcher at a file that
+    # never arrived shows a blank homescreen while the script reports success.
+    if ! pushWatchface "${sourcewatchfacedir}" ; then
+        echo "Error: deploying ${sourcewatchfacename} to the watch failed, not activating" >&2
+        return 1
+    fi
     
     if [ "${activate}" = "true" ] ; then
         activateWatchface "${sourcewatchfacename}"
         if [ -f "${WALLPAPER}" ] ; then
-            pushWallpaper "${WALLPAPER}"
+            pushWallpaper "${WALLPAPER}" || echo "Warning: wallpaper push failed" >&2
         fi
     fi
 }
@@ -360,16 +398,11 @@ function deleteTempFontconfig {
 # temporary fontconfig configuration.
 # Args:
 #   $1 - sourcewatchfacename: Name of the watchface to test
-function testface {
-    local sourcewatchfacename="${1%/*}"
-    
-    if ! sourcewatchfacedir=$(findWatchface "${sourcewatchfacename}") ; then
-        exit 1
-    fi
-    
-    echo "Testing ${sourcewatchfacename}"
-
-    WATCHFACE_FONTS_PATH="${sourcewatchfacedir}/usr/share/fonts/"
+# Point fontconfig at a watchface's bundled fonts for a local qml run
+# Args:
+#   $1 - Watchface directory (fonts expected under usr/share/fonts/)
+function setupWatchfaceFontconfig {
+    WATCHFACE_FONTS_PATH="${1}/usr/share/fonts/"
 
     if [ -d "${WATCHFACE_FONTS_PATH}" ]; then
         printVerbose "Watchface has custom fonts in path \"${WATCHFACE_FONTS_PATH}\""
@@ -420,6 +453,18 @@ EOF
     else
         printVerbose "Watchface has no custom fonts"
     fi
+}
+
+function testface {
+    local sourcewatchfacename="${1%/*}"
+    
+    if ! sourcewatchfacedir=$(findWatchface "${sourcewatchfacename}") ; then
+        exit 1
+    fi
+    
+    echo "Testing ${sourcewatchfacename}"
+
+    setupWatchfaceFontconfig "${sourcewatchfacedir}"
 
     if [ ! -f "${PWD}/${WALLPAPER}" ] ; then
         WALLPAPER="${SCRIPT_DIRPATH}/${WALLPAPER}"
@@ -507,11 +552,54 @@ EOF
 }
 
 # Convert preview images for a watchface
-# This function processes PNG preview images and converts them to various
-# resolutions for both the watch and web display
+# This function stores the transparent master as the single shipped watch
+# preview and builds the web thumbnails for the README
 # Args:
 #   $1 - watchfacename: Name of the watchface
 #   $2 - watchfacedir: Directory path of the watchface
+# Render one watchface headless and store its shipped preview master. This is
+# the pipeline that generates every watchfaces-preview/<name>-full.webp in the
+# repository: a fixed capture time (13:37:37 on digital faces, 10:12:00 with
+# happy hands on analog ones), battery at 96, square geometry and a transparent
+# background, grabbed once the face has finished loading and settled.
+# Args:
+#   $1 - Watchface name
+function captureface {
+    local sourcewatchfacename="${1%/*}"
+    
+    if ! sourcewatchfacedir=$(findWatchface "${sourcewatchfacename}") ; then
+        return 1
+    fi
+    if [[ -z "${QML_BIN}" ]]; then
+        echo "Error: no Qt6 QML binary found (tried qml6, qml-qt6). Install qt6-declarative." >&2
+        return 1
+    fi
+    
+    local capturetime="2021-12-02T10:12:00"
+    case "${sourcewatchfacename}" in
+        digital-*) capturetime="2021-12-02T13:37:37" ;;
+    esac
+    
+    echo "Capturing ${sourcewatchfacename}"
+    setupWatchfaceFontconfig "${sourcewatchfacedir}"
+    createWatchfaceConfig "${sourcewatchfacename}" "${PWD}/${WALLPAPER}" "${PWD}/${WALLPAPER_ROUND}" "${sourcewatchfacedir}/usr/share/asteroid-launcher/watchfaces/" true "${capturetime}"
+    trap "rm -rf '${CONFIG_TMPDIR}'" EXIT
+    QML_IMPORT_PATH="${SCRIPT_DIRPATH}/fake-components:${CONFIG_TMPDIR}" \
+        ${QML_BIN} "${SCRIPT_DIRPATH}/loader.qml" || return 1
+    
+    convertPreviews "${sourcewatchfacename}" "${sourcewatchfacedir}"
+}
+
+# Capture every watchface in the repository in one run
+function captureall {
+    local wf
+    local faces
+    mapfile -t faces < <(find . -maxdepth 3 -type d -path "*/usr/share" 2>/dev/null | sed 's|/usr/share$||' | sort | awk -F '/' '{print $2}')
+    for wf in "${faces[@]}" ; do
+        captureface "${wf}" || echo "Warning: capture failed for ${wf}" >&2
+    done
+}
+
 function convertPreviews {
     local watchfacename="$1"
     local watchfacedir="$2"
@@ -520,33 +608,32 @@ function convertPreviews {
     local magickcmd=""
     
     if [ -f "${transparent}" ] ; then
-        echo "Converting ${transparent}"
-        magickcmd="$(command -v magick || command -v convert)" 
-        
+        magickcmd="$(command -v magick || command -v convert)"
         if [ -z "${magickcmd}" ] ; then
             echo "Error: cannot find either magick or convert (part of ImageMagick) on path"
-            exit 1
+            return 1
         fi
+        echo "Converting ${transparent}"
         
-        # Generate the transparent thumbnail images for the watch
-        # Various resolutions are needed for different watch models
-        for res in 112 128 144 160 182 ; do
-            respath="${watchfacedir}/usr/share/asteroid-launcher/watchfaces-preview/${res}"
-            mkdir -p "${respath}"
-            "${magickcmd}" "${transparent}" \
-                -resize "${res}x${res}" -adaptive-sharpen 0x.8 -quality 70 -strip \
-                "${respath}/${watchfacename}.png"
-        done
+        # Store the transparent master as the single shipped preview, sized to
+        # 40 percent of the current largest display (480px), stripped of image
+        # metadata. The store downloads this and the launcher regenerates a
+        # device sized preview from the live face, so no per resolution PNG set
+        # needs shipping.
+        local previewdir="${watchfacedir}/usr/share/asteroid-launcher/watchfaces-preview"
+        mkdir -p "${previewdir}"
+        "${magickcmd}" "${transparent}" -resize 192x192 -quality 90 -strip "${previewdir}/${watchfacename}-full.webp"
         
         # Generate the thumbnail images for the web (README display)
         [ -d "${PWD}/.thumbnails" ] || mkdir "${PWD}/.thumbnails"
         for thumb in "${watchfacename}" "${watchfacename}-round" ; do
+            [ -f "${thumb}.png" ] || continue
             "${magickcmd}" "${thumb}.png" \
                 -resize "${webResolution}x${webResolution}" -adaptive-sharpen 0x.4 -quality 85 \
                 "${PWD}/.thumbnails/${thumb}.webp"
         done
         
-        rm "${watchfacename}.png" "${watchfacename}-round.png" "${transparent}"
+        rm -f "${watchfacename}.png" "${watchfacename}-round.png" "${transparent}"
         
         echo "| ![thumbnail](.thumbnails/${watchfacename}-round.webp) |![thumbnail](.thumbnails/${watchfacename}.webp) | [${watchfacename}](${watchfacename}/usr/share/asteroid-launcher/watchfaces/${watchfacename}.qml) | [yourname](https://github.com/yourname) |" > "${watchfacename}.md"
         echo "Add the contents of ${watchfacename}.md to README.md, adding font licenses and your name"
@@ -636,7 +723,6 @@ function guiMenu {
                 deployface "${wf}" "${first}"
                 first=false
             done
-            restartCeres
             if [ "${REBOOT}" = "true" ] ; then
                 rebootWatch
             fi
@@ -856,13 +942,13 @@ case "$COMMAND" in
             exit 1
         fi
         ;;
-    "deploy"|"test"|"raw")
+    "deploy"|"test"|"raw"|"capture")
         if [[ ${#COMMAND_ARGS[@]} -ne 1 ]]; then
             echo "Error: $COMMAND command requires exactly 1 argument" >&2
             exit 1
         fi
         ;;
-    "deployall"|"update"|"version")
+    "deployall"|"captureall"|"update"|"version")
         if [[ ${#COMMAND_ARGS[@]} -ne 0 ]]; then
             echo "Error: $COMMAND command takes no arguments" >&2
             exit 1
@@ -893,12 +979,19 @@ case "$COMMAND" in
         SKIP_INTERACTIVE_PROMPT=true
         ;;
     "deploy")
-        deployface "${COMMAND_ARGS[0]}" true
-        restartCeres
+        deployface "${COMMAND_ARGS[0]}" true || exit 1
         SKIP_INTERACTIVE_PROMPT=true
         ;;
     "test")
         testface "${COMMAND_ARGS[0]}"
+        SKIP_INTERACTIVE_PROMPT=true
+        ;;
+    "capture")
+        captureface "${COMMAND_ARGS[0]}" || exit 1
+        SKIP_INTERACTIVE_PROMPT=true
+        ;;
+    "captureall")
+        captureall
         SKIP_INTERACTIVE_PROMPT=true
         ;;
     "raw")
