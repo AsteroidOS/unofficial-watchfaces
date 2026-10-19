@@ -1,2 +1,3 @@
 module org.asteroid.controls
 Icon Icon.qml
+Label Label.qml
