@@ -692,7 +692,7 @@ function textMenu {
     esac
 
     if [ -z "${watchface}" ] ; then
-        dialog --title "No watchface" --msgbox "\nNo watchface selected" 7 30
+        ${MENUPROGRAM} --title "No watchface" --msgbox "\nNo watchface selected" 7 30
         exit
     fi
 
