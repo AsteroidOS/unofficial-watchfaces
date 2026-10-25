@@ -620,6 +620,12 @@ function guiMenu {
     esac
     
     watchface=${watchface//|/ }
+
+    if [ -z "${watchface}" ] ; then
+        zenity --error --title="No watchface" --text="No watchface selected"
+        exit
+    fi
+
     
     if zenity --question --title="Confirming" --text="${action} ${watchface}" ; then
         echo "OK!"
@@ -684,6 +690,11 @@ function textMenu {
             fi
             ;;
     esac
+
+    if [ -z "${watchface}" ] ; then
+        dialog --title "No watchface" --msgbox "\nNo watchface selected" 7 30
+        exit
+    fi
     
     if (${MENUPROGRAM} --clear --title "Confirming" --yesno "${action} ${watchface}" 0 0); then
         echo "OK!"
