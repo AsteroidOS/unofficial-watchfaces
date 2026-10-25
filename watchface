@@ -264,30 +264,30 @@ function watchfaceClone {
     local source_path="$1"
     local dest_name="$2"
     local files
-    
+
     if [ ! -d "${source_path}" ] ; then
         echo "Error: source watchface path \"${source_path}\" does not exist" >&2
         exit 1
     fi
-    
+
     local source_name
     source_name=$(basename "${source_path}")
-    
+
     mapfile -t files <<<"$(cd "${source_path}" && find . -type f | sed 's|^\./||')"
-    
+
     for file in "${files[@]}" ; do
         if [[ -z "${file}" ]] ; then
             continue
         fi
-        
+
         local dest_file
         local destdir
         dest_file="${file//${source_name}/${dest_name}}"
         destdir="${dest_name}/$(dirname "${dest_file}")"
-        
+
         mkdir -p "${destdir}"
         cp "${source_path}/${file}" "${dest_name}/${dest_file}"
-        
+
         local extension="${dest_file##*.}"
         if [ "${extension}" = "qml" ] ; then
             sed -i "s/${source_name}/${dest_name}/g" "${dest_name}/${dest_file}"
@@ -306,17 +306,17 @@ function findWatchface {
     local watchface_name="$1"
     local cwd_path="${PWD}/${watchface_name}"
     local script_path="${SCRIPT_DIRPATH}/${watchface_name}"
-    
+
     if [[ -d "${cwd_path}/usr/share/asteroid-launcher/watchfaces/" ]] ; then
         echo "${cwd_path}"
         return 0
     fi
-    
+
     if [[ -d "${script_path}/usr/share/asteroid-launcher/watchfaces/" ]] ; then
         echo "${script_path}"
         return 0
     fi
-    
+
     echo ""
     return 1
 }
@@ -328,14 +328,14 @@ function findWatchface {
 function deployface {
     local sourcewatchfacename="${1%/*}"
     local activate="$2"
-    
+
     if ! sourcewatchfacedir=$(findWatchface "${sourcewatchfacename}") ; then
         exit 1
     fi
-    
+
     echo "Deploying ${sourcewatchfacename}"
     pushWatchface "${sourcewatchfacedir}"
-    
+
     if [ "${activate}" = "true" ] ; then
         activateWatchface "${sourcewatchfacename}"
         if [ -f "${WALLPAPER}" ] ; then
@@ -362,11 +362,11 @@ function deleteTempFontconfig {
 #   $1 - sourcewatchfacename: Name of the watchface to test
 function testface {
     local sourcewatchfacename="${1%/*}"
-    
+
     if ! sourcewatchfacedir=$(findWatchface "${sourcewatchfacename}") ; then
         exit 1
     fi
-    
+
     echo "Testing ${sourcewatchfacename}"
 
     WATCHFACE_FONTS_PATH="${sourcewatchfacedir}/usr/share/fonts/"
@@ -427,7 +427,7 @@ EOF
     if [ ! -f "${PWD}/${WALLPAPER_ROUND}" ] ; then
         WALLPAPER_ROUND="${SCRIPT_DIRPATH}/${WALLPAPER_ROUND}"
     fi
-    
+
     if [[ -z "${QML_BIN}" ]]; then
         echo "Error: no Qt6 QML binary found (tried qml6, qml-qt6). Install qt6-declarative." >&2
         exit 1
@@ -436,7 +436,7 @@ EOF
     trap "rm -rf '${CONFIG_TMPDIR}'" EXIT
     QML_IMPORT_PATH="${SCRIPT_DIRPATH}/fake-components:${CONFIG_TMPDIR}" \
         ${QML_BIN} "${SCRIPT_DIRPATH}/loader.qml"
-    
+
     convertPreviews "${sourcewatchfacename}" "${sourcewatchfacedir}"
 }
 
@@ -446,24 +446,24 @@ EOF
 #   $1 - qmlfile: Path to the QML file to test
 function testraw {
     local qmlfile="$1"
-    
+
     if [ ! -f "${qmlfile}" ] ; then
         echo "Error: QML file \"${qmlfile}\" does not exist" >&2
         exit 1
     fi
-    
+
     local abs_qmlfile=$(readlink -f "${qmlfile}")
     local qml_dir=$(dirname "${abs_qmlfile}")
     local qml_basename=$(basename "${abs_qmlfile}")
     local qml_name="${qml_basename%.qml}"
-    
+
     echo "Testing raw QML file: ${abs_qmlfile}"
     printVerbose "QML directory: ${qml_dir}"
-    
+
     if [ -d "${qml_dir}/fonts" ]; then
         WATCHFACE_FONTS_PATH="${qml_dir}/fonts/"
         printVerbose "Found fonts directory: ${WATCHFACE_FONTS_PATH}"
-        
+
         LOCAL_FONTCONFIG_BASE_PATH="${XDG_CONFIG_HOME:-$HOME/.config}/fontconfig"
         if [ ! -d "${LOCAL_FONTCONFIG_BASE_PATH}" ]; then
             echo "Warning: Cannot generate temporary fontconfig config file; " \
@@ -473,11 +473,11 @@ function testraw {
             mkdir -p "$LOCAL_FONTCONFIG_PATH"
             local temp_font_config
             temp_font_config=$(mktemp -p "$LOCAL_FONTCONFIG_PATH" --suffix=".conf"  -t 9999-temp_font_config.XXXXXX) || { echo "Failed to generate temporary fontconfig config file" >&2; exit 1; }
-            
+
             printVerbose "Generating temporary fontconfig config file \"${temp_font_config}\""
-            
+
             trap "deleteTempFontconfig \"${temp_font_config}\"" EXIT
-            
+
             cat <<EOF > "${temp_font_config}"
 <?xml version="1.0"?><!DOCTYPE fontconfig SYSTEM "fonts.dtd">
 <fontconfig>
@@ -488,14 +488,14 @@ EOF
     else
         printVerbose "No fonts directory found in ${qml_dir}"
     fi
-    
+
     if [ ! -f "${PWD}/${WALLPAPER}" ] ; then
         WALLPAPER="${SCRIPT_DIRPATH}/${WALLPAPER}"
     fi
     if [ ! -f "${PWD}/${WALLPAPER_ROUND}" ] ; then
         WALLPAPER_ROUND="${SCRIPT_DIRPATH}/${WALLPAPER_ROUND}"
     fi
-    
+
     if [[ -z "${QML_BIN}" ]]; then
         echo "Error: no Qt6 QML binary found (tried qml6, qml-qt6). Install qt6-declarative." >&2
         exit 1
@@ -518,16 +518,16 @@ function convertPreviews {
     local transparent="${watchfacename}-trans.png"
     local webResolution=320
     local magickcmd=""
-    
+
     if [ -f "${transparent}" ] ; then
         echo "Converting ${transparent}"
-        magickcmd="$(command -v magick || command -v convert)" 
-        
+        magickcmd="$(command -v magick || command -v convert)"
+
         if [ -z "${magickcmd}" ] ; then
             echo "Error: cannot find either magick or convert (part of ImageMagick) on path"
             exit 1
         fi
-        
+
         # Generate the transparent thumbnail images for the watch
         # Various resolutions are needed for different watch models
         for res in 112 128 144 160 182 ; do
@@ -537,7 +537,7 @@ function convertPreviews {
                 -resize "${res}x${res}" -adaptive-sharpen 0x.8 -quality 70 -strip \
                 "${respath}/${watchfacename}.png"
         done
-        
+
         # Generate the thumbnail images for the web (README display)
         [ -d "${PWD}/.thumbnails" ] || mkdir "${PWD}/.thumbnails"
         for thumb in "${watchfacename}" "${watchfacename}-round" ; do
@@ -545,16 +545,16 @@ function convertPreviews {
                 -resize "${webResolution}x${webResolution}" -adaptive-sharpen 0x.4 -quality 85 \
                 "${PWD}/.thumbnails/${thumb}.webp"
         done
-        
+
         rm "${watchfacename}.png" "${watchfacename}-round.png" "${transparent}"
-        
+
         echo "| ![thumbnail](.thumbnails/${watchfacename}-round.webp) |![thumbnail](.thumbnails/${watchfacename}.webp) | [${watchfacename}](${watchfacename}/usr/share/asteroid-launcher/watchfaces/${watchfacename}.qml) | [yourname](https://github.com/yourname) |" > "${watchfacename}.md"
         echo "Add the contents of ${watchfacename}.md to README.md, adding font licenses and your name"
     else
         echo "Did not find ${transparent}"
     fi
 }
- 
+
 # Clone a watchface (wrapper function for interactive use)
 # Args:
 #   $1 - sourcewatchfacename: Name of the source watchface
@@ -562,18 +562,18 @@ function convertPreviews {
 function cloneface {
     local sourcewatchfacename="${1%/*}"
     local destwatchface="$2"
-    
+
     if ! sourcewatchfacedir=$(findWatchface "${sourcewatchfacename}") ; then
         exit 1
     fi
-    
+
     echo "Cloning ${sourcewatchfacename} into ${destwatchface}"
-    
+
     if [ -e "${destwatchface}" ] ; then
         echo "Error:  ${destwatchface} already exists, exiting program"
         exit
     fi
-    
+
     watchfaceClone "${sourcewatchfacedir}" "${destwatchface}"
 }
 
@@ -587,7 +587,7 @@ function guiMenu {
     local watchface
     local action
     local default
-    
+
     if ! action=$(zenity --title="Select action" --list --radiolist \
         --column="selected" --column="action" \
         TRUE deploy \
@@ -595,13 +595,13 @@ function guiMenu {
         FALSE test); then
         exit
     fi
-    
+
     if [ "${DEFAULTOPTION}" == "ON" ] ; then
         default=TRUE
     else
         default=FALSE
     fi
-    
+
     case $action in
         deploy)
             declare -a args=('--title="Choose watchfaces"' "--list" "--checklist" '--column="Selected"' '--column="Name"')
@@ -618,7 +618,7 @@ function guiMenu {
             fi
             ;;
     esac
-    
+
     watchface=${watchface//|/ }
 
     if [ -z "${watchface}" ] ; then
@@ -626,7 +626,7 @@ function guiMenu {
         exit
     fi
 
-    
+
     if zenity --question --title="Confirming" --text="${action} ${watchface}" ; then
         echo "OK!"
         if [ "${action}" = "clone" ] ; then
@@ -660,7 +660,7 @@ function textMenu {
     local args
     local watchface
     local newface
-    
+
     if ! action=$(${MENUPROGRAM} --title "Select action" --clear --radiolist \
         "Select action" 0 0 3 \
         "deploy" "Deploy watchface to watch" ON \
@@ -669,7 +669,7 @@ function textMenu {
         3>&1 1>&2 2>&3); then
         exit
     fi
-    
+
     case $action in
         deploy)
             declare -a args=("--title" "Watchfaces" "--clear" "--checklist" "Choose watchfaces:" 25 78 15 "--" )
@@ -695,7 +695,7 @@ function textMenu {
         dialog --title "No watchface" --msgbox "\nNo watchface selected" 7 30
         exit
     fi
-    
+
     if (${MENUPROGRAM} --clear --title "Confirming" --yesno "${action} ${watchface}" 0 0); then
         echo "OK!"
         if [ "${action}" = "clone" ] ; then
