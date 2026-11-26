@@ -121,6 +121,12 @@ Item {
     StepsDataLoader {
         id: stepsDataLoader
 
+        property int day: wallClock.time.getDate()
+
+        onDayChanged: {
+            stepsDataLoader.triggerDaemonRecording();
+            stepsDataLoader.triggerDaemonRecording();
+        }
         Component.onCompleted: {
             stepsDataLoader.getTodayTotal();
             root.stepCount = stepsDataLoader.todayTotal;

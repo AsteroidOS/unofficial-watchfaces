@@ -8,4 +8,7 @@ Item {
     function getTodayTotal() {
     }
 
+    function triggerDaemonRecording() {
+    }
+
 }
